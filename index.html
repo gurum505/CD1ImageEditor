@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+    <title>Document</title>
+</head>
+
+<body onload="draw();">
+    <header>
+        <div class="logo" style="float:left;">
+            <a href="/"></a>
+            <img style="height:50px;" src="https://www.khu.ac.kr/kor/resources/user/img/pc/contents/sub/imgSub0402.jpg"
+                alt="">
+        </div>
+        <div class="header-buttons">
+
+            <button class="download-section" onclick="downloadImage()">
+                새로운 프로젝트
+            </button>
+            <button class="file-upload-button">
+                <label for="choose-file">
+                    이미지 가져오기
+                </label>
+            </button>
+
+            <input type="file" id="choose-file" name="chooseFile" accept="image/*" onclick="selectImage()">
+
+            <button class="download-section" onclick="downloadImage()">
+                이미지 다운로드
+            </button>
+            <button class="download-section" onclick="downloadImage()">
+                프로젝트 저장하기
+            </button>
+            <button class="download-section" onclick="downloadImage()">
+                프로젝트 가져오기
+            </button>
+            <div>
+    </header>
+
+    <div class="editor-wrap">
+        <canvas id="canvas" width="1200" height="600"></canvas>
+        <div class="image-editor-submenu">
+            <button class="a">d</button>
+            <button class="a">d</button>
+            <button class="a">dd</button>
+            <button class="a">d</button>
+            <button class="a">d</button>
+        </div>    
+    </div>
+</body>
+
+</html>
