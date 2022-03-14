@@ -21,16 +21,23 @@ window.addEventListener("load", () => { //canvas : fabric 객체를 관리하는
         'object:modified', function () {
             console.log("수정");
         });
-
-    canvas.on('mouse:wheel', function (opt) {
-        var delta = opt.e.deltaY;
-        var zoom = canvas.getZoom();
-        zoom *= 0.999 ** delta;
-        if (zoom > 20) zoom = 20;
-        if (zoom < 0.01) zoom = 0.01;
-        canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
-        opt.e.preventDefault();
-        opt.e.stopPropagation();
+    canvas.on(
+        'selection:created', function (opt) {
+        console.log("선택 생성");
+        var button = document.getElementById('remove-object');
+        button.disabled= false;
+    });
+    canvas.on(
+        'selection:updated', function (opt) {
+        console.log("선택 업데이트");
+        const button = document.getElementById('remove-object');
+          button.disabled= false;
+    });
+    canvas.on(
+        'selection:cleared', function (opt) {
+        console.log("선택 없음");
+        const button = document.getElementById('remove-object');
+          button.disabled= true;
     });
 
 })
@@ -151,4 +158,12 @@ function textBox() {
             width: 450
         });
     canvas.add(text);
+}
+
+
+//개체 삭제 
+function removeObject() {
+    console.log(canvas.getActiveObject());
+    canvas.remove(canvas.getActiveObject());
+
 }

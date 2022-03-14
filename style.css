@@ -4,7 +4,7 @@
     font-family: sans-serif;
 }
 
-.html{
+html{
     height:100%;
     width:100%;
 }
@@ -15,21 +15,10 @@ header{
     
 }
 .header-buttons{
-    width:100%;
+     width:100%; 
 }
 body {
     background: #2e2b2b;
-}
-
-.img-container{
-    position: absolute;
-    width:50%;
-    height: 50%;
-    top:41%;
-    left : 50%;
-    transform: translate(-50%, -50%);
-    text-align:center;
-    
 }
 
 .file-upload-button, .download-section{
@@ -48,23 +37,25 @@ body {
 }
 
 canvas{
-    padding: 0;
-    margin: auto;
-    display: block;
-
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border:2px solid black;
-   
+    width:80%;
+    position:absolute; 
+    top:0;
+    bottom:0;right:0;left:0; 
+   border:2px solid black;
 }
+   
+
+
 
 .editor-wrap{
+    width:100%;
     padding-top:20px;
     background-color: antiquewhite;
-    width: 100%;
+    
     height:1000px;
+    text-align: center;  
+    
+    position:relative;   
 }
 
 #choose-file{display : none;} 
