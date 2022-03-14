@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
     <script src="script.js"></script>
     <title>Document</title>
 </head>
@@ -43,15 +44,19 @@
     </header>
 
     <div class="editor-wrap">
-        <canvas id="canvas"></canvas>
+        <canvas id="c"></canvas>
         <div class="image-editor-submenu">
             <button class="a" onclick = "drawLine()">그리기</button>
-            <button class="a">d</button>
-            <button class="a">dd</button>
-            <button class="a">d</button>
-            <button class="a">d</button>
+            <button class="a" onclick = "drawRectangle()">사각형</button>
+            <button class="a" onclick="drawCircle()">원</button>
+            <button  id= "undo" class="a" onclick="undo()">취소</button>
+            <button   id = "redo" class="a" onclick="redo()">되돌리기</button>
+            <button   id = "redo" class="a" onclick="textBox()">텍스트</button>
+            <button class="a" onclick="clearCanvas()">삭제</button>
+            <button class="a" onclick="test()">실험</button>
         </div>    
     </div>
+
 </body>
 
 </html>
