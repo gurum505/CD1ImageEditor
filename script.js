@@ -23,35 +23,38 @@ window.addEventListener("load", () => { //canvas : fabric 객체를 관리하는
         });
     canvas.on(
         'selection:created', function (opt) {
-        console.log("선택 생성");
-        var button = document.getElementById('remove-object');
-        button.disabled= false;
-    });
+            console.log("선택 생성");
+            var button = document.getElementById('remove-object');
+            button.disabled = false;
+
+            document.onkeydown = function (e) { // delete, backspace 키로 삭제
+                {
+                    if (e.which == 46 || e.which == 8)
+                        canvas.remove(canvas.getActiveObject());
+                }
+
+            }
+        });
     canvas.on(
         'selection:updated', function (opt) {
-        console.log("선택 업데이트");
-        const button = document.getElementById('remove-object');
-          button.disabled= false;
-    });
+            console.log("선택 업데이트");
+            const button = document.getElementById('remove-object');
+            button.disabled = false;
+        });
     canvas.on(
         'selection:cleared', function (opt) {
-        console.log("선택 없음");
-        const button = document.getElementById('remove-object');
-          button.disabled= true;
-    });
-
+            console.log("선택 없음");
+            const button = document.getElementById('remove-object');
+            button.disabled = true;
+        });
 })
+
 
 
 
 function clearCanvas() { //캔버스 초기화 
     canvas.clear();
     canvas.setBackgroundColor("white");
-    // canvas = new fabric.Canvas('c', {
-    //     backgroundColor: "white"
-    // });
-    // canvas.setHeight(400);
-    // canvas.setWidth(800);
 }
 
 //이미지 첨부
@@ -153,9 +156,11 @@ function test() {
 }
 //text박스 삽입
 function textBox() {
-    var text = new fabric.Textbox('A Computer Science Portal',
+    var text = new fabric.Textbox('text box',
         {
-            width: 450
+            left: Math.floor(Math.random() * 101),
+            top: Math.floor(Math.random() * 101),
+            width: 200
         });
     canvas.add(text);
 }
@@ -165,5 +170,31 @@ function textBox() {
 function removeObject() {
     console.log(canvas.getActiveObject());
     canvas.remove(canvas.getActiveObject());
+
+}
+
+
+// 직렬화 
+function serialization() {
+    json = JSON.stringify(canvas);
+    json = [json];
+    var blob = new Blob(json, { type: "text/plain;charset=utf-8" });
+    var link = document.createElement('a'); //<a> 생성
+    link.href = URL.createObjectURL(blob);
+    link.download = "image.json";
+    link.click();
+
+
+}
+
+// 역직렬화
+function Deserialization() {
+    document.getElementById("choose-json-file").onchange = function (e) {
+        var reader = new FileReader();
+        reader.onload = function (e) { //onload(): 읽기 성공 시 실행되는 핸들러
+            canvas.loadFromJSON(reader.result);
+        }
+        reader.readAsText(e.target.files[0]); // dataURL 형식으로 파일 읽음
+    }
 
 }

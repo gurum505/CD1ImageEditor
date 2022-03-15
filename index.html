@@ -40,6 +40,16 @@
             <button class="download-section" onclick="downloadImage()">
                 프로젝트 가져오기
             </button>
+            <button class="download-section" onclick="serialization()">
+                직렬화
+            </button>
+            <button class="json-file-upload-button">
+                <label for="choose-json-file">
+                    역직렬화
+                </label>
+            </button>
+            <input type="file" id="choose-json-file" name="chooseFile" accept="application/JSON" onclick="Deserialization()">
+
             <div>
     </header>
 
@@ -49,13 +59,16 @@
             <button class="a" onclick = "drawLine()">그리기</button>
             <button class="a" onclick = "drawRectangle()">사각형</button>
             <button class="a" onclick="drawCircle()">원</button>
-            <button  id= "undo" class="a" onclick="undo()">취소</button>
-            <button   id = "redo" class="a" onclick="redo()">되돌리기</button>
             <button   id = "redo" class="a" onclick="textBox()">텍스트</button>
             <button class="a" onclick="clearCanvas()">초기화</button>
             <button disabled id = "remove-object" class="a" onclick="removeObject()">삭제</button>
             <button class="a" onclick="test()">실험</button>
+            <button  id= "undo" class="a" onclick="undo()">취소</button>
+            <button   id = "redo" class="a" onclick="redo()">되돌리기</button>
+            
         </div>    
+
+        
     </div>
 
 </body>
