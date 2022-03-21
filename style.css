@@ -29,7 +29,7 @@ body {
     padding : 4px;
     color :white;
     text-align:center;
-    background-color: green;
+    background-color: cadetblue;
     cursor:pointer;
     border-radius: 30px;
     border :none;
@@ -38,9 +38,7 @@ body {
 
 canvas{
     width:80%;
-    position:absolute; 
-    top:0;
-    bottom:0;right:0;left:0; 
+    margin-left: 300px;
    border:2px solid black;
 }
    
@@ -50,14 +48,17 @@ canvas{
 .editor-wrap{
     width:100%;
     padding-top:20px;
-    background-color: antiquewhite;
-    
+    background-color: beige;
     height:1000px;
     text-align: center;  
     
     position:relative;   
 }
 
+.image-editor-submenu{
+    margin : 20px;
+}
 #choose-file{display : none;} 
 #choose-json-file{display:none;}
+
 

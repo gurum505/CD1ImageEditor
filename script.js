@@ -4,6 +4,9 @@ var canvas;
 var currentMouseX;
 var currentMouseY;
 
+
+
+
 //html 파일 로드 되었을 때(초기화면)
 window.addEventListener("load", () => { //canvas : fabric 객체를 관리하는 객체
     canvas = new fabric.Canvas('c', {
@@ -16,6 +19,8 @@ window.addEventListener("load", () => { //canvas : fabric 객체를 관리하는
         'object:added', function () {
             console.log("추가");
             canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1)); //객체 생성 시 setActive
+            console.log(canvas.getActiveObject());
+
         });
     canvas.on(
         'object:modified', function () {
@@ -23,7 +28,16 @@ window.addEventListener("load", () => { //canvas : fabric 객체를 관리하는
         });
     canvas.on(
         'selection:created', function (opt) {
+            const input = document.getElementById('colorWell');
+            input.hidden = false;
+            colorWell = document.querySelector("#colorWell");
+            // colorWell.value = "black"; 디폴트 칼라
+            colorWell.addEventListener("input", updateColor, false);
+            // colorWell.select();
+
+
             console.log("선택 생성");
+
             var button = document.getElementById('remove-object');
             button.disabled = false;
 
@@ -32,7 +46,6 @@ window.addEventListener("load", () => { //canvas : fabric 객체를 관리하는
                     if (e.which == 46 || e.which == 8)
                         canvas.remove(canvas.getActiveObject());
                 }
-
             }
         });
     canvas.on(
@@ -46,11 +59,19 @@ window.addEventListener("load", () => { //canvas : fabric 객체를 관리하는
             console.log("선택 없음");
             const button = document.getElementById('remove-object');
             button.disabled = true;
+            const input = document.getElementById('colorWell');
+            input.hidden = true;
         });
 })
 
 
-
+//색변경 
+function updateColor(event) {
+    console.log("바꾼다");
+    console.log(event.target);
+    canvas.getActiveObject().set("fill", event.target.value);
+    canvas.renderAll();
+}
 
 function clearCanvas() { //캔버스 초기화 
     canvas.clear();
@@ -197,4 +218,14 @@ function Deserialization() {
         reader.readAsText(e.target.files[0]); // dataURL 형식으로 파일 읽음
     }
 
+}
+
+
+/////////////////////객체 클릭 /////////////////////
+function startup() {
+    colorWell = document.querySelector("#colorWell");
+    colorWell.value = defaultColor;
+    colorWell.addEventListener("input", updateFirst, false);
+    colorWell.addEventListener("change", updateAll, false);
+    colorWell.select();
 }
