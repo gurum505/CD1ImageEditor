@@ -1,6 +1,7 @@
 import { fabric } from "fabric";
 
 export default function Header(props) {
+    console.log("헤더 렌더링");
     const canvas = props.canvas.current;
 
     //이미지 가져오기 
@@ -75,7 +76,7 @@ export default function Header(props) {
                     새프로젝트
                 </button>
                 <button className="import-image">
-                    <label for="import-image-file">
+                    <label htmlFor="import-image-file">
                         이미지 가져오기
                     </label>
                 </button>
@@ -88,7 +89,7 @@ export default function Header(props) {
                     직렬화
                 </button>
                 <button className="json-file-upload-button">
-                    <label for="Deserialization-json-file">
+                    <label htmlFor="Deserialization-json-file">
                         역직렬화
                     </label>
                 </button>

@@ -1,10 +1,18 @@
-export default function FigureSubmenu() {
+import { useState } from "react";
+
+export default function FigureSubmenu(props) {
+    // const canvas = props.canvas;
+    // const object = props.whichObject;
+    // if(canvas.current ==null || object==null ) return null;
+
+    console.log (props.whichObject.type);
+
+
     return (
         <>
             <div>
-                도형 선택 옵션입니다.
+                도형이 
             </div>
-            <button disabled="false">dd</button>
         </>
     )
 }

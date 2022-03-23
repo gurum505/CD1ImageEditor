@@ -2,14 +2,14 @@ import { fabric } from "fabric";
 import { useState } from "react";
 
 export default function EditorMenu(props) {
+    console.log("서브메뉴 렌더링");
     const canvas = props.canvas.current;
-    console.log(props.removeButton);
+
     //선 그리기 
     function drawLine() {
-        console.log(canvas);
         canvas.isDrawingMode = true;
         if (canvas.isDrawingMode == true) {
-            console.log("켜짐");
+            console.log("그리기 켜짐");
         }
         canvas.on('mouse:up', function () {
             canvas.isDrawingMode = false;
@@ -24,7 +24,7 @@ export default function EditorMenu(props) {
             fill: '#f55',
             width: 50,
             height: 50,
-            type :"Figure"  //객체 유형 구분하기 위해 추가
+            type :"figure"  //객체 유형 구분하기 위해 추가
         }));
 
     }
@@ -34,7 +34,7 @@ export default function EditorMenu(props) {
             radius: 30, fill: '#f55',
             top: Math.floor(Math.random() * 101),
             left: Math.floor(Math.random() * 101),
-            type : "Figure" //객체 유형 구분하기 위해 추가
+            type : "figure" //객체 유형 구분하기 위해 추가
         }));
     }
 

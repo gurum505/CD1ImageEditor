@@ -2,11 +2,18 @@ import { fabric } from "fabric";
 import React, { useState, useEffect, useRef } from "react";
 import Header from "./Header";
 import EditorMenu from "./EditorMenu";
-import FigureSubmenu from "./FigureSubmenu";
+import FigureSubMenu from "./FigureSubMenu";
+import LineSubMenu from "./LineSubMenu";
+import TextSubMenu from "./TextSubMenu";
+
 export default function Canvas(props) {
     const canvasRef = useRef(null);  //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
     const [canvas, setCanvas] = useState(""); //useEffect()후 렌더링 하기 위한 state
+
     const [removeButton,setRemoveButton] =useState(true); //removeButton 처음에 disabled, 객체 선택 시 state 변경 
+    const [whichObject, setWhichObject] = useState("");
+
+
     useEffect(() => {  //rendering 후 한 번 실행 
         canvasRef.current = new fabric.Canvas("canvas", {
             backgroundColor: "white",
@@ -19,6 +26,7 @@ export default function Canvas(props) {
             'object:added', function () {
                 console.log("추가");
                 canvasRef.current.setActiveObject(canvasRef.current.item(canvasRef.current.getObjects().length - 1)); //객체 생성 시 setActive
+                setWhichObject(canvasRef.current.getActiveObject());
                 console.log(canvasRef.current.getActiveObject());
 
             });
@@ -30,8 +38,8 @@ export default function Canvas(props) {
         canvasRef.current.on(
             'selection:created', function (opt) {
                 console.log("선택");
-                console.log(canvasRef.current.getActiveObject());
-
+                setWhichObject(canvasRef.current.getActiveObject());
+                console.log(canvasRef.current.getActiveObject().type);
                 // const input = document.getElementById('colorWell');
                 // input.hidden = false;
                 // colorWell = document.querySelector("#colorWell");
@@ -40,7 +48,6 @@ export default function Canvas(props) {
                 // // colorWell.select();
                
                 var button = document.getElementById('remove-object');
-                console.log(button);
                 button.disabled = false;
                 setRemoveButton(false);
 
@@ -55,8 +62,11 @@ export default function Canvas(props) {
             'selection:updated', function (opt) {
                 
                 console.log("선택 업데이트");
+                setWhichObject(canvasRef.current.getActiveObject());
+                console.log(canvasRef.current.getActiveObject().type);
                 const button = document.getElementById('remove-object');
                 button.disabled = false;
+                setWhichObject(canvasRef.current.getActiveObject());
             });
 
         canvasRef.current.on(
@@ -64,7 +74,7 @@ export default function Canvas(props) {
                 console.log("선택 없음");
                 const button = document.getElementById('remove-object');
                 button.disabled = true;
-                
+                setWhichObject("");
                 // const input = document.getElementById('colorWell');
                 // input.hidden = true;
             });
@@ -73,12 +83,16 @@ export default function Canvas(props) {
 
     }, []);
 
+    
     return (
         <>
-            <Header canvas={canvas} />
+            <Header canvas={canvasRef} />
             <canvas id="canvas" />
-            <EditorMenu canvas={canvas} removeButton = {removeButton}/>
-            <FigureSubmenu  canvas={canvas}  />
+            <EditorMenu canvas={canvasRef} removeButton = {removeButton}/>
+            { whichObject.type ==="figure" && <FigureSubMenu  canvas={canvasRef} whichObject= {whichObject}  />}
+            { whichObject.type ==="text" && <TextSubMenu  canvas={canvasRef} whichObject= {whichObject}  />}
+            { whichObject.type ==="path" && <LineSubMenu  canvas={canvasRef} whichObject= {whichObject}  />}
+
         </>
     );
 }
