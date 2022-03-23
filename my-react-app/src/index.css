@@ -1,13 +1,21 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+body{
+    background-color: antiquewhite;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
+
+/* .file-upload-button, .download-section, .json-file-upload-button{
+    margin : auto;
+    font-weight: bold;
+    width:120px;
+    height:50px;
+    padding : 4px;
+    color :white;
+    text-align:center;
+    background-color: cadetblue;
+    cursor:pointer;
+    border-radius: 30px;
+    border :none;
+} */
+
+#import-image-file{display : none;} 
+#Deserialization-json-file{display:none;}
