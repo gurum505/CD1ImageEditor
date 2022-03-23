@@ -2,11 +2,11 @@ import { fabric } from "fabric";
 import React, { useState, useEffect, useRef } from "react";
 import Header from "./Header";
 import EditorMenu from "./EditorMenu";
+import FigureSubmenu from "./FigureSubmenu";
 export default function Canvas(props) {
     const canvasRef = useRef(null);  //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
     const [canvas, setCanvas] = useState(""); //useEffect()후 렌더링 하기 위한 state
-
-
+    const [removeButton,setRemoveButton] =useState(true); //removeButton 처음에 disabled, 객체 선택 시 state 변경 
     useEffect(() => {  //rendering 후 한 번 실행 
         canvasRef.current = new fabric.Canvas("canvas", {
             backgroundColor: "white",
@@ -30,28 +30,30 @@ export default function Canvas(props) {
         canvasRef.current.on(
             'selection:created', function (opt) {
                 console.log("선택");
+                console.log(canvasRef.current.getActiveObject());
+
                 // const input = document.getElementById('colorWell');
                 // input.hidden = false;
                 // colorWell = document.querySelector("#colorWell");
                 // // colorWell.value = "black"; 디폴트 칼라
                 // colorWell.addEventListener("input", updateColor, false);
                 // // colorWell.select();
-
-
-                console.log("선택 생성");
-
+               
                 var button = document.getElementById('remove-object');
+                console.log(button);
                 button.disabled = false;
+                setRemoveButton(false);
 
                 document.onkeydown = function (e) { // delete, backspace 키로 삭제
                     {
                         if (e.which == 46 || e.which == 8)
-                            canvas.remove(canvas.getActiveObject());
+                        canvasRef.current.remove(canvasRef.current.getActiveObject());
                     }
                 }
             });
         canvasRef.current.on(
             'selection:updated', function (opt) {
+                
                 console.log("선택 업데이트");
                 const button = document.getElementById('remove-object');
                 button.disabled = false;
@@ -60,8 +62,9 @@ export default function Canvas(props) {
         canvasRef.current.on(
             'selection:cleared', function (opt) {
                 console.log("선택 없음");
-                // const button = document.getElementById('remove-object');
-                // button.disabled = true;
+                const button = document.getElementById('remove-object');
+                button.disabled = true;
+                
                 // const input = document.getElementById('colorWell');
                 // input.hidden = true;
             });
@@ -74,7 +77,8 @@ export default function Canvas(props) {
         <>
             <Header canvas={canvas} />
             <canvas id="canvas" />
-            <EditorMenu canvas={canvas} />
+            <EditorMenu canvas={canvas} removeButton = {removeButton}/>
+            <FigureSubmenu  canvas={canvas}  />
         </>
     );
 }
