@@ -3,11 +3,10 @@ import FigureSubMenu from "./FigureSubMenu";
 import TextBoxSubMenu from "./TextBoxSubMenu";
 import PathSubMenu from "./PathSubMenu";
 export default function EditorMenuTest(props) {
-
-    console.log("메뉴 렌더링");
     const canvas = props.canvas.current;
     // const [selectedObject, setSelectedObject] = useState(false);
     const [menu, setMenu] = useState("");
+    const [btnDisabled, setBtnDisabled] = useState(true); //객체 삭제 버튼 disabled 결정 
 
     if (canvas != null) {
         canvas.on({
@@ -16,6 +15,8 @@ export default function EditorMenuTest(props) {
                     setMenu("figure");
                 else if (canvas.getActiveObject().type === "path") setMenu("path");
                 else if (canvas.getActiveObject().type === "textbox") setMenu("textbox");
+                setBtnDisabled(false);
+
             },
         });
 
@@ -25,10 +26,25 @@ export default function EditorMenuTest(props) {
                     setMenu("figure");
                 else if (canvas.getActiveObject().type === "path") setMenu("path");
                 else if (canvas.getActiveObject().type === "textbox") setMenu("textbox");
+
+                setBtnDisabled(false);
+
+                document.onkeydown = function (e) { // delete, backspace 키로 삭제
+                    {
+                        if (e.key == "Delete" || e.key == "Backspace")
+                            canvas.remove(canvas.getActiveObject());
+                    }
+                }
             },
         });
 
-        
+        canvas.on({
+            'selection:cleared': () => {
+                setBtnDisabled(true);
+            }
+        })
+
+
     }
     function addFigure() {
         setMenu("figure");
@@ -44,7 +60,6 @@ export default function EditorMenuTest(props) {
 
     function removeObject() {
         const button = document.getElementById('remove-object');
-        console.log(canvas.getActiveObject());
         canvas.remove(canvas.getActiveObject());
 
     }
@@ -53,7 +68,7 @@ export default function EditorMenuTest(props) {
             <button onClick={addFigure}>도형 삽입</button>
             <button onClick={addPath}>그리기</button>
             <button onClick={addTextBox}>텍스트 박스</button>
-            <button id='remove-object' onClick={removeObject}>객체 삭제</button>
+            <button id='remove-object' disabled={btnDisabled} onClick={removeObject}>객체 삭제</button>
             {menu == "figure" && <FigureSubMenu canvas={canvas} />}
             {menu == "textbox" && <TextBoxSubMenu canvas={canvas} />}
             {menu == "path" && <PathSubMenu canvas={canvas} />}
