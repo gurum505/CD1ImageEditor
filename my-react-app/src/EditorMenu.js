@@ -11,6 +11,7 @@ export default function EditorMenuTest(props) {
     const [isAddingTextbox, setIsAddingTextbox] = useState(false);
 
     function addFigure() { //도형(삼각형, 원, 직사각형) 추가
+        canvas.off('mouse:down');
         setObjectType("figure");
         canvas.isDrawingMode =false; // 그리기 하다가 도형 삽입 클릭시 drawing 모드가 켜져 있으면 도형과 함께 곡선이 그려지는 것을 방지
     }
@@ -23,6 +24,7 @@ export default function EditorMenuTest(props) {
     }
 
     function addPath() { //그리기 
+        canvas.off('mouse:down');
         setObjectType("path");
     }
 

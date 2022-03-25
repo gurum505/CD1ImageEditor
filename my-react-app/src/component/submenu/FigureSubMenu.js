@@ -55,7 +55,7 @@ export default function FigureSubMenu(props) {
                 angle: 0,
                 fill: 'rgba(255,0,0,0.5)',
                 transparentCorners: false,
-                type: 'rect',
+                // type: 'rect',
             });
 
             canvas.add(rect);
@@ -105,7 +105,7 @@ export default function FigureSubMenu(props) {
                 radius: (pointer.x - origX) / 2,
                 fill: 'rgba(255,0,0,0.5)',
                 transparentCorners: false,
-                type: 'circle',
+                // type: 'circle',
             });
 
             canvas.add(circle);
@@ -160,7 +160,7 @@ export default function FigureSubMenu(props) {
                 angle: 0,
                 fill: 'rgba(255,0,0,0.5)',
                 transparentCorners: false,
-                type: 'triangle',
+                // type: 'triangle',
             });
 
             canvas.add(triangle);
