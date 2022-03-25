@@ -1,10 +1,10 @@
 import { fabric } from "fabric";
 import { useState } from "react";
-import SubMenu from "./component/SubMenu";
-import DefaultMenu from "./component/submenu/DefaultMenu";
+import SubMenu from "./component/Submenu";
+import DefaultMenu from "./component/submenu/DefaultSubmenu";
 
 export default function EditorMenuTest(props) {
-    console.log("에디터 렌더링");
+
     const canvas = props.canvas.current;
     const [btnDisabled, setBtnDisabled] = useState(true); //객체 삭제 버튼 disabled 결정 
     const [objectType, setObjectType] = useState("");  //어떤 종류의 object를 추가할 것인지 

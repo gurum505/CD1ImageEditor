@@ -1,6 +1,6 @@
 import { fabric } from "fabric";
 import { useEffect, useState } from "react";
-export default function TextBoxSubMenu(props) {
+export default function TextboxSubmenu(props) {
 
     const canvas = props.canvas;
     const isAddingTextbox = props.isAddingTextbox;
@@ -28,7 +28,7 @@ export default function TextBoxSubMenu(props) {
 
 
     return (<>
-        <div>
+        <div className="textbox-submenu">
             <button>
                 진하게
             </button>
@@ -36,8 +36,9 @@ export default function TextBoxSubMenu(props) {
                 이탤릭
             </button>
             <button>
-                말풍선
+                밑줄선
             </button>
+            &nbsp; &nbsp; 
             <button>
                 왼쪽정렬
             </button>
@@ -47,6 +48,8 @@ export default function TextBoxSubMenu(props) {
             <button>
                 오른쪽정렬
             </button>
+            &nbsp; &nbsp; 
+
             <button>
                 색상
             </button>

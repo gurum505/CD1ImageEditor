@@ -1,11 +1,10 @@
-import FigureSubMenu from './submenu/FigureSubMenu';
-import ImageSubMenu from './submenu/ImageSubMenu';
-import PathSubMenu from './submenu/PathSubMenu';
-import TextBoxSubMenu from './submenu/TextBoxSubMenu';
+import FigureSubmenu from './submenu/FigureSubmenu';
+import ImageSubmenu from './submenu/ImageSubmenu';
+import PathSubmenu from './submenu/PathSubmenu';
+import TextboxSubmenu from './submenu/TextboxSubmenu';
 
 export default function SubMenu(props) {
 
-    console.log("submenu렌더링");
     function changeObjectType() { //객체 타입 전환 
         if (canvas.getActiveObject().type === "rect" || canvas.getActiveObject().type === "triangle" || canvas.getActiveObject().type === "circle")
             props.setObjectType("figure");
@@ -52,10 +51,10 @@ export default function SubMenu(props) {
 
     return (
         <div className="sub-menu">
-            {(objectType === 'figure') && <FigureSubMenu canvas={canvas} />}
-            {(objectType === 'image') && <ImageSubMenu canvas={canvas} />}
-            {(objectType === 'path') && <PathSubMenu canvas={canvas} />}
-            {(objectType === 'textbox') && <TextBoxSubMenu canvas={canvas} setIsAddingTextbox={props.setIsAddingTextbox} isAddingTextbox={isAddingTextbox} />}
+            {(objectType === 'figure') && <FigureSubmenu canvas={canvas} />}
+            {(objectType === 'image') && <ImageSubmenu canvas={canvas} />}
+            {(objectType === 'path') && <PathSubmenu canvas={canvas} />}
+            {(objectType === 'textbox') && <TextboxSubmenu canvas={canvas} setIsAddingTextbox={props.setIsAddingTextbox} isAddingTextbox={isAddingTextbox} />}
         </div>
     );
 }
