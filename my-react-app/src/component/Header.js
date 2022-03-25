@@ -1,10 +1,7 @@
 import { fabric } from "fabric";
-import { useState } from "react";
 export default function Header(props) {
-    console.log("헤더 렌더링");
     const canvas = props.canvas.current;
-    const [isDeserializaion, setIsDeserializaion] = useState(false);
-    console.log(props.whichObject);
+
     //이미지 가져오기 
     function importImage() {
         document.getElementById("import-image-file").onchange = function (e) {
@@ -94,11 +91,11 @@ export default function Header(props) {
                     이미지 다운로드
                 </button>
                 <button className="serialization" onClick={serialization} >
-                    직렬화
+                    프로젝트 저장하기 
                 </button>
                 <button className="json-file-upload-button">
                     <label htmlFor="Deserialization-json-file">
-                        역직렬화
+                        프로젝트 가져오기
                     </label>
                 </button>
                 <input type="file" id="Deserialization-json-file" name="chooseFile" accept="application/JSON"
