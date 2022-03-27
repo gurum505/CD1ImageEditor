@@ -4,7 +4,7 @@ import ImageSubmenu from './submenu/ImageSubmenu';
 import PathSubmenu from './submenu/PathSubmenu';
 import TextboxSubmenu from './submenu/TextboxSubmenu';
 
-export default function SubMenu(props) {
+export default function Submenu(props) {
     
         function changeObjectType() { //객체 타입 전환 
         if (canvas.getActiveObject().type === "rect" || canvas.getActiveObject().type === "triangle" || canvas.getActiveObject().type === "circle")

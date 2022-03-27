@@ -1,6 +1,6 @@
 import { fabric } from "fabric";
 import { useState } from "react";
-import SubMenu from "./component/Submenu";
+import Submenu from "./component/Submenu";
 import DefaultMenu from "./component/submenu/DefaultSubmenu";
 
 export default function EditorMenuTest(props) {
@@ -33,7 +33,7 @@ export default function EditorMenuTest(props) {
     }
     return (
         <div className="editor-menu">
-            <SubMenu canvas={canvas} isCleared={isCleared} setIsCleared={setIsCleared} objectType={objectType} setObjectType={setObjectType} setBtnDisabled={setBtnDisabled} setIsAddingTextbox={setIsAddingTextbox} isAddingTextbox={isAddingTextbox} />
+            <Submenu canvas={canvas} isCleared={isCleared} setIsCleared={setIsCleared} objectType={objectType} setObjectType={setObjectType} setBtnDisabled={setBtnDisabled} setIsAddingTextbox={setIsAddingTextbox} isAddingTextbox={isAddingTextbox} />
             <button onClick={addFigure}>도형 삽입</button>
             <button onClick={addPath}>그리기</button>
             <button onClick={addTextBox}>텍스트 박스</button>
