@@ -6,16 +6,18 @@ export default function TextboxSubmenu(props) {
     const [isBold, setIsBold] = useState(false);
     const [isItalic,setIsItalic] = useState(false);
     const [isUnderlined, setIsUnderlined] = useState(false);
-
     const textBox = useRef("");
-    const color =  useRef("red");
+
+    const [color,setColor] = useState('black');
+
+    console.log("textbox submenu 렌더링");
 
     canvas.on('mouse:down', (o) => {
         var pointer = canvas.getPointer(o.e);
-
+        console.log(color);
         var textBox = new fabric.Textbox('내용 입력', {
             width: 250,
-            fill : `${color.current}`,
+            fill : `${color}`,
             left: pointer.x - 125,
             top: pointer.y - 20,
         });
@@ -85,6 +87,9 @@ export default function TextboxSubmenu(props) {
             setIsItalic(1);
     }
     }
+
+    
+    //밑줄
     function underlineText(){
         if(canvas.getActiveObject()){
             var underline = !canvas.getActiveObject().underline;
@@ -108,8 +113,17 @@ export default function TextboxSubmenu(props) {
     }
     }
 
-    //밑줄
+    function selectColor(e){
+        const selectedColor = e.target.value;
+        console.log(selectedColor);
+        setColor(selectedColor);
 
+        if(canvas.getActiveObject().type==='textbox'){
+            const text = canvas.getActiveObject();
+            text.set({fill: `${selectedColor}`});
+            canvas.renderAll();
+    }
+}
 
     return (<>
         <div className="textbox-submenu">
@@ -134,9 +148,7 @@ export default function TextboxSubmenu(props) {
             </button>
             &nbsp; &nbsp;
 
-            <button >
-                색상
-            </button>
+            <input id="color" type="color" onChange={selectColor}/>
         </div>
     </>)
 }
