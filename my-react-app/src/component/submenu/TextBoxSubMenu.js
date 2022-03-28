@@ -66,8 +66,8 @@ export default function TextboxSubmenu(props) {
             var underline = !canvas.getActiveObject().underline;
             console.log(underline);
             const text = canvas.getActiveObject();
-            canvas.renderAll();
             text.set('underline', underline);
+            canvas.renderAll();
             // text.set('fontWeight','italic');
             // document.getElementById("bold").style.fontWeight = `${fontWeight}`;
             // text.setSelectionStyles({ underline: underline }, text.selectionStart,99 );

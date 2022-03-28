@@ -1,11 +1,13 @@
+import { fabric } from "fabric";
 import { useEffect, useRef, useState } from "react";
 import Submenu from "./component/Submenu";
 import DefaultMenu from "./component/submenu/DefaultSubmenu";
 import './editor.css';
 
+//TODO: 객체 삭제 버튼 때문에 editorMenu 전체가 렌더링 되어야 한다. 삭제 버튼을 개별 컴포넌트로 만들어야 할듯
+
 export default function EditorMenu(props) {
     const canvas = props.canvas.current;
-
     console.log('EdiitorMenu 렌더링');
 
 
@@ -83,12 +85,21 @@ export default function EditorMenu(props) {
         canvas.remove(canvas.getActiveObject());
     }
 
+    //이미지 추가 
+    function addImage(){
+        if (objectType === 'image') setObjectType('');
+        else setObjectType("image");
+        canvas.off('mouse:down');
+    }
+    
+
     return (
         <div className="editor-menu">
             <Submenu canvas={canvas} objectType={objectType} />
             <button id='add-figure' onClick={addFigure}>도형 삽입</button>
             <button id='path' onClick={addLine}>그리기</button>
             <button id='textbox' onClick={addTextBox}>텍스트 박스</button>
+            <button id='add-image' onClick ={addImage}>이미지 추가</button>
             <button id='remove-object' onClick={removeObject}>객체 삭제</button>
             <DefaultMenu canvas={canvas} />
         </div>

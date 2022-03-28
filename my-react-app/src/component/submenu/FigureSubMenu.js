@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { fabric } from "fabric";
+import ColorPicker from "./ColorPicker";
 
 export default function FigureSubMenu(props) {
     console.log('FigureSebmenu 컴포넌트 렌더링');
     const canvas = props.canvas;
+    const color = useRef('black');
 
     function addRect() {
         canvas.defaultCursor = 'crosshair';
@@ -23,7 +25,7 @@ export default function FigureSubMenu(props) {
                 width: pointer.x - origX,
                 height: pointer.y - origY,
                 angle: 0,
-                fill: '{rgba(255,0,0,0.5)}',
+                fill: `${color.current}`,
                 transparentCorners: false,
                 // type: 'rect',
             });
@@ -73,7 +75,7 @@ export default function FigureSubMenu(props) {
                 originX: 'left',
                 originY: 'top',
                 radius: (pointer.x - origX) / 2,
-                fill: 'rgba(255,0,0,0.5)',
+                fill: `${color.current}`,
                 transparentCorners: false,
                 // type: 'circle',
             });
@@ -128,7 +130,7 @@ export default function FigureSubMenu(props) {
                 width: pointer.x - origX,
                 height: pointer.y - origY,
                 angle: 0,
-                fill: 'rgba(255,0,0,0.5)',
+                fill:  `${color.current}`,
                 transparentCorners: false,
                 // type: 'triangle',
             });
@@ -177,6 +179,8 @@ export default function FigureSubMenu(props) {
                 <button onClick={addTriangle}>
                     삼각형
                 </button>
+                &nbsp; &nbsp;
+                <ColorPicker  canvas={canvas} color={color} />
             </div>
         </>
     )
