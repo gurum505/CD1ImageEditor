@@ -12,19 +12,20 @@ export default function App(props) {
     const [canvas, setCanvas] = useState(""); //useEffect()후 렌더링 하기 위한 state
 
     useEffect(() => {  //rendering 후 한 번 실행 
-        canvasRef.current = new fabric.Canvas("canvas", {
+        canvasRef.current = (new fabric.Canvas("canvas", {
             backgroundColor: "white",
             height: 400,
             width: 800,
-        });
+        }));
 
-        // document.onkeydown = function (e) { // delete, backspace 키로 삭제
-        //     {
-        //         if (e.key === "Delete" || e.key === "Backspace")
-        //         canvasRef.current.remove( canvasRef.current.getActiveObject());
-        //     }
-        // }
-        setCanvas(1);
+        document.onkeydown = function (e) { // delete, backspace 키로 삭제
+            {
+                if (e.key === "Delete" || e.key === "Backspace")
+                canvasRef.current.remove( canvasRef.current.getActiveObject());
+            }
+        }
+
+        setCanvas(canvasRef);
         
 
     }, []);
@@ -33,7 +34,7 @@ export default function App(props) {
         <>
             <Header canvas={canvasRef} />
             <canvas id="canvas" />
-            <  EditorMenu canvas={canvasRef} />
+            <EditorMenu canvas={canvasRef} />
         </>
     );
 }

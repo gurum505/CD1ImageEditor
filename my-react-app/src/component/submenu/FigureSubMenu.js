@@ -2,38 +2,8 @@ import { useEffect, useState } from "react";
 import { fabric } from "fabric";
 
 export default function FigureSubMenu(props) {
-
-
-    function objectSelected(o) {
-        var objectType = o.target.type;
-        console.log(objectType);
-        if (objectType === 'rect' || objectType === 'circle' || objectType === 'triangle') return 'figure';
-        else if (objectType === 'path') return 'path';
-        else if (objectType === 'textbox') return 'textbox';
-        else if (objectType === 'image') return 'image';
-    }
-
-    console.log("figuresubmenu 펑션");
-
+    console.log('FigureSebmenu 컴포넌트 렌더링');
     const canvas = props.canvas;
-    
-
-
-    canvas.on('selection:updated', () => {
-        console.log("selection : cleared");
-    });
-
-    canvas.on('selection:cleared', () => {
-        console.log("selection : cleared");
-    });
-
-    canvas.on('object:added', ()=>{
-        console.log('object : added');
-    });
-    canvas.on('object:updated', () => {
-        console.log('object : updated ');
-    });
-
 
     function addRect() {
         canvas.defaultCursor = 'crosshair';
@@ -53,7 +23,7 @@ export default function FigureSubMenu(props) {
                 width: pointer.x - origX,
                 height: pointer.y - origY,
                 angle: 0,
-                fill: 'rgba(255,0,0,0.5)',
+                fill: '{rgba(255,0,0,0.5)}',
                 transparentCorners: false,
                 // type: 'rect',
             });
@@ -79,7 +49,7 @@ export default function FigureSubMenu(props) {
 
         canvas.on('mouse:up', function (o) {
             isDown = false;
-            canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
+            // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.defaultCursor = 'default';
             canvas.off('mouse:down');
             canvas.off('mouse:move');
@@ -131,7 +101,7 @@ export default function FigureSubMenu(props) {
 
         canvas.on('mouse:up', function (o) {
             isDown = false;
-            canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
+            // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.off('mouse:move');
             canvas.off('mouse:up');
             canvas.off('mouse:down');
@@ -187,7 +157,7 @@ export default function FigureSubMenu(props) {
 
         canvas.on('mouse:up', function (o) {
             isDown = false;
-            canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
+            // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.off('mouse:move');
             canvas.off('mouse:up');
             canvas.off('mouse:down');

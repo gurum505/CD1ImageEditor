@@ -17,7 +17,7 @@ export default function Header(props) {
                         top: 60
                     });
                     img.scaleToWidth(200);
-                    canvas.add(img).setActiveObject(img).renderAll();
+                    canvas.add(img).setActiveObject(img);
                 }
             }
             reader.readAsDataURL(e.target.files[0]); // dataURL 형식으로 파일 읽음
@@ -53,6 +53,7 @@ export default function Header(props) {
 
     // 역직렬화
     function Deserialization() {
+        canvas.off('object:added'); //역직렬화 시 object : added가 되면서 객체 삭제 버튼이 누를 수 있게 되는 것을 방지 
         const originalToObject = fabric.Object.prototype.toObject;
         const myAdditional = ['type'];
         fabric.Object.prototype.toObject = function (additionalProperties) {
@@ -62,7 +63,6 @@ export default function Header(props) {
             var reader = new FileReader();
             reader.onload = function (e) { //onload(): 읽기 성공 시 실행되는 핸들러
                 canvas.loadFromJSON(reader.result);
-                // canvas.setActiveObject();
             }
             reader.readAsText(e.target.files[0]); // dataURL 형식으로 파일 읽음
         }
