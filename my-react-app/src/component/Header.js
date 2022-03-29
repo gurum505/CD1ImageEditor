@@ -18,7 +18,6 @@ export default function Header(props) {
                 fabric.Image.fromURL(data, function (img) {
                     canvas.setHeight(img.height);
                     canvas.setWidth(img.width);
-                    console.log("ㅇ");
                     canvas.setBackgroundImage(img);
                 
                 });
