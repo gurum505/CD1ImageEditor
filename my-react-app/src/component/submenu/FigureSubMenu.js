@@ -3,21 +3,27 @@ import { fabric } from "fabric";
 import ColorPicker from "./ColorPicker";
 
 export default function FigureSubMenu(props) {
+    const state = props.state;
     const canvas = props.canvas;
     const color = useRef('black');
 
-    useEffect(()=>{
-        canvas.off('mouse:down');
-        canvas.defaultCursor = 'default';
-    })
+    function updateModifications(savehistory) {
+        if (savehistory === true) {
+            var  myjson = canvas.toJSON();
+            state.current.push(myjson);
+        }
+       
+    }
+    
+  
+   
 
     function addRect() {
         canvas.off('mouse:down');
         canvas.defaultCursor = 'crosshair';
         var rect, isDown, origX, origY;
 
-       
-
+        
         canvas.on('mouse:down', function (o) {
             isDown = true;
             var pointer = canvas.getPointer(o.e);
@@ -35,7 +41,6 @@ export default function FigureSubMenu(props) {
                 transparentCorners: false,
                 // type: 'rect',
             });
-
             canvas.add(rect);
         });
 
@@ -56,6 +61,7 @@ export default function FigureSubMenu(props) {
         });
 
         canvas.on('mouse:up', function (o) {
+            updateModifications(true);
             isDown = false;
             // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.defaultCursor = 'default';
@@ -67,6 +73,7 @@ export default function FigureSubMenu(props) {
     }
 
     function addCircle() {
+        
         canvas.off('mouse:down');
 
         canvas.defaultCursor = 'crosshair';
@@ -89,7 +96,6 @@ export default function FigureSubMenu(props) {
             });
 
             canvas.add(circle);
-
         });
 
         canvas.on('mouse:move', function (o) {
@@ -110,13 +116,15 @@ export default function FigureSubMenu(props) {
         });
 
         canvas.on('mouse:up', function (o) {
+            updateModifications(true);
+
             isDown = false;
             // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.off('mouse:move');
             canvas.off('mouse:up');
             canvas.off('mouse:down');
             canvas.defaultCursor = 'default';
-
+           
         });
 
     }
@@ -145,7 +153,7 @@ export default function FigureSubMenu(props) {
             });
 
             canvas.add(triangle);
-
+            
         });
 
         canvas.on('mouse:move', function (o) {
@@ -167,12 +175,15 @@ export default function FigureSubMenu(props) {
         });
 
         canvas.on('mouse:up', function (o) {
+            canvas.renderAll();
+            updateModifications(true);
             isDown = false;
             // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.off('mouse:move');
             canvas.off('mouse:up');
             canvas.off('mouse:down');
             canvas.defaultCursor = 'default';
+  
 
         });
     }

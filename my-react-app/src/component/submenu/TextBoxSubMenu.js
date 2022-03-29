@@ -3,8 +3,17 @@ import {  useEffect, useRef } from "react";
 import ColorPicker from "./ColorPicker";
 export default function TextboxSubmenu(props) {
     const canvas = props.canvas;
+    const state = props.state;
     const color = useRef('black');
-    
+    function updateModifications(savehistory) {
+        if (savehistory === true) {
+            var  myjson = canvas.toJSON();
+            state.current.push(myjson);
+        }
+        console.log(state.current.length);
+        
+    }
+
     useEffect(()=>{
         canvas.off('mouse:down');
         canvas.defaultCursor = 'default';
@@ -22,7 +31,9 @@ export default function TextboxSubmenu(props) {
                 top: pointer.y - 20,
             });
             canvas.add(textbox);
+            updateModifications(true);
             canvas.off('mouse:down');
+            canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.defaultCursor = 'default';
 
         });

@@ -1,14 +1,27 @@
 import { fabric } from "fabric";
+import { useEffect, useState } from "react";
 export default function Header(props) {
+    const state = props.state;
+    const mods = props.mods;
+    const canvas = props.canvasRef.current;
+
+    
+    
+    function updateModifications(savehistory) {
+        if (savehistory === true) {
+            var  myjson = canvas.toJSON();
+            state.current.push(myjson);
+        }
+        console.log(state.current.length);
+       
+    }
     console.log('헤더렌더링');
     //FIXME:불러오는 이미지가 캔버스보다 클 때 submenu를 넘어가는 것 수정 필요 
-    const canvas = props.canvasRef.current;
 
     function importImage(e) {
         e.target.value = ''
         console.log("이미지 가져오기");
         canvas.clear();
-        props.setCanvas(!props.canvas);
         
         document.getElementById('import-image-file').onchange = function (e) {
             var file = e.target.files[0];
@@ -19,7 +32,10 @@ export default function Header(props) {
                     canvas.setHeight(img.height);
                     canvas.setWidth(img.width);
                     canvas.setBackgroundImage(img);
-                
+                    state.current =[];
+                    state.current.push(canvas.toJSON());
+
+                    mods.current=0;
                 });
             };
             reader.readAsDataURL(file);
@@ -28,8 +44,8 @@ export default function Header(props) {
 
     //새 프로젝트 
     function clearCanvas() { //캔버스 초기화 
-        canvas.clear();
-        canvas.setBackgroundColor("white");
+        window.location.reload();
+
     }
 
     //이미지 다운로드
@@ -58,20 +74,43 @@ export default function Header(props) {
     // 역직렬화
     function Deserialization() {
         canvas.off('object:added'); //역직렬화 시 object : added가 되면서 객체 삭제 버튼이 누를 수 있게 되는 것을 방지 
-        const originalToObject = fabric.Object.prototype.toObject;
-        const myAdditional = ['type'];
-        fabric.Object.prototype.toObject = function (additionalProperties) {
-            return originalToObject.call(this, myAdditional.concat(additionalProperties));
-        }
+       
         document.getElementById("Deserialization-json-file").onchange = function (e) {
             var reader = new FileReader();
             reader.onload = function (e) { //onload(): 읽기 성공 시 실행되는 핸들러
-                var temp = canvas.loadFromJSON(reader.result);
+                var temp = canvas.loadFromJSON(reader.result,canvas.renderAll.bind(canvas));
                 let data = JSON.parse(reader.result);
+                state.current =[];
+                // state.current.push(canvas.toJSON());
+                mods.current=0;
+                if(data.backgroundImage!=undefined){
                 canvas.setWidth(data.backgroundImage.width);
                 canvas.setHeight(data.backgroundImage.height);
-            }
+            }}
             reader.readAsText(e.target.files[0]); // dataURL 형식으로 파일 읽음
+        }
+    }
+    function undo(){
+        if (mods.current <state.current.length-1 && state.current.length>1) {
+            
+            canvas.clear().renderAll();
+            canvas.loadFromJSON(state.current[state.current.length - 2 - mods.current],canvas.renderAll.bind(canvas));
+
+            //After loading JSON it’s important to call canvas.renderAll(). In the 2nd parameter of canvas.loadFromJSON(json, callback) you can define a cllback function which is invoked after all objects are loaded/added.
+            
+            mods.current += 1;
+            console.log(mods.current);
+            console.log(state.current.length);
+
+        }
+    }
+
+    function redo(){
+        if (mods.current > 0) {
+            canvas.clear().renderAll();
+            canvas.loadFromJSON(state.current[state.current.length - mods.current ],canvas.renderAll.bind(canvas));
+            mods.current -= 1;
+            console.log(mods.current);
         }
     }
 
@@ -109,7 +148,8 @@ export default function Header(props) {
                     </label>
                 </button>
                 <input type="file" id="import-image-file" name="chooseFile" accept="image/*" onClick={importImage}  />
-
+                <button id = 'undo'   onClick = {undo}>이전</button>
+                <button id = 'redo'   onClick = {redo}>되돌리기</button>
             </div>
         </div>
     )

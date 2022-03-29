@@ -8,17 +8,15 @@ export default function Submenu(props) {
 
     const canvas = props.canvas;
     const buttonType = props.buttonType;
-    const isAddingTextbox = props.isAddingTextbox;
 
-    
 
     return (
         <div className="sub-menu">
-            {(buttonType === 'figure') && <FigureSubmenu canvas={canvas} />}
-            {(buttonType === 'image') && <ImageSubmenu canvas={canvas} />}
-            {(buttonType === 'line') && <LineSubmenu canvas={canvas} />}
-            {(buttonType === 'textbox') && <TextboxSubmenu canvas={canvas} />}
-            {(buttonType === 'filter') && <FilterSubmenu canvas={canvas} />}
+            {(buttonType === 'figure') && <FigureSubmenu canvas={canvas} state={props.state} mods={props.mods}/>}
+            {(buttonType === 'image') && <ImageSubmenu canvas={canvas} state={props.state} mods={props.mods}/>}
+            {(buttonType === 'line') && <LineSubmenu canvas={canvas} state={props.state} mods={props.mods}/>}
+            {(buttonType === 'textbox') && <TextboxSubmenu canvas={canvas} state={props.state} mods={props.mods}/>}
+            {(buttonType === 'filter') && <FilterSubmenu canvas={canvas} state={props.state} mods={props.mods}/>}
         </div>
     );
 }

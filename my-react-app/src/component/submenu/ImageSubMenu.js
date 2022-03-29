@@ -3,7 +3,15 @@ import '../../editor.css';
 
 export default function ImageSubMenu(props) {
     const canvas = props.canvas;
-
+    const state = props.state;
+    function updateModifications(savehistory) {
+        if (savehistory === true) {
+            var  myjson = canvas.toJSON();
+            state.current.push(myjson);
+        }
+        console.log(state.current.length);
+        
+    }
     function addLocalImage() {
         canvas.isDrawingMode = false;
         document.getElementById("add-local-image-file").onchange = function (e) {
@@ -20,7 +28,7 @@ export default function ImageSubMenu(props) {
                     });
 
                     canvas.add(img).setActiveObject(img);
-
+                    updateModifications(true);
                     canvas.renderAll();
 
                 }
