@@ -1,28 +1,30 @@
 import { fabric } from "fabric";
 export default function Header(props) {
-    const canvas = props.canvas.current;
+    console.log('헤더렌더링');
+    //FIXME:불러오는 이미지가 캔버스보다 클 때 submenu를 넘어가는 것 수정 필요 
+    const canvas = props.canvasRef.current;
 
-
-
-    function importImage() {
-        document.getElementById('import-image-file').addEventListener("change", function (e) {
+    function importImage(e) {
+        e.target.value = ''
+        console.log("이미지 가져오기");
+        canvas.clear();
+        props.setCanvas(!props.canvas);
+        
+        document.getElementById('import-image-file').onchange = function (e) {
             var file = e.target.files[0];
             var reader = new FileReader();
             reader.onload = function (f) {
                 var data = f.target.result;
                 fabric.Image.fromURL(data, function (img) {
-                    // add background image
-                    canvas.setWidth(img.width);
                     canvas.setHeight(img.height);
-                    canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
-                        // scaleX: canvas.width / img.width,  : 이미지 크기를 캔버스 크기로 확장 
-                        // scaleY: canvas.height / img.height
-                    
-                    });
+                    canvas.setWidth(img.width);
+                    console.log("ㅇ");
+                    canvas.setBackgroundImage(img);
+                
                 });
             };
             reader.readAsDataURL(file);
-        });
+        };
     }
 
     //새 프로젝트 
@@ -38,6 +40,7 @@ export default function Header(props) {
         link.href = image;
         link.download = "image.png";
         link.click();
+        console.log(canvas);
     }
 
     // 직렬화 
@@ -64,7 +67,10 @@ export default function Header(props) {
         document.getElementById("Deserialization-json-file").onchange = function (e) {
             var reader = new FileReader();
             reader.onload = function (e) { //onload(): 읽기 성공 시 실행되는 핸들러
-                canvas.loadFromJSON(reader.result);
+                var temp = canvas.loadFromJSON(reader.result);
+                let data = JSON.parse(reader.result);
+                canvas.setWidth(data.backgroundImage.width);
+                canvas.setHeight(data.backgroundImage.height);
             }
             reader.readAsText(e.target.files[0]); // dataURL 형식으로 파일 읽음
         }
@@ -82,7 +88,7 @@ export default function Header(props) {
                 <button className="new-project" onClick={clearCanvas}>
                     새프로젝트
                 </button>
-               
+        
                 <button className="new-project" onClick={downloadImage}>
                     이미지 다운로드
                 </button>
@@ -100,10 +106,10 @@ export default function Header(props) {
 
                 <button className="import-image">
                     <label htmlFor="import-image-file">
-                        배경 이미지  
+                        이미지 가져오기 
                     </label>
                 </button>
-                <input type="file" id="import-image-file" name="chooseFile" accept="image/*" onClick={importImage} />
+                <input type="file" id="import-image-file" name="chooseFile" accept="image/*" onClick={importImage}  />
 
             </div>
         </div>

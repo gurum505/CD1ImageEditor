@@ -21,3 +21,8 @@ body{
 #add-image-file {display:none;}
 #Deserialization-json-file{display:none;}
 #add-local-image-file{display:none;}
+.wrap{
+    width : 1000px;
+    height :500px;
+    background-color: #f3f3f3;
+}

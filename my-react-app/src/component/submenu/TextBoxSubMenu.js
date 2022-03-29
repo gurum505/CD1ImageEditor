@@ -1,12 +1,17 @@
 import { fabric } from "fabric";
-import {  useRef } from "react";
+import {  useEffect, useRef } from "react";
 import ColorPicker from "./ColorPicker";
 export default function TextboxSubmenu(props) {
-    console.log("textbox submenu 렌더링");
     const canvas = props.canvas;
     const color = useRef('black');
+    
+    useEffect(()=>{
+        canvas.off('mouse:down');
+        canvas.defaultCursor = 'default';
+    })
 
     function addTextBox() {
+        canvas.defaultCursor = 'text';
         canvas.on('mouse:down', (o) => {
             const pointer = canvas.getPointer(o.e);
             addTextBox();
@@ -18,6 +23,7 @@ export default function TextboxSubmenu(props) {
             });
             canvas.add(textbox);
             canvas.off('mouse:down');
+            canvas.defaultCursor = 'default';
 
         });
     }

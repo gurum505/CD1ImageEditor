@@ -7,7 +7,7 @@ export default function App(props) {
     const canvasRef = useRef(new fabric.Canvas("canvas", {
         backgroundColor: "white",
         height: 400,
-        width: 800,
+        width: 700,
     }));  //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
     const [canvas, setCanvas] = useState(""); //useEffect()후 렌더링 하기 위한 state
 
@@ -15,7 +15,7 @@ export default function App(props) {
         canvasRef.current = (new fabric.Canvas("canvas", {
             backgroundColor: "white",
             height: 400,
-            width: 800,
+            width: 700,
         }));
 
         document.onkeydown = function (e) { // delete, backspace 키로 삭제
@@ -28,13 +28,13 @@ export default function App(props) {
         setCanvas(canvasRef);
         
 
-    }, []);
+    },[] );
 
     return (
         <>
-            <Header canvas={canvasRef} />
-            <canvas id="canvas" />
-            <EditorMenu canvas={canvasRef} />
+            <Header canvasRef={canvasRef}  canvas={canvas} setCanvas={setCanvas}/>
+            <div className="wrap"><canvas id="canvas" /></div>
+            <EditorMenu canvasRef={canvasRef} />
         </>
     );
 }

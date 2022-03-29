@@ -22,6 +22,6 @@ export default function ColorPicker(props){
         }
     }
     return (
-        <input id="color" type="color" onChange={selectColor} />
+        <input id="color" type="color" onChange={selectColor} defaultValue='black'/>
     );
 }

@@ -3,14 +3,20 @@ import { fabric } from "fabric";
 import ColorPicker from "./ColorPicker";
 
 export default function FigureSubMenu(props) {
-    console.log('FigureSebmenu 컴포넌트 렌더링');
     const canvas = props.canvas;
     const color = useRef('black');
 
+    useEffect(()=>{
+        canvas.off('mouse:down');
+        canvas.defaultCursor = 'default';
+    })
+
     function addRect() {
+        canvas.off('mouse:down');
         canvas.defaultCursor = 'crosshair';
         var rect, isDown, origX, origY;
 
+       
 
         canvas.on('mouse:down', function (o) {
             isDown = true;
@@ -61,6 +67,8 @@ export default function FigureSubMenu(props) {
     }
 
     function addCircle() {
+        canvas.off('mouse:down');
+
         canvas.defaultCursor = 'crosshair';
         var circle, isDown, origX, origY;
 
@@ -114,6 +122,7 @@ export default function FigureSubMenu(props) {
     }
 
     function addTriangle() {
+        canvas.off('mouse:down');
         canvas.defaultCursor = 'crosshair';
         var triangle, isDown, origX, origY;
 
