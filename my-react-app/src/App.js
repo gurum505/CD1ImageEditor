@@ -17,7 +17,7 @@ import RightSidebar from './Layout/RightSidebar';
 //TODO: Canvas: Focus zoom in out 구현 
 //TODO: 버튼기능구현 layout으로 분배
 //FIXME: canvas크기구현할때 왼쪽 사이드바까지 고려해서 집어넣어야함
-//FIXME: 사이드 메뉴바를 누르면 캔버스의 도형이 안보임(초기화는 아닌듯) + 캔버스에 도형 및 텍스트 안집어넣어짐
+//FIXME: 사이드 메뉴바를 누르면 캔버스의 도형이 안보임(초기화는 아닌듯) 
 
 
 //canvas
