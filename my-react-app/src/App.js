@@ -13,15 +13,18 @@ import RightSidebar from './Layout/RightSidebar';
 //TODO: togglemenu, isOpen wid 깔끔히 정리 ex){l:50,r:50}
 //FIXME: Sidebar:x축이 -200px으로 되어있다. 내용을 쓸때도 left 200px을해야한다.
 //TODO: Sidebar-R: 버튼도 조정필요 향후에 따라 결정
-//TODO: Left,Right내용 들어갈부분
+//TODO: Left,Right내용 들어갈부분(왼,오른쪽 정렬 등)
 //TODO: Canvas: Focus zoom in out 구현 
 //TODO: 버튼기능구현 layout으로 분배
-//FIXME: LeftSidebar 왼쪽에 공백이 왜 생기지? 
+//FIXME: canvas크기구현할때 왼쪽 사이드바까지 고려해서 집어넣어야함
+//FIXME: 사이드 메뉴바를 누르면 캔버스의 도형이 안보임(초기화는 아닌듯) + 캔버스에 도형 및 텍스트 안집어넣어짐
+
 
 //canvas
 import Header from "./component/Header";
 import EditorMenu from "./EditorMenu";
 
+//TODO: 도형과 텍스트 묶어서 객체 삭제가 안됌 => activeobjects로 받아서 for문remove돌리면 됌
 
 
 

@@ -1,6 +1,7 @@
 .layout{
     position: fixed;
     top: 80px; /*header 크기만큼 */
+    left:0;
     bottom: 0;
     width:100%;
     display:flex; /*container안의 item 가로로 정렬*/
