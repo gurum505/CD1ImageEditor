@@ -9,7 +9,6 @@ export default function ImageSubMenu(props) {
             var  myjson = canvas.toJSON();
             state.current.push(myjson);
         }
-        console.log(state.current.length);
         
     }
     function addLocalImage() {

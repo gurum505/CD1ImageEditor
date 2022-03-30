@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 export default function FilterSubmenu(props) {
     const canvas = props.canvas;
-
+    console.log("렌더링");
     useEffect(() => {
         //새로운 이미지 렌더링 시 effect 값들 초기값으로 변경 
         document.getElementById('opacity').value = 5;
@@ -92,7 +92,7 @@ export default function FilterSubmenu(props) {
     
 
     return (
-        <>
+        <div id ='filter-list'>
             <ul style={{width:'100px', listStyle:"none"}}>
                 <li>
                     <div className="effect">
@@ -115,7 +115,7 @@ export default function FilterSubmenu(props) {
             </ul>
 
 
-        </>
+        </div>
 
     )
 }

@@ -9,7 +9,6 @@ export default function LineSubMenu(props) {
             var  myjson = canvas.toJSON();
             state.current.push(myjson);
         }
-        console.log(state.current.length);
     }
     const color = useRef('black');  //useRef : 값이 바뀌어도 렌더링되지 않음.
 
@@ -33,7 +32,6 @@ export default function LineSubMenu(props) {
 
     function drawStraight() {
         canvas.isDrawingMode = false;
-        console.log(canvas.isDrawingMode);
         canvas.off('mouse:down');
         canvas.off('mouse:up');
         var line, isDown;
@@ -69,20 +67,7 @@ export default function LineSubMenu(props) {
         });
     }
 
-    //     function selectColor(e){
-    //         const selectedColor = e.target.value;
-    //         console.log(selectedColor);
-    //         color.current = selectedColor;
-    //         canvas.freeDrawingBrush.color = `${color.current}`;
-
-    //         if(canvas.getActiveObject()){
-    //             if(canvas.getActiveObject().type==='line' ||canvas.getActiveObject().type==='path'){
-    //             const path = canvas.getActiveObject();
-    //             path.set({stroke: `${selectedColor}`});
-    //             canvas.renderAll();
-    //             }
-    //     }
-    // }
+    
     return (<>
         <div>
             <button id="curve" onClick={drawCurve}>

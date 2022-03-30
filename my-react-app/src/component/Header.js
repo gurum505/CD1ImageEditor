@@ -1,27 +1,22 @@
 import { fabric } from "fabric";
-import { useEffect, useState } from "react";
+import { useRef } from "react";
 export default function Header(props) {
     const state = props.state;
     const mods = props.mods;
     const canvas = props.canvasRef.current;
 
     
-    
+
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var  myjson = canvas.toJSON();
             state.current.push(myjson);
         }
-        console.log(state.current.length);
-       
+    
     }
-    console.log('헤더렌더링');
     //FIXME:불러오는 이미지가 캔버스보다 클 때 submenu를 넘어가는 것 수정 필요 
-
     function importImage(e) {
         e.target.value = ''
-        console.log("이미지 가져오기");
-        canvas.clear();
         
         document.getElementById('import-image-file').onchange = function (e) {
             var file = e.target.files[0];
@@ -32,14 +27,22 @@ export default function Header(props) {
                     canvas.setHeight(img.height);
                     canvas.setWidth(img.width);
                     canvas.setBackgroundImage(img);
+                    canvas.renderAll();
                     state.current =[];
                     state.current.push(canvas.toJSON());
-
+        
                     mods.current=0;
                 });
             };
             reader.readAsDataURL(file);
         };
+
+        if(document.getElementById('filter-list')!=null){
+        document.getElementById('opacity').value = 5;
+        document.getElementById('blur').value = 0;
+        document.getElementById('brightness').value = 0;
+        document.getElementById('pixelate').value = 0;
+        }
     }
 
     //새 프로젝트 
@@ -55,7 +58,6 @@ export default function Header(props) {
         link.href = image;
         link.download = "image.png";
         link.click();
-        console.log(canvas);
     }
 
     // 직렬화 
@@ -99,8 +101,6 @@ export default function Header(props) {
             //After loading JSON it’s important to call canvas.renderAll(). In the 2nd parameter of canvas.loadFromJSON(json, callback) you can define a cllback function which is invoked after all objects are loaded/added.
             
             mods.current += 1;
-            console.log(mods.current);
-            console.log(state.current.length);
 
         }
     }
@@ -110,7 +110,6 @@ export default function Header(props) {
             canvas.clear().renderAll();
             canvas.loadFromJSON(state.current[state.current.length - mods.current ],canvas.renderAll.bind(canvas));
             mods.current -= 1;
-            console.log(mods.current);
         }
     }
 

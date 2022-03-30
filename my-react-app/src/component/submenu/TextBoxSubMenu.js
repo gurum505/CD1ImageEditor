@@ -9,9 +9,7 @@ export default function TextboxSubmenu(props) {
         if (savehistory === true) {
             var  myjson = canvas.toJSON();
             state.current.push(myjson);
-        }
-        console.log(state.current.length);
-        
+        }        
     }
 
     useEffect(()=>{
@@ -67,8 +65,6 @@ export default function TextboxSubmenu(props) {
     function italicizeText() {
         if (canvas.getActiveObject()) {
             var fontFamily = canvas.getActiveObject().fontStyle === 'italic' ? 'normal' : 'italic';
-            console.log(canvas.getActiveObject().fontFamily);
-            console.log(fontFamily);
             const text = canvas.getActiveObject();
             // text.setSelectionStyles({ fontWeight: `${fontWeight}` }, text.selectionStart,99 );
             text.set("fontStyle", fontFamily);
@@ -81,7 +77,6 @@ export default function TextboxSubmenu(props) {
     function underlineText() {
         if (canvas.getActiveObject()) {
             var underline = !canvas.getActiveObject().underline;
-            console.log(underline);
             const text = canvas.getActiveObject();
             text.set('underline', underline);
             canvas.renderAll();
@@ -99,18 +94,6 @@ export default function TextboxSubmenu(props) {
             canvas.renderAll();
         }
     }
-
-    // function selectColor(e) {
-    //     const selectedColor = e.target.value;
-    //     color.current = selectedColor;
-    //     console.log(selectedColor);
-
-    //     if (canvas.getActiveObject() && canvas.getActiveObject().type === 'textbox') {
-    //             const text = canvas.getActiveObject();
-    //             text.set({ fill: `${color.current}` });
-    //             canvas.renderAll();
-    //     }
-    // }
 
     return(
     <>

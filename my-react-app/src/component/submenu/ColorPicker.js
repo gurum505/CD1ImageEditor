@@ -5,7 +5,6 @@ export default function ColorPicker(props){
     const figure = ['rect','triangle','circle'];
     function selectColor(e) {
         const selectedColor = e.target.value;
-        console.log(selectedColor);
         color.current = selectedColor;
         if (canvas.getActiveObject() && (canvas.getActiveObject().type === 'textbox' || figure.includes(canvas.getActiveObject().type) )) {
                 const text = canvas.getActiveObject();

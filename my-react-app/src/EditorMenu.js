@@ -17,7 +17,6 @@ export default function EditorMenu(props) {
             var  myjson = canvas.toJSON();
             state.current.push(myjson);
         }
-        console.log(state.current.length);
         
     }
     console.log('Editormenu 렌더링');
@@ -63,9 +62,23 @@ export default function EditorMenu(props) {
                 document.getElementById('remove-object').disabled = false },
             'object:modified':()=>{
                     console.log('object:modified');
-                    updateModifications(true);
-    
-            }});
+                    updateModifications(true); },
+        //     'mouse:wheel':(opt)=>{
+        //         var scaleRatio = canvas.height/canvas.width;
+
+        //         if(opt.e.deltaY<0){ 
+        //             canvas.setDimensions({ width: canvas.getWidth() *2* scaleRatio, height: canvas.getHeight() *2* scaleRatio });
+        //             canvas.setZoom(scaleRatio);
+
+        //             console.log("스크롤업");
+        //         }else{ 
+        //             canvas.setDimensions({ width: canvas.getWidth() *1.5* scaleRatio, height: canvas.getHeight() *1.5* scaleRatio });
+        //             canvas.setZoom(scaleRatio);
+        //             console.log("스크롤다운");
+        //         }
+                
+        // }
+        });
     }, );
 
     const [buttonType, setButtonType] = useState("");  //어떤 종류의 object를 추가할 것인지 
@@ -108,6 +121,11 @@ export default function EditorMenu(props) {
         canvas.off('mouse:down');
     }
     
+    function cut(){
+        if (buttonType === 'cut') setButtonType('');
+        else setButtonType("cut");
+        canvas.off('mouse:down');
+    }
 
     return (
         <div className="editor-menu">
@@ -117,8 +135,8 @@ export default function EditorMenu(props) {
             <button id='textbox' onClick={addTextBox} >텍스트 박스</button>
             <button id='add-image' onClick ={addImage} >이미지 추가</button>
             <button id='filter' onClick={addFilter} >필터</button>
+            <button id='cut' onClick ={cut}>자르기</button>
             <button id='remove-object' onClick={removeObject} >객체 삭제</button>
-            
             <DefaultMenu canvas={canvas} />
         </div>
     )
