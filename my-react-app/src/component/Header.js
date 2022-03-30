@@ -71,11 +71,7 @@ export default function Header(props) {
 
     return (
         <div className="editor-header">
-            <div className="logo" >
-                <a href="/">
-                    <img src={require('../logo.jpg')} />
-                </a>
-            </div>
+            
             <div className="editor-header-buttons" >
                 <button className="new-project" onClick={clearCanvas}>
                     새프로젝트

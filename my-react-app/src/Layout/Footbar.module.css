@@ -1,0 +1,18 @@
+.footbar{
+    height: 80px;
+    margin-top:auto;
+    background-color: aquamarine;
+}
+.contents{
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items: center; /* 세로축 정렬*/
+    justify-content:center; /* 가로축 정렬*/
+    margin: 0 auto; /*auto:오른쪽 왼쪽 여백(margin)이 동일하도록*/
+
+}
+.title{
+    font-weight: 600;
+    font-size: 20px;
+}

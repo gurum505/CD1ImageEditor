@@ -1,0 +1,35 @@
+.layout{
+    position: fixed;
+    top: 80px; /*header 크기만큼 */
+    bottom: 0;
+    width:100%;
+    display:flex; /*container안의 item 가로로 정렬*/
+}
+.mainContainer{
+    position: relative;
+    width: 100%;/*right부분 debug할때 삭제하고하면 편함*/
+}
+.footbar{
+    position:absolute;
+    bottom:0;
+}
+.left {
+    background-color: #e451da;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    color: #202020;
+    height: 100%;
+    z-index: 99;
+  }
+.right {
+    background-color: #e451da;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    color: #202020;
+    height: 100%;
+    z-index: 99;
+  }

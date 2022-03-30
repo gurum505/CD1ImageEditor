@@ -1,0 +1,20 @@
+.container {
+    background-color: #fc0202;
+    overflow: hidden; /*글이 넘어가면 잘리도록*/
+  }
+  /* border-right: 4px solid #202020;*/
+  .button {
+    z-index: 99;
+    transition: 0.8s ease;
+    border: 2px solid #202020;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    left: 200px;
+  }
+  .content {
+    position: absolute;
+    left:200px;
+    white-space: nowrap; /*글이 재정렬되면서 밑으로 내려가지 않도록*/
+  }
+  

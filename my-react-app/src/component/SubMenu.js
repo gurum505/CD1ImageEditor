@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import FigureSubmenu from './submenu/FigureSubmenu';
-import ImageSubmenu from './submenu/ImageSubmenu';
-import PathSubmenu from './submenu/PathSubmenu';
-import TextboxSubmenu from './submenu/TextboxSubmenu';
+import FigureSubMenu from './SubMenu/FigureSubMenu';
+import ImageSubMenu from './SubMenu/ImageSubMenu';
+import PathSubMenu from './SubMenu/PathSubMenu';
+import TextBoxSubMenu from './SubMenu/TextBoxSubMenu';
 
-export default function Submenu(props) {
+export default function SubMenu(props) {
     
         function changeObjectType() { //객체 타입 전환 
         if (canvas.getActiveObject().type === "rect" || canvas.getActiveObject().type === "triangle" || canvas.getActiveObject().type === "circle")
@@ -53,10 +53,10 @@ export default function Submenu(props) {
 
     return (
         <div className="sub-menu">
-            {(objectType === 'figure' || objectType === '') && <FigureSubmenu canvas={canvas} />}
-            {(objectType === 'image') && <ImageSubmenu canvas={canvas} />}
-            {(objectType === 'path') && <PathSubmenu canvas={canvas} />}
-            {(objectType === 'textbox') && <TextboxSubmenu canvas={canvas} setIsAddingTextbox={props.setIsAddingTextbox} isAddingTextbox={isAddingTextbox} />}
+            {(objectType === 'figure' || objectType === '') && <FigureSubMenu canvas={canvas} />}
+            {(objectType === 'image') && <ImageSubMenu canvas={canvas} />}
+            {(objectType === 'path') && <PathSubMenu canvas={canvas} />}
+            {(objectType === 'textbox') && <TextBoxSubMenu canvas={canvas} setIsAddingTextbox={props.setIsAddingTextbox} isAddingTextbox={isAddingTextbox} />}
         </div>
     );
 }

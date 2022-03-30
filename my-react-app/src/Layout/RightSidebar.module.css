@@ -1,0 +1,18 @@
+.container {
+    background-color: #ccf711;
+  }
+  .button {
+    z-index: 99;
+    transition: 0.8s ease;
+    border: 2px solid #202020;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    right: -200px;
+  }
+  .content {
+    position: relative;
+    right: -200px; /* relative right로 container좌에 붙여주는*/
+    white-space: nowrap; 
+  }
+  
