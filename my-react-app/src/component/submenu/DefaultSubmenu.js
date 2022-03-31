@@ -13,10 +13,10 @@ export default function DefaultMenu(props) {
     return (<>
         <div>
             <label>canvas width: </label>
-            <input type="text"  onChange = {resizeCanvasWidth} placeholder="800" / >
+            <input type="text"  onChange = {resizeCanvasWidth} placeholder="600" / >
             <br />
             <label>canvas height: </label>
-            <input type="text"  onChange={resizeCanvasHeight} placeholder="600" />
+            <input type="text"  onChange={resizeCanvasHeight} placeholder="400" />
         </div>
     </>)
 }

@@ -29,22 +29,70 @@ import EditorMenu from "./EditorMenu";
 
 
 export default function App(props) {
+    function updateModifications(savehistory) {
+        if (savehistory === true) {
+            var  myjson = canvasRef.current.toJSON();
+            state.current.push(myjson);
+        }
+       
+    }
+    const [canvas, setCanvas] = useState(""); //useEffect()후 렌더링 하기 위한 state
 
     const canvasRef = useRef(new fabric.Canvas("canvas", {
         backgroundColor: "white",
         height: 400,
-        width: 800,
-    }));  
-    const [canvas, setCanvas] = useState(""); 
+        width: 700,
+    
+    }));  //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
 
-    useEffect(() => {  
-        canvasRef.current = new fabric.Canvas("canvas", {
+    const state = useRef([]);
+    const mods = useRef(0);
+
+
+    useEffect(() => {  //rendering 후 한 번 실행 
+        canvasRef.current = (new fabric.Canvas("canvas", {
             backgroundColor: "white",
             height: 400,
-            width: 800,
-        });
-        setCanvas(1);
-    }, []);
+            width: 700,
+        }));
+
+
+        function zoom(event) {
+            event.preventDefault();
+            console.log("ㅋㅋ");
+            scale += event.deltaY * -0.001;
+
+            // Restrict scale
+            scale = Math.min(Math.max(.125, scale), 4);
+
+            // Apply scale transform
+            el.style.transform = `scale(${scale})`;
+        }
+
+        let scale = 1;
+        const el = document.querySelector('.wrap');
+        console.log(el);
+        el.addEventListener('wheel', zoom);
+
+        document.onkeydown = function (e) { // delete, backspace 키로 삭제
+            {
+                if (e.key === "Delete" || e.key === "Backspace")
+                canvasRef.current.remove( canvasRef.current.getActiveObject());
+                updateModifications(true);
+            }
+        }
+        
+        canvasRef.current.on('selection:created',()=>{
+            console.log("ㅋ");
+        })
+        canvasRef.current.on('mouse:wheel',(e)=>{
+            console.log(e);
+            console.log('zz');
+        })
+        setCanvas(canvasRef);
+       
+    },[]);
+
 
     const [wid, setX] = useState([50,50])
     const [isOpen, setOpen] = useState([false,false]);
@@ -72,9 +120,9 @@ export default function App(props) {
             <main className={styles.mainContainer}>
                 <Toolbar/>  
                 <Center>
-                    <Header canvas={canvasRef} />
-                    <canvas id="canvas" />
-                    <EditorMenu canvas={canvasRef} />
+                    <Header canvasRef={canvasRef}  canvas={canvas} state={state} mods={mods}/>
+                    <div className="wrap"><canvas id="canvas" /></div>
+                    <EditorMenu canvasRef={canvasRef} state={state} />
                 </Center>
                 <Footbar/>
             </main>
@@ -97,3 +145,4 @@ export default function App(props) {
 //https://cocook.tistory.com/137 -이미지 중앙
 //https://parra.tistory.com/entry/CSS-transform%EC%9C%BC%EB%A1%9C-zoom-%ED%9A%A8%EA%B3%BC-%EB%82%B4%EA%B8%B0
 //https://codesandbox.io/s/wonderful-cerf-69doe?file=/src/App.js:563-672
+        

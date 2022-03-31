@@ -1,45 +1,29 @@
-import { useEffect, useState } from "react";
+import {useRef } from "react";
 import { fabric } from "fabric";
+import ColorPicker from "./ColorPicker";
 
-export default function FigureSubMenu(props) {
-
-
-    function objectSelected(o) {
-        var objectType = o.target.type;
-        console.log(objectType);
-        if (objectType === 'rect' || objectType === 'circle' || objectType === 'triangle') return 'figure';
-        else if (objectType === 'path') return 'path';
-        else if (objectType === 'textbox') return 'textbox';
-        else if (objectType === 'image') return 'image';
-    }
-
-    console.log("figuresubmenu 펑션");
-
+export default function FigureSubmenu(props) {
+    const state = props.state;
     const canvas = props.canvas;
+    const color = useRef('black');
+
+    function updateModifications(savehistory) {
+        if (savehistory === true) {
+            var  myjson = canvas.toJSON();
+            state.current.push(myjson);
+        }
+       
+    }
     
-
-
-    canvas.on('selection:updated', () => {
-        console.log("selection : cleared");
-    });
-
-    canvas.on('selection:cleared', () => {
-        console.log("selection : cleared");
-    });
-
-    canvas.on('object:added', ()=>{
-        console.log('object : added');
-    });
-    canvas.on('object:updated', () => {
-        console.log('object : updated ');
-    });
-
+  
+   
 
     function addRect() {
+        canvas.off('mouse:down');
         canvas.defaultCursor = 'crosshair';
         var rect, isDown, origX, origY;
 
-
+        
         canvas.on('mouse:down', function (o) {
             isDown = true;
             var pointer = canvas.getPointer(o.e);
@@ -53,11 +37,10 @@ export default function FigureSubMenu(props) {
                 width: pointer.x - origX,
                 height: pointer.y - origY,
                 angle: 0,
-                fill: 'rgba(255,0,0,0.5)',
+                fill: `${color.current}`,
                 transparentCorners: false,
                 // type: 'rect',
             });
-
             canvas.add(rect);
         });
 
@@ -78,8 +61,9 @@ export default function FigureSubMenu(props) {
         });
 
         canvas.on('mouse:up', function (o) {
+            updateModifications(true);
             isDown = false;
-            canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
+            // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.defaultCursor = 'default';
             canvas.off('mouse:down');
             canvas.off('mouse:move');
@@ -89,6 +73,9 @@ export default function FigureSubMenu(props) {
     }
 
     function addCircle() {
+        
+        canvas.off('mouse:down');
+
         canvas.defaultCursor = 'crosshair';
         var circle, isDown, origX, origY;
 
@@ -103,13 +90,12 @@ export default function FigureSubMenu(props) {
                 originX: 'left',
                 originY: 'top',
                 radius: (pointer.x - origX) / 2,
-                fill: 'rgba(255,0,0,0.5)',
+                fill: `${color.current}`,
                 transparentCorners: false,
                 // type: 'circle',
             });
 
             canvas.add(circle);
-
         });
 
         canvas.on('mouse:move', function (o) {
@@ -130,18 +116,21 @@ export default function FigureSubMenu(props) {
         });
 
         canvas.on('mouse:up', function (o) {
+            updateModifications(true);
+
             isDown = false;
-            canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
+            // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.off('mouse:move');
             canvas.off('mouse:up');
             canvas.off('mouse:down');
             canvas.defaultCursor = 'default';
-
+           
         });
 
     }
 
     function addTriangle() {
+        canvas.off('mouse:down');
         canvas.defaultCursor = 'crosshair';
         var triangle, isDown, origX, origY;
 
@@ -158,13 +147,13 @@ export default function FigureSubMenu(props) {
                 width: pointer.x - origX,
                 height: pointer.y - origY,
                 angle: 0,
-                fill: 'rgba(255,0,0,0.5)',
+                fill:  `${color.current}`,
                 transparentCorners: false,
                 // type: 'triangle',
             });
 
             canvas.add(triangle);
-
+            
         });
 
         canvas.on('mouse:move', function (o) {
@@ -186,12 +175,15 @@ export default function FigureSubMenu(props) {
         });
 
         canvas.on('mouse:up', function (o) {
+            canvas.renderAll();
+            updateModifications(true);
             isDown = false;
-            canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
+            // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.off('mouse:move');
             canvas.off('mouse:up');
             canvas.off('mouse:down');
             canvas.defaultCursor = 'default';
+  
 
         });
     }
@@ -207,6 +199,8 @@ export default function FigureSubMenu(props) {
                 <button onClick={addTriangle}>
                     삼각형
                 </button>
+                &nbsp; &nbsp;
+                <ColorPicker  canvas={canvas} color={color} />
             </div>
         </>
     )

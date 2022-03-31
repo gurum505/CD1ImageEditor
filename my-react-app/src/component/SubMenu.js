@@ -1,62 +1,25 @@
-import { useEffect } from 'react';
-import FigureSubMenu from './SubMenu/FigureSubMenu';
-import ImageSubMenu from './SubMenu/ImageSubMenu';
-import PathSubMenu from './SubMenu/PathSubMenu';
-import TextBoxSubMenu from './SubMenu/TextBoxSubMenu';
+import FigureSubmenu from './submenu/FigureSubmenu';
+import ImageSubmenu from './submenu/ImageSubmenu';
+import LineSubmenu from './submenu/LineSubmenu';
+import TextboxSubmenu from './submenu/TextBoxSubmenu';
+import FilterSubmenu from './submenu/FilterSubmenu';
+import CutSubmenu from './submenu/CutSubmenu';
 
-export default function SubMenu(props) {
-    
-        function changeObjectType() { //객체 타입 전환 
-        if (canvas.getActiveObject().type === "rect" || canvas.getActiveObject().type === "triangle" || canvas.getActiveObject().type === "circle")
-            props.setObjectType("figure");
-        else if (canvas.getActiveObject().type === "path") props.setObjectType("path");
-        else if (canvas.getActiveObject().type === "textbox") props.setObjectType("textbox");
-        else if (canvas.getActiveObject().type === "image") props.setObjectType("image");
-        props.setBtnDisabled(false);
-        // document.onkeydown = function (e) { // delete, backspace 키로 삭제
-        //     {
-        //         if (e.key === "Delete" || e.key === "Backspace")
-        //             canvas.remove(canvas.getActiveObject());
-        //     }
-        // }    
-    }
+export default function Submenu(props) {
+    console.log('submenu렌더링');
 
     const canvas = props.canvas;
-    const objectType = props.objectType;
-    const isAddingTextbox = props.isAddingTextbox;
+    const buttonType = props.buttonType;
 
-    canvas.on({
-        'selection:updated': () => {
-            changeObjectType();
-            console.log('selection:updated');
-        },
-        'selection:created': () => {
-            changeObjectType();
-
-            console.log('selection:created');
-        }
-        ,
-        'object:removed': () => {
-            console.log('object : removed');
-            props.setBtnDisabled(true);
-        },
-        'selection:cleared': () => {
-            console.log('selection : cleared'); 
-            props.setBtnDisabled(true);
-            props.setIsCleared(true);
-        },
-        'object:added': () => {
-            console.log('object : added');
-        }
-
-    });
 
     return (
         <div className="sub-menu">
-            {(objectType === 'figure' || objectType === '') && <FigureSubMenu canvas={canvas} />}
-            {(objectType === 'image') && <ImageSubMenu canvas={canvas} />}
-            {(objectType === 'path') && <PathSubMenu canvas={canvas} />}
-            {(objectType === 'textbox') && <TextBoxSubMenu canvas={canvas} setIsAddingTextbox={props.setIsAddingTextbox} isAddingTextbox={isAddingTextbox} />}
+            {(buttonType === 'figure') && <FigureSubmenu canvas={canvas} state={props.state} mods={props.mods}/>}
+            {(buttonType === 'image') && <ImageSubmenu canvas={canvas} state={props.state} mods={props.mods}/>}
+            {(buttonType === 'line') && <LineSubmenu canvas={canvas} state={props.state} mods={props.mods}/>}
+            {(buttonType === 'textbox') && <TextboxSubmenu canvas={canvas} state={props.state} mods={props.mods}/>}
+            {(buttonType === 'filter') && <FilterSubmenu canvas={canvas} state={props.state} mods={props.mods}/>}
+            {(buttonType === 'cut') && <CutSubmenu canvas={canvas} state={props.state} mods={props.mods}/>}
         </div>
     );
 }

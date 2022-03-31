@@ -18,4 +18,17 @@ body{
 } */
 
 #import-image-file{display : none;} 
+#add-image-file {display:none;}
 #Deserialization-json-file{display:none;}
+#add-local-image-file{display:none;}
+.wrap{
+    width : 1000px;
+    height :500px;
+    background-color: #f3f3f3;
+    margin-left: 200px;
+}
+
+canvas{
+    margin-top : 50px;
+    margin-left:130px;
+}
