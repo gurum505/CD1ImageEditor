@@ -22,7 +22,7 @@ import RightSidebar from './Layout/RightSidebar';
 
 //canvas
 import Header from "./component/Header";
-import EditorMenu from "./EditorMenu";
+import EditorMenu from "./Editormenu";
 
 //TODO: 도형과 텍스트 묶어서 객체 삭제가 안됌 => activeobjects로 받아서 for문remove돌리면 됌
 
