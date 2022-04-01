@@ -1,12 +1,10 @@
 import styles from './Toolbar.module.css'
-const Toolbar =() =>(
+
+const Toolbar =({children}) =>(
     <header className={styles.Toolbar}>
-      <div>Toolbar</div>
-      <div>draw</div> 
-      <div>rectangle</div> 
-      <nav className={styles.ToolbarNav}>
-         ...
-      </nav>
+      <div>
+         {children}
+      </div>
    </header>
 );
 export default Toolbar;

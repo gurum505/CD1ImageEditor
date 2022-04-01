@@ -1,17 +1,19 @@
 import styles from './Title.module.css'
-
+import {GithubOutlined} from "@ant-design/icons"
 const Title=()=>{
     return(
         <div className={styles.header}>
-            this is Header
+            
             <div className={styles.contents}>
-                <div>
-                    제목
-                </div>
-                <div>
-                    로고?
-                </div>
-
+                <h1>
+                    CDImageEditor  
+                    <GithubOutlined/>
+                </h1>
+                <h3>
+                    <span>Fabric  </span>
+                    <span>React  </span>
+                    <span>HTML5  </span>
+                </h3>
             </div>
             
         </div>

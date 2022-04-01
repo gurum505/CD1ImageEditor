@@ -10,21 +10,22 @@ import Footbar from './Layout/Footbar';
 import LeftSidebar from './Layout/LeftSidebar';
 import RightSidebar from './Layout/RightSidebar';
 
-//TODO: togglemenu, isOpen wid 깔끔히 정리 ex){l:50,r:50}
-//FIXME: Sidebar:x축이 -200px으로 되어있다. 내용을 쓸때도 left 200px을해야한다.
-//TODO: Sidebar-R: 버튼도 조정필요 향후에 따라 결정
-//TODO: Left,Right내용 들어갈부분(왼,오른쪽 정렬 등)
+//FIXME: Sidebar:x축이 -200px으로 되어있다. 내용을 쓸때도 left 200px을해야한다.=> 처음 렌더링 될때부터 transletx-200 되서 그런듯 처음 >>가 눌러도 안바뀌는 것도 그렇고
 //TODO: Canvas: Focus zoom in out 구현 
 //TODO: 버튼기능구현 layout으로 분배
 //FIXME: canvas크기구현할때 왼쪽 사이드바까지 고려해서 집어넣어야함
 //FIXME: 사이드 메뉴바를 누르면 캔버스의 도형이 안보임(초기화는 아닌듯) 
-
+//FIXME: 사이드 메뉴바 최소 최대 크기 설정 가운데 canvas와 오른쪽200px이 확보되어야
+//TODO: Right사이드바 page를 따로 따로 만들어 분배
 
 //canvas
 import Header from "./component/Header";
 import EditorMenu from "./EditorMenu";
 
 //TODO: 도형과 텍스트 묶어서 객체 삭제가 안됌 => activeobjects로 받아서 for문remove돌리면 됌
+//FIXME: redop undo 이미지가져오기(header)에 적용안됌
+//TODO: 이미지 드래그앤 드롭으로 이미지 집어넣기, 복사 붙여넣기로 집어넣기
+//TODO: 객체들고 옮길때 canvas에 중앙선or경계 표시
 
 
 
@@ -34,7 +35,6 @@ export default function App(props) {
             var  myjson = canvasRef.current.toJSON();
             state.current.push(myjson);
         }
-       
     }
     const [canvas, setCanvas] = useState(""); //useEffect()후 렌더링 하기 위한 state
 
@@ -48,14 +48,12 @@ export default function App(props) {
     const state = useRef([]);
     const mods = useRef(0);
 
-
     useEffect(() => {  //rendering 후 한 번 실행 
         canvasRef.current = (new fabric.Canvas("canvas", {
             backgroundColor: "white",
             height: 400,
             width: 700,
         }));
-
 
         function zoom(event) {
             event.preventDefault();
@@ -75,8 +73,7 @@ export default function App(props) {
         el.addEventListener('wheel', zoom);
 
         document.onkeydown = function (e) { // delete, backspace 키로 삭제
-            {
-                if (e.key === "Delete" || e.key === "Backspace")
+            if (e.key === "Delete" || e.key === "Backspace"){
                 canvasRef.current.remove( canvasRef.current.getActiveObject());
                 updateModifications(true);
             }
@@ -94,40 +91,57 @@ export default function App(props) {
     },[]);
 
 
-    const [wid, setX] = useState([50,50])
-    const [isOpen, setOpen] = useState([false,false]);
+
+    //LeftSidebar, RightSidebar 열고 닫는 함수
+    //0:Left, 1:Right
+    const [wid, setX] = useState({0:50,1:50})
+    const [isOpen, setOpen] = useState({0:false,1:false});
     const toggleMenu = (direction) => {
-        let newwid=[wid];
-        let newisOpen=[isOpen];
         if (wid[direction] > 50) {
-            newwid[direction]=50;
-            newisOpen[direction]=true;
-            setX(newwid);
-            setOpen(newisOpen);
+            setX({
+            ...wid,
+            [direction]:50
+            });
+            setOpen({
+            ...isOpen,
+            [direction]:false
+            });
         } else {
-            newwid[direction]=200;
-            newisOpen[direction]=false;
-            setX(newwid);
-            setOpen(newisOpen);
+            setX({
+                ...wid,
+                [direction]:200
+            });
+            setOpen({
+                ...isOpen,
+                [direction]:true
+            });
         }
     };
 
     return (
         <div className={styles.layout}>
             <Title/>
-            <LeftSidebar wid={wid} toggleMenu={toggleMenu} isOpen={isOpen} className={styles.left}/> 
+            <LeftSidebar wid={wid} toggleMenu={toggleMenu} isOpen={isOpen} className={styles.left}> 
+                {/*Left에는 직접적인 기능들 */}
+            </LeftSidebar>
 
             <main className={styles.mainContainer}>
-                <Toolbar/>  
+                <Toolbar> 
+                    <Header canvasRef={canvasRef} canvas={canvas} state={state} mods={mods}/>
+                </Toolbar>
                 <Center>
-                    <Header canvasRef={canvasRef}  canvas={canvas} state={state} mods={mods}/>
+                    
                     <div className="wrap"><canvas id="canvas" /></div>
-                    <EditorMenu canvasRef={canvasRef} state={state} />
+                    <EditorMenu canvasRef={canvasRef} canvas={canvas} state={state} />
                 </Center>
-                <Footbar/>
+                <Footbar>
+                    {/*투명하게, zoom component, 전체화면키 전환키 */}
+                </Footbar>
             </main>
 
-            <RightSidebar wid={wid} toggleMenu={toggleMenu} isOpen={isOpen} className={styles.right}/> 
+            <RightSidebar wid={wid} toggleMenu={toggleMenu} isOpen={isOpen} className={styles.right}> 
+                {/*속성들: pt크기 색상 필터속성 캔버스크기*/}
+            </RightSidebar>
         </div>
     );
 }

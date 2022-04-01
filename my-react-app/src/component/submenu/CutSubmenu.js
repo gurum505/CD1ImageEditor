@@ -28,13 +28,12 @@ export default function CutSubmenu(props) {
     return (
     
         <ul style={{  listStyle: "none", }}>
-            <li><button onClick={crop}>정방형</button></li>
-            <li><button onClick={crop}>3:2</button></li>
-            <li><button onClick={crop}>4:3</button></li>
-            <li><button onClick={crop}>16:9</button></li>
-            <hr></hr>
-            <li><button onClick={apply}>적용</button></li>
-            <li><button onClick={crop}>취소</button></li>
+            <button onClick={crop}>정방형</button>
+            <button onClick={crop}>3:2</button>
+            <button onClick={crop}>4:3</button>
+            <button onClick={crop}>16:9</button>
+            <button onClick={apply}>적용</button>
+            <button onClick={crop}>취소</button>
         </ul>
 
     )

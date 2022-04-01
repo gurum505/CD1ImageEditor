@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Submenu from "./component/Submenu";
 import DefaultMenu from "./component/submenu/DefaultSubmenu";
 import './editor.css';
@@ -9,7 +9,7 @@ export default function EditorMenu(props) {
     const canvas = props.canvasRef.current;
     canvas.isDrawingMode = false;
     const state = props.state;
-    const mods = props.mods;
+    //const mods = props.mods;
     
     function updateModifications(savehistory) {
         if (savehistory === true) {
@@ -18,16 +18,14 @@ export default function EditorMenu(props) {
         }
         
     }
-    console.log('Editormenu 렌더링');
+
     useEffect(() => {
-        
         var json = JSON.stringify(canvas);
         json = [json];
-        var blob = new Blob(json, { type: "text/plain;charset=utf-8" });
-        var link = document.createElement('a'); //<a> 생성
+        //var blob = new Blob(json, { type: "text/plain;charset=utf-8" });
+        //var link = document.createElement('a'); //<a> 생성
         var json = canvas.toJSON(['selectable', 'name', 'ownType', 'ddlValue', 'lockScalingX']);
         if(state.current.length===0)state.current.push(JSON.stringify(canvas));
-
 
 
         const figure = ['rect', 'circle', 'triangle'];
