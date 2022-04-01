@@ -1,7 +1,7 @@
 import styles from "./LeftSidebar.module.css";
 import {FontSizeOutlined,MenuOutlined,BorderOutlined,AreaChartOutlined, LineOutlined } from "@ant-design/icons"
 //곡선(자유그리기)
-//<HighlightOutlined />
+//<HighlightOutlined /> <FallOutlined />
 //
 const LeftSidebar = ({children, wid, toggleMenu, isOpen}) => {
   isOpen=isOpen[0];
