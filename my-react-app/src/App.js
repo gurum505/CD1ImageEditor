@@ -59,7 +59,6 @@ export default function App(props) {
 
         function zoom(event) {
             event.preventDefault();
-            console.log("ㅋㅋ");
             scale += event.deltaY * -0.001;
 
             // Restrict scale
@@ -75,8 +74,9 @@ export default function App(props) {
         el.addEventListener('wheel', zoom);
 
         document.onkeydown = function (e) { // delete, backspace 키로 삭제
-            {
-                if (e.key === "Delete" || e.key === "Backspace")
+            {   
+               
+                if (e.key === "Delete" )
                 canvasRef.current.remove( canvasRef.current.getActiveObject());
                 updateModifications(true);
             }
@@ -89,8 +89,10 @@ export default function App(props) {
             console.log(e);
             console.log('zz');
         })
+       
         setCanvas(canvasRef);
        
+        
     },[]);
 
 

@@ -22,6 +22,7 @@ body{
 #Deserialization-json-file{display:none;}
 #add-local-image-file{display:none;}
 .wrap{
+    text-align: center;
     width : 1000px;
     height :500px;
     background-color: #f3f3f3;
@@ -29,6 +30,5 @@ body{
 }
 
 canvas{
-    margin-top : 50px;
-    margin-left:130px;
+    margin: 50px 100px
 }
