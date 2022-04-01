@@ -4,6 +4,7 @@ import DefaultMenu from "./component/submenu/DefaultSubmenu";
 import './editor.css';
 
 export default function EditorMenu(props) {
+    console.log("에디ㅓㅌ레ㅣㄴㄷ러이");
     const canvas = props.canvasRef.current;
     canvas.isDrawingMode = false;
     const state = props.state;
@@ -11,17 +12,16 @@ export default function EditorMenu(props) {
     
     function updateModifications(savehistory) {
         if (savehistory === true) {
-            var myjson = canvas.toJSON();
+            var myjson = canvas.toDatalessJSON(['width','height']);
             state.current.push(myjson);
         }
     }
 
     useEffect(() => {
         var json = JSON.stringify(canvas);
-        json = [json];
         //var blob = new Blob(json, { type: "text/plain;charset=utf-8" });
         //var link = document.createElement('a'); //<a> 생성
-        if(state.current.length===0)state.current.push(JSON.stringify(canvas));
+        if(state.current.length===0) updateModifications(true);
 
 
         const figure = ['rect', 'circle', 'triangle'];
@@ -30,7 +30,7 @@ export default function EditorMenu(props) {
         var selectType;
 
         canvas.off();
-        if (buttonType !== 'cut')
+        if (buttonType !== 'crop')
             canvas.on({
                 'selection:updated': () => {
                     document.getElementById('remove-object').disabled = false

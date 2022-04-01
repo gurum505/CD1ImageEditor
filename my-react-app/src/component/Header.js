@@ -1,6 +1,8 @@
 import { fabric } from "fabric";
-import {FolderOpenOutlined,CloudDownloadOutlined,UploadOutlined,
-    FileImageOutlined,RedoOutlined,UndoOutlined,DownloadOutlined} from "@ant-design/icons"
+import {
+    FolderOpenOutlined, CloudDownloadOutlined, UploadOutlined,
+    FileImageOutlined, RedoOutlined, UndoOutlined, DownloadOutlined
+} from "@ant-design/icons"
 //새프로젝트
 //<FileAddOutlined />
 //<FolderOpenOutlined />
@@ -16,12 +18,12 @@ import {FolderOpenOutlined,CloudDownloadOutlined,UploadOutlined,
 export default function Header(props) {
     const state = props.state;
     const mods = props.mods;
-    const canvas = props.canvasRef.current;
+    var canvas = props.canvasRef.current;
 
     //FIXME:불러오는 이미지가 캔버스보다 클 때 submenu를 넘어가는 것 수정 필요 
     function importImage(e) {
         e.target.value = ''
-        
+
         document.getElementById('import-image-file').onchange = function (e) {
             var file = e.target.files[0];
             var reader = new FileReader();
@@ -32,20 +34,21 @@ export default function Header(props) {
                     canvas.setWidth(img.width);
                     canvas.setBackgroundImage(img);
                     canvas.renderAll();
-                    state.current =[];
-                    state.current.push(canvas.toJSON());
-        
-                    mods.current=0;
+                    state.current = [];
+                    var myjson = canvas.toDatalessJSON(['width', 'height']);
+                    state.current.push(myjson);
+
+                    mods.current = 0;
                 });
             };
             reader.readAsDataURL(file);
         };
 
-        if(document.getElementById('filter-list')!=null){
-        document.getElementById('opacity').value = 5;
-        document.getElementById('blur').value = 0;
-        document.getElementById('brightness').value = 0;
-        document.getElementById('pixelate').value = 0;
+        if (document.getElementById('filter-list') != null) {
+            document.getElementById('opacity').value = 5;
+            document.getElementById('blur').value = 0;
+            document.getElementById('brightness').value = 0;
+            document.getElementById('pixelate').value = 0;
         }
     }
 
@@ -58,7 +61,6 @@ export default function Header(props) {
     //이미지 다운로드
     function downloadImage() {
         var image = canvas.toDataURL();  //canvas 그림을 문자열 형태로 
-        console.log(image);
         var link = document.createElement('a'); //<a> 생성
         link.href = image;
         link.download = "image.png";
@@ -80,35 +82,52 @@ export default function Header(props) {
     // 역직렬화
     function Deserialization() {
         canvas.off('object:added'); //역직렬화 시 object : added가 되면서 객체 삭제 버튼이 누를 수 있게 되는 것을 방지 
-       
+
         document.getElementById("Deserialization-json-file").onchange = function (e) {
             var reader = new FileReader();
             reader.onload = function (e) { //onload(): 읽기 성공 시 실행되는 핸들러
-                //var temp = canvas.loadFromJSON(reader.result,canvas.renderAll.bind(canvas));
+                canvas.loadFromJSON(reader.result, canvas.renderAll.bind(canvas));
+                var test = canvas.toDatalessJSON(['width', 'height']);
                 let data = JSON.parse(reader.result);
-                state.current =[];
-                // state.current.push(canvas.toJSON());
-                mods.current=0;
-                if(data.backgroundImage!==undefined){
-                canvas.setWidth(data.backgroundImage.width);
-                canvas.setHeight(data.backgroundImage.height);
-            }}
+
+                state.current = [];
+                mods.current = 0;
+                if (data.backgroundImage !== undefined) {
+                    canvas.setWidth(data.backgroundImage.width);
+                    canvas.setHeight(data.backgroundImage.height);
+
+                    fabric.Image.fromURL(data.backgroundImage.src, function (img) {
+                        canvas.setBackgroundImage(img);
+                        var myjson = canvas.toDatalessJSON(['width', 'height', 'backgroundImage']);
+                        state.current.push(myjson);
+                    });
+
+                }
+            }
             reader.readAsText(e.target.files[0]); // dataURL 형식으로 파일 읽음
         }
     }
-    function undo(){
-        if (mods.current <state.current.length-1 && state.current.length>1) {
+    function undo() {
+        if (mods.current < state.current.length - 1 && state.current.length > 1) {
             canvas.clear().renderAll();
-            canvas.loadFromJSON(state.current[state.current.length - 2 - mods.current],canvas.renderAll.bind(canvas));
+            var json = state.current[state.current.length - 2 - mods.current];
+            canvas.loadFromJSON(json, () => {
+                if (json.width) {
+                    if (json.width) canvas.setWidth(json.width);
+                    if (json.height) canvas.setHeight(json.height);
+                }
+                canvas.renderAll.bind(canvas);
+
+            });
             //After loading JSON it’s important to call canvas.renderAll(). In the 2nd parameter of canvas.loadFromJSON(json, callback) you can define a cllback function which is invoked after all objects are loaded/added.
             mods.current += 1;
         }
     }
 
-    function redo(){
+    function redo() {
         if (mods.current > 0) {
             canvas.clear().renderAll();
-            canvas.loadFromJSON(state.current[state.current.length - mods.current ],canvas.renderAll.bind(canvas));
+            canvas.loadFromJSON(state.current[state.current.length - mods.current], canvas.renderAll.bind(canvas));
             mods.current -= 1;
         }
     }
@@ -116,12 +135,12 @@ export default function Header(props) {
 
     return (
         <div className="editor-header">
-            
+
             <div className="editor-header-buttons" >
                 <button className="new-project" onClick={clearCanvas}>
                     <FolderOpenOutlined />새프로젝트
                 </button>
-        
+
                 <button className="new-project" onClick={downloadImage}>
                     <FileImageOutlined /> 이미지 저장
                 </button>
@@ -139,12 +158,12 @@ export default function Header(props) {
 
                 <button className="import-image">
                     <label htmlFor="import-image-file">
-                        <CloudDownloadOutlined />이미지 가져오기 
+                        <CloudDownloadOutlined />이미지 가져오기
                     </label>
                 </button>
-                <input type="file" id="import-image-file" name="chooseFile" accept="image/*" onClick={importImage}  />
-                <button id = 'undo'   onClick = {undo}><UndoOutlined />이전</button>
-                <button id = 'redo'   onClick = {redo}><RedoOutlined />되돌리기</button>
+                <input type="file" id="import-image-file" name="chooseFile" accept="image/*" onClick={importImage} />
+                <button id='undo' onClick={undo}><UndoOutlined />이전</button>
+                <button id='redo' onClick={redo}><RedoOutlined />되돌리기</button>
             </div>
         </div>
     )

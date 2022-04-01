@@ -9,7 +9,9 @@ export default function FigureSubmenu(props) {
 
     function updateModifications(savehistory) {
         if (savehistory === true) {
-            var  myjson = canvas.toJSON();
+            var myjson = canvas.toDatalessJSON(['width','height']);
+
+            console.log(myjson);
             state.current.push(myjson);
         }
        

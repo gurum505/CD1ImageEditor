@@ -7,7 +7,9 @@ export default function CropSubmenu(props) {
     
     function updateModifications(savehistory) {
         if (savehistory === true) {
-            var myjson = canvas.toJSON();
+            var myjson = canvas.toDatalessJSON(['width','height']);
+            console.log(myjson);
+            console.log(canvas);
             state.current.push(myjson);
         }
     }
@@ -49,12 +51,12 @@ export default function CropSubmenu(props) {
         var cropBtn = document.querySelectorAll('.crop-button');
         cropBtn.forEach((btn)=>{
             btn.disabled  =true;
-        })
+        })  
     }
 
     function apply() {
         if(canvas.getActiveObject() === selectionRect)  canvas.remove(selectionRect);
-
+       
         fabric.Image.fromURL(canvas.toDataURL(), img => {
             currentImage = img; //현재 캔버스를 currentIamge 로 저장
             currentImage.set({
@@ -69,22 +71,31 @@ export default function CropSubmenu(props) {
                 width: selectionRect.getScaledWidth(),
                 height: selectionRect.getScaledHeight()
             });
-            
+
             canvas.setBackgroundImage(currentImage).renderAll();
+            var  prevObjects = canvas.getObjects();
+            prevObjects.forEach((object)=>{
+                canvas.remove(object);
+            });
+            canvas.remove(selectionRect);
+            var cropBtn = document.querySelectorAll('.crop-button');
+            cropBtn.forEach((btn)=>{
+                btn.disabled  =false;
+                
+            });
+            updateModifications(true); //#FIXME: REDO 할 때 캔버스 크기도 
+
         });
        
-        canvas.remove(selectionRect);
-        var cropBtn = document.querySelectorAll('.crop-button');
-        cropBtn.forEach((btn)=>{
-            btn.disabled  =false;
-            
-        });
-        updateModifications(true); //#FIXME: REDO 할 때 캔버스 크기도 
+
+
         
     }
 
     
     function cropCustom(){
+        canvas.defaultCursor = 'crosshair';
+
         if(canvas.getActiveObject() === selectionRect)  canvas.remove(selectionRect);
         var cropBtn = document.querySelectorAll('.crop-button');
         cropBtn.forEach((btn)=>{
@@ -94,7 +105,6 @@ export default function CropSubmenu(props) {
         var isDown, origX, origY;
 
         canvas.on('mouse:down', function (o) {
-            console.log("ㅋㅋ");
             isDown = true;
             var pointer = canvas.getPointer(o.e);
             origX = pointer.x; //클릭시 마우스 x좌표
@@ -141,6 +151,7 @@ export default function CropSubmenu(props) {
         });
 
         canvas.on('mouse:up', function (o) {
+
             isDown = false;
             // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.defaultCursor = 'default';
@@ -149,7 +160,9 @@ export default function CropSubmenu(props) {
             canvas.off('mouse:up');
             cropBtn.forEach((btn)=>{
                 btn.disabled  =false;
-            })       
+            })   
+            canvas.defaultCursor = 'default';
+    
         });
 
     }
