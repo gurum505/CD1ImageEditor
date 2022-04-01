@@ -70,15 +70,18 @@ export default function App(props) {
 
         let scale = 1;
         const el = document.querySelector('.wrap');
-        console.log(el);
         el.addEventListener('wheel', zoom);
 
         document.onkeydown = function (e) { // delete, backspace 키로 삭제
             {   
                
-                if (e.key === "Delete" )
-                canvasRef.current.remove( canvasRef.current.getActiveObject());
-                updateModifications(true);
+                if (e.key === "Delete" ){
+                    var objects = canvasRef.current.getActiveObjects();
+                    objects.forEach((object)=>{
+                        canvasRef.current.remove(object);
+                    })
+                    updateModifications(true);
+                }
             }
         }
         
