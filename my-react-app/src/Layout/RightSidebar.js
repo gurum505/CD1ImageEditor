@@ -1,5 +1,24 @@
 import styles from "./RightSidebar.module.css";
 import {FontSizeOutlined,SettingOutlined,BorderOutlined,AreaChartOutlined, LineOutlined } from "@ant-design/icons"
+
+//속성들-정렬은 header에 가는게 맞을수도 있다.
+//정렬 좌
+//<AlignLeftOutlined />
+//정렬 중앙
+//<AlignCenterOutlined />
+//정렬 우측
+//<AlignRightOutlined />
+//색 적용
+//<BgColorsOutlined />
+//text font size
+//<LineHeightOutlined />
+//font color
+//<FontColorsOutlined />
+//width
+//<ColumnWidthOutlined />
+//height
+//<ColumnHeightOutlined />
+
 const RightSidebar = ({children, wid,  toggleMenu, isOpen}) => { 
   /** 화면 바깥을 클릭시 닫히도록 하는 함수
    * const handleClose = async e => {
@@ -34,8 +53,7 @@ const RightSidebar = ({children, wid,  toggleMenu, isOpen}) => {
       })
     });
   });*/
-  //
-  //
+  
   isOpen=isOpen[1];
   wid=wid[1];
 

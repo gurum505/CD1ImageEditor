@@ -1,7 +1,7 @@
 import FigureSubmenu from './submenu/FigureSubmenu';
 import ImageSubmenu from './submenu/ImageSubmenu';
 import LineSubmenu from './submenu/LineSubmenu';
-import TextboxSubmenu from './submenu/TextboxSubmenu';
+import TextboxSubmenu from './submenu/TextBoxSubmenu';
 import FilterSubmenu from './submenu/FilterSubmenu';
 import CutSubmenu from './submenu/CutSubmenu';
 

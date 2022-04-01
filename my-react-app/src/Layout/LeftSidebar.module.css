@@ -12,6 +12,9 @@
   position: relative;
   left: 200px;
 }
+.openContainer{
+  transition: all 1s ease;
+}
 .icon{
   font-size: 20pt; 
   margin: 0; /*상우하좌 시계방향*/
@@ -42,7 +45,7 @@
   cursor: pointer;
 }
 .content {
-  position: absolute;
+  position: relative;
   left:200px;
   white-space: nowrap; /*글이 재정렬되면서 밑으로 내려가지 않도록*/
 }

@@ -1,10 +1,8 @@
 import styles from "./LeftSidebar.module.css";
 import {FontSizeOutlined,MenuOutlined,BorderOutlined,AreaChartOutlined, LineOutlined } from "@ant-design/icons"
-//https://ant.design/components/icon/#components-icon-demo-custom
-//TODO: Open시와 close시 분리
-//TODO: onClick따로 묶을 수 없나
-/*FIXME:칸이 먼저 생기는것 방지, box-border 지금 2개 겹쳐있음*/
-
+//곡선(자유그리기)
+//<HighlightOutlined />
+//
 const LeftSidebar = ({children, wid, toggleMenu, isOpen}) => {
   isOpen=isOpen[0];
   wid=wid[0];
@@ -12,7 +10,7 @@ const LeftSidebar = ({children, wid, toggleMenu, isOpen}) => {
   function page(isOpen){
     if(isOpen){
       return(
-        <div>
+        <div className={styles.openContainer}>
           <MenuOutlined className={styles.icon} onClick={()=>toggleMenu(0)}/>
           <details className={styles.detail} >
             <summary>Shape</summary>
