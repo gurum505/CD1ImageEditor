@@ -20,7 +20,7 @@ import RightSidebar from './Layout/RightSidebar';
 
 //canvas
 import Header from "./component/Header";
-import EditorMenu from "./EditorMenu";
+import EditorMenu from "./Editormenu";
 
 //TODO: 도형과 텍스트 묶어서 객체 삭제가 안됌 => activeobjects로 받아서 for문remove돌리면 됌
 //FIXME: redop undo 이미지가져오기(header)에 적용안됌
@@ -57,7 +57,6 @@ export default function App(props) {
 
         function zoom(event) {
             event.preventDefault();
-            console.log("ㅋㅋ");
             scale += event.deltaY * -0.001;
 
             // Restrict scale
@@ -86,8 +85,10 @@ export default function App(props) {
             console.log(e);
             console.log('zz');
         })
+       
         setCanvas(canvasRef);
        
+        
     },[]);
 
 

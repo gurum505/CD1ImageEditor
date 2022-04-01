@@ -34,6 +34,7 @@ export default function EditorMenu(props) {
         var selectType;
         
         canvas.off();
+        if(buttonType!='cut')
         canvas.on({
             'selection:updated': () => {
                 document.getElementById('remove-object').disabled = false
@@ -58,28 +59,15 @@ export default function EditorMenu(props) {
             'object:updated': () => {
                 document.getElementById('remove-object').disabled = false },
             'object:modified':()=>{
+                console.log(canvas.getActiveObject().getScaledWidth());
+
                     console.log('object:modified');
                     updateModifications(true); },
-        //     'mouse:wheel':(opt)=>{
-        //         var scaleRatio = canvas.height/canvas.width;
-
-        //         if(opt.e.deltaY<0){ 
-        //             canvas.setDimensions({ width: canvas.getWidth() *2* scaleRatio, height: canvas.getHeight() *2* scaleRatio });
-        //             canvas.setZoom(scaleRatio);
-
-        //             console.log("스크롤업");
-        //         }else{ 
-        //             canvas.setDimensions({ width: canvas.getWidth() *1.5* scaleRatio, height: canvas.getHeight() *1.5* scaleRatio });
-        //             canvas.setZoom(scaleRatio);
-        //             console.log("스크롤다운");
-        //         }
-                
-        // }
+       
         });
     }, );
 
     const [buttonType, setButtonType] = useState("");  //어떤 종류의 object를 추가할 것인지 
-    const [isAddingTextbox, setIsAddingTextbox] = useState(false);
 
     function addFigure() { //도형(삼각형, 원, 직사각형) 추가
         // if (buttonType === 'figure') setButtonType(''); //현재 열려있는 submenu 가 figure이면 submenu를 닫음
@@ -91,7 +79,6 @@ export default function EditorMenu(props) {
     function addTextBox() { //텍스트상자 추가
         if (buttonType === 'textbox') setButtonType('');
         else setButtonType("textbox");
-        setIsAddingTextbox(!isAddingTextbox);
         canvas.isDrawingMode = false; // 그리기 하다가 도형 삽입 클릭시 drawing 모드가 켜져 있으면 도형과 함께 곡선이 그려지는 것을 방지
     }
 
