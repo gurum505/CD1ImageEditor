@@ -31,10 +31,10 @@ import EditorMenu from "./Editormenu";
 export default function App(props) {
     function updateModifications(savehistory) {
         if (savehistory === true) {
-            var  myjson = canvasRef.current.toJSON();
+            var myjson = canvasRef.current.toJSON();
             state.current.push(myjson);
         }
-       
+
     }
     const [canvas, setCanvas] = useState(""); //useEffect()후 렌더링 하기 위한 state
 
@@ -42,7 +42,7 @@ export default function App(props) {
         backgroundColor: "white",
         height: 400,
         width: 700,
-    
+
     }));  //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
 
     const state = useRef([]);
@@ -73,45 +73,45 @@ export default function App(props) {
         el.addEventListener('wheel', zoom);
 
         document.onkeydown = function (e) { // delete, backspace 키로 삭제
-            {   
-               
-                if (e.key === "Delete" ){
-                    var objects = canvasRef.current.getActiveObjects();
-                    objects.forEach((object)=>{
-                        canvasRef.current.remove(object);
-                    })
-                    updateModifications(true);
-                }
+
+
+            if (e.key === "Delete") {
+                var objects = canvasRef.current.getActiveObjects();
+                objects.forEach((object) => {
+                    canvasRef.current.remove(object);
+                })
+                updateModifications(true);
             }
+
         }
-        
-        canvasRef.current.on('selection:created',()=>{
+
+        canvasRef.current.on('selection:created', () => {
             console.log("ㅋ");
         })
-        canvasRef.current.on('mouse:wheel',(e)=>{
+        canvasRef.current.on('mouse:wheel', (e) => {
             console.log(e);
             console.log('zz');
         })
-       
+
         setCanvas(canvasRef);
-       
-        
-    },[]);
 
 
-    const [wid, setX] = useState([50,50])
-    const [isOpen, setOpen] = useState([false,false]);
+    }, []);
+
+
+    const [wid, setX] = useState([50, 50])
+    const [isOpen, setOpen] = useState([false, false]);
     const toggleMenu = (direction) => {
-        let newwid=[wid];
-        let newisOpen=[isOpen];
+        let newwid = [wid];
+        let newisOpen = [isOpen];
         if (wid[direction] > 50) {
-            newwid[direction]=50;
-            newisOpen[direction]=true;
+            newwid[direction] = 50;
+            newisOpen[direction] = true;
             setX(newwid);
             setOpen(newisOpen);
         } else {
-            newwid[direction]=200;
-            newisOpen[direction]=false;
+            newwid[direction] = 200;
+            newisOpen[direction] = false;
             setX(newwid);
             setOpen(newisOpen);
         }
@@ -119,20 +119,20 @@ export default function App(props) {
 
     return (
         <div className={styles.layout}>
-            <Title/>
-            <LeftSidebar wid={wid} toggleMenu={toggleMenu} isOpen={isOpen} className={styles.left}/> 
+            <Title />
+            <LeftSidebar wid={wid} toggleMenu={toggleMenu} isOpen={isOpen} className={styles.left} />
 
             <main className={styles.mainContainer}>
-                <Toolbar/>  
+                <Toolbar />
                 <Center>
-                    <Header canvasRef={canvasRef}  canvas={canvas} state={state} mods={mods}/>
+                    <Header canvasRef={canvasRef} canvas={canvas} state={state} mods={mods} />
                     <div className="wrap"><canvas id="canvas" /></div>
                     <EditorMenu canvasRef={canvasRef} state={state} />
                 </Center>
-                <Footbar/>
+                <Footbar />
             </main>
 
-            <RightSidebar wid={wid} toggleMenu={toggleMenu} isOpen={isOpen} className={styles.right}/> 
+            <RightSidebar wid={wid} toggleMenu={toggleMenu} isOpen={isOpen} className={styles.right} />
         </div>
     );
 }
@@ -141,13 +141,12 @@ export default function App(props) {
 //출처
 //sidebar
 //https://ji-u.tistory.com/22
-//https://blogpack.tistory.com/1018 
+//https://blogpack.tistory.com/1018
 //https://blog.naver.com/maestrois/222188488158
 //https://dev.to/franciscomendes10866/how-to-create-a-sidebar-in-react-3dh6
 //https://velog.io/@pear/CSS-position-property-%EC%A0%95%EB%A6%AC
 //layer
-//https://d2.naver.com/helloworld/8540176 
+//https://d2.naver.com/helloworld/8540176
 //https://cocook.tistory.com/137 -이미지 중앙
 //https://parra.tistory.com/entry/CSS-transform%EC%9C%BC%EB%A1%9C-zoom-%ED%9A%A8%EA%B3%BC-%EB%82%B4%EA%B8%B0
 //https://codesandbox.io/s/wonderful-cerf-69doe?file=/src/App.js:563-672
-        

@@ -4,15 +4,6 @@ export default function Header(props) {
     const mods = props.mods;
     const canvas = props.canvasRef.current;
 
-    
-
-    function updateModifications(savehistory) {
-        if (savehistory === true) {
-            var  myjson = canvas.toJSON();
-            state.current.push(myjson);
-        }
-    
-    }
     //FIXME:불러오는 이미지가 캔버스보다 클 때 submenu를 넘어가는 것 수정 필요 
     function importImage(e) {
         e.target.value = ''
@@ -53,6 +44,7 @@ export default function Header(props) {
     //이미지 다운로드
     function downloadImage() {
         var image = canvas.toDataURL();  //canvas 그림을 문자열 형태로 
+        console.log(image);
         var link = document.createElement('a'); //<a> 생성
         link.href = image;
         link.download = "image.png";
@@ -65,7 +57,6 @@ export default function Header(props) {
         json = [json];
         var blob = new Blob(json, { type: "text/plain;charset=utf-8" });
         var link = document.createElement('a'); //<a> 생성
-        var json = canvas.toJSON(['selectable', 'name', 'ownType', 'ddlValue', 'lockScalingX']);
 
         link.href = URL.createObjectURL(blob);
         link.download = "image.json";
@@ -79,7 +70,7 @@ export default function Header(props) {
         document.getElementById("Deserialization-json-file").onchange = function (e) {
             var reader = new FileReader();
             reader.onload = function (e) { //onload(): 읽기 성공 시 실행되는 핸들러
-                var temp = canvas.loadFromJSON(reader.result,canvas.renderAll.bind(canvas));
+                canvas.loadFromJSON(reader.result,canvas.renderAll.bind(canvas));
                 let data = JSON.parse(reader.result);
                 state.current =[];
                 // state.current.push(canvas.toJSON());

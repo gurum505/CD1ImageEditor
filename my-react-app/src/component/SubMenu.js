@@ -3,7 +3,7 @@ import ImageSubmenu from './submenu/ImageSubmenu';
 import LineSubmenu from './submenu/LineSubmenu';
 import TextboxSubmenu from './submenu/TextboxSubmenu';
 import FilterSubmenu from './submenu/FilterSubmenu';
-import CutSubmenu from './submenu/CutSubmenu';
+import CropSubmenu from './submenu/CropSubmenu';
 
 export default function Submenu(props) {
     console.log('submenu렌더링');
@@ -19,7 +19,7 @@ export default function Submenu(props) {
             {(buttonType === 'line') && <LineSubmenu canvas={canvas} state={props.state} mods={props.mods}/>}
             {(buttonType === 'textbox') && <TextboxSubmenu canvas={canvas} state={props.state} mods={props.mods}/>}
             {(buttonType === 'filter') && <FilterSubmenu canvas={canvas} state={props.state} mods={props.mods}/>}
-            {(buttonType === 'cut') && <CutSubmenu canvas={canvas} state={props.state} mods={props.mods}/>}
+            {(buttonType === 'crop') && <CropSubmenu canvas={canvas} state={props.state} mods={props.mods}/>}
         </div>
     );
 }

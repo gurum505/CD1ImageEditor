@@ -59,7 +59,7 @@ export default function FilterSubmenu(props) {
             object.applyFilters();
         } else {
             startBrightness = e.target.value;
-            var filter = new fabric.Image.filters.Blur({
+            filter = new fabric.Image.filters.Blur({
                 blur: '0',
             });
             fabric.util.removeFromArray(object.filters, object.filters[object.filters.length - 1]);
