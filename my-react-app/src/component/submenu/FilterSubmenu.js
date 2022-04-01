@@ -108,9 +108,7 @@ export default function FilterSubmenu(props) {
                         <div> <label htmlFor="pixelate">pixelate</label>
                             <input id="pixelate" type="range" min="0" max="5" defaultValue="0" step="1" onChange={pixelate} />
                         </div>
-
                     </div>
-
                 </li>
             </ul>
 

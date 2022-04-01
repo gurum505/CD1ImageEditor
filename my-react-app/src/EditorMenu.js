@@ -7,17 +7,22 @@ export default function EditorMenu(props) {
     const canvas = props.canvasRef.current;
     canvas.isDrawingMode = false;
     const state = props.state;
-
+    //const mods = props.mods;
+    
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var myjson = canvas.toJSON();
             state.current.push(myjson);
         }
     }
-    console.log('Editormenu 렌더링');
-    useEffect(() => {
 
-        if (state.current.length === 0) state.current.push(JSON.stringify(canvas));
+    useEffect(() => {
+        var json = JSON.stringify(canvas);
+        json = [json];
+        //var blob = new Blob(json, { type: "text/plain;charset=utf-8" });
+        //var link = document.createElement('a'); //<a> 생성
+        if(state.current.length===0)state.current.push(JSON.stringify(canvas));
+
 
         const figure = ['rect', 'circle', 'triangle'];
         const line = ['line', 'path'];

@@ -15,9 +15,6 @@ export default function FigureSubmenu(props) {
        
     }
     
-  
-   
-
     function addRect() {
         canvas.off('mouse:down');
         canvas.defaultCursor = 'crosshair';

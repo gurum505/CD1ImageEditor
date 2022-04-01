@@ -85,13 +85,6 @@ export default function App(props) {
 
         }
 
-        canvasRef.current.on('selection:created', () => {
-            console.log("ㅋ");
-        })
-        canvasRef.current.on('mouse:wheel', (e) => {
-            console.log(e);
-            console.log('zz');
-        })
 
         setCanvas(canvasRef);
 

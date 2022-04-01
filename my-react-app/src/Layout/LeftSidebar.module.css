@@ -1,20 +1,49 @@
 .container {
     background-color: #fc0202;
-    overflow: hidden; /*글이 넘어가면 잘리도록*/
+     /*글이 넘어가면 잘리도록overflow: hidden;*/
   }
   /* border-right: 4px solid #202020;*/
-  .button {
-    z-index: 99;
-    transition: 0.8s ease;
-    border: 2px solid #202020;
-    border-radius: 10px;
-    overflow: hidden;
-    position: relative;
-    left: 200px;
-  }
-  .content {
-    position: absolute;
-    left:200px;
-    white-space: nowrap; /*글이 재정렬되면서 밑으로 내려가지 않도록*/
-  }
+.button {
+  z-index: 99;
+  transition: 0.8s ease;
+  border: 2px solid #202020;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  left: 200px;
+}
+.icon{
+  font-size: 20pt; 
+  margin: 0; /*상우하좌 시계방향*/
+  left:0px;
+  display: block;
+  border: 2px solid #202020;
+  padding: 5px;
+  width:45px;
+  box-sizing: border-box;
+}
+.detail{
+  box-sizing: border-box;
+  border: 2px solid #202020;
+  width:200px; /*가로 size*/
+  padding: 8px; /*칸 각각 height*/
+  left:0px;
+  margin:0;
+  
+}
+.detail summary:hover{/*details위에 마우스를 갖다 댔을때*/
+  background-color: #fff;
+  box-shadow: inset 1px 0 #ddd, inset -1px 0 #ddd;
+  cursor: pointer;
+}
+.detail p:hover{/*TODO: summary랑 묶기*/
+  background-color: #fff;
+  box-shadow: inset 1px 0 #ddd, inset -1px 0 #ddd;
+  cursor: pointer;
+}
+.content {
+  position: absolute;
+  left:200px;
+  white-space: nowrap; /*글이 재정렬되면서 밑으로 내려가지 않도록*/
+}
   
