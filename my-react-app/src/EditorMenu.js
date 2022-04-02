@@ -4,11 +4,10 @@ import DefaultMenu from "./component/submenu/DefaultSubmenu";
 import './editor.css';
 
 export default function EditorMenu(props) {
-    console.log("에디ㅓㅌ레ㅣㄴㄷ러이");
     const canvas = props.canvasRef.current;
     canvas.isDrawingMode = false;
     const state = props.state;
-    //const mods = props.mods;
+
     
     function updateModifications(savehistory) {
         if (savehistory === true) {
@@ -49,11 +48,11 @@ export default function EditorMenu(props) {
                 'object:added': () => {
                     canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
                     selectType = canvas.getActiveObject().type;
-                    document.getElementById('remove-object').disabled = false;
-
+                    document.getElementById('remove-object').disabled = false; 
                 },
                 'object:updated': () => {
                     document.getElementById('remove-object').disabled = false
+                    
                 },
                 'object:modified': () => {
                     console.log(canvas.getActiveObject().getScaledWidth());
@@ -68,8 +67,8 @@ export default function EditorMenu(props) {
     const [buttonType, setButtonType] = useState("");  //어떤 종류의 object를 추가할 것인지 
 
     function addFigure() { //도형(삼각형, 원, 직사각형) 추가
-        // if (buttonType === 'figure') setButtonType(''); //현재 열려있는 submenu 가 figure이면 submenu를 닫음
-        setButtonType("figure");
+        if (buttonType === 'figure') setButtonType(''); //현재 열려있는 submenu 가 figure이면 submenu를 닫음
+        else setButtonType("figure");
         canvas.off('mouse:down');
         canvas.isDrawingMode = false; // 그리기 하다가 도형 삽입 클릭시 drawing 모드가 켜져 있으면 도형과 함께 곡선이 그려지는 것을 방지
     }
@@ -87,7 +86,14 @@ export default function EditorMenu(props) {
     }
 
     function removeObject() { //객체 삭제
-        canvas.remove(canvas.getActiveObject());
+        var objects = canvas.getActiveObjects();
+        objects.forEach((object) => {
+            canvas.remove(object);
+            document.getElementById(object).remove();
+        });
+        canvas.renderAll();
+        updateModifications(true);
+
     }
 
     //이미지 추가 
@@ -110,16 +116,29 @@ export default function EditorMenu(props) {
         canvas.off('mouse:down');
     }
 
+    function rotateCanvas(){
+        if (buttonType === 'rotate') setButtonType('');
+        else setButtonType('rotate');
+        canvas.off('mouse:down');
+    }
+    
+    function showObjectList(){
+        if (buttonType === 'objectList') setButtonType('');
+        else setButtonType('objectList');
+        canvas.off('mouse:down');
+    }
+
     return (
         <div className="editor-menu">
-            <Submenu canvas={canvas} buttonType={buttonType} state={state} />
-            <button id='add-figure' onClick={addFigure} >도형 삽입</button>
+            <Submenu canvas={canvas} buttonType={buttonType} state={state} setButtonType={setButtonType}/>
+            <button id='add-figure' onClick={addFigure}  >도형 삽입</button>
             <button id='path' onClick={addLine} >그리기</button>
             <button id='textbox' onClick={addTextBox} >텍스트 박스</button>
             <button id='add-image' onClick={addImage} >이미지 추가</button>
             <button id='filter' onClick={addFilter} >필터</button>
             <button id='crop' onClick={cropImage}>자르기</button>
             <button id='remove-object' onClick={removeObject} >객체 삭제</button>
+            <button id = 'rotate-canvas' onClick={rotateCanvas}>회전</button>
             <DefaultMenu canvas={canvas} />
         </div>
     )

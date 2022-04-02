@@ -5,6 +5,37 @@ export default function TextboxSubmenu(props) {
     const canvas = props.canvas;
     const state = props.state;
     const color = useRef('black');
+
+    function addLayer(object) {  //레이어에 객체 추가 
+        const div = document.createElement('div');
+        div.id = object;
+        div.style.border=' solid #0000FF';
+        div.style.width = '130px';
+        const el = document.getElementById('layer');
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = 'delete';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.onclick = ()=>{
+            canvas.remove(object);
+            document.getElementById(object).remove();
+            updateModifications(true)
+        }
+
+        const objectBtn = document.createElement('button');
+        objectBtn.innerHTML = object.type;
+        objectBtn.className = "layer-object";
+        objectBtn.id = object;
+        objectBtn.onclick = () => {
+            canvas.setActiveObject(object);
+            canvas.renderAll();
+        }
+
+        div.appendChild(objectBtn);
+        div.appendChild(deleteBtn);
+        el.insertBefore(div,el.firstChild);  //스택처럼 쌓이게 
+    }
+
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var  myjson = canvas.toJSON();
@@ -30,6 +61,7 @@ export default function TextboxSubmenu(props) {
             });
             canvas.add(textbox);
             updateModifications(true);
+            addLayer(textbox);
             canvas.off('mouse:down');
             canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.defaultCursor = 'default';

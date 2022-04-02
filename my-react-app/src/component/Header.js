@@ -21,6 +21,36 @@ export default function Header(props) {
     var canvas = props.canvasRef.current;
 
     //FIXME:불러오는 이미지가 캔버스보다 클 때 submenu를 넘어가는 것 수정 필요 
+
+    function addLayer(object) {  //레이어에 객체 추가 
+        const div = document.createElement('div');
+        div.id = object;
+        div.style.border=' solid #0000FF';
+        div.style.width = '130px';
+        const el = document.getElementById('layer');
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = 'delete';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.onclick = ()=>{
+            canvas.remove(object);
+            document.getElementById(object).remove();
+        }
+
+        const objectBtn = document.createElement('button');
+        objectBtn.innerHTML = object.type;
+        objectBtn.className = "layer-object";
+        objectBtn.id = object;
+        objectBtn.onclick = () => {
+            canvas.setActiveObject(object);
+            canvas.renderAll();
+        }
+
+        div.appendChild(objectBtn);
+        div.appendChild(deleteBtn);
+        el.insertBefore(div,el.firstChild);  //스택처럼 쌓이게 
+        
+    }
     function importImage(e) {
         e.target.value = ''
 
@@ -108,6 +138,10 @@ export default function Header(props) {
         }
     }
     function undo() {
+        var prevObjects = canvas.getObjects(); //undo 하기 전에 layer 제거 
+        prevObjects.forEach((object)=>{
+            document.getElementById(object).remove();
+        })
         if (mods.current < state.current.length - 1 && state.current.length > 1) {
             canvas.clear().renderAll();
             var json = state.current[state.current.length - 2 - mods.current];
@@ -122,14 +156,34 @@ export default function Header(props) {
             //After loading JSON it’s important to call canvas.renderAll(). In the 2nd parameter of canvas.loadFromJSON(json, callback) you can define a cllback function which is invoked after all objects are loaded/added.
             mods.current += 1;
         }
+        var objects= canvas.getObjects();
+        
+
+        objects.forEach((object)=>{
+            addLayer(object);
+            }
+        )
+        
+     
     }
 
     function redo() {
+        var prevObjects = canvas.getObjects(); //undo 하기 전에 layer 제거 
+        prevObjects.forEach((object)=>{
+            document.getElementById(object).remove();
+        })
         if (mods.current > 0) {
             canvas.clear().renderAll();
             canvas.loadFromJSON(state.current[state.current.length - mods.current], canvas.renderAll.bind(canvas));
             mods.current -= 1;
         }
+        var objects= canvas.getObjects();
+        
+
+        objects.forEach((object)=>{
+           addLayer(object);
+            }
+        )
     }
 
 

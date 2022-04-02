@@ -11,6 +11,38 @@ export default function ImageSubmenu(props) {
         }
         
     }
+
+    function addLayer(object) {  //레이어에 객체 추가 
+        const div = document.createElement('div');
+        div.id = object;
+        div.style.border=' solid #0000FF';
+        div.style.width = '130px';
+        const el = document.getElementById('layer');
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = 'delete';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.onclick = ()=>{
+            canvas.remove(object);
+            document.getElementById(object).remove();
+            updateModifications(true)
+        }
+
+        const objectBtn = document.createElement('button');
+        objectBtn.innerHTML = object.type;
+        objectBtn.className = "layer-object";
+        objectBtn.id = object;
+        objectBtn.onclick = () => {
+            canvas.setActiveObject(object);
+            canvas.renderAll();
+        }
+
+        div.appendChild(objectBtn);
+        div.appendChild(deleteBtn);
+        el.insertBefore(div,el.firstChild);  //스택처럼 쌓이게 
+        
+    }
+
     function addLocalImage() {
         canvas.isDrawingMode = false;
         document.getElementById("add-local-image-file").onchange = function (e) {
@@ -28,6 +60,7 @@ export default function ImageSubmenu(props) {
 
                     canvas.add(img).setActiveObject(img);
                     updateModifications(true);
+                    addLayer(img);
                     canvas.renderAll();
 
                 }

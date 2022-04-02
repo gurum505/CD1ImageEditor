@@ -23,8 +23,7 @@ import RightSidebar from './Layout/RightSidebar';
 //canvas
 import Header from "./component/Header";
 import EditorMenu from "./Editormenu";
-
-//TODO: 도형과 텍스트 묶어서 객체 삭제가 안됌 => activeobjects로 받아서 for문remove돌리면 됌
+import Layer from "./component/Layer";
 
 
 
@@ -37,7 +36,6 @@ export default function App(props) {
 
     }
     const [canvas, setCanvas] = useState(""); //useEffect()후 렌더링 하기 위한 state
-
     const canvasRef = useRef(new fabric.Canvas("canvas", {
         backgroundColor: "white",
         height: 400,
@@ -85,7 +83,6 @@ export default function App(props) {
 
         }
 
-
         setCanvas(canvasRef);
 
 
@@ -121,6 +118,8 @@ export default function App(props) {
                     <Header canvasRef={canvasRef} canvas={canvas} state={state} mods={mods} />
                     <div className="wrap"><canvas id="canvas" /></div>
                     <EditorMenu canvasRef={canvasRef} state={state} />
+                    <Layer canvasRef={canvasRef}></Layer>
+                    <div id="layer"></div>
                 </Center>
                 <Footbar />
             </main>
