@@ -76,6 +76,7 @@ export default function EditorMenu(props) {
         if (buttonType === 'figure') setButtonType(''); //현재 열려있는 submenu 가 figure이면 submenu를 닫음
         else setButtonType("figure");
         canvas.off('mouse:down');
+        console.log("it works!")
         canvas.isDrawingMode = false; // 그리기 하다가 도형 삽입 클릭시 drawing 모드가 켜져 있으면 도형과 함께 곡선이 그려지는 것을 방지
     }
 

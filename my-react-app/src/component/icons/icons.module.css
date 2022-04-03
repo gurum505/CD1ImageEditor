@@ -1,0 +1,9 @@
+.icon{
+    font-size: 20pt; 
+    margin: 0; /*상우하좌 시계방향*/
+    left:0px;
+    border: 2px solid #202020;
+    padding: 5px;
+    width:45px;
+    box-sizing: border-box;
+  }

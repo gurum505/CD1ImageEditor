@@ -1,19 +1,26 @@
 import { fabric } from "fabric";
-import {
-    FolderOpenOutlined, CloudDownloadOutlined, UploadOutlined,
-    FileImageOutlined, RedoOutlined, UndoOutlined, DownloadOutlined
-} from "@ant-design/icons"
-//새프로젝트
-//<FileAddOutlined />
-//<FolderOpenOutlined />
-//이미지 가져오기 
-//<CloudDownloadOutlined />
-//이미지 저장! 다운로드 말고
-// <FileImageOutlined />
-//REDO UNDO
-//<RedoOutlined /> <UndoOutlined />
-//프로젝트 업로드 다운로드
-//<DownloadOutlined /> <UploadOutlined />
+import {FolderOpenOutlined,CloudDownloadOutlined,UploadOutlined,
+    FileImageOutlined,RedoOutlined,UndoOutlined,DownloadOutlined} from "@ant-design/icons"
+
+//2번째 줄- 즉시 효과를 갖는, 사이드바를 구성하기에 부적합한 부가적인 기능들    
+//앞으로 가져오기 -rotate(90)
+//<DownOutlined />
+//맨 앞으로 가져오기-rotate(90)
+//<DoubleRightOutlined />
+//뒤로보내기-rotate(90)
+//<UpOutlined /> 
+//맨 뒤로 보내기-rotate(90)
+//<DoubleLeftOutlined />
+//이미지 자르기
+//<ScissorOutlined />
+//이미지 자르기 적용
+//<CheckOutlined />
+//이미지 자르기 취소
+//<CloseOutlined />
+//복사 
+//<CopyOutlined />
+//삭제
+//<DeleteOutlined />
 
 export default function Header(props) {
     const state = props.state;
