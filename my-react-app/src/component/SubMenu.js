@@ -1,7 +1,7 @@
 import FigureSubmenu from './submenu/FigureSubmenu';
 import ImageSubmenu from './submenu/ImageSubmenu';
 import LineSubmenu from './submenu/LineSubmenu';
-import TextboxSubmenu from './submenu/TextBoxSubmenu';
+import TextboxSubmenu from './submenu/TextboxSubmenu';
 import FilterSubmenu from './submenu/FilterSubmenu';
 import CropSubmenu from './submenu/CropSubmenu';
 import { useRef } from 'react';
