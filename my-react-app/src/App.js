@@ -71,16 +71,15 @@ export default function App(props) {
         el.addEventListener('wheel', zoom);
 
         document.onkeydown = function (e) { // delete, backspace 키로 삭제
-
-
             if (e.key === "Delete") {
-                var objects = canvasRef.current.getActiveObjects();
-                objects.forEach((object) => {
+                var o = canvasRef.current.getActiveObjects();
+                o.forEach( (object) =>{
                     canvasRef.current.remove(object);
-                })
+                    document.getElementById(object).remove();
+                }); 
+                canvasRef.current.discardActiveObject();
                 updateModifications(true);
             }
-
         }
 
         setCanvas(canvasRef);

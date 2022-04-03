@@ -32,6 +32,8 @@ export default function EditorMenu(props) {
         if (buttonType !== 'crop')
             canvas.on({
                 'selection:updated': () => {
+                    console.log('selection:updated');
+
                     document.getElementById('remove-object').disabled = false
                     selectType = canvas.getActiveObject().type;
                     if (figure.includes(selectType)) setButtonType('figure');
@@ -40,21 +42,28 @@ export default function EditorMenu(props) {
                     else if (selectType === 'textbox') setButtonType('textbox');
                 },
                 'selection:cleared': () => {
+                    console.log('selection:cleared');
                     document.getElementById('remove-object').disabled = true
                 },
                 'selection:created': () => {
+                    console.log('selection:created');
+
                     document.getElementById('remove-object').disabled = false
                 },
                 'object:added': () => {
+                    console.log('object:added');
+
                     canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
                     selectType = canvas.getActiveObject().type;
                     document.getElementById('remove-object').disabled = false; 
                 },
                 'object:updated': () => {
+                    console.log('object:updated');
                     document.getElementById('remove-object').disabled = false
                     
                 },
                 'object:modified': () => {
+                    console.log('object:modified');
                     console.log(canvas.getActiveObject().getScaledWidth());
 
                     console.log('object:modified');
@@ -86,14 +95,13 @@ export default function EditorMenu(props) {
     }
 
     function removeObject() { //객체 삭제
-        var objects = canvas.getActiveObjects();
-        objects.forEach((object) => {
+        var o = canvas.getActiveObjects();
+        o.forEach( (object) =>{
             canvas.remove(object);
             document.getElementById(object).remove();
-        });
-        canvas.renderAll();
+        }); 
+        canvas.discardActiveObject();
         updateModifications(true);
-
     }
 
     //이미지 추가 
