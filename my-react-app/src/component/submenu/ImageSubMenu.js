@@ -2,32 +2,24 @@ import { fabric } from "fabric";
 import '../../editor.css';
 
 export default function ImageSubmenu(props) {
-    const canvas = props.canvas;
-    const state = props.state;
+    const canvas = props.canvasRef.current;
+    const stateRef = props.stateRef;
+    const objectNumRef = props.objectNumRef;
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var  myjson = canvas.toJSON();
-            state.current.push(myjson);
+            stateRef.current.push(myjson);
         }
         
     }
 
     function addLayer(object) {  //레이어에 객체 추가 
         const div = document.createElement('div');
-        div.id = object.id;
-        div.style.border=' solid #0000FF';
+        div.id = objectNumRef.current;
+        div.style.border = ' solid #0000FF';
         div.style.width = '130px';
         const el = document.getElementById('layer');
-
-        const deleteBtn = document.createElement('button');
-        deleteBtn.innerHTML = 'delete';
-        deleteBtn.className = 'delete-btn';
-        deleteBtn.onclick = ()=>{
-            canvas.remove(object);
-            document.getElementById(object.id).remove();
-            updateModifications(true)
-        }
-
+        
         const objectBtn = document.createElement('button');
         objectBtn.innerHTML = object.type;
         objectBtn.className = "layer-object";
@@ -35,11 +27,19 @@ export default function ImageSubmenu(props) {
             canvas.setActiveObject(object);
             canvas.renderAll();
         }
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = 'delete';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.onclick = () => {
+            canvas.remove(object);
+            document.getElementById(object.id).remove();
+            updateModifications(true);
+        }
+
 
         div.appendChild(objectBtn);
         div.appendChild(deleteBtn);
-        el.insertBefore(div,el.firstChild);  //스택처럼 쌓이게 
-        
+        el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 
     }
 
     function addLocalImage(e) {
@@ -53,13 +53,12 @@ export default function ImageSubmenu(props) {
                 image.onload = function () {
                     var img = new fabric.Image(image);
                     img.set({
-                        id : `${props.id.current}`,
+                        id : `${++objectNumRef.current}`,
                         left: Math.floor(Math.random() * 101),
                         top: Math.floor(Math.random() * 101),
                     });
 
                     canvas.add(img).setActiveObject(img);
-                    props.id.current+=1;
                     updateModifications(true);
                     addLayer(img);
                     canvas.renderAll();

@@ -2,8 +2,8 @@ import { fabric } from "fabric";
 import { useEffect } from "react";
 
 export default function FilterSubmenu(props) {
-    const canvas = props.canvas;
-    console.log("렌더링");
+    const canvas = props.canvasRef.current;
+    
     useEffect(() => {
         //새로운 이미지 렌더링 시 effect 값들 초기값으로 변경 
         document.getElementById('opacity').value = 5;

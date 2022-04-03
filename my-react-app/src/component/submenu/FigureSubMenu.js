@@ -3,25 +3,32 @@ import { fabric } from "fabric";
 import ColorPicker from "./ColorPicker";
 
 export default function FigureSubmenu(props) {
-    const state = props.state;
-    const canvas = props.canvas;
+    const stateRef = props.stateRef;
+    const canvas = props.canvasRef.current;
     const color = useRef('black');
+    const objectNumRef = props.objectNumRef;
 
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var myjson = canvas.toDatalessJSON(['width', 'height','id']);
-            state.current.push(myjson);
-            console.log(myjson);
+            stateRef.current.push(myjson);
         }
 
     }
     function addLayer(object) {  //레이어에 객체 추가 
         const div = document.createElement('div');
-        div.id = object.id;
+        div.id = objectNumRef.current
         div.style.border = ' solid #0000FF';
         div.style.width = '130px';
         const el = document.getElementById('layer');
-
+        
+        const objectBtn = document.createElement('button');
+        objectBtn.innerHTML = object.type;
+        objectBtn.className = "layer-object";
+        objectBtn.onclick = () => {
+            canvas.setActiveObject(object);
+            canvas.renderAll();
+        }
         const deleteBtn = document.createElement('button');
         deleteBtn.innerHTML = 'delete';
         deleteBtn.className = 'delete-btn';
@@ -31,18 +38,12 @@ export default function FigureSubmenu(props) {
             updateModifications(true);
         }
 
-        const objectBtn = document.createElement('button');
-        objectBtn.innerHTML = object.type;
-        objectBtn.className = "layer-object";
-        objectBtn.onclick = () => {
-            canvas.setActiveObject(object);
-            canvas.renderAll();
-        }
 
         div.appendChild(objectBtn);
         div.appendChild(deleteBtn);
         el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 
     }
+
     function addRect() {
         canvas.off('mouse:down');
         canvas.off('mouse:up');
@@ -65,10 +66,9 @@ export default function FigureSubmenu(props) {
                 fill: `${color.current}`,
                 transparentCorners: false,
                 type: 'rect',
-                id: `${props.id.current}`
+                id: `${++objectNumRef.current}`
             });
             canvas.add(rect);
-            props.id.current += 1
 
         });
 
@@ -91,13 +91,11 @@ export default function FigureSubmenu(props) {
         canvas.on('mouse:up', function (o) {
             updateModifications(true);
             isDown = false;
-            // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.defaultCursor = 'default';
             addLayer(rect);
             canvas.off('mouse:down');
             canvas.off('mouse:up');
             canvas.off('mouse:move');
-            console.log(canvas);
 
         });
 
@@ -123,12 +121,10 @@ export default function FigureSubmenu(props) {
                 radius: (pointer.x - origX) / 2,
                 fill: `${color.current}`,
                 transparentCorners: false,
-                id : `${props.id.current}`
+                id : `${++objectNumRef.current}`
             });
 
             canvas.add(circle);
-            console.log(circle);
-            props.id.current+=1;
 
         });
 
@@ -187,12 +183,11 @@ export default function FigureSubmenu(props) {
                 angle: 0,
                 fill: `${color.current}`,
                 transparentCorners: false,
-                id: `${props.id.current}`,
+                id: `${++objectNumRef.current}`,
                 type: 'triangle'
             });
 
             canvas.add(triangle);
-            props.id.current+=1;
 
         });
 

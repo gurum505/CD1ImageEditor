@@ -40,7 +40,7 @@ export default function App(props) {
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var myjson = canvasRef.current.toJSON();
-            state.current.push(myjson);
+            stateRef.current.push(myjson);
         }
 
     }
@@ -49,11 +49,11 @@ export default function App(props) {
         backgroundColor: "white",
         height: 400,
         width: 700,
-
+        objectNum: 0,
     }));  //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
-
-    const state = useRef([]);
-    const mods = useRef(0);
+    const stateRef = useRef([]);
+    const modsRef = useRef(0);
+    const objectNumRef = useRef(0);
 
 
     useEffect(() => {  //rendering 후 한 번 실행 
@@ -132,12 +132,12 @@ export default function App(props) {
 
             <main className={styles.mainContainer}>
                 <Toolbar>
-                    <Header canvasRef={canvasRef} canvas={canvas} state={state} mods={mods} />
+                    <Header canvasRef={canvasRef} objectNumRef={objectNumRef} stateRef={stateRef} modsRef={modsRef} />
                 </Toolbar>
                 <Center>
                     
                     <div className="wrap"><canvas id="canvas" /></div>
-                    <EditorMenu canvasRef={canvasRef} state={state} />
+                    <EditorMenu canvasRef={canvasRef} stateRef={stateRef} objectNumRef={objectNumRef}/>
                     <Layer/>
                 </Center>
                 <Footbar>

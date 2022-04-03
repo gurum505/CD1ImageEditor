@@ -6,17 +6,16 @@ import FilterSubmenu from './submenu/FilterSubmenu';
 import CropSubmenu from './submenu/CropSubmenu';
 import { useRef } from 'react';
 export default function Submenu(props) {
-    const canvas = props.canvas;
     const buttonType = props.buttonType;
-    const id = useRef(0);  
+
     return (
         <div className="sub-menu">
-            {(buttonType === 'figure') && <FigureSubmenu canvas={canvas} state={props.state} id={id}/>}
-            {(buttonType === 'image') && <ImageSubmenu canvas={canvas} state={props.state} id={id}/>}
-            {(buttonType === 'line') && <LineSubmenu canvas={canvas} state={props.state} id={id}/>}
-            {(buttonType === 'textbox') && <TextboxSubmenu canvas={canvas} state={props.state} id={id}/>}
-            {(buttonType === 'filter') && <FilterSubmenu canvas={canvas} state={props.state} id={id} />}
-            {(buttonType === 'crop') && <CropSubmenu canvas={canvas} state={props.state} id={id}/>}
+            {(buttonType === 'figure') && <FigureSubmenu canvasRef={props.canvasRef} stateRef={props.stateRef} objectNumRef={props.objectNumRef}/>}
+            {(buttonType === 'image') && <ImageSubmenu canvasRef={props.canvasRef} stateRef={props.stateRef} objectNumRef={props.objectNumRef}/>}
+            {(buttonType === 'line') && <LineSubmenu canvasRef={props.canvasRef} stateRef={props.stateRef} objectNumRef={props.objectNumRef}/>}
+            {(buttonType === 'textbox') && <TextboxSubmenu canvasRef={props.canvasRef} stateRef={props.stateRef} objectNumRef={props.objectNumRef}/>}
+            {(buttonType === 'filter') && <FilterSubmenu canvasRef={props.canvasRef} stateRef={props.stateRef} objectNumRef={props.objectNumRef} />}
+            {(buttonType === 'crop') && <CropSubmenu canvasRef={props.canvasRef} setButtonType={props.setButtonType} stateRef={props.stateRef} objectNumRef={props.objectNumRef}/>}
         </div>
     );
 }

@@ -2,25 +2,18 @@ import { useRef} from "react";
 import { fabric } from "fabric";
 import ColorPicker from "./ColorPicker";
 export default function LineSubmenu(props) {
-    const canvas = props.canvas;
-    const state = props.state;
+    const canvas = props.canvasRef.current;
+    const stateRef = props.stateRef;
+    const objectNumRef = props.objectNumRef;
+    const color = useRef('black');  // : 값이 바뀌어도 렌더링되지 않음.
 
     function addLayer(object) {  //레이어에 객체 추가 
         const div = document.createElement('div');
-        div.id = object.id
-        div.style.border=' solid #0000FF';
+        div.id = objectNumRef.current;
+        div.style.border = ' solid #0000FF';
         div.style.width = '130px';
         const el = document.getElementById('layer');
-
-        const deleteBtn = document.createElement('button');
-        deleteBtn.innerHTML = 'delete';
-        deleteBtn.className = 'delete-btn';
-        deleteBtn.onclick = ()=>{
-            canvas.remove(object);
-            document.getElementById(object.id).remove();
-            updateModifications(true)
-        }
-
+        
         const objectBtn = document.createElement('button');
         objectBtn.innerHTML = object.type;
         objectBtn.className = "layer-object";
@@ -28,20 +21,27 @@ export default function LineSubmenu(props) {
             canvas.setActiveObject(object);
             canvas.renderAll();
         }
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = 'delete';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.onclick = () => {
+            canvas.remove(object);
+            document.getElementById(object.id).remove();
+            updateModifications(true);
+        }
+
 
         div.appendChild(objectBtn);
         div.appendChild(deleteBtn);
-        el.insertBefore(div,el.firstChild);  //스택처럼 쌓이게 
-        
+        el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 
     }
 
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var  myjson = canvas.toJSON();
-            state.current.push(myjson);
+            stateRef.current.push(myjson);
         }
     }
-    const color = useRef('black');  //useRef : 값이 바뀌어도 렌더링되지 않음.
 
     function drawCurve() {
         canvas.off('object:added');
@@ -56,9 +56,7 @@ export default function LineSubmenu(props) {
         }
         canvas.on('mouse:up',()=>{
             updateModifications(true);
-            canvas.item(canvas.getObjects().length - 1).set({id:`${props.id.current}`})
-            props.id.current+=1;
-            console.log(canvas.item(canvas.getObjects().length - 1))
+            canvas.item(canvas.getObjects().length - 1).set({id:`${++objectNumRef.current}`})
             addLayer(canvas.item(canvas.getObjects().length - 1));
         })
         
@@ -81,10 +79,9 @@ export default function LineSubmenu(props) {
                 stroke: `${color.current}`,
                 originX: 'center',
                 originY: 'center',
-                id : props.id.current,
+                id : `${++objectNumRef.current}`
             });
             canvas.add(line);
-            props.id.current+=1;
         });
 
         canvas.on('mouse:move', function (o) {
@@ -102,8 +99,8 @@ export default function LineSubmenu(props) {
             canvas.off('mouse:down');
             canvas.off('mouse:up');
             updateModifications(true);
-            addLayer(line);
             canvas.defaultCursor = 'default';
+            addLayer(line);
 
         });
     }
@@ -118,7 +115,6 @@ export default function LineSubmenu(props) {
                 직선
             </button>
             &nbsp; &nbsp;
-            {/* <input id="color" type="color" onChange={selectColor}/> */}
             <ColorPicker canvas={canvas} color={color} />
 
         </div>

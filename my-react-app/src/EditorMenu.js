@@ -5,14 +5,15 @@ import './editor.css';
 
 export default function EditorMenu(props) {
     const canvas = props.canvasRef.current;
-    canvas.isDrawingMode = false;
-    const state = props.state;
+    const state = props.stateRef.current;
+    const [buttonType, setButtonType] = useState("");  //어떤 종류의 object를 추가할 것인지 
 
+    canvas.isDrawingMode = false;
     
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var myjson = canvas.toDatalessJSON(['width','height']);
-            state.current.push(myjson);
+            state.push(myjson);
         }
     }
 
@@ -20,7 +21,7 @@ export default function EditorMenu(props) {
         var json = JSON.stringify(canvas);
         //var blob = new Blob(json, { type: "text/plain;charset=utf-8" });
         //var link = document.createElement('a'); //<a> 생성
-        if(state.current.length===0) updateModifications(true);
+        if(state.length===0) updateModifications(true);
 
 
         const figure = ['rect', 'circle', 'triangle'];
@@ -69,8 +70,6 @@ export default function EditorMenu(props) {
 
             });
     });
-
-    const [buttonType, setButtonType] = useState("");  //어떤 종류의 object를 추가할 것인지 
 
     function addFigure() { //도형(삼각형, 원, 직사각형) 추가
         if (buttonType === 'figure') setButtonType(''); //현재 열려있는 submenu 가 figure이면 submenu를 닫음
@@ -125,7 +124,7 @@ export default function EditorMenu(props) {
 
     return (
         <div className="editor-menu">
-            <Submenu canvas={canvas} buttonType={buttonType} state={state} setButtonType={setButtonType}/>
+            <Submenu canvasRef={props.canvasRef}  setButtonType={setButtonType} buttonType={buttonType} stateRef={props.stateRef}  objectNumRef={props.objectNumRef}/>
             <button id='add-figure' onClick={addFigure}  >도형 삽입</button>
             <button id='path' onClick={addLine} >그리기</button>
             <button id='textbox' onClick={addTextBox} >텍스트 박스</button>

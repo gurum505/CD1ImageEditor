@@ -1,4 +1,3 @@
-
 export default function ColorPicker(props){
     const canvas = props.canvas;
     const color = props.color;
