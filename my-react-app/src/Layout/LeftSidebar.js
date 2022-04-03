@@ -2,15 +2,14 @@ import styles from "./LeftSidebar.module.css";
 import LeftSidebarClosed from "../component/submenu/LeftSidebarClosed";
 import LeftSidebarOpened from "../component/submenu/LeftSidebarOpened";
 
-const LeftSidebar = ({children, wid, toggleMenu, isOpen}) => {
-  isOpen=isOpen[0];
-  wid=wid[0];
+const LeftSidebar = ({children, wid, toggleMenu, isOpen, canvas}) => {
+ 
 
   function page(isOpen){
     if(isOpen){
       return(
         <div>
-          <LeftSidebarOpened toggleMenu={toggleMenu}/>
+          <LeftSidebarOpened toggleMenu={toggleMenu} canvas={canvas}/>
         </div>
       )
     }

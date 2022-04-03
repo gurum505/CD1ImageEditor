@@ -4,8 +4,7 @@ import {FontSizeOutlinedIcon,SettingOutlinedIcon,BorderOutlinedIcon
 import RightSidebarOpened from "../component/submenu/RightSidebarOpened";
 
 const RightSidebar = ({children, wid,  toggleMenu, isOpen}) => { 
-  isOpen=isOpen[1];
-  wid=wid[1];
+  
 
   const page=(isOpen)=>{
     if(isOpen){

@@ -30,7 +30,7 @@ import Header from "./component/Header";
 import EditorMenu from "./EditorMenu";
 import Layer from "./component/Layer";
 
-//FIXME: Canvas: 도형과 텍스트 묶어서 객체 삭제가 안됌 => activeobjects로 받아서 for문remove돌리면 됌
+//FIXME: Canvas: 도형과 텍스트 묶어서 객체 삭제가 안됌 => 곡선안지워지던데 곡선 끊기도록하면 되나?
 //FIXME: Canvas: redo undo 이미지가져오기(header)에 적용안됌
 //TODO: Canvas:이미지 드래그앤 드롭으로 이미지 집어넣기, 복사 붙여넣기로 집어넣기
 //TODO: Canvas:객체들고 옮길때 canvas에 중앙선or경계 표시
@@ -42,8 +42,8 @@ export default function App(props) {
             var myjson = canvasRef.current.toJSON();
             state.current.push(myjson);
         }
-
     }
+
     const [canvas, setCanvas] = useState(""); //useEffect()후 렌더링 하기 위한 state
     const canvasRef = useRef(new fabric.Canvas("canvas", {
         backgroundColor: "white",
@@ -54,7 +54,6 @@ export default function App(props) {
 
     const state = useRef([]);
     const mods = useRef(0);
-
 
     useEffect(() => {  //rendering 후 한 번 실행 
         canvasRef.current = (new fabric.Canvas("canvas", {
@@ -91,34 +90,63 @@ export default function App(props) {
     }, []);
 
 
-    const [wid, setX] = useState({0:50,1:50})
-    const [isOpen, setOpen] = useState({0:false,1:false});
-    const toggleMenu = (direction) => {
-        if (wid[direction] > 50) {
-            setX({
-            ...wid,
-            [direction]:50
-            });
-            setOpen({
-            ...isOpen,
-            [direction]:false
-            });
+    const [wid, setX] = useState({widLeft:50,widRight:50})
+    const [isOpen, setOpen] = useState({isOpenLeft:false,isOpenRight:false});
+    const {widLeft,widRight}=wid;
+    const {isOpenLeft,isOpenRight}=isOpen;
+    function toggleMenu(direction) {
+        if (direction === 0) {
+            if (widLeft > 50) {
+                setX({
+                    ...wid,
+                    widLeft: 50
+                });
+                setOpen({
+                    ...isOpen,
+                    isOpenLeft: false
+                });
+            }
+            else {
+                setX({
+                    ...wid,
+                    widLeft: 200
+                });
+                setOpen({
+                    ...isOpen,
+                    isOpenLeft: true
+                });
+            }
+
         } else {
-            setX({
-                ...wid,
-                [direction]:200
-            });
-            setOpen({
-                ...isOpen,
-                [direction]:true
-            });
+            if (widRight > 50) {
+                setX({
+                    ...wid,
+                    widRight: 50
+                });
+                setOpen({
+                    ...isOpen,
+                    isOpenRight: false
+                });
+            }
+            else {
+                setX({
+                    ...wid,
+                    widRight: 200
+                });
+                setOpen({
+                    ...isOpen,
+                    isOpenRight: true
+                });
+            }
+
         }
+
     }
 
     return (
         <div className={styles.layout}>
             <Title />
-            <LeftSidebar wid={wid} toggleMenu={toggleMenu} isOpen={isOpen} className={styles.left} />
+            <LeftSidebar className={styles.left} toggleMenu={toggleMenu} wid={widLeft} isOpen={isOpenLeft} canvasRef={canvasRef} state={state} canvas={canvas}/>
 
             <main className={styles.mainContainer}>
                 <Toolbar>
@@ -136,7 +164,7 @@ export default function App(props) {
                 </Footbar>
             </main>
 
-            <RightSidebar wid={wid} toggleMenu={toggleMenu} isOpen={isOpen} className={styles.right} />
+            <RightSidebar className={styles.right} toggleMenu={toggleMenu} wid={widRight}  isOpen={isOpenRight}/>
         </div>
     );
 }
