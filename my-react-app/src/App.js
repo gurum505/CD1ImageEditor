@@ -23,6 +23,7 @@ import RightSidebar from './Layout/RightSidebar';
 //TODO: Sidebar: Open시와 close시 분리
 //TODO: Sidebar: onClick따로 묶을 수 없나
 /*FIXME:Sidebar:칸이 먼저 생기는것 방지=>줄을 안보이게?(tmp), box-border 지금 2개 겹쳐있음*/
+/*              박스가 먼저생기는 이유는 밀리는게 아니라 고정된 상태라서? 고정된 상태라서 오른쪽처럼 안말리는건가*/
 
 //canvas
 import Header from "./component/Header";
@@ -62,14 +63,11 @@ export default function App(props) {
             width: 700,
         }));
 
-
         function zoom(event) {
             event.preventDefault();
             scale += event.deltaY * -0.001;
-
             // Restrict scale
             scale = Math.min(Math.max(.125, scale), 4);
-
             // Apply scale transform
             el.style.transform = `scale(${scale})`;
         }
@@ -79,8 +77,6 @@ export default function App(props) {
         el.addEventListener('wheel', zoom);
 
         document.onkeydown = function (e) { // delete, backspace 키로 삭제
-
-
             if (e.key === "Delete") {
                 var objects = canvasRef.current.getActiveObjects();
                 objects.forEach((object) => {
@@ -88,33 +84,34 @@ export default function App(props) {
                 })
                 updateModifications(true);
             }
-
         }
-
-
         setCanvas(canvasRef);
-
-
     }, []);
 
 
-    const [wid, setX] = useState([50, 50])
-    const [isOpen, setOpen] = useState([false, false]);
+    const [wid, setX] = useState({0:50,1:50})
+    const [isOpen, setOpen] = useState({0:false,1:false});
     const toggleMenu = (direction) => {
-        let newwid = [wid];
-        let newisOpen = [isOpen];
         if (wid[direction] > 50) {
-            newwid[direction] = 50;
-            newisOpen[direction] = true;
-            setX(newwid);
-            setOpen(newisOpen);
+            setX({
+            ...wid,
+            [direction]:50
+            });
+            setOpen({
+            ...isOpen,
+            [direction]:false
+            });
         } else {
-            newwid[direction] = 200;
-            newisOpen[direction] = false;
-            setX(newwid);
-            setOpen(newisOpen);
+            setX({
+                ...wid,
+                [direction]:200
+            });
+            setOpen({
+                ...isOpen,
+                [direction]:true
+            });
         }
-    };
+    }
 
     return (
         <div className={styles.layout}>
@@ -122,9 +119,11 @@ export default function App(props) {
             <LeftSidebar wid={wid} toggleMenu={toggleMenu} isOpen={isOpen} className={styles.left} />
 
             <main className={styles.mainContainer}>
-                <Toolbar />
-                <Center>
+                <Toolbar>
                     <Header canvasRef={canvasRef} canvas={canvas} state={state} mods={mods} />
+                </Toolbar>
+                <Center>
+                    
                     <div className="wrap"><canvas id="canvas" /></div>
                     <EditorMenu canvasRef={canvasRef} state={state} />
                 </Center>
