@@ -10,13 +10,39 @@ export default function FigureSubmenu(props) {
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var myjson = canvas.toDatalessJSON(['width','height']);
-
-            console.log(myjson);
             state.current.push(myjson);
         }
        
     }
-    
+    function addLayer(object) {  //레이어에 객체 추가 
+        const div = document.createElement('div');
+        div.id = object;
+        div.style.border=' solid #0000FF';
+        div.style.width = '130px';
+        const el = document.getElementById('layer');
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = 'delete';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.onclick = ()=>{
+            canvas.remove(object);
+            document.getElementById(object).remove();
+            updateModifications(true);
+        }
+
+        const objectBtn = document.createElement('button');
+        objectBtn.innerHTML = object.type;
+        objectBtn.className = "layer-object";
+        objectBtn.id = object;
+        objectBtn.onclick = () => {
+            canvas.setActiveObject(object);
+            canvas.renderAll();
+        }
+
+        div.appendChild(objectBtn);
+        div.appendChild(deleteBtn);
+        el.insertBefore(div,el.firstChild);  //스택처럼 쌓이게 
+    }
     function addRect() {
         canvas.off('mouse:down');
         canvas.defaultCursor = 'crosshair';
@@ -38,9 +64,10 @@ export default function FigureSubmenu(props) {
                 angle: 0,
                 fill: `${color.current}`,
                 transparentCorners: false,
-                // type: 'rect',
+                type: 'rect',
             });
-            canvas.add(rect);
+            canvas.add(rect);            
+            
         });
 
         canvas.on('mouse:move', function (o) {
@@ -67,6 +94,9 @@ export default function FigureSubmenu(props) {
             canvas.off('mouse:down');
             canvas.off('mouse:move');
             canvas.off('mouse:up');
+            
+            addLayer(rect);
+
         });
 
     }
@@ -123,7 +153,7 @@ export default function FigureSubmenu(props) {
             canvas.off('mouse:up');
             canvas.off('mouse:down');
             canvas.defaultCursor = 'default';
-           
+            addLayer(circle);
         });
 
     }
@@ -182,7 +212,8 @@ export default function FigureSubmenu(props) {
             canvas.off('mouse:up');
             canvas.off('mouse:down');
             canvas.defaultCursor = 'default';
-  
+            addLayer(triangle);
+
 
         });
     }

@@ -4,6 +4,38 @@ import ColorPicker from "./ColorPicker";
 export default function LineSubmenu(props) {
     const canvas = props.canvas;
     const state = props.state;
+
+    function addLayer(object) {  //레이어에 객체 추가 
+        const div = document.createElement('div');
+        div.id = object;
+        div.style.border=' solid #0000FF';
+        div.style.width = '130px';
+        const el = document.getElementById('layer');
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = 'delete';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.onclick = ()=>{
+            canvas.remove(object);
+            document.getElementById(object).remove();
+            updateModifications(true)
+        }
+
+        const objectBtn = document.createElement('button');
+        objectBtn.innerHTML = object.type;
+        objectBtn.className = "layer-object";
+        objectBtn.id = object;
+        objectBtn.onclick = () => {
+            canvas.setActiveObject(object);
+            canvas.renderAll();
+        }
+
+        div.appendChild(objectBtn);
+        div.appendChild(deleteBtn);
+        el.insertBefore(div,el.firstChild);  //스택처럼 쌓이게 
+        
+    }
+
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var  myjson = canvas.toJSON();
@@ -25,12 +57,14 @@ export default function LineSubmenu(props) {
         }
         canvas.on('mouse:up',()=>{
             updateModifications(true);
+            addLayer(canvas.item(canvas.getObjects().length - 1));
         })
         
     }
 
 
     function drawStraight() {
+        canvas.defaultCursor = 'crosshair';
         canvas.isDrawingMode = false;
         canvas.off('mouse:down');
         canvas.off('mouse:up');
@@ -64,6 +98,9 @@ export default function LineSubmenu(props) {
             canvas.off('mouse:down');
             canvas.off('mouse:up');
             updateModifications(true);
+            addLayer(line);
+            canvas.defaultCursor = 'default';
+
         });
     }
 

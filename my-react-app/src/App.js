@@ -27,7 +27,8 @@ import RightSidebar from './Layout/RightSidebar';
 
 //canvas
 import Header from "./component/Header";
-import EditorMenu from "./EditorMenu";
+import EditorMenu from "./Editormenu";
+import Layer from "./component/Layer";
 
 //FIXME: Canvas: 도형과 텍스트 묶어서 객체 삭제가 안됌 => activeobjects로 받아서 for문remove돌리면 됌
 //FIXME: Canvas: redo undo 이미지가져오기(header)에 적용안됌
@@ -44,7 +45,6 @@ export default function App(props) {
 
     }
     const [canvas, setCanvas] = useState(""); //useEffect()후 렌더링 하기 위한 state
-
     const canvasRef = useRef(new fabric.Canvas("canvas", {
         backgroundColor: "white",
         height: 400,
@@ -78,10 +78,12 @@ export default function App(props) {
 
         document.onkeydown = function (e) { // delete, backspace 키로 삭제
             if (e.key === "Delete") {
-                var objects = canvasRef.current.getActiveObjects();
-                objects.forEach((object) => {
+                var o = canvasRef.current.getActiveObjects();
+                o.forEach( (object) =>{
                     canvasRef.current.remove(object);
-                })
+                    document.getElementById(object).remove();
+                }); 
+                canvasRef.current.discardActiveObject();
                 updateModifications(true);
             }
         }
@@ -126,6 +128,8 @@ export default function App(props) {
                     
                     <div className="wrap"><canvas id="canvas" /></div>
                     <EditorMenu canvasRef={canvasRef} state={state} />
+                    <Layer canvasRef={canvasRef}></Layer>
+                    <div id="layer"></div>
                 </Center>
                 <Footbar>
                     {/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
@@ -152,4 +156,3 @@ export default function App(props) {
 //https://codesandbox.io/s/wonderful-cerf-69doe?file=/src/App.js:563-672
 //icon
 //https://ant.design/components/icon/#components-icon-demo-custom
-        
