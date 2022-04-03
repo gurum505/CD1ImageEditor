@@ -48,6 +48,16 @@ export default function App(props) {
 
 
     useEffect(() => {  //rendering 후 한 번 실행 
+
+        // fabric.Object.prototype.toObject = (function(toObject) {
+        //     return function() {
+        //         return fabric.util.object.extend(toObject.call(this), {
+        //             id: this.id,//my custom property
+        //         });
+        //     };
+    
+        // })(fabric.Object.prototype.toObject);
+        
         canvasRef.current = (new fabric.Canvas("canvas", {
             backgroundColor: "white",
             height: 400,
@@ -75,7 +85,7 @@ export default function App(props) {
                 var o = canvasRef.current.getActiveObjects();
                 o.forEach( (object) =>{
                     canvasRef.current.remove(object);
-                    document.getElementById(object).remove();
+                    document.getElementById(object.id).remove();
                 }); 
                 canvasRef.current.discardActiveObject();
                 updateModifications(true);
@@ -117,8 +127,7 @@ export default function App(props) {
                     <Header canvasRef={canvasRef} canvas={canvas} state={state} mods={mods} />
                     <div className="wrap"><canvas id="canvas" /></div>
                     <EditorMenu canvasRef={canvasRef} state={state} />
-                    <Layer canvasRef={canvasRef}></Layer>
-                    <div id="layer"></div>
+                    <Layer/>
                 </Center>
                 <Footbar />
             </main>

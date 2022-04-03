@@ -14,7 +14,7 @@ export default function ImageSubmenu(props) {
 
     function addLayer(object) {  //레이어에 객체 추가 
         const div = document.createElement('div');
-        div.id = object;
+        div.id = object.id;
         div.style.border=' solid #0000FF';
         div.style.width = '130px';
         const el = document.getElementById('layer');
@@ -24,14 +24,13 @@ export default function ImageSubmenu(props) {
         deleteBtn.className = 'delete-btn';
         deleteBtn.onclick = ()=>{
             canvas.remove(object);
-            document.getElementById(object).remove();
+            document.getElementById(object.id).remove();
             updateModifications(true)
         }
 
         const objectBtn = document.createElement('button');
         objectBtn.innerHTML = object.type;
         objectBtn.className = "layer-object";
-        objectBtn.id = object;
         objectBtn.onclick = () => {
             canvas.setActiveObject(object);
             canvas.renderAll();
@@ -43,7 +42,8 @@ export default function ImageSubmenu(props) {
         
     }
 
-    function addLocalImage() {
+    function addLocalImage(e) {
+        e.target.value = ''
         canvas.isDrawingMode = false;
         document.getElementById("add-local-image-file").onchange = function (e) {
             var reader = new FileReader();
@@ -53,12 +53,13 @@ export default function ImageSubmenu(props) {
                 image.onload = function () {
                     var img = new fabric.Image(image);
                     img.set({
-
-                        left: 100,
-                        top: 60
+                        id : `${props.id.current}`,
+                        left: Math.floor(Math.random() * 101),
+                        top: Math.floor(Math.random() * 101),
                     });
 
                     canvas.add(img).setActiveObject(img);
+                    props.id.current+=1;
                     updateModifications(true);
                     addLayer(img);
                     canvas.renderAll();

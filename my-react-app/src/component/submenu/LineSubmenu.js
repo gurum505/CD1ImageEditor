@@ -7,7 +7,7 @@ export default function LineSubmenu(props) {
 
     function addLayer(object) {  //레이어에 객체 추가 
         const div = document.createElement('div');
-        div.id = object;
+        div.id = object.id
         div.style.border=' solid #0000FF';
         div.style.width = '130px';
         const el = document.getElementById('layer');
@@ -17,14 +17,13 @@ export default function LineSubmenu(props) {
         deleteBtn.className = 'delete-btn';
         deleteBtn.onclick = ()=>{
             canvas.remove(object);
-            document.getElementById(object).remove();
+            document.getElementById(object.id).remove();
             updateModifications(true)
         }
 
         const objectBtn = document.createElement('button');
         objectBtn.innerHTML = object.type;
         objectBtn.className = "layer-object";
-        objectBtn.id = object;
         objectBtn.onclick = () => {
             canvas.setActiveObject(object);
             canvas.renderAll();
@@ -57,6 +56,9 @@ export default function LineSubmenu(props) {
         }
         canvas.on('mouse:up',()=>{
             updateModifications(true);
+            canvas.item(canvas.getObjects().length - 1).set({id:`${props.id.current}`})
+            props.id.current+=1;
+            console.log(canvas.item(canvas.getObjects().length - 1))
             addLayer(canvas.item(canvas.getObjects().length - 1));
         })
         
@@ -79,8 +81,10 @@ export default function LineSubmenu(props) {
                 stroke: `${color.current}`,
                 originX: 'center',
                 originY: 'center',
+                id : props.id.current,
             });
             canvas.add(line);
+            props.id.current+=1;
         });
 
         canvas.on('mouse:move', function (o) {

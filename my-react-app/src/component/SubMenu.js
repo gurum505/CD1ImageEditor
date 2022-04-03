@@ -4,20 +4,19 @@ import LineSubmenu from './submenu/LineSubmenu';
 import TextboxSubmenu from './submenu/TextboxSubmenu';
 import FilterSubmenu from './submenu/FilterSubmenu';
 import CropSubmenu from './submenu/CropSubmenu';
-import RotateSubmenu from './submenu/RotateSubmenu';
+import { useRef } from 'react';
 export default function Submenu(props) {
     const canvas = props.canvas;
     const buttonType = props.buttonType;
-
+    const id = useRef(0);  
     return (
         <div className="sub-menu">
-            {(buttonType === 'figure') && <FigureSubmenu canvas={canvas} state={props.state} />}
-            {(buttonType === 'image') && <ImageSubmenu canvas={canvas} state={props.state} />}
-            {(buttonType === 'line') && <LineSubmenu canvas={canvas} state={props.state} />}
-            {(buttonType === 'textbox') && <TextboxSubmenu canvas={canvas} state={props.state}/>}
-            {(buttonType === 'filter') && <FilterSubmenu canvas={canvas} state={props.state} />}
-            {(buttonType === 'crop') && <CropSubmenu canvas={canvas} state={props.state} />}
-            {(buttonType === 'rotate') && <RotateSubmenu canvas={canvas} state={props.state}/>}
+            {(buttonType === 'figure') && <FigureSubmenu canvas={canvas} state={props.state} id={id}/>}
+            {(buttonType === 'image') && <ImageSubmenu canvas={canvas} state={props.state} id={id}/>}
+            {(buttonType === 'line') && <LineSubmenu canvas={canvas} state={props.state} id={id}/>}
+            {(buttonType === 'textbox') && <TextboxSubmenu canvas={canvas} state={props.state} id={id}/>}
+            {(buttonType === 'filter') && <FilterSubmenu canvas={canvas} state={props.state} id={id} />}
+            {(buttonType === 'crop') && <CropSubmenu canvas={canvas} state={props.state} id={id}/>}
         </div>
     );
 }

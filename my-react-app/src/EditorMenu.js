@@ -52,7 +52,7 @@ export default function EditorMenu(props) {
                 },
                 'object:added': () => {
                     console.log('object:added');
-
+                    console.log(canvas.item(canvas.getObjects().length - 1));
                     canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
                     selectType = canvas.getActiveObject().type;
                     document.getElementById('remove-object').disabled = false; 
@@ -63,9 +63,6 @@ export default function EditorMenu(props) {
                     
                 },
                 'object:modified': () => {
-                    console.log('object:modified');
-                    console.log(canvas.getActiveObject().getScaledWidth());
-
                     console.log('object:modified');
                     updateModifications(true);
                 },
@@ -98,7 +95,7 @@ export default function EditorMenu(props) {
         var o = canvas.getActiveObjects();
         o.forEach( (object) =>{
             canvas.remove(object);
-            document.getElementById(object).remove();
+            document.getElementById(object.id).remove();
         }); 
         canvas.discardActiveObject();
         updateModifications(true);
@@ -124,17 +121,6 @@ export default function EditorMenu(props) {
         canvas.off('mouse:down');
     }
 
-    function rotateCanvas(){
-        if (buttonType === 'rotate') setButtonType('');
-        else setButtonType('rotate');
-        canvas.off('mouse:down');
-    }
-    
-    function showObjectList(){
-        if (buttonType === 'objectList') setButtonType('');
-        else setButtonType('objectList');
-        canvas.off('mouse:down');
-    }
 
     return (
         <div className="editor-menu">
@@ -146,7 +132,6 @@ export default function EditorMenu(props) {
             <button id='filter' onClick={addFilter} >필터</button>
             <button id='crop' onClick={cropImage}>자르기</button>
             <button id='remove-object' onClick={removeObject} >객체 삭제</button>
-            <button id = 'rotate-canvas' onClick={rotateCanvas}>회전</button>
             <DefaultMenu canvas={canvas} />
         </div>
     )

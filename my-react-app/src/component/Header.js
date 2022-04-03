@@ -24,7 +24,7 @@ export default function Header(props) {
 
     function addLayer(object) {  //레이어에 객체 추가 
         const div = document.createElement('div');
-        div.id = object;
+        div.id = object.id;
         div.style.border=' solid #0000FF';
         div.style.width = '130px';
         const el = document.getElementById('layer');
@@ -34,13 +34,12 @@ export default function Header(props) {
         deleteBtn.className = 'delete-btn';
         deleteBtn.onclick = ()=>{
             canvas.remove(object);
-            document.getElementById(object).remove();
+            document.getElementById(object.id).remove();
         }
 
         const objectBtn = document.createElement('button');
         objectBtn.innerHTML = object.type;
         objectBtn.className = "layer-object";
-        objectBtn.id = object;
         objectBtn.onclick = () => {
             canvas.setActiveObject(object);
             canvas.renderAll();
@@ -53,7 +52,6 @@ export default function Header(props) {
     }
     function importImage(e) {
         e.target.value = ''
-
         document.getElementById('import-image-file').onchange = function (e) {
             var file = e.target.files[0];
             var reader = new FileReader();
@@ -99,27 +97,37 @@ export default function Header(props) {
 
     // 직렬화 
     function serialization() {
-        var json = JSON.stringify(canvas);
-        json = [json];
-        var blob = new Blob(json, { type: "text/plain;charset=utf-8" });
+        console.log(canvas);
+        var json = canvas.toDatalessJSON(['id'])
+        json = JSON.stringify(json);
+
+        
+        var blob = new Blob([json], { type: "text/plain;charset=utf-8" });
         var link = document.createElement('a'); //<a> 생성
 
         link.href = URL.createObjectURL(blob);
         link.download = "image.json";
         link.click();
+        
     }
 
     // 역직렬화
     function Deserialization() {
-        canvas.off('object:added'); //역직렬화 시 object : added가 되면서 객체 삭제 버튼이 누를 수 있게 되는 것을 방지 
 
         document.getElementById("Deserialization-json-file").onchange = function (e) {
             var reader = new FileReader();
             reader.onload = function (e) { //onload(): 읽기 성공 시 실행되는 핸들러
-                canvas.loadFromJSON(reader.result, canvas.renderAll.bind(canvas));
-                var test = canvas.toDatalessJSON(['width', 'height']);
+                canvas.loadFromJSON(reader.result, ()=>{
+                    canvas.renderAll.bind(canvas);
+                    console.log(canvas);
+                    var objects = canvas.getObjects();
+                    objects.forEach((object)=>{
+                        addLayer(object);
+                    })
+                    
+                });
                 let data = JSON.parse(reader.result);
-
+                var myjson;
                 state.current = [];
                 mods.current = 0;
                 if (data.backgroundImage !== undefined) {
@@ -128,19 +136,24 @@ export default function Header(props) {
 
                     fabric.Image.fromURL(data.backgroundImage.src, function (img) {
                         canvas.setBackgroundImage(img);
-                        var myjson = canvas.toDatalessJSON(['width', 'height', 'backgroundImage']);
+                        myjson = canvas.toDatalessJSON(['width', 'height', 'backgroundImage']);
+                        console.log(myjson);
                         state.current.push(myjson);
                     });
-
                 }
+                else{
+                    state.current.push(canvas.toJSON());
+                }
+                canvas.renderAll();
             }
             reader.readAsText(e.target.files[0]); // dataURL 형식으로 파일 읽음
         }
     }
     function undo() {
         var prevObjects = canvas.getObjects(); //undo 하기 전에 layer 제거 
+        console.log(prevObjects);
         prevObjects.forEach((object)=>{
-            document.getElementById(object).remove();
+            document.getElementById(object.id).remove();
         })
         if (mods.current < state.current.length - 1 && state.current.length > 1) {
             canvas.clear().renderAll();
@@ -151,6 +164,8 @@ export default function Header(props) {
                     if (json.height) canvas.setHeight(json.height);
                 }
                 canvas.renderAll.bind(canvas);
+                console.log(canvas.getObjects());
+
 
             });
             //After loading JSON it’s important to call canvas.renderAll(). In the 2nd parameter of canvas.loadFromJSON(json, callback) you can define a cllback function which is invoked after all objects are loaded/added.
@@ -170,11 +185,12 @@ export default function Header(props) {
     function redo() {
         var prevObjects = canvas.getObjects(); //undo 하기 전에 layer 제거 
         prevObjects.forEach((object)=>{
-            document.getElementById(object).remove();
+            document.getElementById(object.id).remove();
         })
         if (mods.current > 0) {
             canvas.clear().renderAll();
             canvas.loadFromJSON(state.current[state.current.length - mods.current], canvas.renderAll.bind(canvas));
+
             mods.current -= 1;
         }
         var objects= canvas.getObjects();

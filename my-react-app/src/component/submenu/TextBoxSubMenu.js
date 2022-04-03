@@ -18,14 +18,13 @@ export default function TextboxSubmenu(props) {
         deleteBtn.className = 'delete-btn';
         deleteBtn.onclick = ()=>{
             canvas.remove(object);
-            document.getElementById(object).remove();
+            document.getElementById(object.id).remove();
             updateModifications(true)
         }
 
         const objectBtn = document.createElement('button');
         objectBtn.innerHTML = object.type;
         objectBtn.className = "layer-object";
-        objectBtn.id = object;
         objectBtn.onclick = () => {
             canvas.setActiveObject(object);
             canvas.renderAll();
@@ -58,8 +57,10 @@ export default function TextboxSubmenu(props) {
                 fill: `${color.current}`,
                 left: pointer.x - 125,
                 top: pointer.y - 20,
+                id : props.id.current
             });
             canvas.add(textbox);
+            props.id.current+=1;
             updateModifications(true);
             addLayer(textbox);
             canvas.off('mouse:down');
