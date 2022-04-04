@@ -2,44 +2,44 @@ import { fabric } from "fabric";
 import {  useEffect, useRef } from "react";
 import ColorPicker from "./ColorPicker";
 export default function TextboxSubmenu(props) {
-    const canvas = props.canvas;
-    const state = props.state;
+    const canvas = props.canvasRef.current;
+    const stateRef = props.stateRef;
+    const objectNumRef = props.objectNumRef;
     const color = useRef('black');
 
     function addLayer(object) {  //레이어에 객체 추가 
         const div = document.createElement('div');
-        div.id = object;
-        div.style.border=' solid #0000FF';
+        div.id = objectNumRef.current;
+        div.style.border = ' solid #0000FF';
         div.style.width = '130px';
         const el = document.getElementById('layer');
-
-        const deleteBtn = document.createElement('button');
-        deleteBtn.innerHTML = 'delete';
-        deleteBtn.className = 'delete-btn';
-        deleteBtn.onclick = ()=>{
-            canvas.remove(object);
-            document.getElementById(object).remove();
-            updateModifications(true)
-        }
-
+        
         const objectBtn = document.createElement('button');
         objectBtn.innerHTML = object.type;
         objectBtn.className = "layer-object";
-        objectBtn.id = object;
         objectBtn.onclick = () => {
             canvas.setActiveObject(object);
             canvas.renderAll();
         }
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = 'delete';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.onclick = () => {
+            canvas.remove(object);
+            document.getElementById(object.id).remove();
+            updateModifications(true);
+        }
+
 
         div.appendChild(objectBtn);
         div.appendChild(deleteBtn);
-        el.insertBefore(div,el.firstChild);  //스택처럼 쌓이게 
+        el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 
     }
 
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var  myjson = canvas.toJSON();
-            state.current.push(myjson);
+            stateRef.current.push(myjson);
         }        
     }
 
@@ -58,6 +58,7 @@ export default function TextboxSubmenu(props) {
                 fill: `${color.current}`,
                 left: pointer.x - 125,
                 top: pointer.y - 20,
+                id : `${++objectNumRef.current}`
             });
             canvas.add(textbox);
             updateModifications(true);
@@ -152,7 +153,6 @@ export default function TextboxSubmenu(props) {
                 오른쪽정렬
             </button>
             &nbsp; &nbsp;
-            {/* <input id="color" type="color" onChange={selectColor} /> */}
             <ColorPicker  canvas={canvas} color ={color}/>
         </div>
     </>);

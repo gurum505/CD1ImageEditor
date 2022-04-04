@@ -23,15 +23,24 @@ import {FolderOpenOutlined,CloudDownloadOutlined,UploadOutlined,
 //<DeleteOutlined />
 
 export default function Header(props) {
-    const state = props.state;
-    const mods = props.mods;
+    const stateRef = props.stateRef;
+    const modsRef = props.modsRef;
+    const objectNumRef = props.objectNumRef;
     var canvas = props.canvasRef.current;
 
     //FIXME:불러오는 이미지가 캔버스보다 클 때 submenu를 넘어가는 것 수정 필요 
 
+    function updateModifications(savehistory) {
+        if (savehistory === true) {
+            var myjson = canvas.toDatalessJSON(['width','height']);
+            stateRef.current.push(myjson);
+        }
+    }
+
+
     function addLayer(object) {  //레이어에 객체 추가 
         const div = document.createElement('div');
-        div.id = object;
+        div.id = object.id;
         div.style.border=' solid #0000FF';
         div.style.width = '130px';
         const el = document.getElementById('layer');
@@ -41,13 +50,13 @@ export default function Header(props) {
         deleteBtn.className = 'delete-btn';
         deleteBtn.onclick = ()=>{
             canvas.remove(object);
-            document.getElementById(object).remove();
+            document.getElementById(object.id).remove();
+            updateModifications(true);
         }
 
         const objectBtn = document.createElement('button');
         objectBtn.innerHTML = object.type;
         objectBtn.className = "layer-object";
-        objectBtn.id = object;
         objectBtn.onclick = () => {
             canvas.setActiveObject(object);
             canvas.renderAll();
@@ -58,9 +67,16 @@ export default function Header(props) {
         el.insertBefore(div,el.firstChild);  //스택처럼 쌓이게 
         
     }
+
+    function removeAllLayer(){
+        var prevObjects = canvas.getObjects(); //undo 하기 전에 layer 제거 
+        console.log(prevObjects);
+        prevObjects.forEach((object)=>{
+            document.getElementById(object.id).remove();
+        })
+    }
     function importImage(e) {
         e.target.value = ''
-
         document.getElementById('import-image-file').onchange = function (e) {
             var file = e.target.files[0];
             var reader = new FileReader();
@@ -71,11 +87,11 @@ export default function Header(props) {
                     canvas.setWidth(img.width);
                     canvas.setBackgroundImage(img);
                     canvas.renderAll();
-                    state.current = [];
+                    stateRef.current = [];
                     var myjson = canvas.toDatalessJSON(['width', 'height']);
-                    state.current.push(myjson);
+                    stateRef.current.push(myjson);
 
-                    mods.current = 0;
+                    modsRef.current = 0;
                 });
             };
             reader.readAsDataURL(file);
@@ -106,91 +122,115 @@ export default function Header(props) {
 
     // 직렬화 
     function serialization() {
-        var json = JSON.stringify(canvas);
-        json = [json];
-        var blob = new Blob(json, { type: "text/plain;charset=utf-8" });
+        console.log(canvas);
+        var json = canvas.toDatalessJSON(['id','width','height','objectNum'])
+        console.log(json)
+        json = JSON.stringify(json);
+
+        
+        var blob = new Blob([json], { type: "text/plain;charset=utf-8" });
         var link = document.createElement('a'); //<a> 생성
 
         link.href = URL.createObjectURL(blob);
         link.download = "image.json";
         link.click();
+        
     }
 
     // 역직렬화
     function Deserialization() {
-        canvas.off('object:added'); //역직렬화 시 object : added가 되면서 객체 삭제 버튼이 누를 수 있게 되는 것을 방지 
-
+        var prevObjects = canvas.getObjects(); //undo 하기 전에 layer 제거 
+        console.log(prevObjects);
+        prevObjects.forEach((object)=>{
+            document.getElementById(object.id).remove();
+        })
         document.getElementById("Deserialization-json-file").onchange = function (e) {
             var reader = new FileReader();
             reader.onload = function (e) { //onload(): 읽기 성공 시 실행되는 핸들러
-                canvas.loadFromJSON(reader.result, canvas.renderAll.bind(canvas));
-                var test = canvas.toDatalessJSON(['width', 'height']);
-                let data = JSON.parse(reader.result);
+                canvas.loadFromJSON(reader.result, ()=>{
+                    canvas.setHeight(canvas.height);
+                    canvas.setWidth(canvas.width); 
+                    var prevCanvasObjects = canvas.getObjects().length;
+                    objectNumRef.current = prevCanvasObjects;
+                    console.log(props.objectNum);
+                    console.log(canvas);
+                    stateRef.current = [];
+                    modsRef.current= 0;
+                    canvas.renderAll.bind(canvas);
+                    console.log(canvas);
+                    var objects = canvas.getObjects();
+                    objects.forEach((object)=>{
+                        addLayer(object);
+                    })
+                    stateRef.current.push(canvas.toDatalessJSON())
+                    console.log(stateRef.current.length);
+                    
+                // if (data.backgroundImage !== undefined) {
+                //     canvas.setWidth(data.backgroundImage.width);
+                //     canvas.setHeight(data.backgroundImage.height);
 
-                state.current = [];
-                mods.current = 0;
-                if (data.backgroundImage !== undefined) {
-                    canvas.setWidth(data.backgroundImage.width);
-                    canvas.setHeight(data.backgroundImage.height);
+                //     fabric.Image.fromURL(data.backgroundImage.src, function (img) {
+                //         canvas.setBackgroundImage(img);
+                //         myjson = canvas.toDatalessJSON(['width', 'height', 'backgroundImage']);
+                //         console.log(myjson);
+                //         state.current.push(myjson);
+                //         console.log(state.current.length);
 
-                    fabric.Image.fromURL(data.backgroundImage.src, function (img) {
-                        canvas.setBackgroundImage(img);
-                        var myjson = canvas.toDatalessJSON(['width', 'height', 'backgroundImage']);
-                        state.current.push(myjson);
-                    });
-
-                }
+                //     });
+                // }
+                // else{
+                //     state.current.push(canvas.toJSON());
+                // }
+                // canvas.renderAll();
+                });
+                canvas.renderAll();
             }
             reader.readAsText(e.target.files[0]); // dataURL 형식으로 파일 읽음
         }
     }
     function undo() {
-        var prevObjects = canvas.getObjects(); //undo 하기 전에 layer 제거 
-        prevObjects.forEach((object)=>{
-            document.getElementById(object).remove();
-        })
-        if (mods.current < state.current.length - 1 && state.current.length > 1) {
+        console.log(modsRef.current);
+        console.log(stateRef.current.length);
+        if (modsRef.current < stateRef.current.length - 1 && stateRef.current.length > 1) {
+            removeAllLayer();
             canvas.clear().renderAll();
-            var json = state.current[state.current.length - 2 - mods.current];
+            var json = stateRef.current[stateRef.current.length - 2 - modsRef.current];
             canvas.loadFromJSON(json, () => {
                 if (json.width) {
                     if (json.width) canvas.setWidth(json.width);
                     if (json.height) canvas.setHeight(json.height);
                 }
                 canvas.renderAll.bind(canvas);
-
+                console.log(canvas.getObjects());
+                modsRef.current += 1;
+                var objects = canvas.getObjects();
+                objects.forEach((object) => {
+                    addLayer(object);
+                }
+                )
             });
             //After loading JSON it’s important to call canvas.renderAll(). In the 2nd parameter of canvas.loadFromJSON(json, callback) you can define a cllback function which is invoked after all objects are loaded/added.
-            mods.current += 1;
-        }
-        var objects= canvas.getObjects();
-        
 
-        objects.forEach((object)=>{
-            addLayer(object);
-            }
-        )
-        
-     
+        }
+
     }
 
     function redo() {
-        var prevObjects = canvas.getObjects(); //undo 하기 전에 layer 제거 
-        prevObjects.forEach((object)=>{
-            document.getElementById(object).remove();
-        })
-        if (mods.current > 0) {
+        if (modsRef.current > 0) {
+            removeAllLayer();
             canvas.clear().renderAll();
-            canvas.loadFromJSON(state.current[state.current.length - mods.current], canvas.renderAll.bind(canvas));
-            mods.current -= 1;
-        }
-        var objects= canvas.getObjects();
-        
+            canvas.loadFromJSON(stateRef.current[stateRef.current.length - modsRef.current], () => {
+                canvas.renderAll.bind(canvas);
 
-        objects.forEach((object)=>{
-           addLayer(object);
-            }
-        )
+                modsRef.current -= 1;
+                var objects = canvas.getObjects();
+                objects.forEach((object) => {
+                    addLayer(object);
+                }
+                )
+            });
+        }
+
     }
 
 

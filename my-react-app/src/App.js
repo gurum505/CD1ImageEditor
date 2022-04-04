@@ -38,7 +38,7 @@ export default function App(props) {
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var myjson = canvasRef.current.toJSON();
-            state.current.push(myjson);
+            stateRef.current.push(myjson);
         }
     }
 
@@ -47,13 +47,23 @@ export default function App(props) {
         backgroundColor: "white",
         height: 400,
         width: 700,
-
+        objectNum: 0,
     }));  //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
-
-    const state = useRef([]);
-    const mods = useRef(0);
+    const stateRef = useRef([]);
+    const modsRef = useRef(0);
+    const objectNumRef = useRef(0);
 
     useEffect(() => {  //rendering 후 한 번 실행 
+
+        // fabric.Object.prototype.toObject = (function(toObject) {
+        //     return function() {
+        //         return fabric.util.object.extend(toObject.call(this), {
+        //             id: this.id,//my custom property
+        //         });
+        //     };
+    
+        // })(fabric.Object.prototype.toObject);
+        
         canvasRef.current = (new fabric.Canvas("canvas", {
             backgroundColor: "white",
             height: 400,
@@ -78,7 +88,7 @@ export default function App(props) {
                 var o = canvasRef.current.getActiveObjects();
                 o.forEach( (object) =>{
                     canvasRef.current.remove(object);
-                    document.getElementById(object).remove();
+                    document.getElementById(object.id).remove();
                 }); 
                 canvasRef.current.discardActiveObject();
                 updateModifications(true);
@@ -148,14 +158,13 @@ export default function App(props) {
 
             <main className={styles.mainContainer}>
                 <Toolbar>
-                    <Header canvasRef={canvasRef} canvas={canvas} state={state} mods={mods} />
+                    <Header canvasRef={canvasRef} objectNumRef={objectNumRef} stateRef={stateRef} modsRef={modsRef} />
                 </Toolbar>
                 <Center>
                     
                     <div className="wrap"><canvas id="canvas" /></div>
-                    <EditorMenu canvasRef={canvasRef} state={state} />
-                    <Layer canvasRef={canvasRef}></Layer>
-                    <div id="layer"></div>
+                    <EditorMenu canvasRef={canvasRef} stateRef={stateRef} objectNumRef={objectNumRef}/>
+                    <Layer/>
                 </Center>
                 <Footbar>
                     {/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
