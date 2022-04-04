@@ -33,9 +33,10 @@ export default function Header(props) {
 
     function updateModifications(savehistory) {
         if (savehistory === true) {
-            var myjson = canvas.toDatalessJSON(['width','height']);
+            var myjson = canvas.toDatalessJSON(['width', 'height', 'id']);
             stateRef.current.push(myjson);
         }
+
     }
 
     useEffect(() => {
@@ -87,7 +88,6 @@ export default function Header(props) {
           }
         var objects = canvas.getActiveObjects();
         objects.forEach((object)=>{
-            console.log(object);
             if(document.getElementById(object.id))
            document.getElementById(object.id).style.border ='solid red'
        })
@@ -149,9 +149,7 @@ export default function Header(props) {
 
     // 직렬화 
     function serialization() {
-        console.log(canvas);
         var json = canvas.toDatalessJSON(['id','width','height','objectNum'])
-        console.log(json)
         json = JSON.stringify(json);
 
         
@@ -167,7 +165,6 @@ export default function Header(props) {
     // 역직렬화
     function Deserialization() {
         var prevObjects = canvas.getObjects(); //undo 하기 전에 layer 제거 
-        console.log(prevObjects);
         prevObjects.forEach((object)=>{
             document.getElementById(object.id).remove();
         })
@@ -182,13 +179,11 @@ export default function Header(props) {
                     stateRef.current = [];
                     modsRef.current= 0;
                     canvas.renderAll.bind(canvas);
-                    console.log(canvas);
                     var objects = canvas.getObjects();
                     objects.forEach((object)=>{
                         addLayer(object);
                     })
-                    stateRef.current.push(canvas.toDatalessJSON())
-
+                    stateRef.current.push(canvas.toDatalessJSON(['width', 'height', 'id']));
                     var objects = canvas.getActiveObjects();
                     objects.forEach((object) => {
                         if (document.getElementById(object.id))
@@ -232,7 +227,6 @@ export default function Header(props) {
                     if (json.width) canvas.setWidth(json.width);
                     if (json.height) canvas.setHeight(json.height);
                 }
-                canvas.renderAll.bind(canvas);
                 modsRef.current += 1;
                 var objects = canvas.getObjects();
                 objects.forEach((object) => {

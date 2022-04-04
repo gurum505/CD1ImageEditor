@@ -9,11 +9,11 @@ export default function LineSubmenu(props) {
 
     function addLayer(object) {  //레이어에 객체 추가 
         const div = document.createElement('div');
-        div.id = objectNumRef.current;
+        div.id = objectNumRef.current
         div.style.border = ' solid #0000FF';
         div.style.width = '130px';
         const el = document.getElementById('layer');
-        
+
         const objectBtn = document.createElement('button');
         objectBtn.innerHTML = object.type;
         objectBtn.className = "layer-object";
@@ -38,9 +38,10 @@ export default function LineSubmenu(props) {
 
     function updateModifications(savehistory) {
         if (savehistory === true) {
-            var  myjson = canvas.toJSON();
+            var myjson = canvas.toDatalessJSON(['width', 'height', 'id']);
             stateRef.current.push(myjson);
         }
+
     }
 
     function drawCurve() {
@@ -59,7 +60,6 @@ export default function LineSubmenu(props) {
         }
         canvas.on('mouse:up',()=>{
             canvas.discardActiveObject().renderAll(); // 곡선 그리고 나면 활성화되는 것 끄기 ( canvas.off('object:added') 로 하면 redo 할 때 활성화가 안됨)
-            updateModifications(true);
             canvas.item(canvas.getObjects().length - 1).set({id:`${++objectNumRef.current}`})
             addLayer(canvas.item(canvas.getObjects().length - 1));
             var objects = canvas.getActiveObjects();
@@ -68,6 +68,8 @@ export default function LineSubmenu(props) {
                 if (document.getElementById(object.id))
                     document.getElementById(object.id).style.border = 'solid red'
             })
+            updateModifications(true);
+
 
         })
         

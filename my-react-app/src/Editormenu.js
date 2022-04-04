@@ -14,7 +14,7 @@ export default function EditorMenu(props) {
 
     function updateModifications(savehistory) {
         if (savehistory === true) {
-            var myjson = canvas.toDatalessJSON(['width', 'height']);
+            var myjson = canvas.toDatalessJSON(['width', 'height','id']);
             stateRef.current.push(myjson);
         }
     }
@@ -42,8 +42,9 @@ export default function EditorMenu(props) {
             })
         } catch (e) { }
 
-        if (stateRef.current.length === 0) updateModifications(true);
-
+        if (stateRef.current.length === 0) {
+            updateModifications(true);
+        }
 
         const figure = ['rect', 'circle', 'triangle'];
         const line = ['line', 'path'];
@@ -55,8 +56,6 @@ export default function EditorMenu(props) {
                 'selection:updated': () => {
 
                     if (!canvas.getActiveObject().cropRect === true) {//update 된 객체가 crop rect 라면 렌더링되지 않게 함 
-
-
                         console.log('selection:updated');
                         document.getElementById('remove-object').disabled = false
                         selectType = canvas.getActiveObject().type;

@@ -8,19 +8,19 @@ export default function ImageSubmenu(props) {
     canvas.off();
     function updateModifications(savehistory) {
         if (savehistory === true) {
-            var  myjson = canvas.toJSON();
+            var myjson = canvas.toDatalessJSON(['width', 'height', 'id']);
             stateRef.current.push(myjson);
         }
-        
+
     }
 
     function addLayer(object) {  //레이어에 객체 추가 
         const div = document.createElement('div');
-        div.id = objectNumRef.current;
+        div.id = objectNumRef.current
         div.style.border = ' solid #0000FF';
         div.style.width = '130px';
         const el = document.getElementById('layer');
-        
+
         const objectBtn = document.createElement('button');
         objectBtn.innerHTML = object.type;
         objectBtn.className = "layer-object";
