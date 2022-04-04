@@ -5,6 +5,7 @@ export default function ImageSubmenu(props) {
     const canvas = props.canvasRef.current;
     const stateRef = props.stateRef;
     const objectNumRef = props.objectNumRef;
+    canvas.off();
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var  myjson = canvas.toJSON();
@@ -61,6 +62,13 @@ export default function ImageSubmenu(props) {
                     canvas.add(img).setActiveObject(img);
                     updateModifications(true);
                     addLayer(img);
+                    
+                    var objects = canvas.getActiveObjects();
+                    objects.forEach((object) => {
+                        if (document.getElementById(object.id))
+                            document.getElementById(object.id).style.border = 'solid red'
+                    })
+
                     canvas.renderAll();
 
                 }

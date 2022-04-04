@@ -1,11 +1,13 @@
 import { fabric } from "fabric";
 import {  useEffect, useRef } from "react";
 import ColorPicker from "./ColorPicker";
-export default function TextboxSubmenu(props) {
+export default function TextBoxSubmenu(props) {
     const canvas = props.canvasRef.current;
     const stateRef = props.stateRef;
     const objectNumRef = props.objectNumRef;
     const color = useRef('black');
+
+    canvas.off();
 
     function addLayer(object) {  //레이어에 객체 추가 
         const div = document.createElement('div');
@@ -65,6 +67,7 @@ export default function TextboxSubmenu(props) {
             addLayer(textbox);
             canvas.off('mouse:down');
             canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
+            document.getElementById(textbox.id).style.border = 'solid red';
             canvas.defaultCursor = 'default';
 
         });

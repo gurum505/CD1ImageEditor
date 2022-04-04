@@ -1,9 +1,59 @@
 import { fabric } from "fabric";
+
 export default function CropSubmenu(props) {
     const stateRef = props.stateRef;
     const canvas = props.canvasRef.current;
     var currentImage;
     var selectionRect;
+    canvas.off();
+    var left1 = 0;
+    var top1 = 0;
+    var scale1x = 0;
+    var scale1y = 0;
+    var width1 = 0;
+    var height1 = 0;
+
+    //crop 상자가 범위를 초과하지 않게 
+    canvas.on('object:scaling', function (e) {
+        var obj = e.target;
+        obj.setCoords();
+        var brNew = obj.getBoundingRect();
+
+        if (((brNew.width + brNew.left) >= obj.canvas.width) || ((brNew.height + brNew.top) >= obj.canvas.height) || ((brNew.left < 0) || (brNew.top < 0))) {
+            obj.left = left1;
+            obj.top = top1;
+            obj.scaleX = scale1x;
+            obj.scaleY = scale1y;
+            obj.width = width1;
+            obj.height = height1;
+        }
+        else {
+            left1 = obj.left;
+            top1 = obj.top;
+            scale1x = obj.scaleX;
+            scale1y = obj.scaleY;
+            width1 = obj.width;
+            height1 = obj.height;
+        }
+    });
+    canvas.on('object:moving', function (e) {
+        var obj = e.target;
+        // if object is too big ignore
+        if (obj.currentHeight > obj.canvas.height || obj.currentWidth > obj.canvas.width) {
+            return;
+        }
+        obj.setCoords();
+        // top-left  corner
+        if (obj.getBoundingRect().top < 0 || obj.getBoundingRect().left < 0) {
+            obj.top = Math.max(obj.top, obj.top - obj.getBoundingRect().top);
+            obj.left = Math.max(obj.left, obj.left - obj.getBoundingRect().left);
+        }
+        // bot-right corner
+        if (obj.getBoundingRect().top + obj.getBoundingRect().height > obj.canvas.height || obj.getBoundingRect().left + obj.getBoundingRect().width > obj.canvas.width) {
+            obj.top = Math.min(obj.top, obj.canvas.height - obj.getBoundingRect().height + obj.top - obj.getBoundingRect().top);
+            obj.left = Math.min(obj.left, obj.canvas.width - obj.getBoundingRect().width + obj.left - obj.getBoundingRect().left);
+        }
+    });
 
     function updateModifications(savehistory) {
         if (savehistory === true) {
@@ -15,19 +65,19 @@ export default function CropSubmenu(props) {
 
     function addSelectionRect(ratio = '') {
         var height = parseInt(canvas.height);
-        var width;
-        if (ratio === '3:2') width = height * (3 / 2.0);
-        else if (ratio === '4:3') width = height * (4 / 3.0);
-        else if (ratio === '16:9') width = height * (16 / 9.0);
-        else if (ratio === '1:1') width = height;
+        var ratio;
+        if (ratio === '3:2') ratio = 3 / 2
+        else if (ratio === '4:3') ratio = 4 / 3
+        else if (ratio === '16:9') ratio = 16 / 9
+        else if (ratio === '1:1') ratio = 1 / 1
         selectionRect = new fabric.Rect({
             fill: 'rgba(0,0,0,0.3)',
             originX: 'left',
             originY: 'top',
             stroke: 'black',
             opacity: 1,
-            width: `${width}`,
-            height: `${height}`,
+            width: canvas.height * ratio,
+            height: canvas.height - 3,
             hasRotatingPoint: false,
             transparentCorners: false,
             cornerColor: 'white',
@@ -40,7 +90,7 @@ export default function CropSubmenu(props) {
             borderScaleFactor: 1.3,
             cropRect: true
         });
-        selectionRect.set({ 'width': width, 'height': height });
+        // selectionRect.set({ 'width': width, 'height': height });
         canvas.centerObject(selectionRect);
         canvas.add(selectionRect);
     }
@@ -93,15 +143,10 @@ export default function CropSubmenu(props) {
             updateModifications(true); //#FIXME: REDO 할 때 캔버스 크기도 
             props.setButtonType('');
         });
-
-
-
-
     }
 
 
     function cropCustom() {
-
         var objects = canvas.getObjects();
 
         canvas.defaultCursor = 'crosshair';
@@ -110,10 +155,13 @@ export default function CropSubmenu(props) {
         cropBtn.forEach((btn) => {
             btn.disabled = true;
         })
-        canvas.off('mouse:down');
+
         var isDown, origX, origY;
 
         canvas.on('mouse:down', function (o) {
+            console.log(o);
+            canvas.selection = false;
+
             objects.forEach((object) => {     //드래그 하면 기존의 객체까지 group select가 되어서 제대로 된 left, top 을 얻을 수 없음
                 object.set('selectable', false);
             })
@@ -122,12 +170,13 @@ export default function CropSubmenu(props) {
             origX = pointer.x; //클릭시 마우스 x좌표
             origY = pointer.y; //클릭시 마우스 y좌표 
             selectionRect = new fabric.Rect({
-                fill: 'rgba(0,0,0,0.3)',
+                fill: 'transparent',
                 left: origX,
                 top: origY,
                 originX: 'left',
                 originY: 'top',
-                stroke: 'black',
+                stroke: '#ccc',
+                strokeDashArray: [2, 2],
                 opacity: 1,
                 width: 1,
                 height: 1,
@@ -149,18 +198,24 @@ export default function CropSubmenu(props) {
         });
 
         canvas.on('mouse:move', function (o) {
+
             if (!isDown) return;
             var pointer = canvas.getPointer(o.e);
-
-            if (origX > pointer.x) {
+            if (pointer.x > canvas.width || pointer.x < 0) {
+                console.log("오바야 ")
+            }
+            if (origX > pointer.x && pointer.x > 0) {
                 selectionRect.set({ left: Math.abs(pointer.x) });
             }
-            if (origY > pointer.y) {
+            if (origY > pointer.y && pointer.y > 0) {
                 selectionRect.set({ top: Math.abs(pointer.y) });
             }
+            console.log(pointer.x);
+            if (!(pointer.x > canvas.width || pointer.x < 0))
+                selectionRect.set({ width: Math.abs(origX - pointer.x) });
 
-            selectionRect.set({ width: Math.abs(origX - pointer.x) });
-            selectionRect.set({ height: Math.abs(origY - pointer.y) });
+            if (!(pointer.y > canvas.height || pointer.y < 0))
+                selectionRect.set({ height: Math.abs(origY - pointer.y) });
             canvas.renderAll();
         });
 
@@ -178,6 +233,8 @@ export default function CropSubmenu(props) {
                 btn.disabled = false;
             })
             canvas.defaultCursor = 'default';
+            canvas.selection = true;
+
 
         });
 

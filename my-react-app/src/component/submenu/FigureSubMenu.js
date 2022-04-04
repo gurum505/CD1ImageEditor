@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import {useRef } from "react";
 import { fabric } from "fabric";
 import ColorPicker from "./ColorPicker";
 
@@ -7,7 +7,18 @@ export default function FigureSubmenu(props) {
     const canvas = props.canvasRef.current;
     const color = useRef('black');
     const objectNumRef = props.objectNumRef;
-
+    
+    function colorActiveLayer(){
+        var layerElements = document.getElementById('layer');
+        for (let i = 0; i < layerElements.children.length; i++) {
+            layerElements.children[i].style.border ='solid blue';
+          }
+        var objects = canvas.getActiveObjects();
+        objects.forEach((object)=>{
+           document.getElementById(object.id).style.border ='solid red'
+       })
+    }
+    
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var myjson = canvas.toDatalessJSON(['width', 'height','id']);
@@ -96,6 +107,7 @@ export default function FigureSubmenu(props) {
             canvas.off('mouse:down');
             canvas.off('mouse:up');
             canvas.off('mouse:move');
+            colorActiveLayer();
 
         });
 
@@ -156,7 +168,7 @@ export default function FigureSubmenu(props) {
             canvas.off('mouse:move');
 
             addLayer(circle);
-
+            colorActiveLayer();
 
         });
 
@@ -188,6 +200,7 @@ export default function FigureSubmenu(props) {
             });
 
             canvas.add(triangle);
+            
 
         });
 
@@ -220,7 +233,7 @@ export default function FigureSubmenu(props) {
             canvas.off('mouse:move');
 
             addLayer(triangle);
-
+            colorActiveLayer();
 
         });
     }

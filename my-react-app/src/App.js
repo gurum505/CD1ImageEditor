@@ -48,7 +48,7 @@ export default function App(props) {
     const canvasRef = useRef(new fabric.Canvas("canvas", {
         backgroundColor: "white",
         height: 400,
-        width: 700,
+        width: 800,
         objectNum: 0,
     }));  //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
     const stateRef = useRef([]);
@@ -56,21 +56,12 @@ export default function App(props) {
     const objectNumRef = useRef(0);
 
 
-    useEffect(() => {  //rendering 후 한 번 실행 
+    useEffect(() => {  //rendering 후 한 번 실행  
 
-        // fabric.Object.prototype.toObject = (function(toObject) {
-        //     return function() {
-        //         return fabric.util.object.extend(toObject.call(this), {
-        //             id: this.id,//my custom property
-        //         });
-        //     };
-    
-        // })(fabric.Object.prototype.toObject);
-        
         canvasRef.current = (new fabric.Canvas("canvas", {
             backgroundColor: "white",
             height: 400,
-            width: 700,
+            width: 800,
         }));
 
         function zoom(event) {
@@ -86,8 +77,13 @@ export default function App(props) {
         const el = document.querySelector('.wrap');
         el.addEventListener('wheel', zoom);
 
-        document.onkeydown = function (e) { // delete, backspace 키로 삭제
-            if (e.key === "Delete") {
+        canvasRef.current.on('object:modified',() => {
+            console.log('object:modified');
+            updateModifications(true);
+        },)
+
+        window.onkeydown = function (e) { // delete, backspace 키로 삭제
+            if (e.key === 'Delete' || e.key ==='Backspace') {
                 var o = canvasRef.current.getActiveObjects();
                 o.forEach( (object) =>{
                     canvasRef.current.remove(object);
@@ -98,8 +94,7 @@ export default function App(props) {
             }
         }
         setCanvas(canvasRef);
-    }, []);
-
+    },[]);
 
     const [wid, setX] = useState({0:50,1:50})
     const [isOpen, setOpen] = useState({0:false,1:false});
@@ -135,7 +130,6 @@ export default function App(props) {
                     <Header canvasRef={canvasRef} objectNumRef={objectNumRef} stateRef={stateRef} modsRef={modsRef} />
                 </Toolbar>
                 <Center>
-                    
                     <div className="wrap"><canvas id="canvas" /></div>
                     <EditorMenu canvasRef={canvasRef} stateRef={stateRef} objectNumRef={objectNumRef}/>
                     <Layer/>

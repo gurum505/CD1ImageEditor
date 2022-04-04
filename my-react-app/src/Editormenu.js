@@ -9,19 +9,34 @@ export default function EditorMenu(props) {
     const [buttonType, setButtonType] = useState("");  //어떤 종류의 object를 추가할 것인지 
 
     canvas.isDrawingMode = false;
-    
+    canvas.defaultCursor = 'default'; //커서 모양 기본 
+    // canvas.selection = true; //객체 드래그로 만들 때 파란창 다시 뜨도록 (+ 객체 드래그 선택 가능하게)
+
     function updateModifications(savehistory) {
         if (savehistory === true) {
-            var myjson = canvas.toDatalessJSON(['width','height']);
+            var myjson = canvas.toDatalessJSON(['width', 'height']);
             state.push(myjson);
         }
+    }
+
+
+    function colorActiveLayer() {
+        var layerElements = document.getElementById('layer');
+        for (let i = 0; i < layerElements.children.length; i++) {
+            layerElements.children[i].style.border = 'solid blue';
+        }
+        var objects = canvas.getActiveObjects();
+        objects.forEach((object) => {
+            if (document.getElementById(object.id))
+                document.getElementById(object.id).style.border = 'solid red'
+        })
     }
 
     useEffect(() => {
         var json = JSON.stringify(canvas);
         //var blob = new Blob(json, { type: "text/plain;charset=utf-8" });
         //var link = document.createElement('a'); //<a> 생성
-        if(state.length===0) updateModifications(true);
+        if (state.length === 0) updateModifications(true);
 
 
         const figure = ['rect', 'circle', 'triangle'];
@@ -29,46 +44,50 @@ export default function EditorMenu(props) {
         document.getElementById('remove-object').disabled = true;
         var selectType;
 
-        canvas.off();
-        if (buttonType !== 'crop')
-            canvas.on({
-                'selection:updated': () => {
-                    console.log('selection:updated');
+        // if (buttonType !== 'crop')
+        canvas.on({
+            'selection:updated': () => {
+                console.log('selection:updated');
+                document.getElementById('remove-object').disabled = false
+                selectType = canvas.getActiveObject().type;
+                if (figure.includes(selectType)) setButtonType('figure');
+                else if (line.includes(selectType)) setButtonType('line');
+                else if (selectType === 'image') setButtonType('image');
+                else if (selectType === 'textbox') setButtonType('textbox');
+                colorActiveLayer();
+            },
+            'object:removed':()=>{
+                console.log('object:removed');
+            },
+            'selection:cleared': () => {
+                console.log('selection:cleared');
+                document.getElementById('remove-object').disabled = true;
+                var layerElements = document.getElementById('layer');
+                for (let i = 0; i < layerElements.children.length; i++) {
+                    layerElements.children[i].style.border = 'solid blue';
+                }
+            },
+            'selection:created': () => {
+                console.log('selection:created');
+                document.getElementById('remove-object').disabled = false;
+                var objects = canvas.getActiveObjects();
+                objects.forEach((object) => {
+                    if (document.getElementById(object.id))
+                        document.getElementById(object.id).style.border = 'solid red'
+                })
+            },
+            'object:added': () => {
+                console.log('object:added');
+                canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
+                selectType = canvas.getActiveObject().type;
+                document.getElementById('remove-object').disabled = false;
+            },
+            'object:updated': () => {
+                console.log('object:updated');
+                document.getElementById('remove-object').disabled = false
+            },
 
-                    document.getElementById('remove-object').disabled = false
-                    selectType = canvas.getActiveObject().type;
-                    if (figure.includes(selectType)) setButtonType('figure');
-                    else if (line.includes(selectType)) setButtonType('line');
-                    else if (selectType === 'image') setButtonType('image');
-                    else if (selectType === 'textbox') setButtonType('textbox');
-                },
-                'selection:cleared': () => {
-                    console.log('selection:cleared');
-                    document.getElementById('remove-object').disabled = true
-                },
-                'selection:created': () => {
-                    console.log('selection:created');
-
-                    document.getElementById('remove-object').disabled = false
-                },
-                'object:added': () => {
-                    console.log('object:added');
-                    console.log(canvas.item(canvas.getObjects().length - 1));
-                    canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
-                    selectType = canvas.getActiveObject().type;
-                    document.getElementById('remove-object').disabled = false; 
-                },
-                'object:updated': () => {
-                    console.log('object:updated');
-                    document.getElementById('remove-object').disabled = false
-                    
-                },
-                'object:modified': () => {
-                    console.log('object:modified');
-                    updateModifications(true);
-                },
-
-            });
+        });
     });
 
     function addFigure() { //도형(삼각형, 원, 직사각형) 추가
@@ -93,10 +112,10 @@ export default function EditorMenu(props) {
 
     function removeObject() { //객체 삭제
         var o = canvas.getActiveObjects();
-        o.forEach( (object) =>{
+        o.forEach((object) => {
             canvas.remove(object);
             document.getElementById(object.id).remove();
-        }); 
+        });
         canvas.discardActiveObject();
         updateModifications(true);
     }
@@ -124,7 +143,7 @@ export default function EditorMenu(props) {
 
     return (
         <div className="editor-menu">
-            <Submenu canvasRef={props.canvasRef}  setButtonType={setButtonType} buttonType={buttonType} stateRef={props.stateRef}  objectNumRef={props.objectNumRef}/>
+            <Submenu canvasRef={props.canvasRef} setButtonType={setButtonType} buttonType={buttonType} stateRef={props.stateRef} objectNumRef={props.objectNumRef} />
             <button id='add-figure' onClick={addFigure}  >도형 삽입</button>
             <button id='path' onClick={addLine} >그리기</button>
             <button id='textbox' onClick={addTextBox} >텍스트 박스</button>

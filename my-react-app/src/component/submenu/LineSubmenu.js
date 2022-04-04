@@ -44,20 +44,30 @@ export default function LineSubmenu(props) {
     }
 
     function drawCurve() {
-        canvas.off('object:added');
         canvas.off('mouse:down');
         canvas.off('mouse:up');
         canvas.freeDrawingBrush.color = color.current;
         if (canvas.isDrawingMode) { //곡선 그리기가 꺼져있는 상태에서 곡선버튼을 눌렀을 때  
             canvas.isDrawingMode = false;
+            canvas.defaultCursor = 'default';
+            return ;
         }
         else {
             canvas.isDrawingMode = true;
+            canvas.defaultCursor = 'crosshair';
+
         }
         canvas.on('mouse:up',()=>{
+            canvas.discardActiveObject().renderAll(); // 곡선 그리고 나면 활성화되는 것 끄기 ( canvas.off('object:added') 로 하면 redo 할 때 활성화가 안됨)
             updateModifications(true);
             canvas.item(canvas.getObjects().length - 1).set({id:`${++objectNumRef.current}`})
             addLayer(canvas.item(canvas.getObjects().length - 1));
+            var objects = canvas.getActiveObjects();
+            objects.forEach((object) => {
+                if (document.getElementById(object.id))
+                    document.getElementById(object.id).style.border = 'solid red'
+            })
+
         })
         
     }
@@ -101,6 +111,13 @@ export default function LineSubmenu(props) {
             updateModifications(true);
             canvas.defaultCursor = 'default';
             addLayer(line);
+            
+            var objects = canvas.getActiveObjects();
+            objects.forEach((object) => {
+                if (document.getElementById(object.id))
+                    document.getElementById(object.id).style.border = 'solid red'
+            })
+
 
         });
     }
