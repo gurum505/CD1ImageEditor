@@ -6,11 +6,11 @@ export default function LeftSidebarClosed({toggleMenu}){
     
     return(
         <div style={{display:"flex",flexDirection:"column"}} >
-          <MenuOutlinedIcon onClick={()=>toggleMenu(0)}/>
-          <BorderOutlinedIcon  onClick={()=>toggleMenu(0)}/>
-          <FontSizeOutlinedIcon  onClick={()=>toggleMenu(0)}/>
-          <LineOutlinedIcon   onClick={()=>toggleMenu(0)}/>
-          <AreaChartOutlinedIcon   onClick={()=>toggleMenu(0)}/>
+          <MenuOutlinedIcon onClick={()=>toggleMenu()}/>
+          <BorderOutlinedIcon  onClick={()=>toggleMenu()}/>
+          <FontSizeOutlinedIcon  onClick={()=>toggleMenu()}/>
+          <LineOutlinedIcon   onClick={()=>toggleMenu()}/>
+          <AreaChartOutlinedIcon   onClick={()=>toggleMenu()}/>
         </div>
     );
 }

@@ -1,6 +1,6 @@
 import styles from './Footbar.module.css'
 import {EditOutlined,DragOutlined,ZoomInOutlined,ZoomOutOutlined,
-    ExpandOutlined,ExpandAltOutlined ,EyeOutlined} from "@ant-design/icons"
+    ExpandOutlined,EyeOutlined} from "@ant-design/icons"
 //import { Button, Switch, Tooltip } from 'antd';
 //선택모드
 //import CommonButton from '../../components/common/CommonButton';
@@ -40,7 +40,7 @@ const Footbar=()=>{
                     <ExpandOutlined />비율에 맞추기
                 </button>
                 <button>
-                    <ExpandAltOutlined /><EyeOutlined />미리보기
+                    <EyeOutlined />미리보기
                 </button>
                 
             </div>

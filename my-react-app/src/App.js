@@ -8,56 +8,64 @@ import Toolbar from './Layout/Toolbar';
 import Center from './Layout/Center';
 import Footbar from './Layout/Footbar';
 import LeftSidebar from './Layout/LeftSidebar';
-import RightSidebar from './Layout/RightSidebar';
+//import RightSidebar from './Layout/RightSidebar';
 
 //TODO: togglemenu, isOpen wid 깔끔히 정리 ex){l:50,r:50}
 //FIXME: Sidebar:x축이 -200px으로 되어있다. 내용을 쓸때도 left 200px을해야한다.
-//TODO: Sidebar-R: 버튼도 조정필요 향후에 따라 결정
-//TODO: Left,Right내용 들어갈부분(왼,오른쪽 정렬 등)
-//TODO: Canvas: Focus zoom in out 구현 
+//TODO: Left내용
 //TODO: Canvas: 버튼기능구현 layout으로 분배
 //FIXME: Sidebar:canvas크기구현할때 왼쪽 사이드바까지 고려해서 집어넣어야함
-//FIXME: Sidebar:사이드 메뉴바를 누르면 캔버스의 도형이 안보임(초기화는 아닌듯) 
+//FIXME: Sidebar:사이드 메뉴바를 누르면 캔버스의 도형이 안보임(초기화는 아닌듯)
 //FIXME: Sidebar:사이드 메뉴바 최소 최대 크기 설정 가운데 canvas와 오른쪽200px이 확보되어야
-//TODO: Sidebar:Right사이드바 page를 따로 따로 만들어 분배, Left또한 component를 분리 
-//TODO: Sidebar: Open시와 close시 분리
 //TODO: Sidebar: onClick따로 묶을 수 없나
 /*FIXME:Sidebar:칸이 먼저 생기는것 방지=>줄을 안보이게?(tmp), box-border 지금 2개 겹쳐있음*/
 /*              박스가 먼저생기는 이유는 밀리는게 아니라 고정된 상태라서? 고정된 상태라서 오른쪽처럼 안말리는건가*/
+//TODO: 전체가 계속 다시 렌더링 됨으로써 remove함수나 여러 함수가 동시에 실행된다.막자
+//TODO:ESLint사용해 정리해보자 https://velog.io/@velopert/eslint-and-prettier-in-react
 
 //canvas
 import Header from "./component/Header";
-import EditorMenu from "./Editormenu";
+import Editormenu from "./Editormenu";
 import Layer from "./component/Layer";
 
-//FIXME: Canvas: 도형과 텍스트 묶어서 객체 삭제가 안됌 => activeobjects로 받아서 for문remove돌리면 됌
-//FIXME: Canvas: redo undo 이미지가져오기(header)에 적용안됌
+//FIXME: Canvas: 도형과 텍스트 묶어서 객체 삭제가 안됌 => 곡선안지워지던데 
 //TODO: Canvas:이미지 드래그앤 드롭으로 이미지 집어넣기, 복사 붙여넣기로 집어넣기
 //TODO: Canvas:객체들고 옮길때 canvas에 중앙선or경계 표시
-
 
 export default function App(props) {
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var myjson = canvasRef.current.toJSON();
-            stateRef.current.push(myjson);
+            state.current.push(myjson);
         }
-
     }
+
     const [canvas, setCanvas] = useState(""); //useEffect()후 렌더링 하기 위한 state
     const canvasRef = useRef(new fabric.Canvas("canvas", {
         backgroundColor: "white",
         height: 400,
+<<<<<<< HEAD
         width: 800,
         objectNum: 0,
     }));  //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
     const stateRef = useRef([]);
     const modsRef = useRef(0);
     const objectNumRef = useRef(0);
+=======
+        width: 700,
+>>>>>>> c4cfd110b1ad5318633520429bf69d0af9551a90
 
+    }));  //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
 
+    const state = useRef([]);
+    const mods = useRef(0);
+
+<<<<<<< HEAD
     useEffect(() => {  //rendering 후 한 번 실행  
 
+=======
+    useEffect(() => {  //rendering 후 한 번 실행 
+>>>>>>> c4cfd110b1ad5318633520429bf69d0af9551a90
         canvasRef.current = (new fabric.Canvas("canvas", {
             backgroundColor: "white",
             height: 400,
@@ -85,10 +93,10 @@ export default function App(props) {
         window.onkeydown = function (e) { // delete, backspace 키로 삭제
             if (e.key === 'Delete' || e.key ==='Backspace') {
                 var o = canvasRef.current.getActiveObjects();
-                o.forEach( (object) =>{
+                o.forEach((object) => {
                     canvasRef.current.remove(object);
-                    document.getElementById(object.id).remove();
-                }); 
+                    document.getElementById(object).remove();
+                });
                 canvasRef.current.discardActiveObject();
                 updateModifications(true);
             }
@@ -96,50 +104,29 @@ export default function App(props) {
         setCanvas(canvasRef);
     },[]);
 
-    const [wid, setX] = useState({0:50,1:50})
-    const [isOpen, setOpen] = useState({0:false,1:false});
-    const toggleMenu = (direction) => {
-        if (wid[direction] > 50) {
-            setX({
-            ...wid,
-            [direction]:50
-            });
-            setOpen({
-            ...isOpen,
-            [direction]:false
-            });
-        } else {
-            setX({
-                ...wid,
-                [direction]:200
-            });
-            setOpen({
-                ...isOpen,
-                [direction]:true
-            });
-        }
-    }
+    
 
     return (
         <div className={styles.layout}>
             <Title />
-            <LeftSidebar wid={wid} toggleMenu={toggleMenu} isOpen={isOpen} className={styles.left} />
+            <LeftSidebar className={styles.left} canvasRef={canvasRef}/>
 
             <main className={styles.mainContainer}>
                 <Toolbar>
-                    <Header canvasRef={canvasRef} objectNumRef={objectNumRef} stateRef={stateRef} modsRef={modsRef} />
+                    <Header canvasRef={canvasRef} canvas={canvas} state={state} mods={mods} />
                 </Toolbar>
                 <Center>
                     <div className="wrap"><canvas id="canvas" /></div>
-                    <EditorMenu canvasRef={canvasRef} stateRef={stateRef} objectNumRef={objectNumRef}/>
-                    <Layer/>
+                    <Layer canvasRef={canvasRef}></Layer>
+                    {/* <Editormenu canvasRef={canvasRef} state={state} /> */}
+                    <div id="layer"></div>
                 </Center>
                 <Footbar>
                     {/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
                 </Footbar>
             </main>
 
-            <RightSidebar wid={wid} toggleMenu={toggleMenu} isOpen={isOpen} className={styles.right} />
+            {/* <RightSidebar className={styles.right} toggleMenu={toggleMenu} wid={widRight} isOpen={isOpenRight} canvasRef={canvasRef} state={state} canvas={canvas} /> */}
         </div>
     );
 }

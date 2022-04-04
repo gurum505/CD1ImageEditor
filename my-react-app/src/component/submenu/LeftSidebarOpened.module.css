@@ -17,3 +17,6 @@ background-color: #fff;
 box-shadow: inset 1px 0 #ddd, inset -1px 0 #ddd;
 cursor: pointer;
 }
+input[type="file"]{
+  display:none;
+}

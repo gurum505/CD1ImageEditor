@@ -9,8 +9,11 @@ export default function EditorMenu(props) {
     const [buttonType, setButtonType] = useState("");  //어떤 종류의 object를 추가할 것인지 
 
     canvas.isDrawingMode = false;
+<<<<<<< HEAD
     canvas.defaultCursor = 'default'; //커서 모양 기본 
     // canvas.selection = true; //객체 드래그로 만들 때 파란창 다시 뜨도록 (+ 객체 드래그 선택 가능하게)
+=======
+>>>>>>> c4cfd110b1ad5318633520429bf69d0af9551a90
 
     function updateModifications(savehistory) {
         if (savehistory === true) {
@@ -87,7 +90,44 @@ export default function EditorMenu(props) {
                 document.getElementById('remove-object').disabled = false
             },
 
+<<<<<<< HEAD
         });
+=======
+                    document.getElementById('remove-object').disabled = false
+                    selectType = canvas.getActiveObject().type;
+                    if (figure.includes(selectType)) setButtonType('figure');
+                    else if (line.includes(selectType)) setButtonType('line');
+                    else if (selectType === 'image') setButtonType('image');
+                    else if (selectType === 'textbox') setButtonType('textbox');
+                },
+                'selection:cleared': () => {
+                    console.log('selection:cleared');
+                    document.getElementById('remove-object').disabled = true
+                },
+                'selection:created': () => {
+                    console.log('selection:created');
+
+                    document.getElementById('remove-object').disabled = false
+                },
+                'object:added': () => {
+                    console.log('object:added');
+                    console.log(canvas.item(canvas.getObjects().length - 1));
+                    canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
+                    selectType = canvas.getActiveObject().type;
+                    document.getElementById('remove-object').disabled = false;
+                },
+                'object:updated': () => {
+                    console.log('object:updated');
+                    document.getElementById('remove-object').disabled = false
+
+                },
+                'object:modified': () => {
+                    console.log('object:modified');
+                    updateModifications(true);
+                },
+
+            });
+>>>>>>> c4cfd110b1ad5318633520429bf69d0af9551a90
     });
 
     function addFigure() { //도형(삼각형, 원, 직사각형) 추가

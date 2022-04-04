@@ -24,8 +24,8 @@
 }
 
 .content {
-  position: relative;
-  left:200px;
+  position: absolute;
+  left:0px;
   white-space: nowrap; /*글이 재정렬되면서 밑으로 내려가지 않도록*/
 }
   

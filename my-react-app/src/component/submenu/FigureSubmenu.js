@@ -1,4 +1,4 @@
-import {useRef } from "react";
+import { useRef } from "react";
 import { fabric } from "fabric";
 import ColorPicker from "./ColorPicker";
 
@@ -7,21 +7,21 @@ export default function FigureSubmenu(props) {
     const canvas = props.canvasRef.current;
     const color = useRef('black');
     const objectNumRef = props.objectNumRef;
-    
-    function colorActiveLayer(){
+
+    function colorActiveLayer() {
         var layerElements = document.getElementById('layer');
         for (let i = 0; i < layerElements.children.length; i++) {
-            layerElements.children[i].style.border ='solid blue';
-          }
+            layerElements.children[i].style.border = 'solid blue';
+        }
         var objects = canvas.getActiveObjects();
-        objects.forEach((object)=>{
-           document.getElementById(object.id).style.border ='solid red'
-       })
+        objects.forEach((object) => {
+            document.getElementById(object.id).style.border = 'solid red'
+        })
     }
-    
+
     function updateModifications(savehistory) {
         if (savehistory === true) {
-            var myjson = canvas.toDatalessJSON(['width', 'height','id']);
+            var myjson = canvas.toDatalessJSON(['width', 'height', 'id']);
             stateRef.current.push(myjson);
         }
 
@@ -32,7 +32,7 @@ export default function FigureSubmenu(props) {
         div.style.border = ' solid #0000FF';
         div.style.width = '130px';
         const el = document.getElementById('layer');
-        
+
         const objectBtn = document.createElement('button');
         objectBtn.innerHTML = object.type;
         objectBtn.className = "layer-object";
@@ -114,7 +114,7 @@ export default function FigureSubmenu(props) {
     }
 
     function addCircle() {
-        
+
         canvas.defaultCursor = 'crosshair';
         var circle, isDown, origX, origY;
         canvas.off('mouse:down');
@@ -133,7 +133,7 @@ export default function FigureSubmenu(props) {
                 radius: (pointer.x - origX) / 2,
                 fill: `${color.current}`,
                 transparentCorners: false,
-                id : `${++objectNumRef.current}`
+                id: `${++objectNumRef.current}`
             });
 
             canvas.add(circle);
@@ -200,7 +200,7 @@ export default function FigureSubmenu(props) {
             });
 
             canvas.add(triangle);
-            
+
 
         });
 
