@@ -57,7 +57,6 @@ export default function App(props) {
     const mods = useRef(0);
 
     useEffect(() => {  //rendering 후 한 번 실행  
-
         canvasRef.current = (new fabric.Canvas("canvas", {
             backgroundColor: "white",
             height: 400,
@@ -78,12 +77,16 @@ export default function App(props) {
         el.addEventListener('wheel', zoom);
 
         canvasRef.current.on('object:modified',() => {
-            console.log('object:modified');
+            console.log('object:modified'); 
             updateModifications(true);
         },)
 
         window.onkeydown = function (e) { // delete, backspace 키로 삭제
-            if (e.key === 'Delete' || e.key ==='Backspace') {
+           
+            if (e.key === 'Delete' || e.key ==='Backspace') {   // 텍스트 입력 중 backspace눌러도 객체 삭제 되지 않도록 
+                if(canvasRef.current.getActiveObject().type==='textbox'&& canvasRef.current.getActiveObject().isEditing ){ 
+                    console.log(canvasRef.current.getActiveObject().editable);
+                    return;}
                 var o = canvasRef.current.getActiveObjects();
                 o.forEach((object) => {
                     canvasRef.current.remove(object);

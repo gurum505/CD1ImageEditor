@@ -96,7 +96,10 @@ export default function Header(props) {
     function removeAllLayer(){
         var prevObjects = canvas.getObjects(); //undo 하기 전에 layer 제거 
         prevObjects.forEach((object)=>{
+            try{
             document.getElementById(object.id).remove();
+            }catch(e){
+            }
         })
     }
     function importImage(e) {
@@ -217,6 +220,10 @@ export default function Header(props) {
     }
     function undo() {
         if (modsRef.current < stateRef.current.length - 1 && stateRef.current.length > 1) {
+            var cropButtons = document.getElementsByClassName('crop-button');
+            for(var i = 0; i<document.getElementsByClassName('crop-button').length; i++){
+                cropButtons[i].disabled = false; 
+            }
             removeAllLayer();
             canvas.clear().renderAll();
             var json = stateRef.current[stateRef.current.length - 2 - modsRef.current];

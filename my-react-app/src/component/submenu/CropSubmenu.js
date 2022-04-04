@@ -5,7 +5,7 @@ export default function CropSubmenu(props) {
     const canvas = props.canvasRef.current;
     var currentImage;
     var selectionRect;
-    canvas.off();
+    // canvas.off();
     var left1 = 0;
     var top1 = 0;
     var scale1x = 0;
@@ -13,6 +13,8 @@ export default function CropSubmenu(props) {
     var width1 = 0;
     var height1 = 0;
 
+    canvas.off('object:modified'); //object 수정되면 state에 추가되는데 이를 방지 
+    // canvas.off('object:added')
     //crop 상자가 범위를 초과하지 않게 
     canvas.on('object:scaling', function (e) {
         var obj = e.target;
@@ -64,7 +66,6 @@ export default function CropSubmenu(props) {
     }
 
     function addSelectionRect(ratio = '') {
-        var height = parseInt(canvas.height);
         var ratio;
         if (ratio === '3:2') ratio = 3 / 2
         else if (ratio === '4:3') ratio = 4 / 3
@@ -147,6 +148,7 @@ export default function CropSubmenu(props) {
 
 
     function cropCustom() {
+        // canvas.selection = false; 
         var objects = canvas.getObjects();
 
         canvas.defaultCursor = 'crosshair';
@@ -159,10 +161,12 @@ export default function CropSubmenu(props) {
         var isDown, origX, origY;
 
         canvas.on('mouse:down', function (o) {
-            canvas.selection = false;
+            // canvas.selection = false;
 
             objects.forEach((object) => {     //드래그 하면 기존의 객체까지 group select가 되어서 제대로 된 left, top 을 얻을 수 없음
-                object.set('selectable', false);
+                object.set({'selectable':false})
+                console.log(object);
+                
             })
             isDown = true;
             var pointer = canvas.getPointer(o.e);
@@ -231,7 +235,7 @@ export default function CropSubmenu(props) {
             })
             canvas.defaultCursor = 'default';
             canvas.selection = true;
-
+            
 
         });
 
@@ -243,6 +247,7 @@ export default function CropSubmenu(props) {
         cropBtn.forEach((btn) => {
             btn.disabled = false;
         })
+        props.setButtonType('');
     }
 
 

@@ -34,8 +34,14 @@ export default function EditorMenu(props) {
 
     useEffect(() => {
         var json = JSON.stringify(canvas);
-        //var blob = new Blob(json, { type: "text/plain;charset=utf-8" });
-        //var link = document.createElement('a'); //<a> 생성
+
+        var objects = canvas.getObjects();
+        try {
+            objects.forEach((object) => {
+                if (object.cropRect) canvas.remove(object);
+            })
+        } catch (e) { }
+
         if (stateRef.current.length === 0) updateModifications(true);
 
 
@@ -44,50 +50,59 @@ export default function EditorMenu(props) {
         document.getElementById('remove-object').disabled = true;
         var selectType;
 
-        // if (buttonType !== 'crop')
-        canvas.on({
-            'selection:updated': () => {
-                console.log('selection:updated');
-                document.getElementById('remove-object').disabled = false
-                selectType = canvas.getActiveObject().type;
-                if (figure.includes(selectType)) setButtonType('figure');
-                else if (line.includes(selectType)) setButtonType('line');
-                else if (selectType === 'image') setButtonType('image');
-                else if (selectType === 'textbox') setButtonType('textbox');
-                colorActiveLayer();
-            },
-            'object:removed':()=>{
-                console.log('object:removed');
-            },
-            'selection:cleared': () => {
-                console.log('selection:cleared');
-                document.getElementById('remove-object').disabled = true;
-                var layerElements = document.getElementById('layer');
-                for (let i = 0; i < layerElements.children.length; i++) {
-                    layerElements.children[i].style.border = 'solid blue';
-                }
-            },
-            'selection:created': () => {
-                console.log('selection:created');
-                document.getElementById('remove-object').disabled = false;
-                var objects = canvas.getActiveObjects();
-                objects.forEach((object) => {
-                    if (document.getElementById(object.id))
-                        document.getElementById(object.id).style.border = 'solid red'
-                })
-            },
-            'object:added': () => {
-                console.log('object:added');
-                canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
-                selectType = canvas.getActiveObject().type;
-                document.getElementById('remove-object').disabled = false;
-            },
-            'object:updated': () => {
-                console.log('object:updated');
-                document.getElementById('remove-object').disabled = false
-            },
+        if (buttonType !== 'crop')
+            canvas.on({
+                'selection:updated': () => {
 
-        });
+                    if (!canvas.getActiveObject().cropRect === true) {//update 된 객체가 crop rect 라면 렌더링되지 않게 함 
+
+
+                        console.log('selection:updated');
+                        document.getElementById('remove-object').disabled = false
+                        selectType = canvas.getActiveObject().type;
+                        if (figure.includes(selectType)) setButtonType('figure');
+                        else if (line.includes(selectType)) setButtonType('line');
+                        else if (selectType === 'image') setButtonType('image');
+                        else if (selectType === 'textbox') setButtonType('textbox');
+                        colorActiveLayer();
+                    }
+                },
+                'object:removed': () => {
+                    console.log('object:removed');
+                },
+                'selection:cleared': () => {
+                    console.log('selection:cleared');
+                    document.getElementById('remove-object').disabled = true;
+                    var layerElements = document.getElementById('layer');
+                    for (let i = 0; i < layerElements.children.length; i++) {
+                        layerElements.children[i].style.border = 'solid blue';
+                    }
+                },
+                'selection:created': () => {
+                    console.log('selection:created');
+                    document.getElementById('remove-object').disabled = false;
+                    var objects = canvas.getActiveObjects();
+                    objects.forEach((object) => {
+                        if (document.getElementById(object.id))
+                            document.getElementById(object.id).style.border = 'solid red'
+                    })
+                },
+                'object:added': () => {
+                    console.log('object:added');
+                    canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
+                    selectType = canvas.getActiveObject().type;
+                    document.getElementById('remove-object').disabled = false;
+                },
+                'object:modified': () => {
+                    console.log('object:modified');
+                    // document.getElementById('remove-object').disabled = false
+                },
+                'object:updated': () => {
+                    console.log('object:updated');
+                    document.getElementById('remove-object').disabled = false
+                },
+
+            });
     });
 
     function addFigure() { //도형(삼각형, 원, 직사각형) 추가

@@ -63,6 +63,7 @@ export default function LineSubmenu(props) {
             canvas.item(canvas.getObjects().length - 1).set({id:`${++objectNumRef.current}`})
             addLayer(canvas.item(canvas.getObjects().length - 1));
             var objects = canvas.getActiveObjects();
+            
             objects.forEach((object) => {
                 if (document.getElementById(object.id))
                     document.getElementById(object.id).style.border = 'solid red'
