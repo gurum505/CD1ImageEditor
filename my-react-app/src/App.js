@@ -17,7 +17,7 @@ import RightSidebar from './Layout/RightSidebar';
 //TODO: Canvas: Focus zoom in out 구현 
 //TODO: Canvas: 버튼기능구현 layout으로 분배
 //FIXME: Sidebar:canvas크기구현할때 왼쪽 사이드바까지 고려해서 집어넣어야함
-//FIXME: Sidebar:사이드 메뉴바를 누르면 캔버스의 도형이 안보임(초기화는 아닌듯) 
+//FIXME: Sidebar:사이드 메뉴바를 누르면 캔버스의 도형이 안보임(초기화는 아닌듯) =>app.js렌더링문제?canvasRef
 //FIXME: Sidebar:사이드 메뉴바 최소 최대 크기 설정 가운데 canvas와 오른쪽200px이 확보되어야
 //TODO: Sidebar: onClick따로 묶을 수 없나
 /*FIXME:Sidebar:칸이 먼저 생기는것 방지=>줄을 안보이게?(tmp), box-border 지금 2개 겹쳐있음*/
@@ -25,7 +25,7 @@ import RightSidebar from './Layout/RightSidebar';
 //TODO: 전체가 계속 다시 렌더링 됨으로써 remove함수나 여러 함수가 동시에 실행된다.막자
 //canvas
 import Header from "./component/Header";
-import EditorMenu from "./EditorMenu";
+import Editormenu from "./Editormenu";
 import Layer from "./component/Layer";
 
 //FIXME: Canvas: 도형과 텍스트 묶어서 객체 삭제가 안됌 => 곡선안지워지던데 곡선 끊기도록하면 되나?
@@ -38,7 +38,7 @@ export default function App(props) {
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var myjson = canvasRef.current.toJSON();
-            stateRef.current.push(myjson);
+            state.current.push(myjson);
         }
     }
 
@@ -47,23 +47,13 @@ export default function App(props) {
         backgroundColor: "white",
         height: 400,
         width: 700,
-        objectNum: 0,
+
     }));  //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
-    const stateRef = useRef([]);
-    const modsRef = useRef(0);
-    const objectNumRef = useRef(0);
+
+    const state = useRef([]);
+    const mods = useRef(0);
 
     useEffect(() => {  //rendering 후 한 번 실행 
-
-        // fabric.Object.prototype.toObject = (function(toObject) {
-        //     return function() {
-        //         return fabric.util.object.extend(toObject.call(this), {
-        //             id: this.id,//my custom property
-        //         });
-        //     };
-    
-        // })(fabric.Object.prototype.toObject);
-        
         canvasRef.current = (new fabric.Canvas("canvas", {
             backgroundColor: "white",
             height: 400,
@@ -88,7 +78,7 @@ export default function App(props) {
                 var o = canvasRef.current.getActiveObjects();
                 o.forEach( (object) =>{
                     canvasRef.current.remove(object);
-                    document.getElementById(object.id).remove();
+                    document.getElementById(object).remove();
                 }); 
                 canvasRef.current.discardActiveObject();
                 updateModifications(true);
@@ -158,13 +148,13 @@ export default function App(props) {
 
             <main className={styles.mainContainer}>
                 <Toolbar>
-                    <Header canvasRef={canvasRef} objectNumRef={objectNumRef} stateRef={stateRef} modsRef={modsRef} />
+                    <Header canvasRef={canvasRef} canvas={canvas} state={state} mods={mods} />
                 </Toolbar>
                 <Center>
                     
                     <div className="wrap"><canvas id="canvas" /></div>
-                    <EditorMenu canvasRef={canvasRef} stateRef={stateRef} objectNumRef={objectNumRef}/>
-                    <Layer/>
+                    <Layer canvasRef={canvasRef}></Layer>
+                    <div id="layer"></div>
                 </Center>
                 <Footbar>
                     {/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}

@@ -1,7 +1,7 @@
 import { fabric } from "fabric";
 import {  useEffect, useRef } from "react";
 import ColorPicker from "./ColorPicker";
-export default function TextboxSubmenu(props) {
+export default function TextBoxSubmenu(props) {
     const canvas = props.canvasRef.current;
     const stateRef = props.stateRef;
     const objectNumRef = props.objectNumRef;
