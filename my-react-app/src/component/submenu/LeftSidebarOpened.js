@@ -154,7 +154,7 @@ export default function LeftSidebarOpened({toggleMenu, canvasRef}){
 
     return(
         <div className={styles.container}>
-        <MenuOutlinedIcon onClick={()=>toggleMenu(0)}/>
+        <MenuOutlinedIcon onClick={()=>toggleMenu()}/>
         <details className={styles.detail} >
             <summary>Shape</summary>
             <p onClick={addRect}><BorderOutlinedIcon/> rectangle</p>
