@@ -3,15 +3,13 @@ import {FontSizeOutlinedIcon,SettingOutlinedIcon,BorderOutlinedIcon
   ,AreaChartOutlinedIcon, LineOutlinedIcon } from "../component/icons/icons"
 import RightSidebarOpened from "../component/submenu/RightSidebarOpened";
 
-const RightSidebar = ({children, wid,  toggleMenu, isOpen}) => { 
+const RightSidebar = ({children, wid,  toggleMenu, isOpen, canvasRef}) => { 
   
 
   const page=(isOpen)=>{
-    if(isOpen){
       return(
-        <RightSidebarOpened/>
+        <RightSidebarOpened canvasRef={canvasRef}/>
       );
-    }
   }
 
   return (

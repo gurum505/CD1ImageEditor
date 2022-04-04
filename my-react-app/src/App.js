@@ -19,12 +19,10 @@ import RightSidebar from './Layout/RightSidebar';
 //FIXME: Sidebar:canvas크기구현할때 왼쪽 사이드바까지 고려해서 집어넣어야함
 //FIXME: Sidebar:사이드 메뉴바를 누르면 캔버스의 도형이 안보임(초기화는 아닌듯) 
 //FIXME: Sidebar:사이드 메뉴바 최소 최대 크기 설정 가운데 canvas와 오른쪽200px이 확보되어야
-//TODO: Sidebar:Right사이드바 page를 따로 따로 만들어 분배, Left또한 component를 분리 
-//TODO: Sidebar: Open시와 close시 분리
 //TODO: Sidebar: onClick따로 묶을 수 없나
 /*FIXME:Sidebar:칸이 먼저 생기는것 방지=>줄을 안보이게?(tmp), box-border 지금 2개 겹쳐있음*/
 /*              박스가 먼저생기는 이유는 밀리는게 아니라 고정된 상태라서? 고정된 상태라서 오른쪽처럼 안말리는건가*/
-
+//TODO: 전체가 계속 다시 렌더링 됨으로써 remove함수나 여러 함수가 동시에 실행된다.막자
 //canvas
 import Header from "./component/Header";
 import EditorMenu from "./EditorMenu";
@@ -164,7 +162,7 @@ export default function App(props) {
                 </Footbar>
             </main>
 
-            <RightSidebar className={styles.right} toggleMenu={toggleMenu} wid={widRight}  isOpen={isOpenRight}/>
+            <RightSidebar className={styles.right} toggleMenu={toggleMenu} wid={widRight}  isOpen={isOpenRight} canvasRef={canvasRef} state={state} canvas={canvas}/>
         </div>
     );
 }

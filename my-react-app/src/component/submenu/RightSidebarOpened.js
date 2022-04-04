@@ -1,14 +1,25 @@
 import styles from "./RightSidebarOpened.module.css"
 //속성들-정렬은 header에 가는게 맞을수도 있다.
 
-export default function RightSidebarOpened(){
+export default function RightSidebarOpened({canvasRef}){
     //함수조작 여기서
+    const canvas=canvasRef.current;
+
+    function resizeCanvasWidth(e){
+      canvas.setWidth(e.target.value);
+      console.log(e.target.value);
+    }
+    function resizeCanvasHeight(e){
+        canvas.setHeight(e.target.value);
+        console.log(e.target.value);
+    }
+    
     return(
         <div>
           <details className={styles.detail}>
             <summary>Canvas</summary>
-            <p>width</p>
-            <p>height</p>            
+            <p>width<input type="text"  onChange = {resizeCanvasWidth} placeholder="600" /></p>
+            <p>height<input type="text"  onChange={resizeCanvasHeight} placeholder="400" /></p>            
           </details>
           <details className={styles.detail}>
             <summary>Figure</summary>
