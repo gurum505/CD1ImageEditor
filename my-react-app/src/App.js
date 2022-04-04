@@ -23,6 +23,8 @@ import RightSidebar from './Layout/RightSidebar';
 /*FIXME:Sidebar:칸이 먼저 생기는것 방지=>줄을 안보이게?(tmp), box-border 지금 2개 겹쳐있음*/
 /*              박스가 먼저생기는 이유는 밀리는게 아니라 고정된 상태라서? 고정된 상태라서 오른쪽처럼 안말리는건가*/
 //TODO: 전체가 계속 다시 렌더링 됨으로써 remove함수나 여러 함수가 동시에 실행된다.막자
+//TODO:ESLint사용해 정리해보자
+
 //canvas
 import Header from "./component/Header";
 import Editormenu from "./Editormenu";
@@ -76,10 +78,10 @@ export default function App(props) {
         document.onkeydown = function (e) { // delete, backspace 키로 삭제
             if (e.key === "Delete") {
                 var o = canvasRef.current.getActiveObjects();
-                o.forEach( (object) =>{
+                o.forEach((object) => {
                     canvasRef.current.remove(object);
                     document.getElementById(object).remove();
-                }); 
+                });
                 canvasRef.current.discardActiveObject();
                 updateModifications(true);
             }
@@ -88,10 +90,10 @@ export default function App(props) {
     }, []);
 
 
-    const [wid, setX] = useState({widLeft:50,widRight:50})
-    const [isOpen, setOpen] = useState({isOpenLeft:false,isOpenRight:false});
-    const {widLeft,widRight}=wid;
-    const {isOpenLeft,isOpenRight}=isOpen;
+    const [wid, setX] = useState({ widLeft: 50, widRight: 50 })
+    const [isOpen, setOpen] = useState({ isOpenLeft: false, isOpenRight: false });
+    const { widLeft, widRight } = wid;
+    const { isOpenLeft, isOpenRight } = isOpen;
     function toggleMenu(direction) {
         if (direction === 0) {
             if (widLeft > 50) {
@@ -144,16 +146,17 @@ export default function App(props) {
     return (
         <div className={styles.layout}>
             <Title />
-            <LeftSidebar className={styles.left} toggleMenu={toggleMenu} wid={widLeft} isOpen={isOpenLeft} canvasRef={canvasRef} state={state} canvas={canvas}/>
+            <LeftSidebar className={styles.left} toggleMenu={toggleMenu} wid={widLeft} isOpen={isOpenLeft} canvasRef={canvasRef} state={state} canvas={canvas} />
 
             <main className={styles.mainContainer}>
                 <Toolbar>
                     <Header canvasRef={canvasRef} canvas={canvas} state={state} mods={mods} />
                 </Toolbar>
                 <Center>
-                    
+
                     <div className="wrap"><canvas id="canvas" /></div>
                     <Layer canvasRef={canvasRef}></Layer>
+                    {/* <Editormenu canvasRef={canvasRef} state={state} /> */}
                     <div id="layer"></div>
                 </Center>
                 <Footbar>
@@ -161,7 +164,7 @@ export default function App(props) {
                 </Footbar>
             </main>
 
-            <RightSidebar className={styles.right} toggleMenu={toggleMenu} wid={widRight}  isOpen={isOpenRight} canvasRef={canvasRef} state={state} canvas={canvas}/>
+            <RightSidebar className={styles.right} toggleMenu={toggleMenu} wid={widRight} isOpen={isOpenRight} canvasRef={canvasRef} state={state} canvas={canvas} />
         </div>
     );
 }

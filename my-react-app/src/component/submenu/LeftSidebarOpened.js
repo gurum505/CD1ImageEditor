@@ -172,8 +172,8 @@ export default function LeftSidebarOpened({toggleMenu, canvasRef}){
         </details>
         <details className={styles.detail}> 
             <summary>Image</summary>
-            <p><label for="image-upload">
-                <input id="image-upload" type="file" onChange={(e)=>addLocalImage(e)}/>
+            <p><label>
+                <input type="file" onChange={(e)=>addLocalImage(e)}/>
                 <AreaChartOutlinedIcon/> from local repository
             </label></p>
             
