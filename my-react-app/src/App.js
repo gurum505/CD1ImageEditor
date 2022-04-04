@@ -36,7 +36,8 @@ export default function App(props) {
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var myjson = canvasRef.current.toJSON();
-            state.current.push(myjson);
+            stateRef.current.push(myjson);
+            console.log(stateRef.current.length);
         }
     }
 
@@ -86,10 +87,12 @@ export default function App(props) {
                 var o = canvasRef.current.getActiveObjects();
                 o.forEach((object) => {
                     canvasRef.current.remove(object);
-                    document.getElementById(object).remove();
+                    document.getElementById(object.id).remove();
                 });
-                canvasRef.current.discardActiveObject();
+
+                canvasRef.current.discardActiveObject(); // 그룹 삭제 시 빈 sizebox 남아있는 거 제거 
                 updateModifications(true);
+
             }
         }
         setCanvas(canvasRef);
@@ -100,11 +103,11 @@ export default function App(props) {
     return (
         <div className={styles.layout}>
             <Title />
-            <LeftSidebar className={styles.left} canvasRef={canvasRef}/>
+            <LeftSidebar className={styles.left} canvasRef={canvasRef} />
 
             <main className={styles.mainContainer}>
                 <Toolbar>
-                    <Header canvasRef={canvasRef} canvas={canvas} stateRef={stateRef} modsRef={modsRef} />
+                    <Header canvasRef={canvasRef} canvas={canvas} stateRef={stateRef} modsRef={modsRef} objectNumRef={objectNumRef} />
                 </Toolbar>
                 <Center>
                     <div className="wrap"><canvas id="canvas" /></div>

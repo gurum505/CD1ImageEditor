@@ -247,8 +247,6 @@ export default function Header(props) {
             canvas.clear().renderAll();
             canvas.loadFromJSON(stateRef.current[stateRef.current.length - modsRef.current], () => {
                 canvas.renderAll.bind(canvas);
-                canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
-                console.log(canvas.item(canvas.getObjects().length - 1));
                 modsRef.current -= 1;
                 var objects = canvas.getObjects();
                 objects.forEach((object) => {

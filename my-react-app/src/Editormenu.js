@@ -5,7 +5,7 @@ import './editor.css';
 
 export default function EditorMenu(props) {
     const canvas = props.canvasRef.current;
-    const state = props.stateRef.current;
+    const stateRef = props.stateRef;
     const [buttonType, setButtonType] = useState("");  //어떤 종류의 object를 추가할 것인지 
 
     canvas.isDrawingMode = false;
@@ -15,7 +15,7 @@ export default function EditorMenu(props) {
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var myjson = canvas.toDatalessJSON(['width', 'height']);
-            state.push(myjson);
+            stateRef.current.push(myjson);
         }
     }
 
@@ -36,7 +36,7 @@ export default function EditorMenu(props) {
         var json = JSON.stringify(canvas);
         //var blob = new Blob(json, { type: "text/plain;charset=utf-8" });
         //var link = document.createElement('a'); //<a> 생성
-        if (state.length === 0) updateModifications(true);
+        if (stateRef.current.length === 0) updateModifications(true);
 
 
         const figure = ['rect', 'circle', 'triangle'];
@@ -116,7 +116,7 @@ export default function EditorMenu(props) {
             canvas.remove(object);
             document.getElementById(object.id).remove();
         });
-        canvas.discardActiveObject();
+        canvas.discardActiveObject(); // 그룹 삭제 시 빈 sizebox 남아있는 거 제거 
         updateModifications(true);
     }
 

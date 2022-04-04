@@ -159,7 +159,6 @@ export default function CropSubmenu(props) {
         var isDown, origX, origY;
 
         canvas.on('mouse:down', function (o) {
-            console.log(o);
             canvas.selection = false;
 
             objects.forEach((object) => {     //드래그 하면 기존의 객체까지 group select가 되어서 제대로 된 left, top 을 얻을 수 없음
@@ -202,7 +201,6 @@ export default function CropSubmenu(props) {
             if (!isDown) return;
             var pointer = canvas.getPointer(o.e);
             if (pointer.x > canvas.width || pointer.x < 0) {
-                console.log("오바야 ")
             }
             if (origX > pointer.x && pointer.x > 0) {
                 selectionRect.set({ left: Math.abs(pointer.x) });
@@ -210,7 +208,6 @@ export default function CropSubmenu(props) {
             if (origY > pointer.y && pointer.y > 0) {
                 selectionRect.set({ top: Math.abs(pointer.y) });
             }
-            console.log(pointer.x);
             if (!(pointer.x > canvas.width || pointer.x < 0))
                 selectionRect.set({ width: Math.abs(origX - pointer.x) });
 
