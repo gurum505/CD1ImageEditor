@@ -45,7 +45,6 @@ export default function App(props) {
         backgroundColor: "white",
         height: 400,
         width: 800,
-        objectNum: 0,
     }));  //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
     const stateRef = useRef([]);
     const modsRef = useRef(0);
@@ -105,12 +104,12 @@ export default function App(props) {
 
             <main className={styles.mainContainer}>
                 <Toolbar>
-                    <Header canvasRef={canvasRef} canvas={canvas} state={state} mods={mods} />
+                    <Header canvasRef={canvasRef} canvas={canvas} stateRef={stateRef} modsRef={modsRef} />
                 </Toolbar>
                 <Center>
                     <div className="wrap"><canvas id="canvas" /></div>
                     <Layer canvasRef={canvasRef}></Layer>
-                    {/* <Editormenu canvasRef={canvasRef} state={state} /> */}
+                    <Editormenu canvasRef={canvasRef} stateRef={stateRef} objectNumRef={objectNumRef}/>
                     <div id="layer"></div>
                 </Center>
                 <Footbar>
