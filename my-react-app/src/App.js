@@ -44,28 +44,20 @@ export default function App(props) {
     const canvasRef = useRef(new fabric.Canvas("canvas", {
         backgroundColor: "white",
         height: 400,
-<<<<<<< HEAD
         width: 800,
         objectNum: 0,
     }));  //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
     const stateRef = useRef([]);
     const modsRef = useRef(0);
     const objectNumRef = useRef(0);
-=======
-        width: 700,
->>>>>>> c4cfd110b1ad5318633520429bf69d0af9551a90
 
-    }));  //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
+      //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
 
     const state = useRef([]);
     const mods = useRef(0);
 
-<<<<<<< HEAD
     useEffect(() => {  //rendering 후 한 번 실행  
 
-=======
-    useEffect(() => {  //rendering 후 한 번 실행 
->>>>>>> c4cfd110b1ad5318633520429bf69d0af9551a90
         canvasRef.current = (new fabric.Canvas("canvas", {
             backgroundColor: "white",
             height: 400,
