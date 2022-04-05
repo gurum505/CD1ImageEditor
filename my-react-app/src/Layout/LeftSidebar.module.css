@@ -1,6 +1,5 @@
 .container {
     background-color: #fc0202;
-     /*글이 넘어가면 잘리도록overflow: hidden;*/
   }
   /* border-right: 4px solid #202020;*/
 .button {
@@ -27,5 +26,6 @@
   position: absolute;
   left:0px;
   white-space: nowrap; /*글이 재정렬되면서 밑으로 내려가지 않도록*/
+  /* overflow:hidden; */
 }
   

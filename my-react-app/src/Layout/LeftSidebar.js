@@ -35,7 +35,7 @@ const LeftSidebar = ({children, canvasRef}) => {
 
   return (
     <div className={styles.container}>
-      <div style={{ width: `${wid}px`, height: '100%', transition:'0.05s ease'}}>
+      <div style={{ width: `${wid}px`, height: '100%', transition:'1s ease'}}>
         
         <div className={styles.content}>
           {children}

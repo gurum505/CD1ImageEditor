@@ -5,7 +5,7 @@ import './editor.css';
 
 export default function EditorMenu(props) {
     const canvas = props.canvasRef.current;
-    const state = props.stateRef.current;
+    const state = props.state;
     const [buttonType, setButtonType] = useState("");  //어떤 종류의 object를 추가할 것인지 
 
     canvas.isDrawingMode = false;
