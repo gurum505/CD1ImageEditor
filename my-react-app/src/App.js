@@ -36,7 +36,8 @@ export default function App(props) {
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var myjson = canvasRef.current.toJSON();
-            state.current.push(myjson);
+            stateRef.current.push(myjson);
+            console.log(stateRef.current.length);
         }
     }
 
@@ -44,18 +45,22 @@ export default function App(props) {
     const canvasRef = useRef(new fabric.Canvas("canvas", {
         backgroundColor: "white",
         height: 400,
-        width: 700,
-
+        width: 800,
     }));  //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
+    const stateRef = useRef([]);
+    const modsRef = useRef(0);
+    const objectNumRef = useRef(0);
+
+      //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
 
     const state = useRef([]);
     const mods = useRef(0);
 
-    useEffect(() => {  //rendering 후 한 번 실행 
+    useEffect(() => {  //rendering 후 한 번 실행  
         canvasRef.current = (new fabric.Canvas("canvas", {
             backgroundColor: "white",
             height: 400,
-            width: 700,
+            width: 800,
         }));
 
         function zoom(event) {
@@ -71,36 +76,46 @@ export default function App(props) {
         const el = document.querySelector('.wrap');
         el.addEventListener('wheel', zoom);
 
-        document.onkeydown = function (e) { // delete, backspace 키로 삭제
-            if (e.key === "Delete") {
+        canvasRef.current.on('object:modified',() => {
+            console.log('object:modified'); 
+            updateModifications(true);
+        },)
+
+        window.onkeydown = function (e) { // delete, backspace 키로 삭제
+           
+            if (e.key === 'Delete' || e.key ==='Backspace') {   // 텍스트 입력 중 backspace눌러도 객체 삭제 되지 않도록 
+                if(canvasRef.current.getActiveObject().type==='textbox'&& canvasRef.current.getActiveObject().isEditing ){ 
+                    console.log(canvasRef.current.getActiveObject().editable);
+                    return;}
                 var o = canvasRef.current.getActiveObjects();
                 o.forEach((object) => {
                     canvasRef.current.remove(object);
-                    document.getElementById(object).remove();
+                    document.getElementById(object.id).remove();
                 });
-                canvasRef.current.discardActiveObject();
+
+                canvasRef.current.discardActiveObject(); // 그룹 삭제 시 빈 sizebox 남아있는 거 제거 
                 updateModifications(true);
+
             }
         }
         setCanvas(canvasRef);
-    }, []);
-
+    },[]);
 
     
 
     return (
         <div className={styles.layout}>
             <Title />
-            <LeftSidebar className={styles.left} canvasRef={canvasRef}/>
+            <LeftSidebar className={styles.left} canvasRef={canvasRef} />
 
             <main className={styles.mainContainer}>
                 <Toolbar>
-                    <Header canvasRef={canvasRef} canvas={canvas} state={state} mods={mods} />
+                    <Header canvasRef={canvasRef} canvas={canvas} stateRef={stateRef} modsRef={modsRef} objectNumRef={objectNumRef} />
                 </Toolbar>
                 <Center>
                     <div className="wrap"><canvas id="canvas" /></div>
                     <Layer canvasRef={canvasRef}></Layer>
-                    {/* <Editormenu canvasRef={canvasRef} state={state} /> */}
+                    <Editormenu canvasRef={canvasRef} stateRef={stateRef} objectNumRef={objectNumRef}/>
                     <div id="layer"></div>
                 </Center>
                 <Footbar>

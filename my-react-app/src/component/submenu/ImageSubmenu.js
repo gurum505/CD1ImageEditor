@@ -5,21 +5,22 @@ export default function ImageSubmenu(props) {
     const canvas = props.canvasRef.current;
     const stateRef = props.stateRef;
     const objectNumRef = props.objectNumRef;
+    canvas.off();
     function updateModifications(savehistory) {
         if (savehistory === true) {
-            var  myjson = canvas.toJSON();
+            var myjson = canvas.toDatalessJSON(['width', 'height', 'id']);
             stateRef.current.push(myjson);
         }
-        
+
     }
 
     function addLayer(object) {  //레이어에 객체 추가 
         const div = document.createElement('div');
-        div.id = objectNumRef.current;
+        div.id = objectNumRef.current
         div.style.border = ' solid #0000FF';
         div.style.width = '130px';
         const el = document.getElementById('layer');
-        
+
         const objectBtn = document.createElement('button');
         objectBtn.innerHTML = object.type;
         objectBtn.className = "layer-object";
@@ -61,6 +62,13 @@ export default function ImageSubmenu(props) {
                     canvas.add(img).setActiveObject(img);
                     updateModifications(true);
                     addLayer(img);
+                    
+                    var objects = canvas.getActiveObjects();
+                    objects.forEach((object) => {
+                        if (document.getElementById(object.id))
+                            document.getElementById(object.id).style.border = 'solid red'
+                    })
+
                     canvas.renderAll();
 
                 }

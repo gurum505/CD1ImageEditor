@@ -4,7 +4,7 @@ import LineSubmenu from './submenu/LineSubmenu';
 import TextBoxSubmenu from './submenu/TextBoxSubmenu';
 import FilterSubmenu from './submenu/FilterSubmenu';
 import CropSubmenu from './submenu/CropSubmenu';
-import { useRef } from 'react';
+
 export default function Submenu(props) {
     const buttonType = props.buttonType;
 

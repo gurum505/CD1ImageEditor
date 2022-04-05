@@ -9,11 +9,11 @@ export default function LineSubmenu(props) {
 
     function addLayer(object) {  //레이어에 객체 추가 
         const div = document.createElement('div');
-        div.id = objectNumRef.current;
+        div.id = objectNumRef.current
         div.style.border = ' solid #0000FF';
         div.style.width = '130px';
         const el = document.getElementById('layer');
-        
+
         const objectBtn = document.createElement('button');
         objectBtn.innerHTML = object.type;
         objectBtn.className = "layer-object";
@@ -38,26 +38,39 @@ export default function LineSubmenu(props) {
 
     function updateModifications(savehistory) {
         if (savehistory === true) {
-            var  myjson = canvas.toJSON();
+            var myjson = canvas.toDatalessJSON(['width', 'height', 'id']);
             stateRef.current.push(myjson);
         }
+
     }
 
     function drawCurve() {
-        canvas.off('object:added');
         canvas.off('mouse:down');
         canvas.off('mouse:up');
         canvas.freeDrawingBrush.color = color.current;
         if (canvas.isDrawingMode) { //곡선 그리기가 꺼져있는 상태에서 곡선버튼을 눌렀을 때  
             canvas.isDrawingMode = false;
+            canvas.defaultCursor = 'default';
+            return ;
         }
         else {
             canvas.isDrawingMode = true;
+            canvas.defaultCursor = 'crosshair';
+
         }
         canvas.on('mouse:up',()=>{
-            updateModifications(true);
+            canvas.discardActiveObject().renderAll(); // 곡선 그리고 나면 활성화되는 것 끄기 ( canvas.off('object:added') 로 하면 redo 할 때 활성화가 안됨)
             canvas.item(canvas.getObjects().length - 1).set({id:`${++objectNumRef.current}`})
             addLayer(canvas.item(canvas.getObjects().length - 1));
+            var objects = canvas.getActiveObjects();
+            
+            objects.forEach((object) => {
+                if (document.getElementById(object.id))
+                    document.getElementById(object.id).style.border = 'solid red'
+            })
+            updateModifications(true);
+
+
         })
         
     }
@@ -101,6 +114,13 @@ export default function LineSubmenu(props) {
             updateModifications(true);
             canvas.defaultCursor = 'default';
             addLayer(line);
+            
+            var objects = canvas.getActiveObjects();
+            objects.forEach((object) => {
+                if (document.getElementById(object.id))
+                    document.getElementById(object.id).style.border = 'solid red'
+            })
+
 
         });
     }

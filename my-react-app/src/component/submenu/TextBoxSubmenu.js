@@ -7,13 +7,15 @@ export default function TextBoxSubmenu(props) {
     const objectNumRef = props.objectNumRef;
     const color = useRef('black');
 
+    canvas.off();
+
     function addLayer(object) {  //레이어에 객체 추가 
         const div = document.createElement('div');
-        div.id = objectNumRef.current;
+        div.id = objectNumRef.current
         div.style.border = ' solid #0000FF';
         div.style.width = '130px';
         const el = document.getElementById('layer');
-        
+
         const objectBtn = document.createElement('button');
         objectBtn.innerHTML = object.type;
         objectBtn.className = "layer-object";
@@ -38,9 +40,10 @@ export default function TextBoxSubmenu(props) {
 
     function updateModifications(savehistory) {
         if (savehistory === true) {
-            var  myjson = canvas.toJSON();
+            var myjson = canvas.toDatalessJSON(['width', 'height', 'id']);
             stateRef.current.push(myjson);
-        }        
+        }
+
     }
 
     useEffect(()=>{
@@ -65,6 +68,7 @@ export default function TextBoxSubmenu(props) {
             addLayer(textbox);
             canvas.off('mouse:down');
             canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
+            document.getElementById(textbox.id).style.border = 'solid red';
             canvas.defaultCursor = 'default';
 
         });
