@@ -3,7 +3,7 @@ import LeftSidebarClosed from "../component/submenu/LeftSidebarClosed";
 import LeftSidebarOpened from "../component/submenu/LeftSidebarOpened";
 
 import { useState } from "react";
-const LeftSidebar = ({children, canvasRef}) => {
+const LeftSidebar = ({children, canvas}) => {
   const [wid, setX] = useState(50)
   const [isOpen, setOpen] = useState(false);
 
@@ -22,7 +22,7 @@ const LeftSidebar = ({children, canvasRef}) => {
     if(isOpen){
       return(
         <div>
-          <LeftSidebarOpened toggleMenu={toggleMenu} canvasRef={canvasRef}/>
+          <LeftSidebarOpened toggleMenu={toggleMenu} canvas={canvas}/>
         </div>
       )
     }

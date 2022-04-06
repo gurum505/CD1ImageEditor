@@ -27,18 +27,11 @@ export default function Header(props) {
     const stateRef = props.stateRef;
     const modsRef = props.modsRef;
     const objectNumRef = props.objectNumRef;
-    var canvas = props.canvasRef.current;
+    var canvas = props.canvas;
 
     //FIXME:불러오는 이미지가 캔버스보다 클 때 submenu를 넘어가는 것 수정 필요 
 
-    function updateModifications(savehistory) {
-        if (savehistory === true) {
-            var myjson = canvas.toDatalessJSON(['width', 'height', 'id']);
-            stateRef.current.push(myjson);
-        }
-
-    }
-
+    
     useEffect(() => {
         document.onkeydown = function (e) { // delete, backspace 키로 삭제
             if (e.ctrlKey && e.key === 'z') {
@@ -49,8 +42,30 @@ export default function Header(props) {
                 redo(); //ctrl + shift + z 로 redo
             }
         }
-
+        
     });
+    
+    function updateModifications(savehistory) {
+        if (savehistory === true) {
+            var myjson = canvas.toDatalessJSON(['width', 'height', 'id']);
+            stateRef.current.push(myjson);
+        }
+
+    }
+
+    function setCanvasCenter(canvas){ //캔버스를 div 내 가운데에 위치 시키는 함수 
+        var wrapWidth = document.getElementsByClassName('wrap')[0].offsetWidth;                
+        var wrapHeight = document.getElementsByClassName('wrap')[0].offsetHeight;
+     
+        var canvasLeft = (wrapWidth-canvas.width)/2+'px';
+        var canvasTop = (wrapHeight-canvas.height)/2+'px';
+        
+        var canvases = document.getElementsByTagName('canvas')
+        for (var i =0; i<canvases.length; i++){
+            canvases[i].style.left= canvasLeft
+            canvases[i].style.top= canvasTop
+        }
+    }
 
     function addLayer(object) {  //레이어에 객체 추가 
         const div = document.createElement('div');
@@ -103,10 +118,18 @@ export default function Header(props) {
         })
     }
     function importImage(e) {
+        console.log(props.imageRef.current);
+        props.imageRef.current = true;
+        props.setImage(!props.image);
         e.target.value = '' //같은 이름의 이미지 파일 업로드가 안되는 것 방지 
         document.getElementById('import-image-file').onchange = function (e) {
             var file = e.target.files[0];
             var reader = new FileReader();
+            var prev_objects = canvas.getObjects();
+            removeAllLayer(); //이전 객체들의 layer 삭제  
+            prev_objects.forEach((object)=>{  //이미지를 불러오면 이전의 캔버스의 객체들을 다 지움 
+                canvas.remove(object);
+            })
             reader.onload = function (f) {
                 var data = f.target.result;
                 fabric.Image.fromURL(data, function (img) {
@@ -114,21 +137,24 @@ export default function Header(props) {
                     canvas.setWidth(img.width);
                     canvas.setBackgroundImage(img);
                     canvas.renderAll();
-                    stateRef.current = [];
                     var myjson = canvas.toDatalessJSON(['width', 'height']);
                     stateRef.current.push(myjson);
-
+                    stateRef.current = [];
                     modsRef.current = 0;
-                });
+                    setCanvasCenter(img);
+
+                   
+                 });
             };
             reader.readAsDataURL(file);
         };
 
-        if (document.getElementById('filter-list') != null) {
-            document.getElementById('opacity').value = 5;
-            document.getElementById('blur').value = 0;
-            document.getElementById('brightness').value = 0;
-            document.getElementById('pixelate').value = 0;
+
+        //필터 값들 기본 값으로 설정 
+        var filters = document.getElementsByClassName('filter');
+        for(var i =0; i<filters.length; i++){
+            filters[i].value  = document.getElementsByClassName('filter')[0].defaultValue;
+            filters[i].checked = false;
         }
     }
 
@@ -189,24 +215,6 @@ export default function Header(props) {
                         if (document.getElementById(object.id))
                             document.getElementById(object.id).style.border = 'solid red'
                     })
-
-                // if (data.backgroundImage !== undefined) {
-                //     canvas.setWidth(data.backgroundImage.width);
-                //     canvas.setHeight(data.backgroundImage.height);
-
-                //     fabric.Image.fromURL(data.backgroundImage.src, function (img) {
-                //         canvas.setBackgroundImage(img);
-                //         myjson = canvas.toDatalessJSON(['width', 'height', 'backgroundImage']);
-                //         console.log(myjson);
-                //         state.current.push(myjson);
-                //         console.log(state.current.length);
-
-                //     });
-                // }
-                // else{
-                //     state.current.push(canvas.toJSON());
-                // }
-                // canvas.renderAll();
                 });
                 canvas.renderAll();
             }
@@ -226,6 +234,7 @@ export default function Header(props) {
                 if (json.width) {
                     if (json.width) canvas.setWidth(json.width);
                     if (json.height) canvas.setHeight(json.height);
+                    setCanvasCenter(json);
                 }
                 modsRef.current += 1;
                 var objects = canvas.getObjects();
@@ -246,7 +255,9 @@ export default function Header(props) {
         if (modsRef.current > 0) {
             removeAllLayer();
             canvas.clear().renderAll();
-            canvas.loadFromJSON(stateRef.current[stateRef.current.length - modsRef.current], () => {
+            var json=stateRef.current[stateRef.current.length - modsRef.current];
+            canvas.loadFromJSON(json, () => {
+                setCanvasCenter(json);
                 canvas.renderAll.bind(canvas);
                 modsRef.current -= 1;
                 var objects = canvas.getObjects();

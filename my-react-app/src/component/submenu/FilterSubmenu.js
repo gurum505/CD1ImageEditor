@@ -2,117 +2,71 @@ import { fabric } from "fabric";
 import { useEffect } from "react";
 
 export default function FilterSubmenu(props) {
-    const canvas = props.canvasRef.current;
-    
-    useEffect(() => {
-        //새로운 이미지 렌더링 시 effect 값들 초기값으로 변경 
-        document.getElementById('opacity').value = 5;
-        document.getElementById('blur').value = 0;
-        document.getElementById('brightness').value = 0;
-        document.getElementById('pixelate').value = 0;
-    }
-    ,);
 
-    var start = 0
-    function blur(e) {
-        const object = canvas.backgroundImage;
-        if (!object) {
-            return;
-        }
-        if (start < e.target.value) {
-            start = e.target.value;
-            var filter = new fabric.Image.filters.Blur({
-                blur: `${e.target.value * 0.2} `
-            });
-            object.filters.push(filter);
-            object.applyFilters();
-        } else {
-            start = e.target.value;
-            fabric.util.removeFromArray(object.filters, object.filters[object.filters.length - 1]);
-            object.applyFilters();
-        }
+    var filters = ['grayscale', 'invert', 'remove-color', 'sepia', 'brownie',
+        'brightness', 'contrast', 'saturation', 'vibrance', 'noise', 'vintage',
+        'pixelate', 'blur', 'sharpen', 'emboss', 'technicolor',
+        'polaroid', 'blend-color', 'gamma', 'kodachrome',
+        'blackwhite', 'blend-image', 'hue', 'resize'];
+
+    var canvas2dBackend = new fabric.Canvas2dFilterBackend()
+    fabric.filterBackend = fabric.initFilterBackend();
+    fabric.Object.prototype.transparentCorners = false;
+    const canvas = props.canvas;
+    const f = fabric.Image.filters;
+
+
+    for (var i = 0; i < filters.length; i++) {
+        (document.getElementById(filters[i])) && (
+            (document.getElementById(filters[i])).checked = !!canvas.getActiveObject().filters[i]);
+    }
+
+
+    function applyFilter(index, filter) { //필터 적용
+        const obj = canvas.backgroundImage;
+        obj.filters[index] = filter;
+        var timeStart = +new Date();
+        console.log(timeStart)
+        obj.applyFilters();
+        var timeEnd = +new Date();
+        var dimString = canvas.backgroundImage.width + ' x ' +
+            canvas.backgroundImage.height;
+        document.getElementById('bench').innerHTML = dimString + 'px ' +
+            parseFloat(timeEnd - timeStart) + 'ms';
         canvas.renderAll();
     }
 
-    function opacity(e) {
-        const object = canvas.backgroundImage;
-        if (!object) {
-            return;
-        }
-        object.set({opacity: e.target.value * 0.2});
-        canvas.renderAll();
+    function getFilter(index) { //어떤 필터인지 
+        var obj = canvas.backgroundImage;
+        return obj.filters[index];
     }
 
-    var startBrightness = 0 ;
-
-    function brightness(e){
-        const object = canvas.backgroundImage;
-        if (!object) {
-            return;
+    function applyFilterValue(index, prop, value) {
+        var obj = canvas.backgroundImage;
+        if (obj.filters[index]) {
+            obj.filters[index][prop] = value;
+            var timeStart = +new Date();
+            obj.applyFilters();
+            var timeEnd = +new Date();
+            var dimString = canvas.getActiveObject().width + ' x ' +
+                canvas.getActiveObject().height;
+            document.getElementById('bench').innerHTML = dimString + 'px ' +
+                parseFloat(timeEnd - timeStart) + 'ms';
+            canvas.renderAll();
         }
-        if (startBrightness < e.target.value) {
-            startBrightness = e.target.value;
-            var filter = new fabric.Image.filters.Brightness({
-                brightness: `${e.target.value * 0.2} `
-            });
-            object.filters.push(filter);
-            object.applyFilters();
-        } else {
-            startBrightness = e.target.value;
-            filter = new fabric.Image.filters.Blur({
-                blur: '0',
-            });
-            fabric.util.removeFromArray(object.filters, object.filters[object.filters.length - 1]);
-            object.applyFilters();
-        }
-        canvas.renderAll();
     }
-    var startPixel =0;
-    function pixelate(e){
-        const object = canvas.backgroundImage;
-        if (!object) {
-            return;
-        }
-       
-        if (startPixel < e.target.value) {
-            startPixel = e.target.value;
-            var filter = new fabric.Image.filters.Pixelate({
-                blocksize: `${e.target.value*2}`,
-            });
-            object.filters.push(filter);
-            object.applyFilters();
-        } else {
-            startPixel = e.target.value;
-            fabric.util.removeFromArray(object.filters, object.filters[object.filters.length - 1]);
-            object.applyFilters();
 
-        }
-        canvas.renderAll();
+    function invert() {
+        applyFilter(1, document.getElementById('invert').checked && new f.Invert());
     }
-    
-
     return (
-        <div id ='filter-list'>
-            <ul style={{width:'100px', listStyle:"none"}}>
-                <li>
-                    <div className="effect">
-                        <div> <label htmlFor="blur">blur</label>
-                            <input id="blur" type="range" min="0" max="5" defaultValue="0" step="1" onChange={blur} />
-                        </div>
-                        <div> <label htmlFor="opacity">opacity</label>
-                            <input id="opacity" type="range" min="0" max="5" defaultValue="5" step="1" onChange={opacity} />
-                        </div>
-                        <div> <label htmlFor="brightness">brightness</label>
-                            <input id="brightness" type="range" min="-3" max="3" defaultValue="0" step="1" onChange={brightness} />
-                        </div>
-                        <div> <label htmlFor="pixelate">pixelate</label>
-                            <input id="pixelate" type="range" min="0" max="5" defaultValue="0" step="1" onChange={pixelate} />
-                        </div>
-                    </div>
-                </li>
-            </ul>
 
+        <div id='filter-list'>
+            <div id='bench'></div>
 
+            <label htmlFor=""><span>Invert:</span>
+                <input type="checkbox" id='invert' value='인버트' onClick={invert} />
+            </label>
         </div>
 
     )

@@ -4,9 +4,10 @@ import ColorPicker from "./ColorPicker";
 
 export default function FigureSubmenu(props) {
     const stateRef = props.stateRef;
-    const canvas = props.canvasRef.current;
+    const canvas = props.canvas;
     const color = useRef('black');
     const objectNumRef = props.objectNumRef;
+    canvas.off('object:added');
 
     function colorActiveLayer() {
         var layerElements = document.getElementById('layer');

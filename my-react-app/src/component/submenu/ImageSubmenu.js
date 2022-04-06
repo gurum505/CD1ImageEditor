@@ -2,7 +2,7 @@ import { fabric } from "fabric";
 import '../../editor.css';
 
 export default function ImageSubmenu(props) {
-    const canvas = props.canvasRef.current;
+    const canvas = props.canvas;
     const stateRef = props.stateRef;
     const objectNumRef = props.objectNumRef;
     canvas.off();

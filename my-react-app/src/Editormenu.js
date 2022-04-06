@@ -4,13 +4,18 @@ import DefaultMenu from "./component/submenu/DefaultSubmenu";
 import './editor.css';
 
 export default function EditorMenu(props) {
-    const canvas = props.canvasRef.current;
+    const canvas = props.canvas;
     const stateRef = props.stateRef;
     const [buttonType, setButtonType] = useState("");  //어떤 종류의 object를 추가할 것인지 
-
     canvas.isDrawingMode = false;
     canvas.defaultCursor = 'default'; //커서 모양 기본 
     // canvas.selection = true; //객체 드래그로 만들 때 파란창 다시 뜨도록 (+ 객체 드래그 선택 가능하게)
+
+    if (props.imageRef.current === true){
+        console.log('ㅎㅎ')
+        props.imageRef.current = false;
+        setButtonType('');
+    }
 
     function updateModifications(savehistory) {
         if (savehistory === true) {
@@ -157,7 +162,7 @@ export default function EditorMenu(props) {
 
     return (
         <div className="editor-menu">
-            <Submenu canvasRef={props.canvasRef} setButtonType={setButtonType} buttonType={buttonType} stateRef={props.stateRef} objectNumRef={props.objectNumRef} />
+            <Submenu canvas={props.canvas} setCanvas={props.setCanvas} setButtonType={setButtonType} buttonType={buttonType} stateRef={props.stateRef} objectNumRef={props.objectNumRef} />
             <button id='add-figure' onClick={addFigure}  >도형 삽입</button>
             <button id='path' onClick={addLine} >그리기</button>
             <button id='textbox' onClick={addTextBox} >텍스트 박스</button>

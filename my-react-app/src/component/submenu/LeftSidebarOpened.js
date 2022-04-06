@@ -6,14 +6,15 @@ import {useRef } from "react";
 import { fabric } from "fabric";
 import ColorPicker from "./ColorPicker";
 
-export default function LeftSidebarOpened({toggleMenu, canvasRef}){
+export default function LeftSidebarOpened({toggleMenu, canvas}){
     //TODO:버튼함수들 넣기
     //TODO: image 넣을때 input typefile 버튼 안보이게 혹은 교체
     //https://stackoverflow.com/questions/572768/styling-an-input-type-file-button
     //canvas가 아니라 canvasRef를 가져오니까 되네??? 뭐여
     
     const color = useRef('black');
-    const canvas=canvasRef.current;
+    // const canvas= {canvas};
+    console.log(canvas)
 
     function addRect() {
         canvas.off('mouse:down');

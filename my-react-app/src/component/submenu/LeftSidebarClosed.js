@@ -3,7 +3,6 @@ import { FontSizeOutlinedIcon ,MenuOutlinedIcon,BorderOutlinedIcon
 
 export default function LeftSidebarClosed({toggleMenu}){
     //버튼 함수들
-    
     return(
         <div style={{display:"flex",flexDirection:"column"}} >
           <MenuOutlinedIcon onClick={()=>toggleMenu()}/>
