@@ -2,7 +2,7 @@ import { fabric } from "fabric";
 
 export default function CropSubmenu(props) {
     const stateRef = props.stateRef;
-    const canvas = props.canvasRef.current;
+    const canvas = props.canvas;
     var currentImage;
     var selectionRect;
     // canvas.off();
@@ -56,6 +56,20 @@ export default function CropSubmenu(props) {
             obj.left = Math.min(obj.left, obj.canvas.width - obj.getBoundingRect().width + obj.left - obj.getBoundingRect().left);
         }
     });
+
+    function setCanvasCenter(canvas){ //캔버스를 div 내 가운데에 위치 시키는 함수 
+        var wrapWidth = document.getElementsByClassName('wrap')[0].offsetWidth;                
+        var wrapHeight = document.getElementsByClassName('wrap')[0].offsetHeight;
+     
+        var canvasLeft = (wrapWidth-canvas.width)/2+'px';
+        var canvasTop = (wrapHeight-canvas.height)/2+'px';
+        
+        var canvases = document.getElementsByTagName('canvas')
+        for (var i =0; i<canvases.length; i++){
+            canvases[i].style.left= canvasLeft
+            canvases[i].style.top= canvasTop
+        }
+    }
 
     function updateModifications(savehistory) {
         if (savehistory === true) {
@@ -141,6 +155,7 @@ export default function CropSubmenu(props) {
             cropBtn.forEach((btn) => {
                 btn.disabled = false;
             });
+            setCanvasCenter(selectionRect);
             updateModifications(true); //#FIXME: REDO 할 때 캔버스 크기도 
             props.setButtonType('');
         });

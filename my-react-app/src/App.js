@@ -41,87 +41,99 @@ import Layer from "./component/Layer";
 export default function App(props) {
     function updateModifications(savehistory) {
         if (savehistory === true) {
-            var myjson = canvasRef.current.toJSON();
+            var myjson = canvas.toJSON();
             stateRef.current.push(myjson);
-            console.log(stateRef.current.length);
         }
     }
 
-    const [canvas, setCanvas] = useState(""); //useEffect()후 렌더링 하기 위한 state
-    const canvasRef = useRef(new fabric.Canvas("canvas", {
-        backgroundColor: "white",
-        height: 400,
-        width: 800,
-    }));  //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
-    const stateRef = useRef([]);
-    const modsRef = useRef(0);
-    const objectNumRef = useRef(0);
+    function setCanvasCenter(canvas) { //캔버스를 div 내 가운데에 위치 시키는 함수 
+        try{
+            var wrapWidth = document.getElementsByClassName('wrap')[0].offsetWidth;
+            var wrapHeight = document.getElementsByClassName('wrap')[0].offsetHeight;
 
+            var canvasLeft = (wrapWidth - canvas.width) / 2 + 'px';
+            var canvasTop = (wrapHeight - canvas.height) / 2 + 'px';
+
+            var canvases = document.getElementsByTagName('canvas')
+            for (var i = 0; i < canvases.length; i++) {
+                canvases[i].style.left = canvasLeft
+                canvases[i].style.top = canvasTop
+            }
+        }
+        catch(e){}
+    }
+
+    const [canvas, setCanvas] = useState(''); //useEffect()후 렌더링 하기 위한 state
+    const[image,setImage] = useState(false); //이미지 불러왔을 때 전체 렌더링을 위한 state 
+    const imageRef = useRef(false); // 이미지를 불러오면 header에서 setImage()를 통해 렌더링을 시키고, Editor.js에서 imageRef값이 변경 되면 submenu들을 렌더링 함 
+
+    const stateRef = useRef([]); // undo/redo 를 위해 특정 canvas 상태를 저장하는 배열 
+    const modsRef = useRef(0); // undo 시작 위치를 결정
+    const objectNumRef = useRef(0); // object 에 id값을 주어서 객체 단위로 처리가 가능 
       //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
 
-    const state = useRef([]);
-    const mods = useRef(0);
-
+    setCanvasCenter(canvas);
     useEffect(() => {  //rendering 후 한 번 실행  
-        canvasRef.current = (new fabric.Canvas("canvas", {
-            backgroundColor: "white",
-            height: 400,
-            width: 800,
-        }));
+        setCanvas(initCanvas());
 
-        function zoom(event) {
+        let scale = 1; //canvas를 포함하는 wrap element를 마우스 휠로 zoom in/out 
+        const el = document.querySelector('.wrap');
+        el.addEventListener('wheel', (event)=>{
             event.preventDefault();
             scale += event.deltaY * -0.001;
             // Restrict scale
             scale = Math.min(Math.max(.125, scale), 4);
             // Apply scale transform
             el.style.transform = `scale(${scale})`;
-        }
 
-        let scale = 1;
-        const el = document.querySelector('.wrap');
-        el.addEventListener('wheel', zoom);
+        });
+    
+    }, []);
 
-        canvasRef.current.on('object:modified',() => {
-            console.log('object:modified'); 
-            updateModifications(true);
-        },)
-
+    if(canvas){
         window.onkeydown = function (e) { // delete, backspace 키로 삭제
-           
+            if(!canvas.getActiveObject()) return //선택된 객체가 없으면 종료 
+
             if (e.key === 'Delete' || e.key ==='Backspace') {   // 텍스트 입력 중 backspace눌러도 객체 삭제 되지 않도록 
-                if(canvasRef.current.getActiveObject().type==='textbox'&& canvasRef.current.getActiveObject().isEditing ){ 
-                    console.log(canvasRef.current.getActiveObject().editable);
+                if(canvas.getActiveObject().type==='textbox'&& canvas.getActiveObject().isEditing ){ 
+                    console.log(canvas.getActiveObject().editable);
                     return;}
-                var o = canvasRef.current.getActiveObjects();
+                var o = canvas.getActiveObjects();
                 o.forEach((object) => {
-                    canvasRef.current.remove(object);
+                    canvas.remove(object);
                     document.getElementById(object.id).remove();
                 });
 
-                canvasRef.current.discardActiveObject(); // 그룹 삭제 시 빈 sizebox 남아있는 거 제거 
+                canvas.discardActiveObject(); // 그룹 삭제 시 빈 sizebox 남아있는 거 제거 
                 updateModifications(true);
 
             }
         }
-        setCanvas(canvasRef);
-    },[]);
 
-    
+    }
+
+        const initCanvas = () => (
+            new fabric.Canvas('canvas', {
+                height: 400,
+                width: 600,
+                backgroundColor: 'white'
+            })
+        )
+
 
     return (
         <div className={styles.layout}>
             <Title />
-            <LeftSidebar className={styles.left} canvasRef={canvasRef} />
+            {canvas&& <LeftSidebar className={styles.left} canvas={canvas} />}
 
             <main className={styles.mainContainer}>
                 <Toolbar>
-                    <Header canvasRef={canvasRef} canvas={canvas} stateRef={stateRef} modsRef={modsRef} objectNumRef={objectNumRef} />
+                    {canvas && <Header canvas={canvas} imageRef={imageRef} image={image}setImage={setImage}stateRef={stateRef} modsRef={modsRef} objectNumRef={objectNumRef} />}
                 </Toolbar>
                 <Center>
                     <div className="wrap"><canvas id="canvas" /></div>
-                    <Layer canvasRef={canvasRef}></Layer>
-                    <Editormenu canvasRef={canvasRef} stateRef={stateRef} objectNumRef={objectNumRef}/>
+                    <Layer canvas={canvas}></Layer>
+                    {canvas && <Editormenu canvas={canvas} imageRef={imageRef} stateRef={stateRef} objectNumRef={objectNumRef}/>}
                     <div id="layer"></div>
                 </Center>
                 <Footbar>

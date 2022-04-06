@@ -5,7 +5,76 @@ import { FontSizeOutlinedIcon ,MenuOutlinedIcon
     ,RectangleIcon } from "../icons/icons";
 import styles from "./LeftSidebarOpened.module.css"
 
-export default function LeftSidebarOpened({toggleMenu,currentRoute}){
+import {useRef } from "react";
+import { fabric } from "fabric";
+import ColorPicker from "./ColorPicker";
+
+export default function LeftSidebarOpened({toggleMenu, currentRoute, canvas}){
+    //TODO:버튼함수들 넣기
+    //TODO: image 넣을때 input typefile 버튼 안보이게 혹은 교체
+    //https://stackoverflow.com/questions/572768/styling-an-input-type-file-button
+    //canvas가 아니라 canvasRef를 가져오니까 되네??? 뭐여
+    
+    const color = useRef('black');
+    // const canvas= {canvas};
+    console.log(canvas)
+
+    function addRect() {
+        canvas.off('mouse:down');
+        canvas.defaultCursor = 'crosshair';
+        var rect, isDown, origX, origY;
+
+        
+        canvas.on('mouse:down', function (o) {
+            isDown = true;
+            var pointer = canvas.getPointer(o.e);
+            origX = pointer.x; //클릭시 마우스 x좌표
+            origY = pointer.y; //클릭시 마우스 y좌표 
+            rect = new fabric.Rect({
+                left: origX,
+                top: origY,
+                originX: 'left',
+                originY: 'top',
+                width: pointer.x - origX,
+                height: pointer.y - origY,
+                angle: 0,
+                fill: `${color.current}`,
+                transparentCorners: false,
+                type: 'rect',
+            });
+            canvas.add(rect);            
+            
+        });
+
+        canvas.on('mouse:move', function (o) {
+            if (!isDown) return;
+            var pointer = canvas.getPointer(o.e);
+
+            if (origX > pointer.x) {
+                rect.set({ left: Math.abs(pointer.x) });
+            }
+            if (origY > pointer.y) {
+                rect.set({ top: Math.abs(pointer.y) });
+            }
+
+            rect.set({ width: Math.abs(origX - pointer.x) });
+            rect.set({ height: Math.abs(origY - pointer.y) });
+            canvas.renderAll();
+        });
+
+        canvas.on('mouse:up', function (o) {
+            //updateModifications(true);
+            isDown = false;
+            // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
+            canvas.defaultCursor = 'default';
+            canvas.off('mouse:down');
+            canvas.off('mouse:move');
+            canvas.off('mouse:up');
+            
+            //addLayer(rect);
+
+        });
+    }
 
     function Open(currentRoute,detailName){
         if(currentRoute === detailName){
@@ -20,7 +89,7 @@ export default function LeftSidebarOpened({toggleMenu,currentRoute}){
         <MenuOutlinedIcon onClick={()=>toggleMenu()}/>
         <details className={styles.detail} open={Open(currentRoute,"Rect")}>
             <summary>Shape</summary>
-            <p><RectangleIcon/><TriangleIcon/><CircleIcon/> </p>
+            <p><RectangleIcon onClick={addRect}/><TriangleIcon/><CircleIcon/> </p>
             <p><label> width</label> <input type="text" /></p>
             <p><label> height</label> <input type="text"/></p>
             <p><label> color</label> <input type="color"/></p>

@@ -2,7 +2,7 @@ import { useRef} from "react";
 import { fabric } from "fabric";
 import ColorPicker from "./ColorPicker";
 export default function LineSubmenu(props) {
-    const canvas = props.canvasRef.current;
+    const canvas = props.canvas;
     const stateRef = props.stateRef;
     const objectNumRef = props.objectNumRef;
     const color = useRef('black');  // : 값이 바뀌어도 렌더링되지 않음.
