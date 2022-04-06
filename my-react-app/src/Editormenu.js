@@ -12,7 +12,6 @@ export default function EditorMenu(props) {
     // canvas.selection = true; //객체 드래그로 만들 때 파란창 다시 뜨도록 (+ 객체 드래그 선택 가능하게)
 
     if (props.imageRef.current === true){
-        console.log('ㅎㅎ')
         props.imageRef.current = false;
         setButtonType('');
     }

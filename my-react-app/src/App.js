@@ -80,10 +80,6 @@ export default function App(props) {
             // Apply scale transform
             el.style.transform = `scale(${scale})`;
 
-            canvas.on('object:modified',() => {
-                console.log('object:modified'); 
-                updateModifications(true);
-            },)
         });
     
     }, []);

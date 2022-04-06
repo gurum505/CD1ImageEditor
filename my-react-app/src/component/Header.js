@@ -118,7 +118,6 @@ export default function Header(props) {
         })
     }
     function importImage(e) {
-        console.log(props.imageRef.current);
         props.imageRef.current = true;
         props.setImage(!props.image);
         e.target.value = '' //같은 이름의 이미지 파일 업로드가 안되는 것 방지 
