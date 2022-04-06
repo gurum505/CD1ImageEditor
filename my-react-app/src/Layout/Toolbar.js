@@ -1,10 +1,8 @@
 import styles from './Toolbar.module.css'
 
 const Toolbar =({children}) =>(
-    <header className={styles.Toolbar}>
-      <div>
-         {children}
-      </div>
-   </header>
+    <div className={styles.Toolbar}>
+      {children}
+   </div>
 );
 export default Toolbar;

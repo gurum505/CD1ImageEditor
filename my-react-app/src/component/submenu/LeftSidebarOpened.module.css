@@ -1,23 +1,69 @@
+
 .detail{
     box-sizing: border-box;
-    border: 2px solid #202020;
+    /* border: 2px solid #202020; */
     width:200px; /*가로 size*/
-    padding: 8px; /*칸 각각 height*/
+    padding: 10px; /*칸 각각 height*/
     left:0px;
-    margin:0;
-    
-    
+    margin: 0px;
+    color: white;
   }
+.detail summary{
+  text-align: center;
+  font-size: 13pt;
+  font-weight: bold;
+  border-top: 2px solid #202020; 
+}
 .detail summary:hover{/*details위에 마우스를 갖다 댔을때*/
-background-color: #fff;
+background-color: gray;
 box-shadow: inset 1px 0 #ddd, inset -1px 0 #ddd;
 cursor: pointer;
 }
-.detail p:hover{/*TODO: summary랑 묶기*/
-background-color: #fff;
-box-shadow: inset 1px 0 #ddd, inset -1px 0 #ddd;
-cursor: pointer;
+
+.detail p{
+  display:flex;
+  align-content: space-between;
+  justify-content: space-between;
 }
-input[type="file"]{
+.detail label{
+  font-size: 12pt;
+  font-weight: bold;
+}
+.detail input[type="text"]{
+  width:50px;
+  box-sizing: border-box;
+  color:gray;
+  outline-style: none;
+  /* background-color: gray; */
+}
+.detail input[type="color"]{
+  width:50px;
+  border:none;
+  cursor: pointer;
+  /* background-color: gray; */
+  box-sizing: border-box;
+}
+.detail input[type="range"]{
+  width:150px;
+  cursor: pointer;
+}
+.detail ul{
+  display:flex;
+  /* border-top: 2px solid #202020; */
+  margin:auto; /*상자 위아래 거리*/
+  list-style: none;
+  padding-left: 0;/*들여쓰기 없애기*/
+  align-content: center;
+  justify-content: flex-start;/*spacebetween 말고*/
+} 
+.effectContainer{
+  display: flex;
+  border-top: 2px solid #202020;
+  flex-direction: column;
+  align-items: center;/*가운데 정렬*/
+}
+.detail label input[type="file"]{
   display:none;
+  margin: 0;
 }
+
