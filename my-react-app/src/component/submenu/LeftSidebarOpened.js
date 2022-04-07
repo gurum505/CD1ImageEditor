@@ -11,7 +11,6 @@ export default function LeftSidebarOpened({toggleMenu, canvas}){
     //TODO: image 넣을때 input typefile 버튼 안보이게 혹은 교체
     //https://stackoverflow.com/questions/572768/styling-an-input-type-file-button
     //canvas가 아니라 canvasRef를 가져오니까 되네??? 뭐여
-    
     const color = useRef('black');
     // const canvas= {canvas};
     console.log(canvas)

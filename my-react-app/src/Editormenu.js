@@ -5,6 +5,7 @@ import './editor.css';
 
 export default function EditorMenu(props) {
     const canvas = props.canvas;
+    console.log(canvas);
     const stateRef = props.stateRef;
     const [buttonType, setButtonType] = useState("");  //어떤 종류의 object를 추가할 것인지 
     canvas.isDrawingMode = false;
@@ -18,7 +19,7 @@ export default function EditorMenu(props) {
 
     function updateModifications(savehistory) {
         if (savehistory === true) {
-            var myjson = canvas.toDatalessJSON(['width', 'height','id']);
+            var myjson = canvas.toDatalessJSON(['width', 'height','id','filterListState']);
             stateRef.current.push(myjson);
         }
     }
@@ -125,7 +126,6 @@ export default function EditorMenu(props) {
     function addLine() { //그리기 
         if (buttonType === 'line') setButtonType('');
         else setButtonType("line");
-        canvas.off('mouse:down');
     }
 
     function removeObject() { //객체 삭제
@@ -169,7 +169,7 @@ export default function EditorMenu(props) {
             <button id='filter' onClick={addFilter} >필터</button>
             <button id='crop' onClick={cropImage}>자르기</button>
             <button id='remove-object' onClick={removeObject} >객체 삭제</button>
-            <DefaultMenu canvas={canvas} />
+            <DefaultMenu canvas={props.canvas} />
         </div>
     )
 }

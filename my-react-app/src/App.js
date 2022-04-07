@@ -110,7 +110,8 @@ export default function App(props) {
             new fabric.Canvas('canvas', {
                 height: 400,
                 width: 600,
-                backgroundColor: 'white'
+                backgroundColor: 'white',
+                filterListState: [],
             })
         )
 
