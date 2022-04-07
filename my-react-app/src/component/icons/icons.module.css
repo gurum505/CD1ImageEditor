@@ -4,10 +4,14 @@
     left:0px;
     border: 2px solid #202020;
     padding: 10px;
-    width:50px;
+    width:48px;
     box-sizing: border-box;
     color: gray;
+    border-radius: 5px;
   }
+.icon:focus{
+  outline:none;/*클릭시 파란테두리 없애기*/
+}
 .icon:hover{
   cursor: pointer;
   background-color: #fff;
@@ -18,8 +22,17 @@
   visibility: visible;
   z-index: 99;
 }
+.container{
+  position: relative;
+}
 .tooltiptext{
-  background-color: blue;
+  background-color: gray;
   position: absolute;
   visibility: hidden;
+  border-radius: 5px;
+  padding: 0 5px 0 5px;
+  top: -25px;
+  left: 0px;
+  text-align: center;
+  white-space: nowrap;
 }

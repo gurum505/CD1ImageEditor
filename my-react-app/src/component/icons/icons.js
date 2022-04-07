@@ -11,6 +11,9 @@ import { ReactComponent as Circle} from './CircleIcon.svg';
 import { ReactComponent as Rectangle} from './RectangleIcon.svg';
 import { ReactComponent as Cursor} from './CursorIcon.svg';
 import { ReactComponent as Grab} from './GrabIcon.svg';
+import { ReactComponent as Image} from './ImageIcon.svg';
+import { ReactComponent as ImageFromInternet} from './ImageFromInternetIcon.svg';
+
 
 
 //https://icon-icons.com/ko/
@@ -25,6 +28,24 @@ import { ReactComponent as Grab} from './GrabIcon.svg';
 //<ColumnWidthOutlined />
 //height
 //<ColumnHeightOutlined />
+
+export const ImageFromInternetIcon=({onClick, children})=>{
+    return(
+        <div className={styles.container}>
+            <ImageFromInternet className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+        </div>
+    )
+}
+
+export const ImageIcon=({onClick, children})=>{
+    return(
+        <div className={styles.container}>
+            <Image className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+        </div>
+    )
+}
 
 export const GrabIcon=({onClick, children})=>{
     return(

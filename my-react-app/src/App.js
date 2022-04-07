@@ -15,7 +15,7 @@ import LeftSidebar from './Layout/LeftSidebar';
 //FIXME: Sidebar:canvas크기구현할때 왼쪽 사이드바까지 고려해서 집어넣어야함
 //FIXME: Sidebar:사이드 메뉴바 최소 최대 크기 설정 가운데 canvas와 오른쪽200px이 확보되어야
 //TODO: Sidebar: onClick따로 묶을 수 없나
-/*FIXME:Sidebar:칸이 먼저 생기는것 방지=>박스가 먼저생기는 이유는 밀리는게 아니라 고정된 상태라서? 고정된 상태라서 오른쪽처럼 안말리는건가*/
+//FIXME:Sidebar:칸이 먼저 생기는것 방지=>생성을 미리 해놓고 숨겨둔다음hidden isopen에 따라 반환
 //TODO: 전체가 계속 다시 렌더링 됨으로써 remove함수나 여러 함수가 동시에 실행된다.막자
 //TODO:ESLint사용해 정리해보자 https://velog.io/@velopert/eslint-and-prettier-in-react
 

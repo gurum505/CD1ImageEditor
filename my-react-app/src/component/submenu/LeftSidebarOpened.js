@@ -2,7 +2,7 @@ import { FontSizeOutlinedIcon ,MenuOutlinedIcon
     ,AreaChartOutlinedIcon , LineOutlinedIcon,AlignLeftOutlinedIcon
     ,AlignCenterOutlinedIcon,AlignRightOutlinedIcon,HighlightOutlinedIcon
     ,BoldOutlinedIcon,ItalicOutlinedIcon ,TriangleIcon,CircleIcon
-    ,RectangleIcon } from "../icons/icons";
+    ,RectangleIcon,ImageIcon,ImageFromInternetIcon } from "../icons/icons";
 import styles from "./LeftSidebarOpened.module.css"
 
 import {useRef } from "react";
@@ -10,10 +10,6 @@ import { fabric } from "fabric";
 import ColorPicker from "./ColorPicker";
 
 export default function LeftSidebarOpened({toggleMenu, currentRoute, canvas}){
-    //TODO:버튼함수들 넣기
-    //TODO: image 넣을때 input typefile 버튼 안보이게 혹은 교체
-    //https://stackoverflow.com/questions/572768/styling-an-input-type-file-button
-    //canvas가 아니라 canvasRef를 가져오니까 되네??? 뭐여
     
     const color = useRef('black');
     // const canvas= {canvas};
@@ -84,6 +80,7 @@ export default function LeftSidebarOpened({toggleMenu, currentRoute, canvas}){
         }
     }
 
+    
     return(
         <div className={styles.container}>
         <MenuOutlinedIcon onClick={()=>toggleMenu()}/>
@@ -99,7 +96,7 @@ export default function LeftSidebarOpened({toggleMenu, currentRoute, canvas}){
             <p><FontSizeOutlinedIcon/></p>
             <p><label> font size </label><input type="text"/></p>
             <p><label> color </label><input type="color"/></p>
-            <label>정렬</label>
+            <label style={{marginLeft:"15px"}}>정렬</label>
             <ul>
                 <li>
                 <AlignLeftOutlinedIcon />
@@ -111,7 +108,7 @@ export default function LeftSidebarOpened({toggleMenu, currentRoute, canvas}){
                  <AlignRightOutlinedIcon/> 
                 </li>
             </ul>
-            <label>글꼴</label>
+            <label style={{marginLeft:"15px"}}>글꼴</label>
             <ul>
                 <li>
                 <BoldOutlinedIcon children={"직선 그리기"}/>
@@ -134,16 +131,16 @@ export default function LeftSidebarOpened({toggleMenu, currentRoute, canvas}){
             <p>
             <label>
                 <input type="file"/>
-                <AreaChartOutlinedIcon/>
+                <ImageIcon/>
             </label>
             <label>
                 <input type="file"/>
-                <AreaChartOutlinedIcon/>
+                <ImageFromInternetIcon/>
             </label>
             </p>
             <p><label> width</label> <input type="text"/></p>
             <p> <label> height</label> <input type="text"/></p>
-            <label>효과</label>
+            <label style={{marginLeft:"15px"}}>효과</label>
             <div className={styles.effectContainer}>
                 <label> blur</label> <input type="range" min="0" max="5" defaultValue="0" step="1" />
                 <label> opacity</label> <input type="range" min="0" max="5" defaultValue="5" step="1"/>

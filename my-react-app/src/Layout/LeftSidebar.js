@@ -12,21 +12,21 @@ const LeftSidebar = ({children, canvas}) => {
 
   //사이드바 바깥을 클릭했을 때 닫히도록
   //sidebar, canvas안에서는 안닫히고 나머지에서는 닫히도록
-  const side=useRef();
-  const handleClose = (e)=> {
-    let sideArea = side.current; //sidebar크기
-    let sideCildren = side.current.contains(e.target); //sidebar에 e.target이 들어가나
-    if(isOpen&&(!sideArea|| !sideCildren)){
-      toggleMenu();
-    }
-  }
+  // const side=useRef();
+  // const handleClose = (e)=> {
+  //   let sideArea = side.current; //sidebar크기
+  //   let sideCildren = side.current.contains(e.target); //sidebar에 e.target이 들어가나
+  //   if(isOpen&&(!sideArea|| !sideCildren)){
+  //     toggleMenu();
+  //   }
+  // }
 
-  useEffect(()=> {
-    window.addEventListener('click', handleClose);
-    return () => {
-      window.removeEventListener('click', handleClose);
-    };
-  })
+  // useEffect(()=> {
+  //   window.addEventListener('click', handleClose);
+  //   return () => {
+  //     window.removeEventListener('click', handleClose);
+  //   };
+  // })
   
 
 
