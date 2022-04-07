@@ -9,7 +9,7 @@ import {useRef } from "react";
 import { fabric } from "fabric";
 import ColorPicker from "./ColorPicker";
 
-export default function LeftSidebarOpened({toggleMenu, currentRoute, canvas}){
+export default function LeftSidebarOpened({toggleMenu, currentRoute, canvas} ){
     
     const color = useRef('black');
     // const canvas= {canvas};
@@ -80,9 +80,9 @@ export default function LeftSidebarOpened({toggleMenu, currentRoute, canvas}){
         }
     }
 
-    
+   
     return(
-        <div className={styles.container}>
+        <div>
         <MenuOutlinedIcon onClick={()=>toggleMenu()}/>
         <details className={styles.detail} open={Open(currentRoute,"Rect")}>
             <summary>Shape</summary>

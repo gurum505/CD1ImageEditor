@@ -10,24 +10,19 @@ import Footbar from './Layout/Footbar';
 import LeftSidebar from './Layout/LeftSidebar';
 //import RightSidebar from './Layout/RightSidebar';
 
-//FIXME: Sidebar:x축이 -200px으로 되어있다. 내용을 쓸때도 left 200px을해야한다.
 //TODO: Canvas: 버튼기능구현 layout으로 분배
 //FIXME: Sidebar:canvas크기구현할때 왼쪽 사이드바까지 고려해서 집어넣어야함
-//FIXME: Sidebar:사이드 메뉴바 최소 최대 크기 설정 가운데 canvas와 오른쪽200px이 확보되어야
 //TODO: Sidebar: onClick따로 묶을 수 없나
-//FIXME:Sidebar:칸이 먼저 생기는것 방지=>생성을 미리 해놓고 숨겨둔다음hidden isopen에 따라 반환
 //TODO: 전체가 계속 다시 렌더링 됨으로써 remove함수나 여러 함수가 동시에 실행된다.막자
 //TODO:ESLint사용해 정리해보자 https://velog.io/@velopert/eslint-and-prettier-in-react
 
 //TODO: Sidebar:스크롤바 안보이게 세로만
 //Sidebar:type:radio
-//TODO: Sidebar:hover: show_id or explanation
 //TODO: Sidebar:colorpicker design
-//TODO: Sidebar: 상자에 border-radius 주기
-//TODO: icons: 클릭하고 나면 파란색 잔상 남는거
 //TODO: icons: Sidebar tooltip 보이도록
 //TODO: footbar: 그랩모드 안쓸거면 캔버스를 항상 중앙에 두도록
 //TODO: SIdbar: input text를 다른 box로 고민해보기
+//TODO: icons: tooltip 말풍선, 중심으로
 
 //canvas
 import Header from "./component/Header";
@@ -131,7 +126,9 @@ export default function App(props) {
                     {canvas && <Header canvas={canvas} imageRef={imageRef} image={image}setImage={setImage}stateRef={stateRef} modsRef={modsRef} objectNumRef={objectNumRef} />}
                 </Toolbar>
                 <Center>
-                    <div className="wrap"><canvas id="canvas" /></div>
+                    <div className="wrap">
+                        <canvas id="canvas" />
+                    </div>
                     <Layer canvas={canvas}></Layer>
                     {canvas && <Editormenu canvas={canvas} imageRef={imageRef} stateRef={stateRef} objectNumRef={objectNumRef}/>}
                     <div id="layer"></div>
@@ -153,7 +150,6 @@ export default function App(props) {
 //https://blogpack.tistory.com/1018
 //https://blog.naver.com/maestrois/222188488158
 //https://dev.to/franciscomendes10866/how-to-create-a-sidebar-in-react-3dh6
-//https://velog.io/@pear/CSS-position-property-%EC%A0%95%EB%A6%AC
 //using only html css 
 //https://www.w3schools.com/howto/howto_js_collapse_sidebar.asp
 //https://stackoverflow.com/questions/30574902/collapsible-flexible-width-sidebar-using-only-css

@@ -16,6 +16,7 @@
   cursor: pointer;
   background-color: #fff;
   box-shadow: inset 1px 0 #ddd, inset -1px 0 #ddd;
+  transition: 0.3s ;
 }
 
 .container:hover span{

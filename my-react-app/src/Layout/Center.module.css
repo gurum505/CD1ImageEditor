@@ -1,17 +1,11 @@
 .container{
-    height: calc(100vh - 240px);/*크기조정, footbar 고정*/
-    overflow: scroll;/*TODO: zoom구현뒤 hidden으로 변경*/
-    position: relative;
-    width: 100%; 
+    /* height: calc(100vh - 240px);크기조정, footbar 고정 */
+    width: 100%;
+    height: 100%;
     overflow: hidden;
-}
-
-.center{
-    /*화면 중심고정 flex와 align함수 이용*/
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background-color: blueviolet;
+    z-index: 0;
 }
 
