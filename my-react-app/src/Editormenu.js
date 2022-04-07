@@ -24,7 +24,6 @@ export default function EditorMenu(props) {
         }
     }
 
-
     function colorActiveLayer() {
         var layerElements = document.getElementById('layer');
         for (let i = 0; i < layerElements.children.length; i++) {

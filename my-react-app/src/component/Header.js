@@ -1,9 +1,10 @@
 import { fabric } from "fabric";
 import {
-    FolderOpenOutlined, CloudDownloadOutlined, UploadOutlined,
-    FileImageOutlined, RedoOutlined, UndoOutlined, DownloadOutlined, ConsoleSqlOutlined
-} from "@ant-design/icons"
+    FolderOpenOutlinedIcon, CloudDownloadOutlinedIcon, UploadOutlinedIcon,
+    FileImageOutlinedIcon, RedoOutlinedIcon, UndoOutlinedIcon, DownloadOutlinedIcon
+} from "./icons/icons"
 import { useEffect } from "react";
+import styles from "./Header.module.css"
 
 //2번째 줄- 즉시 효과를 갖는, 사이드바를 구성하기에 부적합한 부가적인 기능들    
 //앞으로 가져오기 -rotate(90)
@@ -228,30 +229,31 @@ export default function Header(props) {
     }
     function undo() {
         if (modsRef.current < stateRef.current.length - 1 && stateRef.current.length > 1) {
-           
+
             removeAllLayer();
             canvas.clear().renderAll();
             var json = stateRef.current[stateRef.current.length - 2 - modsRef.current];
 
             canvas.loadFromJSON(json, () => {
-  
+
                 var state = canvas.filterListState;
 
-                try{
-                var inputNodes = document.getElementById('filter-list').getElementsByTagName('input');
-                for (var i = 0; i < inputNodes.length; i++) {
-                    var id = inputNodes[i].id;
-                    var value = inputNodes[i].value;
-        
-                    if (inputNodes[i].type === 'checkbox') {
-                        document.getElementById(id).checked = state[0][id];
-                    } else if  (inputNodes[i].type === 'range') {
-                        document.getElementById(id).value = Number(state[1][id]);
-                    }else {
-                        document.getElementById(id).value = state[2][id];
+                try {
+                    var inputNodes = document.getElementById('filter-list').getElementsByTagName('input');
+                    for (var i = 0; i < inputNodes.length; i++) {
+                        var id = inputNodes[i].id;
+                        var value = inputNodes[i].value;
+
+                        if (inputNodes[i].type === 'checkbox') {
+                            document.getElementById(id).checked = state[0][id];
+                        } else if (inputNodes[i].type === 'range') {
+                            document.getElementById(id).value = Number(state[1][id]);
+                        } else {
+                            document.getElementById(id).value = state[2][id];
+                        }
+
                     }
-        
-                }}catch(e){}
+                } catch (e) { }
 
                 if (json.width) {
                     if (json.width) canvas.setWidth(json.width);
@@ -282,21 +284,22 @@ export default function Header(props) {
             canvas.loadFromJSON(json, () => {
                 var filters = canvas.backgroundImage.filters;
                 var state = canvas.filterListState;
-                try{
-                var inputNodes = document.getElementById('filter-list').getElementsByTagName('input');
-                for (var i = 0; i < inputNodes.length; i++) {
-                    var id = inputNodes[i].id;
-                    var value = inputNodes[i].value;
-        
-                    if (inputNodes[i].type === 'checkbox') {
-                        document.getElementById(id).checked = state[0][id];
-                    } else if  (inputNodes[i].type === 'range') {
-                        document.getElementById(id).value = Number(state[1][id]);
-                    }else {
-                        document.getElementById(id).value = state[2][id];
+                try {
+                    var inputNodes = document.getElementById('filter-list').getElementsByTagName('input');
+                    for (var i = 0; i < inputNodes.length; i++) {
+                        var id = inputNodes[i].id;
+                        var value = inputNodes[i].value;
+
+                        if (inputNodes[i].type === 'checkbox') {
+                            document.getElementById(id).checked = state[0][id];
+                        } else if (inputNodes[i].type === 'range') {
+                            document.getElementById(id).value = Number(state[1][id]);
+                        } else {
+                            document.getElementById(id).value = state[2][id];
+                        }
+
                     }
-        
-                }}catch(e){}
+                } catch (e) { }
 
                 setCanvasCenter(json);
                 canvas.renderAll.bind(canvas);
@@ -315,37 +318,34 @@ export default function Header(props) {
     }
 
     return (
-        <div className="editor-header">
+        <div className={styles.editorHeader}>
+            {/* 새프로젝트 */}
+            <FolderOpenOutlinedIcon onClick={clearCanvas} className="new-project" children={"새 프로젝트"} />
 
-            <div className="editor-header-buttons" >
-                <button className="new-project" onClick={clearCanvas}>
-                    <FolderOpenOutlined />새프로젝트
-                </button>
+            {/* 이미지 저장 */}
+            <FileImageOutlinedIcon className="new-project" onClick={downloadImage} children={"이미지 저장"} />
 
-                <button className="new-project" onClick={downloadImage}>
-                    <FileImageOutlined /> 이미지 저장
-                </button>
-                <button className="serialization" onClick={serialization} >
-                    <DownloadOutlined />프로젝트 다운로드
-                </button>
-                <button className="json-file-upload-button">
-                    <label htmlFor="Deserialization-json-file">
-                        <UploadOutlined />프로젝트 업로드
-                    </label>
-                </button>
+            {/* 프로젝트 다운로드 */}
+            <DownloadOutlinedIcon className="serialization" onClick={serialization} children={"프로젝트 다운로드"} />
 
+            {/* 프로젝트 업로드 */}
+            <label htmlFor="Deserialization-json-file">
                 <input type="file" id="Deserialization-json-file" name="chooseFile" accept="application/JSON"
                     onClick={Deserialization} />
+                <UploadOutlinedIcon name="chooseFile" accept="application/JSON" onClick={Deserialization} children={"프로젝트 업로드"} />
+            </label>
 
-                <button className="import-image">
-                    <label htmlFor="import-image-file">
-                        <CloudDownloadOutlined />이미지 가져오기
-                    </label>
-                </button>
-                <input type="file" id="import-image-file" name="chooseFile" accept="image/*" onClick={importImage} />
-                <button id='undo' onClick={undo}><UndoOutlined />이전</button>
-                <button id='redo' onClick={redo}><RedoOutlined />되돌리기</button>
-            </div>
+            {/* 이미지 가져오기 */}
+            <label htmlFor="import-image-file">
+                <input type="file" id="import-image-file" name="chooseFile" accept="image/*"
+                    onClick={importImage} />
+                <CloudDownloadOutlinedIcon onClick={importImage} children={"이미지 가져오기"} />
+            </label>
+
+            {/* 이전 */}
+            <UndoOutlinedIcon id='undo' onClick={undo} children={"이전"} />
+            {/* 되돌리기 */}
+            <RedoOutlinedIcon id='redo' onClick={redo} children={"되돌리기"} />
         </div>
     )
 }

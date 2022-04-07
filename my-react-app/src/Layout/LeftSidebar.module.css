@@ -1,31 +1,24 @@
 .container {
-    background-color: #fc0202;
-     /*글이 넘어가면 잘리도록overflow: hidden;*/
-  }
-  /* border-right: 4px solid #202020;*/
-.button {
-  z-index: 99;
-  transition: 0.8s ease;
-  border: 2px solid #202020;
-  border-radius: 10px;
-  overflow: hidden;
-  position: relative;
-  left: 200px;
+  background-color: #161616;
+  height: 100%;
 }
+
+/* border-right: 4px solid #202020;*/
 .icon{
-  font-size: 20pt; 
-  margin: 0; /*상우하좌 시계방향*/
-  left:0px;
-  display: block;
-  border: 2px solid #202020;
-  padding: 5px;
-  width:45px;
-  box-sizing: border-box;
+font-size: 20pt; 
+margin: 0; 
+left:0px;
+display: block;
+border: 2px solid #202020;
+padding: 5px;
+width:45px;
+box-sizing: border-box;
+
 }
 
 .content {
-  position: absolute;
-  left:0px;
-  white-space: nowrap; /*글이 재정렬되면서 밑으로 내려가지 않도록*/
+position: absolute;
+left:0px;
+white-space: nowrap; /*글이 재정렬되면서 밑으로 내려가지 않도록*/
+-webkit-overflow-scrolling: touch;
 }
-  

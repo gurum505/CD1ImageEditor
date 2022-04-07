@@ -1,9 +1,38 @@
 .icon{
     font-size: 20pt; 
-    margin: 0; /*상우하좌 시계방향*/
+    margin: 0;
     left:0px;
     border: 2px solid #202020;
-    padding: 5px;
-    width:45px;
+    padding: 10px;
+    width:48px;
     box-sizing: border-box;
+    color: gray;
+    border-radius: 5px;
   }
+.icon:focus{
+  outline:none;/*클릭시 파란테두리 없애기*/
+}
+.icon:hover{
+  cursor: pointer;
+  background-color: #fff;
+  box-shadow: inset 1px 0 #ddd, inset -1px 0 #ddd;
+}
+
+.container:hover span{
+  visibility: visible;
+  z-index: 99;
+}
+.container{
+  position: relative;
+}
+.tooltiptext{
+  background-color: gray;
+  position: absolute;
+  visibility: hidden;
+  border-radius: 5px;
+  padding: 0 5px 0 5px;
+  top: -25px;
+  left: 0px;
+  text-align: center;
+  white-space: nowrap;
+}

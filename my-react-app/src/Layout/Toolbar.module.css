@@ -1,12 +1,11 @@
 .Toolbar {
     height: 80px;
     width: 100%;
-    position: flex;/*relative absolute fixed*/
-    background-color: #703B09;
+    background-color: #202020;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px; /*top bottom 0 left right 20*/
+    padding: 0; /*top bottom 0 left right 20*/
     box-sizing: border-box; /*테두리포함 크기로 계산*/
     z-index: 90;
 }
