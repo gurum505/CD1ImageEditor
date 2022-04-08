@@ -37,9 +37,9 @@ export default function Header(props) {
     useEffect(() => {
         document.onkeydown = function (e) { 
 
-            if (e.ctrlKey && e.shiftKey && e.key==='Z') {  // It works
+            if (e.ctrlKey && e.shiftKey && e.key==='Z') {  
                 redo();  
-            }else if (e.ctrlKey && e.key === 'z') { //It doesn't work
+            }else if (e.ctrlKey && e.key === 'z') { 
                 undo();
             }else if (e.ctrlKey && e.key==='c'){
                 copy();

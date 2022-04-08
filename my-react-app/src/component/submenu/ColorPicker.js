@@ -18,6 +18,10 @@ export default function ColorPicker(props){
             canvas.renderAll();
             }
         }
+
+        if(canvas.isDrawingMode){
+            canvas.freeDrawingBrush.color =`${selectedColor}`
+        }
     }
     return (
         <input id="color" type="color" onChange={selectColor} defaultValue='black'/>
