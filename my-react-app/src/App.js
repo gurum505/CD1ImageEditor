@@ -10,6 +10,7 @@ import Footbar from './Layout/Footbar';
 import LeftSidebar from './Layout/LeftSidebar';
 //import RightSidebar from './Layout/RightSidebar';
 
+//TODO: 완료후) github: mainpage를 my react app으로 변경, RightSidebar같은 쓸데없는 것들, 주석 다지우기
 //TODO: Canvas: 버튼기능구현 layout으로 분배
 //FIXME: Sidebar:canvas크기구현할때 왼쪽 사이드바까지 고려해서 집어넣어야함
 //TODO: Sidebar: onClick따로 묶을 수 없나
@@ -23,13 +24,13 @@ import LeftSidebar from './Layout/LeftSidebar';
 //TODO: footbar: 그랩모드 안쓸거면 캔버스를 항상 중앙에 두도록
 //TODO: SIdbar: input text를 다른 box로 고민해보기
 //TODO: icons: tooltip 말풍선, 중심으로
+//TODO: sidebar: input을change가 아니라 onKeyPress로?
 
 //canvas
 import Header from "./component/Header";
 import Editormenu from "./Editormenu";
 import Layer from "./component/Layer";
 
-//FIXME: Canvas: 도형과 텍스트 묶어서 객체 삭제가 안됌 => 곡선안지워지던데 
 //TODO: Canvas:이미지 드래그앤 드롭으로 이미지 집어넣기, 복사 붙여넣기로 집어넣기
 //TODO: Canvas:객체들고 옮길때 canvas에 중앙선or경계 표시
 
