@@ -31,194 +31,194 @@ import { ReactComponent as ImageFromInternet} from './ImageFromInternetIcon.svg'
 
 export const ImageFromInternetIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <ImageFromInternet className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 
 export const ImageIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <Image className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 
 export const GrabIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <Grab className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 
 export const CursorIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <Cursor className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 
 export const EditOutlinedIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <EditOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 
 export const DragOutlinedIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <DragOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 
 export const ZoomInOutlinedIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <ZoomInOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 
 export const ZoomOutOutlinedIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <ZoomOutOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 
 export const ExpandOutlinedIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <ExpandOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 
 export const EyeOutlinedIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <EyeOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 
 export const DownloadOutlinedIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <DownloadOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 
 export const FolderOpenOutlinedIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <FolderOpenOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 export const CloudDownloadOutlinedIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <CloudDownloadOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 export const UploadOutlinedIcon=({onClick, children, htmlFor})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <UploadOutlined className={styles.icon} onClick={onClick} htmlFor={htmlFor}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 export const FileImageOutlinedIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <FileImageOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 export const RedoOutlinedIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <RedoOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 export const UndoOutlinedIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <UndoOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 
 export const GithubOutlinedIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <GithubOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 
 export const LineHeightOutlinedIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <LineHeightOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 
 export const RectangleIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <Rectangle className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 
 export const CircleIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <Circle className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 
 export const TriangleIcon=({onClick, children})=>{
     return(
-        <div className={styles.container}>
+        <span className={styles.container}>
             <Triangle className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
-        </div>
+        </span>
     )
 }
 

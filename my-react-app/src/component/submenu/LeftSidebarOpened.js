@@ -84,7 +84,7 @@ export default function LeftSidebarOpened({ toggleMenu, currentRoute, canvas }) 
 
 
     return (
-        <div className={styles.container}>
+        <div>
             <MenuOutlinedIcon onClick={() => toggleMenu()} />
             <details className={styles.detail} open={Open(currentRoute, "Rect")}>
                 <summary>Shape</summary>
