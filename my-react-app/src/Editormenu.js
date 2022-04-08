@@ -5,7 +5,6 @@ import './editor.css';
 
 export default function EditorMenu(props) {
     const canvas = props.canvas;
-    console.log(canvas);
     const stateRef = props.stateRef;
     const [buttonType, setButtonType] = useState("");  //어떤 종류의 object를 추가할 것인지 
     canvas.isDrawingMode = false;
@@ -37,8 +36,6 @@ export default function EditorMenu(props) {
     }
 
     useEffect(() => {
-        var json = JSON.stringify(canvas);
-
         var objects = canvas.getObjects();
         try {
             objects.forEach((object) => {

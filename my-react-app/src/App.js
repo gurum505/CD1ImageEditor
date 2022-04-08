@@ -87,10 +87,13 @@ export default function App(props) {
             el.style.transform = `scale(${scale})`;
 
         });
+
+    
     
     }, []);
 
     if(canvas){
+        
         window.onkeydown = function (e) { // delete, backspace 키로 삭제
             if(!canvas.getActiveObject()) return //선택된 객체가 없으면 종료 
 
@@ -109,6 +112,10 @@ export default function App(props) {
 
             }
         }
+
+        canvas.on('object:modified',()=>{
+            updateModifications(true);
+        })
 
     }
 
