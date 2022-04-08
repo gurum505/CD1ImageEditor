@@ -25,6 +25,7 @@ import LeftSidebar from './Layout/LeftSidebar';
 //TODO: SIdbar: input text를 다른 box로 고민해보기
 //TODO: icons: tooltip 말풍선, 중심으로
 //TODO: sidebar: input을change가 아니라 onKeyPress로?
+//TODO: canvas: CUSTOM CORNERS  https://objectcomputing.com/resources/publications/sett/june-2014-drawing-with-fabricjs
 
 //canvas
 import Header from "./component/Header";
