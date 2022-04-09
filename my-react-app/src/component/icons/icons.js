@@ -4,7 +4,7 @@ import {FontSizeOutlined,MenuOutlined,BorderOutlined,AreaChartOutlined, LineOutl
     FolderOpenOutlined,CloudDownloadOutlined,UploadOutlined,
     FileImageOutlined,RedoOutlined,UndoOutlined,DownloadOutlined,
     EditOutlined,DragOutlined,ZoomInOutlined,ZoomOutOutlined,
-    ExpandOutlined,EyeOutlined} from "@ant-design/icons"
+    ExpandOutlined,EyeOutlined,CopyOutlined,DiffOutlined} from "@ant-design/icons"
 import styles from "./icons.module.css"
 import { ReactComponent as Triangle} from './TriangleIcon.svg';
 import { ReactComponent as Circle} from './CircleIcon.svg';
@@ -28,6 +28,24 @@ import { ReactComponent as ImageFromInternet} from './ImageFromInternetIcon.svg'
 //<ColumnWidthOutlined />
 //height
 //<ColumnHeightOutlined />
+
+export const DiffOutlinedIcon=({onClick, children})=>{
+    return(
+        <span className={styles.container}>
+            <DiffOutlined className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+        </span>
+    )
+}
+
+export const CopyOutlinedIcon=({onClick, children})=>{
+    return(
+        <span className={styles.container}>
+            <CopyOutlined className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+        </span>
+    )
+}
 
 export const ImageFromInternetIcon=({onClick, children})=>{
     return(
@@ -136,19 +154,23 @@ export const FolderOpenOutlinedIcon=({onClick, children})=>{
         </span>
     )
 }
-export const CloudDownloadOutlinedIcon=({onClick, children})=>{
+export const CloudDownloadOutlinedIcon=({onClick, children, htmlFor})=>{
     return(
         <span className={styles.container}>
+            <label htmlFor={htmlFor}>
             <CloudDownloadOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
+            </label>
         </span>
     )
 }
 export const UploadOutlinedIcon=({onClick, children, htmlFor})=>{
     return(
         <span className={styles.container}>
-            <UploadOutlined className={styles.icon} onClick={onClick} htmlFor={htmlFor}/>
+            <label htmlFor={htmlFor}>
+            <UploadOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
+            </label>
         </span>
     )
 }
