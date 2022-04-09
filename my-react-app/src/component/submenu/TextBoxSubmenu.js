@@ -52,6 +52,7 @@ export default function TextBoxSubmenu(props) {
     })
 
     function addTextBox() {
+        document.getElementById('add-textbox').disabled =true;
         canvas.defaultCursor = 'text';
         canvas.on('mouse:down', (o) => {
             const pointer = canvas.getPointer(o.e);
@@ -64,6 +65,8 @@ export default function TextBoxSubmenu(props) {
                 id : `${++objectNumRef.current}`
             });
             canvas.add(textbox);
+            document.getElementById('add-textbox').disabled =false;
+
             updateModifications(true);
             addLayer(textbox);
             canvas.off('mouse:down');
@@ -135,7 +138,7 @@ export default function TextBoxSubmenu(props) {
     return(
     <>
         <div className="textbox-submenu">
-            <button onClick = {addTextBox}>텍스트상자 추가 </button>
+            <button id='add-textbox' onClick = {addTextBox}>텍스트상자 추가 </button>
             &nbsp; &nbsp;
             <button onClick={makeTextBold} id='bold' >
                 진하게

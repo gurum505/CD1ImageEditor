@@ -11,11 +11,14 @@ import { useRef } from "react";
 import { fabric } from "fabric";
 import ColorPicker from "./ColorPicker";
 
+// 테스트
+import OnelineImage from "./OnlineImage";
+
 export default function LeftSidebarOpened({ toggleMenu, currentRoute, canvas }) {
 
     const color = useRef('black');
     // const canvas= {canvas};
-    console.log(canvas)
+    // console.log(canvas)
 
     function addRect() {
         canvas.off('mouse:down');
@@ -88,7 +91,7 @@ export default function LeftSidebarOpened({ toggleMenu, currentRoute, canvas }) 
             <MenuOutlinedIcon onClick={() => toggleMenu()} />
             <details className={styles.detail} open={Open(currentRoute, "Rect")}>
                 <summary>Shape</summary>
-                <p><RectangleIcon onClick={addRect} /><TriangleIcon /><CircleIcon /> </p>
+                <p><RectangleIcon onClick={addRect} /><TriangleIcon/><CircleIcon /> </p>
                 <p><label> width</label> <input type="text" /></p>
                 <p><label> height</label> <input type="text" /></p>
                 <p><label> color</label> <input type="color" /></p>
@@ -150,8 +153,11 @@ export default function LeftSidebarOpened({ toggleMenu, currentRoute, canvas }) 
                     <label> pixelate</label> <input type="range" min="0" max="5" defaultValue="0" step="1" />
                 </div>
 
-
-
+                {/* 테스트 */}
+                    <OnelineImage/>
+                <div>
+                    
+                </div>
             </details>
         </div>
     );

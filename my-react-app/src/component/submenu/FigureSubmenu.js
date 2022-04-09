@@ -57,6 +57,7 @@ export default function FigureSubmenu(props) {
     }
 
     function addRect() {
+        document.getElementById('add-rect').disabled =true;
         canvas.off('mouse:down');
         canvas.off('mouse:up');
         canvas.off('mouse:move');
@@ -101,6 +102,7 @@ export default function FigureSubmenu(props) {
         });
 
         canvas.on('mouse:up', function (o) {
+            document.getElementById('add-rect').disabled =false;
             updateModifications(true);
             isDown = false;
             canvas.defaultCursor = 'default';
@@ -115,7 +117,7 @@ export default function FigureSubmenu(props) {
     }
 
     function addCircle() {
-
+        document.getElementById('add-circle').disabled =true;
         canvas.defaultCursor = 'crosshair';
         var circle, isDown, origX, origY;
         canvas.off('mouse:down');
@@ -159,6 +161,7 @@ export default function FigureSubmenu(props) {
         });
 
         canvas.on('mouse:up', function (o) {
+            document.getElementById('add-circle').disabled =false;
             canvas.renderAll();
             updateModifications(true);
             isDown = false;
@@ -176,6 +179,7 @@ export default function FigureSubmenu(props) {
     }
 
     function addTriangle() {
+        document.getElementById('add-triangle').disabled =true;
         canvas.defaultCursor = 'crosshair';
         var triangle, isDown, origX, origY;
         canvas.off('mouse:down');
@@ -224,6 +228,7 @@ export default function FigureSubmenu(props) {
         });
 
         canvas.on('mouse:up', function (o) {
+            document.getElementById('add-triangle').disabled =false;
             canvas.renderAll();
             updateModifications(true);
             isDown = false;
@@ -241,13 +246,13 @@ export default function FigureSubmenu(props) {
     return (
         <>
             <div>
-                <button onClick={addRect}>
+                <button id='add-rect'onClick={addRect}>
                     사각형
                 </button>
-                <button onClick={addCircle}>
+                <button id='add-circle'onClick={addCircle}>
                     원
                 </button>
-                <button onClick={addTriangle}>
+                <button id='add-triangle' onClick={addTriangle}>
                     삼각형
                 </button>
                 &nbsp; &nbsp;

@@ -166,8 +166,15 @@ export default function Header(props) {
 
     //새 프로젝트 
     function clearCanvas() { //캔버스 초기화 
-        window.location.reload();
-
+        // window.location.reload();
+        props.imageRef.current = true;
+        props.setImage(!props.image);
+        stateRef.current = [];
+        removeAllLayer();
+        canvas.clear().renderAll();
+        canvas.backgroundColor='white';
+        canvas.renderAll();
+        modsRef.current = 0;
     }
 
     //이미지 다운로드
@@ -349,7 +356,8 @@ export default function Header(props) {
                     updateModifications(true);
                     addLayer(obj);
                 });
-
+                canvas.discardActiveObject();
+                canvas.renderAll();
                 // this should solve the unselectability
                 clonedObj.setCoords();
             } else {
@@ -357,15 +365,15 @@ export default function Header(props) {
             })
                 canvas.add(clonedObj);
                 updateModifications(true);
-
+                canvas.requestRenderAll();
                 addLayer(clonedObj);
             }
             colorActiveLayer();
 
             _clipboard.top += 10;
             _clipboard.left += 10;
-            canvas.setActiveObject(clonedObj);
-            canvas.requestRenderAll();
+           
+            // canvas.setActiveObject(clonedObj);
         });
     }
 
