@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import styles from "./Header.module.css"
 
 //2번째 줄- 즉시 효과를 갖는, 사이드바를 구성하기에 부적합한 부가적인 기능들    
-//앞으로 가져오기 -rotate(90)
+//앞으로 가져오기 -rotate(90) 
 //<DownOutlined />
 //맨 앞으로 가져오기-rotate(90)
 //<DoubleRightOutlined />
@@ -33,31 +33,33 @@ export default function Header(props) {
     const canvas = props.canvas;
 
     //FIXME:불러오는 이미지가 캔버스보다 클 때 submenu를 넘어가는 것 수정 필요 
-    var filterList = ['grayscale', 'invert', 'remove-color', 'sepia', 'brownie',
-        'brightness', 'contrast', 'saturation', 'vibrance', 'noise', 'vintage',
-        'pixelate', 'blur', 'sharpen', 'emboss', 'technicolor',
-        'polaroid', 'blend-color', 'gamma', 'kodachrome',
-        'blackwhite', 'blend-image', 'hue', 'resize'];
-
+   
     useEffect(() => {
-        document.onkeydown = function (e) { // delete, backspace 키로 삭제
-            if (e.ctrlKey && e.key === 'z') {
-                undo()  // ctrl+ z로 undo 
-            }
-            //FIXME:  세 키 한 번에 입력할 때 안됨 
-            else if (e.ctrlKey && e.shiftKey) {
-                redo(); //ctrl + shift + z 로 redo
+        document.onkeydown = function (e) { 
+
+            if (e.ctrlKey && e.shiftKey && e.key==='Z') {  
+                redo();  
+            }else if (e.ctrlKey && e.key === 'z') { 
+                undo();
+            }else if (e.ctrlKey && e.key==='c'){
+                copy();
+            }else if (e.ctrlKey && e.key ==='v'){
+                paste();
             }
         }
-
-    });
+       
+    },[]);
 
     function updateModifications(savehistory) {
         if (savehistory === true) {
             var myjson = canvas.toDatalessJSON(['width', 'height', 'id']);
             stateRef.current.push(myjson);
+            console.log(myjson)
         }
+<<<<<<< HEAD
         //getRangeState();
+=======
+>>>>>>> 56119b424b636ba6ae521fe417ad514f0d4ea3fe
     }
 
     function setCanvasCenter(canvas) { //캔버스를 div 내 가운데에 위치 시키는 함수 
@@ -75,6 +77,8 @@ export default function Header(props) {
     }
 
     function addLayer(object) {  //레이어에 객체 추가 
+        console.log(object.type)
+          
         const div = document.createElement('div');
         div.id = object.id;
         div.style.border = ' solid #0000FF';
@@ -103,7 +107,7 @@ export default function Header(props) {
         el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
     }
 
-    function colorActiveLayer() {
+    function colorActiveLayer() {   // 활성화(선택) 되어 있는 layer 빨간색으로 표시 
         var layerElements = document.getElementById('layer');
         for (let i = 0; i < layerElements.children.length; i++) {
             layerElements.children[i].style.border = 'solid blue';
@@ -166,8 +170,15 @@ export default function Header(props) {
 
     //새 프로젝트 
     function clearCanvas() { //캔버스 초기화 
-        window.location.reload();
-
+        // window.location.reload();
+        props.imageRef.current = true;
+        props.setImage(!props.image);
+        stateRef.current = [];
+        removeAllLayer();
+        canvas.clear().renderAll();
+        canvas.backgroundColor='white';
+        canvas.renderAll();
+        modsRef.current = 0;
     }
 
     //이미지 다운로드
@@ -216,8 +227,8 @@ export default function Header(props) {
                         addLayer(object);
                     })
                     stateRef.current.push(canvas.toDatalessJSON(['width', 'height', 'id']));
-                    var objects = canvas.getActiveObjects();
-                    objects.forEach((object) => {
+                    var activeObjects = canvas.getActiveObjects();
+                    activeObjects.forEach((object) => {
                         if (document.getElementById(object.id))
                             document.getElementById(object.id).style.border = 'solid red'
                     })
@@ -236,13 +247,12 @@ export default function Header(props) {
 
             canvas.loadFromJSON(json, () => {
 
-                var state = canvas.filterListState;
-
-                try {
+                
+                try { // 이전 state의 filter value들 값 할당 
+                    var state = canvas.filterListState;
                     var inputNodes = document.getElementById('filter-list').getElementsByTagName('input');
                     for (var i = 0; i < inputNodes.length; i++) {
                         var id = inputNodes[i].id;
-                        var value = inputNodes[i].value;
 
                         if (inputNodes[i].type === 'checkbox') {
                             document.getElementById(id).checked = state[0][id];
@@ -282,13 +292,11 @@ export default function Header(props) {
             canvas.clear().renderAll();
             var json = stateRef.current[stateRef.current.length - modsRef.current];
             canvas.loadFromJSON(json, () => {
-                var filters = canvas.backgroundImage.filters;
-                var state = canvas.filterListState;
                 try {
+                    var state = canvas.filterListState;
                     var inputNodes = document.getElementById('filter-list').getElementsByTagName('input');
                     for (var i = 0; i < inputNodes.length; i++) {
                         var id = inputNodes[i].id;
-                        var value = inputNodes[i].value;
 
                         if (inputNodes[i].type === 'checkbox') {
                             document.getElementById(id).checked = state[0][id];
@@ -316,6 +324,62 @@ export default function Header(props) {
         }
 
     }
+    var test = []
+    //FIXME:  redo undo 할 때 activeselection 좌표 이상함 
+    //http://jsfiddle.net/softvar/7Hsdh/1/
+    var _clipboard;
+    function copy() {
+        canvas.getActiveObject().clone(function(cloned) {
+            _clipboard = cloned;
+        });
+    }
+    
+    var _clipboard;
+    function paste() {
+       
+        _clipboard.clone(function(clonedObj) {
+            canvas.discardActiveObject();
+            console.log(clonedObj.left);
+            clonedObj.set({
+                left: clonedObj.left + 10,
+                top: clonedObj.top + 10,
+                evented: true,
+            });
+            if (clonedObj.type === 'activeSelection') {
+                clonedObj.canvas = canvas;
+                clonedObj.destroy()
+
+                clonedObj.forEachObject(function(obj) {
+                    
+                    obj.set({
+                        id: `${++objectNumRef.current}`,
+                    })
+
+                    canvas.add(obj);
+                    obj.selection = false; 
+                    updateModifications(true);
+                    addLayer(obj);
+                });
+                canvas.discardActiveObject();
+                canvas.renderAll();
+                // this should solve the unselectability
+                clonedObj.setCoords();
+            } else {
+                clonedObj.set({ id:`${++objectNumRef.current}`
+            })
+                canvas.add(clonedObj);
+                updateModifications(true);
+                canvas.requestRenderAll();
+                addLayer(clonedObj);
+            }
+            colorActiveLayer();
+
+            _clipboard.top += 10;
+            _clipboard.left += 10;
+           
+            // canvas.setActiveObject(clonedObj);
+        });
+    }
 
     return (
         <div className={styles.editorHeader}>
@@ -341,7 +405,8 @@ export default function Header(props) {
                     onClick={importImage} />
                 <CloudDownloadOutlinedIcon onClick={importImage} children={"이미지 가져오기"} />
             </label>
-
+            <button id='copy' onClick={copy}>복사</button>
+            <button id='paste' onClick={paste}>붙여넣기</button>
             {/* 이전 */}
             <UndoOutlinedIcon id='undo' onClick={undo} children={"이전"} />
             {/* 되돌리기 */}

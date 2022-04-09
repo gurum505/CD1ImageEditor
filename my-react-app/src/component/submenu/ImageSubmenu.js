@@ -1,5 +1,6 @@
 import { fabric } from "fabric";
 import '../../editor.css';
+import OnlineImage from "./OnlineImage";
 
 export default function ImageSubmenu(props) {
     const canvas = props.canvas;
@@ -82,6 +83,7 @@ export default function ImageSubmenu(props) {
     }
     return (
         <>
+        <OnlineImage />
             <button id="add-image">
                 <label htmlFor="add-local-image-file">
                     로컬 이미지 추가
@@ -89,7 +91,7 @@ export default function ImageSubmenu(props) {
             </button>
             <input type="file" id="add-local-image-file" name="chooseFile" accept="image/*" onClick={addLocalImage} />
 
-            <button disabled onClick={addOnlineImage}>
+            <button  onClick={addOnlineImage}>
                 온라인에서 가져오기
             </button>
         </>

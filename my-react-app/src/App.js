@@ -84,10 +84,14 @@ export default function App(props) {
             el.style.transform = `scale(${scale})`;
 
         });
+
+    
     
     }, []);
 
     if(canvas){
+
+        console.log(canvas.getObjects())
         window.onkeydown = function (e) { // delete, backspace 키로 삭제
             if(!canvas.getActiveObject()) return //선택된 객체가 없으면 종료 
 
@@ -107,6 +111,10 @@ export default function App(props) {
             }
         }
 
+        canvas.on('object:modified',()=>{
+            updateModifications(true);
+        })
+
     }
 
         const initCanvas = () => (
@@ -121,7 +129,7 @@ export default function App(props) {
     return (
         <div className={styles.layout}>
             <Title />
-            {canvas&& <LeftSidebar className={styles.left} canvas={canvas} />}
+            {canvas&& <LeftSidebar className={styles.left} canvas={canvas} stateRef={stateRef} objectNumRef={objectNumRef} />}
 
             <main className={styles.mainContainer}>
                 <Toolbar>

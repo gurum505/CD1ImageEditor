@@ -1,0 +1,30 @@
+
+.search{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100vh;
+    display:flex;
+    min-height: 10vh;
+    justify-content: center;
+    align-items:center;
+    border-bottom:1px solid rgba(0,0,0,0.3);
+    z-index:1;
+    background : white;
+}
+
+img{
+    margin-left:5px;
+    height:50;
+    width:180px;
+    object-fit:conver;
+    object-position :center;
+    cursor:pointer;
+}
+
+.gallery{
+    overflow: scroll;
+    border: 1px solid blue;
+    height:100%;
+}
+

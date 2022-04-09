@@ -13,31 +13,34 @@ export default function CropSubmenu(props) {
     var width1 = 0;
     var height1 = 0;
 
+    canvas.discardActiveObject();
+    canvas.renderAll();
     canvas.off('object:modified'); //object 수정되면 state에 추가되는데 이를 방지 
-    // canvas.off('object:added')
+    canvas.off('object:added');
+    canvas.off('selection:created');
     //crop 상자가 범위를 초과하지 않게 
-    canvas.on('object:scaling', function (e) {
-        var obj = e.target;
-        obj.setCoords();
-        var brNew = obj.getBoundingRect();
+    // canvas.on('object:scaling', function (e) {
+    //     var obj = e.target;
+    //     obj.setCoords();
+    //     var brNew = obj.getBoundingRect();
 
-        if (((brNew.width + brNew.left) >= obj.canvas.width) || ((brNew.height + brNew.top) >= obj.canvas.height) || ((brNew.left < 0) || (brNew.top < 0))) {
-            obj.left = left1;
-            obj.top = top1;
-            obj.scaleX = scale1x;
-            obj.scaleY = scale1y;
-            obj.width = width1;
-            obj.height = height1;
-        }
-        else {
-            left1 = obj.left;
-            top1 = obj.top;
-            scale1x = obj.scaleX;
-            scale1y = obj.scaleY;
-            width1 = obj.width;
-            height1 = obj.height;
-        }
-    });
+    //     if (((brNew.width + brNew.left) >= obj.canvas.width) || ((brNew.height + brNew.top) >= obj.canvas.height) || ((brNew.left < 0) || (brNew.top < 0))) {
+    //         obj.left = left1;
+    //         obj.top = top1;
+    //         obj.scaleX = scale1x;
+    //         obj.scaleY = scale1y;
+    //         obj.width = width1;
+    //         obj.height = height1;
+    //     }
+    //     else {
+    //         left1 = obj.left;
+    //         top1 = obj.top;
+    //         scale1x = obj.scaleX;
+    //         scale1y = obj.scaleY;
+    //         width1 = obj.width;
+    //         height1 = obj.height;
+    //     }
+    // });
     canvas.on('object:moving', function (e) {
         var obj = e.target;
         // if object is too big ignore
@@ -111,6 +114,7 @@ export default function CropSubmenu(props) {
     }
 
     function crop(ratio) {
+        canvas.discardActiveObject();
         if (canvas.getActiveObject() === selectionRect) canvas.remove(selectionRect);
         addSelectionRect(ratio);
         canvas.setActiveObject(selectionRect);
@@ -163,6 +167,8 @@ export default function CropSubmenu(props) {
 
 
     function cropCustom() {
+        canvas.discardActiveObject();
+
         // canvas.selection = false; 
         var objects = canvas.getObjects();
 
@@ -262,7 +268,6 @@ export default function CropSubmenu(props) {
         cropBtn.forEach((btn) => {
             btn.disabled = false;
         })
-        props.setButtonType('');
     }
 
 

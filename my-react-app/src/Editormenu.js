@@ -12,14 +12,14 @@ export default function EditorMenu(props) {
     canvas.defaultCursor = 'default'; //커서 모양 기본 
     // canvas.selection = true; //객체 드래그로 만들 때 파란창 다시 뜨도록 (+ 객체 드래그 선택 가능하게)
 
-    if (props.imageRef.current === true){
+    if (props.imageRef.current === true) {
         props.imageRef.current = false;
         setButtonType('');
     }
 
     function updateModifications(savehistory) {
         if (savehistory === true) {
-            var myjson = canvas.toDatalessJSON(['width', 'height','id','filterListState']);
+            var myjson = canvas.toDatalessJSON(['width', 'height', 'id', 'filterListState']);
             stateRef.current.push(myjson);
         }
     }
@@ -37,8 +37,6 @@ export default function EditorMenu(props) {
     }
 
     useEffect(() => {
-        var json = JSON.stringify(canvas);
-
         var objects = canvas.getObjects();
         try {
             objects.forEach((object) => {
@@ -84,6 +82,7 @@ export default function EditorMenu(props) {
                 'selection:created': () => {
                     console.log('selection:created');
                     document.getElementById('remove-object').disabled = false;
+
                     var objects = canvas.getActiveObjects();
                     objects.forEach((object) => {
                         if (document.getElementById(object.id))
@@ -93,8 +92,10 @@ export default function EditorMenu(props) {
                 'object:added': () => {
                     console.log('object:added');
                     canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
+
                     selectType = canvas.getActiveObject().type;
                     document.getElementById('remove-object').disabled = false;
+
                 },
                 'object:modified': () => {
                     console.log('object:modified');
