@@ -15,69 +15,16 @@
 
 img{
     margin-left:5px;
-    height:100;
-    width:100px;
+    height:50;
+    width:180px;
     object-fit:conver;
     object-position :center;
-    cursor:pointer;
-}
-/* .searchbutton{
-    padding : 0.5rem 3rem;
-    margin-left : 10px;
-    background : blue;
-    color: white;
-    font-size : 1.2rem;
-    cursor : pointer; 
-    text-align :center;
-}
-
-.next{
-    position : fixed;
-    top:90%;
-    right :0%;
-    padding: 0.5rem 0.5rem;
-    width : 100px;
-    text-align:center;
     cursor:pointer;
 }
 
 .gallery{
-    width:90%;
-    margin:12vh 50%;
-    transform: translate(-50%);
-    display:grid;
-    grid-template-columns : repeat(5,200px);
-    row-gap : 10px;
-    column-gap :10px;
-    justify-content: center;
+    overflow: scroll;
+    border: 1px solid blue;
+    height:100%;
 }
 
-.gallery div{
-    position : relative;
-}
-
-img{
-    margin-left:5px;
-    height:300px;
-    width:200px;
-    object-fit:conver;
-    object-position :center;
-    cursor:pointer;
-}
-
-p{
-    position:absolute;
-    margin-left : 10px;
-    bottom : 5px;
-    color: white;
-}
-
-a{
-    position:absolute;
-    top:0;
-    left:0;
-    text-decoration : underline;
-    color: white;
-    margin-left:10px;
-    font-weight:bold
-} */

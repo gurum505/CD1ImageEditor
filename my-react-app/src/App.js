@@ -133,7 +133,7 @@ export default function App(props) {
     return (
         <div className={styles.layout}>
             <Title />
-            {canvas&& <LeftSidebar className={styles.left} canvas={canvas} />}
+            {canvas&& <LeftSidebar className={styles.left} canvas={canvas} stateRef={stateRef} objectNumRef={objectNumRef} />}
 
             <main className={styles.mainContainer}>
                 <Toolbar>

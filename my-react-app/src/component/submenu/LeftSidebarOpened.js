@@ -14,7 +14,7 @@ import ColorPicker from "./ColorPicker";
 // 테스트
 import OnelineImage from "./OnlineImage";
 
-export default function LeftSidebarOpened({ toggleMenu, currentRoute, canvas }) {
+export default function LeftSidebarOpened({ toggleMenu, currentRoute, canvas,stateRef,objectNumRef }) {
 
     const color = useRef('black');
     // const canvas= {canvas};
@@ -154,7 +154,7 @@ export default function LeftSidebarOpened({ toggleMenu, currentRoute, canvas }) 
                 </div>
 
                 {/* 테스트 */}
-                    <OnelineImage/>
+                    <OnelineImage canvas={canvas} stateRef={stateRef} objectNumRef={objectNumRef} />
                 <div>
                     
                 </div>
