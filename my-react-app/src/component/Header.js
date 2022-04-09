@@ -57,7 +57,7 @@ export default function Header(props) {
             var myjson = canvas.toDatalessJSON(['width', 'height', 'id']);
             stateRef.current.push(myjson);
         }
-        getRangeState();
+        //getRangeState();
     }
 
     function setCanvasCenter(canvas) { //캔버스를 div 내 가운데에 위치 시키는 함수 
