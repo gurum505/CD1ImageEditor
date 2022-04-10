@@ -400,6 +400,7 @@ export default function Header(props) {
             <CloudDownloadOutlinedIcon htmlFor="import-image-file" onClick={importImage} children={"이미지 가져오기"} />
             <input type="file" id="import-image-file" name="chooseFile" accept="image/*"
                     onClick={importImage} />
+                    
             <CopyOutlinedIcon id='copy' onClick={copy} children={"복사"}/>
             <DiffOutlinedIcon id='paste' onClick={paste} children={"붙여넣기"}/>
             {/* 이전 */}
