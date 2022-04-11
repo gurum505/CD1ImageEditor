@@ -6,11 +6,6 @@ import './editor.css';
 import * as common from './component/submenu/common';
 export default function EditorMenu(props) {
     const canvas = props.canvas;
-<<<<<<< HEAD
-=======
-    // console.log(canvas);
-    const stateRef = props.stateRef;
->>>>>>> 57f760aca1dbcda8d506dcfd34d86c86f27c19a5
     const [buttonType, setButtonType] = useState("");  //어떤 종류의 object를 추가할 것인지 
     canvas.isDrawingMode = false;
     canvas.defaultCursor = 'default'; //커서 모양 기본 

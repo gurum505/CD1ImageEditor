@@ -4,7 +4,7 @@ export default function CropSubmenu(props) {
     const canvas = props.canvas;
     var currentImage;
     var selectionRect;
-    // canvas.off();
+    canvas.off();
     // var left1 = 0;
     // var top1 = 0;
     // var scale1x = 0;
@@ -12,7 +12,6 @@ export default function CropSubmenu(props) {
     // var width1 = 0;
     // var height1 = 0;
 
-    canvas.renderAll();
     //crop 상자가 범위를 초과하지 않게 
     // canvas.on('object:scaling', function (e) {
     //     var obj = e.target;
@@ -136,14 +135,14 @@ export default function CropSubmenu(props) {
             });
             canvas.initialWidth = currentImage.width;
             canvas.initialHeight = currentImage.height;
-
+            
+            canvas.undo=true;
+            console.log(canvas)
             common.setCanvasCenter(canvas);
             common.updateStates(canvas);
-            console.log(canvas.states);
             props.setButtonType('');
         });
         
-        canvas.on('object:added');
     }
 
 

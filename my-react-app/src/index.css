@@ -50,9 +50,3 @@ body{
 #add-image-file {display:none;}
 #Deserialization-json-file{display:none;}
 #add-local-image-file{display:none;}
- .wrap{
-    margin: 0px auto;
-    width : 1200px;
-    height :500px;
-    background-color: #f3f3f3;
- }

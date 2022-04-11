@@ -31,15 +31,11 @@ export function setCanvasCenter(canvas) { //캔버스를 내 가운데에 위치
 }
 
 export function updateStates(canvas){
-    console.log('어디서')
     canvas.currentWidth = canvas.width;
     canvas.currentHeight = canvas.Height;
     var json = canvas.toDatalessJSON(['undoStack','redoStack','initialWidth', 'initialHeight', 'objectNum', 'id','filterValues']);
-    var temp = canvas.states;
-    temp.push(json);
-    console.log(json)
     canvas.undoStack.push(json);
-    canvas.states = temp
+    console.log("추가햇어요 ㅋ")
 
 }
 

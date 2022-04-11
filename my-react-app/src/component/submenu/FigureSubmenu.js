@@ -12,11 +12,15 @@ export default function FigureSubmenu(props) {
         canvas.off('mouse:down');
         canvas.off('mouse:up');
         canvas.off('mouse:move');
+        document.getElementById('add-rect').disabled =false;
+        document.getElementById('add-circle').disabled =false;
+        document.getElementById('add-triangle').disabled =false;
+
     }
 
     function addRect() {
-        document.getElementById('add-rect').disabled =true;
         mouseEventOff();
+        document.getElementById('add-rect').disabled =true;
         canvas.defaultCursor = 'crosshair';
         var rect, isDown, origX, origY;
         canvas.on('mouse:down', function (o) {
@@ -68,10 +72,10 @@ export default function FigureSubmenu(props) {
     }
 
     function addCircle() {
+        mouseEventOff();
         document.getElementById('add-circle').disabled =true;
         canvas.defaultCursor = 'crosshair';
         var circle, isDown, origX, origY;
-        mouseEventOff();
         canvas.on('mouse:down', function (o) {
             isDown = true;
             var pointer = canvas.getPointer(o.e);
@@ -122,10 +126,10 @@ export default function FigureSubmenu(props) {
     }
 
     function addTriangle() {
+        mouseEventOff();
         document.getElementById('add-triangle').disabled =true;
         canvas.defaultCursor = 'crosshair';
         var triangle, isDown, origX, origY;
-        mouseEventOff();
         canvas.on('mouse:down', function (o) {
             isDown = true;
             var pointer = canvas.getPointer(o.e);

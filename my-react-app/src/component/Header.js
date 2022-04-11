@@ -175,8 +175,10 @@ export default function Header(props) {
             common.setCanvasCenter(canvas);
 
             canvas.loadFromJSON(json, () => {
-                canvas.setWidth(width);
-                canvas.setHeight(height)
+                console.log(json);
+                // canvas.setWidth(canvas.initialWidth);
+                // canvas.setHeight(canvas.initialHeight)
+  
                 canvas.renderAll();
                 if (canvas.backgroundImage) {
                     canvas.backgroundImage.scaleX =  canvas.initialWidth / canvas.backgroundImage.width
@@ -228,8 +230,8 @@ export default function Header(props) {
             var width = canvas.width;
             var height = canvas.height;
             canvas.loadFromJSON(json, () => {
-                canvas.setWidth(width);
-                canvas.setHeight(height);
+                // canvas.setWidth(width);
+                // canvas.setHeight(height);
                 if (canvas.backgroundImage) {
                         canvas.backgroundImage.scaleX =  canvas.initialWidth / canvas.backgroundImage.width
                         canvas.backgroundImage.scaleY = canvas.initialHeight / canvas.backgroundImage.height

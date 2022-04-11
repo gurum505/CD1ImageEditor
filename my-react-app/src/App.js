@@ -36,13 +36,6 @@ import * as common from "./component/submenu/common"
 
 export default function App(props) {
     
-    function updateModifications(savehistory) {
-        if (savehistory === true) {
-            var myjson = canvas.toJSON();
-            stateRef.current.push(myjson);
-        }
-    }
-
     
     const [canvas, setCanvas] = useState(''); //useEffect()후 렌더링 하기 위한 state
     const[image,setImage] = useState(false); //이미지 불러왔을 때 전체 렌더링을 위한 state 
@@ -54,7 +47,6 @@ export default function App(props) {
       //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
 
   
-    common.setCanvasCenter(canvas);
     useEffect(() => {  //rendering 후 한 번 실행  
         setCanvas(initCanvas());
 
@@ -69,14 +61,13 @@ export default function App(props) {
         //     el.style.transform = `scale(${scale})`;
 
         // });
-
-    
     
     }, []);
 
     useEffect(()=>{
         if (canvas) {
             common.updateStates(canvas);
+            common.setCanvasCenter(canvas);
             canvas.on({
                 'mouse:wheel': (opt) => {
            
@@ -136,6 +127,7 @@ export default function App(props) {
             });
            
               window.addEventListener("resize", function(opt) { //브라우저 크기 resize에 따른 이벤트 
+            
                 var windowWidth = window.innerWidth -50 //50 : leftsidbar
                 var windowHeight = window.innerHeight -240;
                 var ratio = canvas.width/canvas.height;
@@ -215,15 +207,15 @@ export default function App(props) {
             }
             return (
             new fabric.Canvas('canvas', {
-                height: height,
-                width: width,
-                initialWidth: width,
-                initalHeight: height, 
+                height: 400,
+                width: 600,
+                initialWidth: 600,
+                initialHeight:400, 
                 objectNum : 0,
                 undoStack :[],
                 redoStack :[],
                 filterValues : '',
-                
+
                 backgroundColor: 'white'
             })
         )}
@@ -232,7 +224,7 @@ export default function App(props) {
     return (
         <div className={styles.layout}>
             <Title />
-            {canvas&& <LeftSidebar className={styles.left}  canvas={canvas} stateRef={stateRef} objectNumRef={objectNumRef} />}
+            {canvas&& <LeftSidebar className={styles.left}  canvas={canvas}  />}
 
             <main className={styles.mainContainer}>
 
