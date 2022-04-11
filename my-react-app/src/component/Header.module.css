@@ -15,3 +15,6 @@
     display: flex;
     box-sizing: border-box; /*테두리포함 크기로 계산*/
 }
+.editorHeader input[type="file"]{
+    display: none;
+}

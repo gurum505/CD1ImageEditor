@@ -11,10 +11,8 @@
 }
 .center{
     display:flex;
-    flex-direction: column;
+    flex-direction: column; /* 이거 도움이되나? */
     justify-content: center;
-    /* align-content: center; */
-    /* align-items: center; */
     position: relative;
     width: calc(100% - 150px);
 }
@@ -22,12 +20,5 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* position: relative; */
-    /* min-width: calc(100% - 200px)rightsidebar width */
-    /* position: relative; */
-    /* z-index: 10; */
     position: relative;
-    /* top: 500x;header크기 */
-    /* left: 500px; */
-    /* z-index: 10; */
 }
