@@ -5,7 +5,6 @@ import {FontSizeOutlinedIcon, MenuOutlinedIcon
     , RectangleIcon, ImageIcon, ImageFromInternetIcon
 } from "../icons/icons";
 import styles from "./LeftSidebarOpened.module.css"
-import { useHorizontalScroll, useScroll } from "../../Scrollbar";
 
 
 export default function LeftSidebarOpened({ toggleMenu, currentRoute}) {
@@ -37,9 +36,6 @@ export default function LeftSidebarOpened({ toggleMenu, currentRoute}) {
             return false;
         }
     }
-
-    const scrollRef=useHorizontalScroll(); //작동은 되나 스크롤이 생성되었을 때만 가능
-    const {scrollY}=useScroll();
 
     return (
         <>

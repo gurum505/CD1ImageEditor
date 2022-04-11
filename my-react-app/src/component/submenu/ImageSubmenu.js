@@ -1,5 +1,4 @@
 import { fabric } from "fabric";
-import '../../editor.css';
 import OnlineImage from "./OnlineImage";
 
 export default function ImageSubmenu(props) {

@@ -8,7 +8,7 @@ export default function LeftSidebarClosed({ toggleMenu, SetCurrentRoute }) {
     
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", outline: "none" }} >
+        <div style={{ display: "flex", flexDirection: "column", outline: "none"}} >
             <MenuOutlinedIcon onClick={() => {SetCurrentRoute("Menu");toggleMenu();}} style={{ userSelect: "none" }}/>
             <BorderOutlinedIcon onClick={() => { SetCurrentRoute("Object"); toggleMenu(); }} />
             <FontSizeOutlinedIcon onClick={() => { SetCurrentRoute("Text"); toggleMenu(); }} />

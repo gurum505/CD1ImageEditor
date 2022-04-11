@@ -1,9 +1,14 @@
 .container {
   background-color: #161616;
-  height: 100%;
+  position: relative;/*있어야 밀림*/
+  top: 0;
+  bottom: 0;
+  left: 0;
+  height: calc(100vh - 80px);
+  z-index: 99;
+  /* width: 10000px; */
 }
 
-/* border-right: 4px solid #202020;*/
 .icon{
 font-size: 20pt; 
 margin: 0; 

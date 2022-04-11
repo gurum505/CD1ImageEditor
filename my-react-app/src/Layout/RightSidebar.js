@@ -29,7 +29,7 @@ const RightSidebar = () => {
   return (
     <div className={styles.container}>
       <p className={styles.title}>
-        <h4>레이어</h4>
+        레이어
       </p>
       <div className={styles.addItem}>
         <PlusOutlinedIcon  onClick={addLayerItem}/>

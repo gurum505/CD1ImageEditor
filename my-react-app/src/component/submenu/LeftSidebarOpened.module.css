@@ -1,6 +1,6 @@
 .container{
   overflow-y: auto;
-  height:calc(100vh - 150px)
+  height:calc(100vh - 150px);/*임의로 준값*/
 }
 .container::-webkit-scrollbar {
   display: none;

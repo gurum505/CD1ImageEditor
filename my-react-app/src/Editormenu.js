@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Submenu from "./component/Submenu";
 import DefaultMenu from "./component/submenu/DefaultSubmenu";
-import './editor.css';
 
 export default function EditorMenu(props) {
     const canvas = props.canvas;

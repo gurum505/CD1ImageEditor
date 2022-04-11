@@ -1,9 +1,9 @@
 .footbar{
-    height: 80px;
+    height:80px;
     margin-top:auto;
     background-color: #202020;
-    position:fixed;
-    bottom: 0px;
+    position: absolute;
+    bottom: 80px;
     width:100%;
 }
 .contents{
