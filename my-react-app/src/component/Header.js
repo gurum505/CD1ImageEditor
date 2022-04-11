@@ -1,7 +1,9 @@
 import { fabric } from "fabric";
 import {
     FolderOpenOutlinedIcon, CloudDownloadOutlinedIcon, UploadOutlinedIcon,
-    FileImageOutlinedIcon, RedoOutlinedIcon, UndoOutlinedIcon, DownloadOutlinedIcon
+    FileImageOutlinedIcon, RedoOutlinedIcon, UndoOutlinedIcon, DownloadOutlinedIcon,
+    DiffOutlinedIcon,CopyOutlinedIcon
+
 } from "./icons/icons"
 import { useEffect } from "react";
 import styles from "./Header.module.css"
@@ -334,20 +336,18 @@ export default function Header(props) {
             <DownloadOutlinedIcon className="serialization" onClick={serialization} children={"프로젝트 다운로드"} />
 
             {/* 프로젝트 업로드 */}
-            <label htmlFor="Deserialization-json-file">
-                <input type="file" id="Deserialization-json-file" name="chooseFile" accept="application/JSON"
+            
+            <UploadOutlinedIcon htmlFor="Deserialization-json-file" onClick={Deserialization} children={"프로젝트 업로드"}/>
+            <input type="file" id="Deserialization-json-file" name="chooseFile" accept="application/JSON"
                     onClick={Deserialization} />
-                <UploadOutlinedIcon name="chooseFile" accept="application/JSON" onClick={Deserialization} children={"프로젝트 업로드"} />
-            </label>
 
             {/* 이미지 가져오기 */}
-            <label htmlFor="import-image-file">
-                <input type="file" id="import-image-file" name="chooseFile" accept="image/*"
+            <CloudDownloadOutlinedIcon htmlFor="import-image-file" onClick={importImage} children={"이미지 가져오기"} />
+            <input type="file" id="import-image-file" name="chooseFile" accept="image/*"
                     onClick={importImage} />
-                <CloudDownloadOutlinedIcon onClick={importImage} children={"이미지 가져오기"} />
-            </label>
-            <button id='copy' onClick={copy}>복사</button>
-            <button id='paste' onClick={paste}>붙여넣기</button>
+                    
+            <CopyOutlinedIcon id='copy' onClick={copy} children={"복사"}/>
+            <DiffOutlinedIcon id='paste' onClick={paste} children={"붙여넣기"}/>
             {/* 이전 */}
             <UndoOutlinedIcon id='undo' onClick={undo} children={"이전"} />
             {/* 되돌리기 */}

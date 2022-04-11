@@ -9,6 +9,7 @@
     margin: 0px;
     color: white;
     user-select: none;/*더블클릭시 파란색 없애기*/
+    z-index: -1;
   }
 .detail summary{
   text-align: center;
@@ -23,6 +24,7 @@
 .detail summary:hover{/*details위에 마우스를 갖다 댔을때*/
   background-color: gray;
   cursor: pointer;
+  transition: 0.3s ;
 }
 .detail summary:focus{/*클릭했을때 기본 윈도우의 파란색잔상 안보이게*/
   outline:none;

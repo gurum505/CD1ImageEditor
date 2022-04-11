@@ -10,32 +10,27 @@ import Footbar from './Layout/Footbar';
 import LeftSidebar from './Layout/LeftSidebar';
 //import RightSidebar from './Layout/RightSidebar';
 
-//FIXME: Sidebar:x축이 -200px으로 되어있다. 내용을 쓸때도 left 200px을해야한다.
+//TODO: 완료후) github: mainpage를 my react app으로 변경, RightSidebar같은 쓸데없는 것들, 주석 다지우기
 //TODO: Canvas: 버튼기능구현 layout으로 분배
 //FIXME: Sidebar:canvas크기구현할때 왼쪽 사이드바까지 고려해서 집어넣어야함
-//FIXME: Sidebar:사이드 메뉴바 최소 최대 크기 설정 가운데 canvas와 오른쪽200px이 확보되어야
+//FIXME: sidebar: 목록이 펼쳐지기도 전에 이미 그려짐=>미리그려놓고 보여줌으로써 성능개선을 꾀하는 방법이 있었는데...
 //TODO: Sidebar: onClick따로 묶을 수 없나
-//FIXME:Sidebar:칸이 먼저 생기는것 방지=>생성을 미리 해놓고 숨겨둔다음hidden isopen에 따라 반환
 //TODO: 전체가 계속 다시 렌더링 됨으로써 remove함수나 여러 함수가 동시에 실행된다.막자
 //TODO:ESLint사용해 정리해보자 https://velog.io/@velopert/eslint-and-prettier-in-react
 
 //TODO: Sidebar:스크롤바 안보이게 세로만
 //Sidebar:type:radio
-//TODO: Sidebar:hover: show_id or explanation
 //TODO: Sidebar:colorpicker design
-//TODO: Sidebar: 상자에 border-radius 주기
-//TODO: icons: 클릭하고 나면 파란색 잔상 남는거
-//TODO: icons: Sidebar tooltip 보이도록
 //TODO: footbar: 그랩모드 안쓸거면 캔버스를 항상 중앙에 두도록
 //TODO: SIdbar: input text를 다른 box로 고민해보기
+//TODO: sidebar: input을change가 아니라 onKeyPress로?
+//TODO: canvas: CUSTOM CORNERS  https://objectcomputing.com/resources/publications/sett/june-2014-drawing-with-fabricjs
 
 //canvas
 import Header from "./component/Header";
 import Editormenu from "./Editormenu";
 import Layer from "./component/Layer";
-
-import * as common from './component/submenu/common.js';
-//FIXME: Canvas: 도형과 텍스트 묶어서 객체 삭제가 안됌 => 곡선안지워지던데 
+import * as common from "./component/submenu/common"
 //TODO: Canvas:이미지 드래그앤 드롭으로 이미지 집어넣기, 복사 붙여넣기로 집어넣기
 //TODO: Canvas:객체들고 옮길때 canvas에 중앙선or경계 표시
 
@@ -222,15 +217,14 @@ export default function App(props) {
             new fabric.Canvas('canvas', {
                 height: height,
                 width: width,
-                backgroundColor: 'white',
-                filterValues: '',  // filter적용하고 undo redo 할 때 필요한 input value 저장 
-                states:[],  // undo redo 를 위해 캔버스 상태 json으로 저장하는 배열
-                mods:0, //undo redo 할 때 iterate 위치 
-                objectNum:0, // 총 object 개수  
-                initialWidth : width, //초기 캔버스 너비 (화면 바뀌면서 캔버스 크기가 바뀌므로 필요)
-                initialHeight: height, //초기 캔버스 높이  ("")
-                undoStack:[],
-                redoStack:[],
+                initialWidth: width,
+                initalHeight: height, 
+                objectNum : 0,
+                undoStack :[],
+                redoStack :[],
+                filterValues : '',
+                
+                backgroundColor: 'white'
             })
         )}
 
@@ -268,7 +262,6 @@ export default function App(props) {
 //https://blogpack.tistory.com/1018
 //https://blog.naver.com/maestrois/222188488158
 //https://dev.to/franciscomendes10866/how-to-create-a-sidebar-in-react-3dh6
-//https://velog.io/@pear/CSS-position-property-%EC%A0%95%EB%A6%AC
 //using only html css 
 //https://www.w3schools.com/howto/howto_js_collapse_sidebar.asp
 //https://stackoverflow.com/questions/30574902/collapsible-flexible-width-sidebar-using-only-css

@@ -1,16 +1,3 @@
-/* .file-upload-button, .download-section, .json-file-upload-button{    margin : auto;
-    font-weight: bold;
-    width:120px;
-    height:50px;
-    padding : 4px;
-    color :white;
-    text-align:center;
-    background-color: cadetblue;
-    cursor:pointer;
-    border-radius: 30px;
-    border :none;
-} */
-
 /* .file-upload-button, .download-section, .json-file-upload-button{
     margin : auto;
     font-weight: bold;
@@ -42,6 +29,30 @@
 body{
     background-color: gray;
 }
+/* rgb(24, 24, 24) */
 
 
+/* .file-upload-button, .download-section, .json-file-upload-button{
+    margin : auto;
+    font-weight: bold;
+    width:120px;
+    height:50px;
+    padding : 4px;
+    color :white;
+    text-align:center;
+    background-color: cadetblue;
+    cursor:pointer;
+    border-radius: 30px;
+    border :none;
+} */
 
+#import-image-file{display : none;} 
+#add-image-file {display:none;}
+#Deserialization-json-file{display:none;}
+#add-local-image-file{display:none;}
+ .wrap{
+    margin: 0px auto;
+    width : 1200px;
+    height :500px;
+    background-color: #f3f3f3;
+ }
