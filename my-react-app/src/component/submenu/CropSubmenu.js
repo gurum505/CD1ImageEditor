@@ -1,23 +1,18 @@
 import { fabric } from "fabric";
-
+import * as common from './common'
 export default function CropSubmenu(props) {
-    const stateRef = props.stateRef;
     const canvas = props.canvas;
     var currentImage;
     var selectionRect;
     // canvas.off();
-    var left1 = 0;
-    var top1 = 0;
-    var scale1x = 0;
-    var scale1y = 0;
-    var width1 = 0;
-    var height1 = 0;
+    // var left1 = 0;
+    // var top1 = 0;
+    // var scale1x = 0;
+    // var scale1y = 0;
+    // var width1 = 0;
+    // var height1 = 0;
 
-    canvas.discardActiveObject();
     canvas.renderAll();
-    canvas.off('object:modified'); //object 수정되면 state에 추가되는데 이를 방지 
-    canvas.off('object:added');
-    canvas.off('selection:created');
     //crop 상자가 범위를 초과하지 않게 
     // canvas.on('object:scaling', function (e) {
     //     var obj = e.target;
@@ -60,29 +55,9 @@ export default function CropSubmenu(props) {
         }
     });
 
-    function setCanvasCenter(canvas){ //캔버스를 div 내 가운데에 위치 시키는 함수 
-        var wrapWidth = document.getElementsByClassName('wrap')[0].offsetWidth;                
-        var wrapHeight = document.getElementsByClassName('wrap')[0].offsetHeight;
-     
-        var canvasLeft = (wrapWidth-canvas.width)/2+'px';
-        var canvasTop = (wrapHeight-canvas.height)/2+'px';
-        
-        var canvases = document.getElementsByTagName('canvas')
-        for (var i =0; i<canvases.length; i++){
-            canvases[i].style.left= canvasLeft
-            canvases[i].style.top= canvasTop
-        }
-    }
-
-    function updateModifications(savehistory) {
-        if (savehistory === true) {
-            var myjson = canvas.toDatalessJSON(['width', 'height', 'id']);
-            stateRef.current.push(myjson);
-        }
-
-    }
-
     function addSelectionRect(ratio = '') {
+        canvas.discardActiveObject();
+
         var ratio;
         if (ratio === '3:2') ratio = 3 / 2
         else if (ratio === '4:3') ratio = 4 / 3
@@ -109,8 +84,8 @@ export default function CropSubmenu(props) {
             cropRect: true
         });
         // selectionRect.set({ 'width': width, 'height': height });
-        canvas.centerObject(selectionRect);
         canvas.add(selectionRect);
+        canvas.centerObject(selectionRect);
     }
 
     function crop(ratio) {
@@ -159,10 +134,16 @@ export default function CropSubmenu(props) {
             cropBtn.forEach((btn) => {
                 btn.disabled = false;
             });
-            setCanvasCenter(selectionRect);
-            updateModifications(true); //#FIXME: REDO 할 때 캔버스 크기도 
+            canvas.initialWidth = currentImage.width;
+            canvas.initialHeight = currentImage.height;
+
+            common.setCanvasCenter(canvas);
+            common.updateStates(canvas);
+            console.log(canvas.states);
             props.setButtonType('');
         });
+        
+        canvas.on('object:added');
     }
 
 

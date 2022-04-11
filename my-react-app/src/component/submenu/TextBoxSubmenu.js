@@ -1,51 +1,13 @@
+import { CommentOutlined } from "@ant-design/icons";
 import { fabric } from "fabric";
 import {  useEffect, useRef } from "react";
 import ColorPicker from "./ColorPicker";
+import * as common from "./common"
+
 export default function TextBoxSubmenu(props) {
     const canvas = props.canvas;
-    const stateRef = props.stateRef;
-    const objectNumRef = props.objectNumRef;
     const color = useRef('black');
-
-    canvas.off();
-
-    function addLayer(object) {  //레이어에 객체 추가 
-        const div = document.createElement('div');
-        div.id = objectNumRef.current
-        div.style.border = ' solid #0000FF';
-        div.style.width = '130px';
-        const el = document.getElementById('layer');
-
-        const objectBtn = document.createElement('button');
-        objectBtn.innerHTML = object.type;
-        objectBtn.className = "layer-object";
-        objectBtn.onclick = () => {
-            canvas.setActiveObject(object);
-            canvas.renderAll();
-        }
-        const deleteBtn = document.createElement('button');
-        deleteBtn.innerHTML = 'delete';
-        deleteBtn.className = 'delete-btn';
-        deleteBtn.onclick = () => {
-            canvas.remove(object);
-            document.getElementById(object.id).remove();
-            updateModifications(true);
-        }
-
-
-        div.appendChild(objectBtn);
-        div.appendChild(deleteBtn);
-        el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 
-    }
-
-    function updateModifications(savehistory) {
-        if (savehistory === true) {
-            var myjson = canvas.toDatalessJSON(['width', 'height', 'id']);
-            stateRef.current.push(myjson);
-        }
-
-    }
-
+ 
     useEffect(()=>{
         canvas.off('mouse:down');
         canvas.defaultCursor = 'default';
@@ -62,15 +24,13 @@ export default function TextBoxSubmenu(props) {
                 fill: `${color.current}`,
                 left: pointer.x - 125,
                 top: pointer.y - 20,
-                id : `${++objectNumRef.current}`
+                id : ++canvas.objectNum,
             });
             canvas.add(textbox);
             document.getElementById('add-textbox').disabled =false;
-
-            updateModifications(true);
-            addLayer(textbox);
+            common.updateStates(canvas);
+            common.addLayer(canvas,textbox);
             canvas.off('mouse:down');
-            canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             document.getElementById(textbox.id).style.border = 'solid red';
             canvas.defaultCursor = 'default';
 

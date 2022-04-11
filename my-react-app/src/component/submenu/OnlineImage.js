@@ -89,7 +89,8 @@ export default function OnelineImage(props) {
                         image.left = Math.floor(Math.random() * 101);
                         image.top = Math.floor(Math.random() * 101);
                         image.scaleToWidth(200, false);
-                        image.scaleToHeight(200, false)
+                        image.scaleToHeight(200, false);
+                        image.transparentCorners = false;
                         canvas.add(image);
                         canvas.renderAll();
                         updateModifications(true);
@@ -127,6 +128,7 @@ export default function OnelineImage(props) {
     return (
         <div>
             <div className="search">
+                <label htmlFor="">이미지 검색</label>
                 <input id='query' type="text" />
                 <button onClick={loadImage} className="searchbutton">search</button>
             </div>

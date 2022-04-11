@@ -1,7 +1,15 @@
-body{
-    background-color: antiquewhite;
-}
-
+/* .file-upload-button, .download-section, .json-file-upload-button{    margin : auto;
+    font-weight: bold;
+    width:120px;
+    height:50px;
+    padding : 4px;
+    color :white;
+    text-align:center;
+    background-color: cadetblue;
+    cursor:pointer;
+    border-radius: 30px;
+    border :none;
+} */
 
 /* .file-upload-button, .download-section, .json-file-upload-button{
     margin : auto;
@@ -21,33 +29,19 @@ body{
 #add-image-file {display:none;}
 #Deserialization-json-file{display:none;}
 #add-local-image-file{display:none;}
+
+#import-image-file{display : none;} 
+#add-image-file {display:none;}
+#Deserialization-json-file{display:none;}
+#add-local-image-file{display:none;}
+
+*{
+    margin:0;
+    padding:0;
+}
 body{
     background-color: gray;
 }
 
 
-/* .file-upload-button, .download-section, .json-file-upload-button{
-    margin : auto;
-    font-weight: bold;
-    width:120px;
-    height:50px;
-    padding : 4px;
-    color :white;
-    text-align:center;
-    background-color: cadetblue;
-    cursor:pointer;
-    border-radius: 30px;
-    border :none;
-} */
-
-#import-image-file{display : none;} 
-#add-image-file {display:none;}
-#Deserialization-json-file{display:none;}
-#add-local-image-file{display:none;}
-.wrap{
-    margin: 0px auto;
-    width : 1200px;
-    height :500px;
-    background-color: #f3f3f3;
-}
 
