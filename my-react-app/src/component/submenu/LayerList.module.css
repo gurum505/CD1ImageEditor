@@ -1,0 +1,6 @@
+.Item{
+    border: 2px solid black;
+    box-sizing: border-box;
+    width: 100px;
+    height: 100px;
+  }

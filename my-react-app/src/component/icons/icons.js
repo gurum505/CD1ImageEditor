@@ -1,21 +1,19 @@
 import {FontSizeOutlined,MenuOutlined,BorderOutlined,AreaChartOutlined, LineOutlined
 ,SettingOutlined,AlignLeftOutlined,AlignCenterOutlined,AlignRightOutlined,HighlightOutlined 
-,BoldOutlined,ItalicOutlined,LineHeightOutlined,GithubOutlined,
+,BoldOutlined,ItalicOutlined,LineHeightOutlined,GithubOutlined,CloseOutlined,
     FolderOpenOutlined,CloudDownloadOutlined,UploadOutlined,
     FileImageOutlined,RedoOutlined,UndoOutlined,DownloadOutlined,
     EditOutlined,DragOutlined,ZoomInOutlined,ZoomOutOutlined,
-    ExpandOutlined,EyeOutlined,CopyOutlined,DiffOutlined} from "@ant-design/icons"
+    ExpandOutlined,EyeOutlined,CopyOutlined,DiffOutlined,PlusOutlined} from "@ant-design/icons"
 import styles from "./icons.module.css"
 import { ReactComponent as Triangle} from './TriangleIcon.svg';
 import { ReactComponent as Circle} from './CircleIcon.svg';
 import { ReactComponent as Rectangle} from './RectangleIcon.svg';
-import { ReactComponent as Cursor} from './CursorIcon.svg';
-import { ReactComponent as Grab} from './GrabIcon.svg';
 import { ReactComponent as Image} from './ImageIcon.svg';
 import { ReactComponent as ImageFromInternet} from './ImageFromInternetIcon.svg';
 
 
-
+//https://ant.design/components/icon/#components-icon-demo-custom
 //https://icon-icons.com/ko/
 
 //색 적용
@@ -28,6 +26,27 @@ import { ReactComponent as ImageFromInternet} from './ImageFromInternetIcon.svg'
 //<ColumnWidthOutlined />
 //height
 //<ColumnHeightOutlined />
+export const CloseOutlinedIcon=({onClick, children, htmlFor})=>{
+    return(
+        <span className={styles.container}>
+            <label htmlFor={htmlFor}>
+            <CloseOutlined className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+            </label>
+        </span>
+    )
+}
+
+export const PlusOutlinedIcon=({onClick, children, htmlFor})=>{
+    return(
+        <span className={styles.container}>
+            <label htmlFor={htmlFor}>
+            <PlusOutlined className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+            </label>
+        </span>
+    )
+}
 
 export const DiffOutlinedIcon=({onClick, children, htmlFor})=>{
     return(
@@ -73,27 +92,8 @@ export const ImageIcon=({onClick, children, htmlFor})=>{
     )
 }
 
-export const GrabIcon=({onClick, children, htmlFor})=>{
-    return(
-        <span className={styles.container}>
-            <label htmlFor={htmlFor}>
-            <Grab className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
-            </label>
-        </span>
-    )
-}
 
-export const CursorIcon=({onClick, children, htmlFor})=>{
-    return(
-        <span className={styles.container}>
-            <label htmlFor={htmlFor}>
-            <Cursor className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
-            </label>
-        </span>
-    )
-}
+
 
 export const EditOutlinedIcon=({onClick, children, htmlFor})=>{
     return(

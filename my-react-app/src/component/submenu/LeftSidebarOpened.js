@@ -1,78 +1,34 @@
-import {
-    FontSizeOutlinedIcon, MenuOutlinedIcon
-    , AreaChartOutlinedIcon, LineOutlinedIcon, AlignLeftOutlinedIcon
+import {FontSizeOutlinedIcon, MenuOutlinedIcon
+    , LineOutlinedIcon, AlignLeftOutlinedIcon
     , AlignCenterOutlinedIcon, AlignRightOutlinedIcon, HighlightOutlinedIcon
     , BoldOutlinedIcon, ItalicOutlinedIcon, TriangleIcon, CircleIcon
     , RectangleIcon, ImageIcon, ImageFromInternetIcon
 } from "../icons/icons";
 import styles from "./LeftSidebarOpened.module.css"
-
-import { useRef } from "react";
-import { fabric } from "fabric";
-import ColorPicker from "./ColorPicker";
-
-export default function LeftSidebarOpened({ toggleMenu, currentRoute, canvas }) {
-
-    const color = useRef('black');
-    // const canvas= {canvas};
-    // console.log(canvas)
-
-    function addRect() {
-        canvas.off('mouse:down');
-        canvas.defaultCursor = 'crosshair';
-        var rect, isDown, origX, origY;
+import { useHorizontalScroll, useScroll } from "../../Scrollbar";
 
 
-        canvas.on('mouse:down', function (o) {
-            isDown = true;
-            var pointer = canvas.getPointer(o.e);
-            origX = pointer.x; //클릭시 마우스 x좌표
-            origY = pointer.y; //클릭시 마우스 y좌표 
-            rect = new fabric.Rect({
-                left: origX,
-                top: origY,
-                originX: 'left',
-                originY: 'top',
-                width: pointer.x - origX,
-                height: pointer.y - origY,
-                angle: 0,
-                fill: `${color.current}`,
-                transparentCorners: false,
-                type: 'rect',
-            });
-            canvas.add(rect);
+export default function LeftSidebarOpened({ toggleMenu, currentRoute}) {
 
-        });
 
-        canvas.on('mouse:move', function (o) {
-            if (!isDown) return;
-            var pointer = canvas.getPointer(o.e);
-
-            if (origX > pointer.x) {
-                rect.set({ left: Math.abs(pointer.x) });
-            }
-            if (origY > pointer.y) {
-                rect.set({ top: Math.abs(pointer.y) });
-            }
-
-            rect.set({ width: Math.abs(origX - pointer.x) });
-            rect.set({ height: Math.abs(origY - pointer.y) });
-            canvas.renderAll();
-        });
-
-        canvas.on('mouse:up', function (o) {
-            //updateModifications(true);
-            isDown = false;
-            // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
-            canvas.defaultCursor = 'default';
-            canvas.off('mouse:down');
-            canvas.off('mouse:move');
-            canvas.off('mouse:up');
-
-            //addLayer(rect);
-
-        });
-    }
+    //detail 한메뉴가 열리면 나머지가 닫히는 함수
+    //필요없을 시 그냥 삭제
+    //click으로 구현은 너무 비효율적
+    
+    // window.addEventListener('DOMContentLoaded', function(){
+    //     console.log("DOMLoaded");
+    //     document.querySelectorAll('details').forEach(function(item){
+    //         item.addEventListener("toggle", event => {
+    //         let toggled = event.target;
+    //         if (toggled.attributes.open) {
+    //           document.querySelectorAll('details[open]').forEach(function(opened){
+    //               if(toggled !== opened)
+    //                 opened.removeAttribute('open'); 
+    //           });
+    //         }
+    //       })
+    //     });
+    // });
 
     function Open(currentRoute, detailName) {
         if (currentRoute === detailName) {
@@ -82,13 +38,17 @@ export default function LeftSidebarOpened({ toggleMenu, currentRoute, canvas }) 
         }
     }
 
+    const scrollRef=useHorizontalScroll(); //작동은 되나 스크롤이 생성되었을 때만 가능
+    const {scrollY}=useScroll();
 
     return (
-        <div>
-            <MenuOutlinedIcon onClick={() => toggleMenu()} />
-            <details className={styles.detail} open={Open(currentRoute, "Rect")}>
-                <summary>Shape</summary>
-                <p><RectangleIcon onClick={addRect} /><TriangleIcon /><CircleIcon /> </p>
+        <>
+        <MenuOutlinedIcon onClick={() => toggleMenu()} />
+            <div className={styles.container}>
+            <details className={styles.detail} open={Open(currentRoute, "Object")}>
+                <summary>Object</summary>
+                <p><RectangleIcon /><TriangleIcon /><CircleIcon /> </p>
+                <p><ImageIcon htmlFor={"put htmlfor"} children={"from file"}/><ImageFromInternetIcon htmlFor={"put htmlFor"} children={"from internet"}/></p>
                 <p><label> width</label> <input type="text" /></p>
                 <p><label> height</label> <input type="text" /></p>
                 <p><label> color</label> <input type="color" /></p>
@@ -129,20 +89,10 @@ export default function LeftSidebarOpened({ toggleMenu, currentRoute, canvas }) 
                 <p><label> color</label> <input type="color" /></p>
             </details>
             <details className={styles.detail} open={Open(currentRoute, "Image")}>
-                <summary>Image</summary>
-                <p>
-                    <label>
-                        <input type="file" />
-                        <ImageIcon />
-                    </label>
-                    <label>
-                        <input type="file" />
-                        <ImageFromInternetIcon />
-                    </label>
-                </p>
+                <summary>Canvas</summary>
                 <p><label> width</label> <input type="text" /></p>
                 <p> <label> height</label> <input type="text" /></p>
-                <label style={{ marginLeft: "15px" }}>효과</label>
+                <label style={{ marginLeft: "15px" }}>필터</label>
                 <div className={styles.effectContainer}>
                     <label> blur</label> <input type="range" min="0" max="5" defaultValue="0" step="1" />
                     <label> opacity</label> <input type="range" min="0" max="5" defaultValue="5" step="1" />
@@ -154,5 +104,6 @@ export default function LeftSidebarOpened({ toggleMenu, currentRoute, canvas }) 
 
             </details>
         </div>
+        </>
     );
 }

@@ -1,7 +1,7 @@
 import styles from "./LeftSidebar.module.css";
 import LeftSidebarClosed from "../component/submenu/LeftSidebarClosed";
 import LeftSidebarOpened from "../component/submenu/LeftSidebarOpened";
-import { useState, useEffect,useRef } from "react";
+import { useState} from "react";
 
 const LeftSidebar = ({children, canvas, stateRef, objectNumRef}) => {
   const [wid, setX] = useState(50)
@@ -27,8 +27,6 @@ const LeftSidebar = ({children, canvas, stateRef, objectNumRef}) => {
   //     window.removeEventListener('click', handleClose);
   //   };
   // })
-  
-
 
   function toggleMenu() {
       if (wid > 50) {
@@ -44,9 +42,7 @@ const LeftSidebar = ({children, canvas, stateRef, objectNumRef}) => {
     
     if(isOpen){
       return(
-        <div>
-          <LeftSidebarOpened toggleMenu={toggleMenu} currentRoute={currentRoute} canvas={canvas} stateRef={stateRef} objectNumRef={objectNumRef}/>
-        </div>
+        <LeftSidebarOpened toggleMenu={toggleMenu} currentRoute={currentRoute} canvas={canvas} stateRef={stateRef} objectNumRef={objectNumRef}/>
       )
     }
     else{
@@ -57,7 +53,7 @@ const LeftSidebar = ({children, canvas, stateRef, objectNumRef}) => {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} >
       <div style={{ width: `${wid}px`, height: '100%', transition:'0.5s ease' ,overflow:"hidden"}}>
         
         <div className={styles.content}>

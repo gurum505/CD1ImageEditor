@@ -8,20 +8,19 @@ import Toolbar from './Layout/Toolbar';
 import Center from './Layout/Center';
 import Footbar from './Layout/Footbar';
 import LeftSidebar from './Layout/LeftSidebar';
-//import RightSidebar from './Layout/RightSidebar';
+import RightSidebar from './Layout/RightSidebar';
 
 //TODO: 완료후) github: mainpage를 my react app으로 변경, RightSidebar같은 쓸데없는 것들, 주석 다지우기
 //TODO: Canvas: 버튼기능구현 layout으로 분배
 //FIXME: Sidebar:canvas크기구현할때 왼쪽 사이드바까지 고려해서 집어넣어야함
 //FIXME: sidebar: 목록이 펼쳐지기도 전에 이미 그려짐=>미리그려놓고 보여줌으로써 성능개선을 꾀하는 방법이 있었는데...
-//TODO: Sidebar: onClick따로 묶을 수 없나
 //TODO: 전체가 계속 다시 렌더링 됨으로써 remove함수나 여러 함수가 동시에 실행된다.막자
 //TODO:ESLint사용해 정리해보자 https://velog.io/@velopert/eslint-and-prettier-in-react
+//TODO: tooltip 예쁘게 https://css-tricks.com/exploring-what-the-details-and-summary-elements-can-do/
 
 //TODO: Sidebar:스크롤바 안보이게 세로만
 //Sidebar:type:radio
 //TODO: Sidebar:colorpicker design
-//TODO: footbar: 그랩모드 안쓸거면 캔버스를 항상 중앙에 두도록
 //TODO: SIdbar: input text를 다른 box로 고민해보기
 //TODO: sidebar: input을change가 아니라 onKeyPress로?
 //TODO: canvas: CUSTOM CORNERS  https://objectcomputing.com/resources/publications/sett/june-2014-drawing-with-fabricjs
@@ -87,10 +86,10 @@ export default function App(props) {
     
     
     }, []);
-
+    
     if(canvas){
 
-        console.log(canvas.getObjects())
+        // console.log(canvas.getObjects())
         window.onkeydown = function (e) { // delete, backspace 키로 삭제
             if(!canvas.getActiveObject()) return //선택된 객체가 없으면 종료 
 
@@ -124,7 +123,7 @@ export default function App(props) {
             })
         )
 
-
+       
     return (
         <div className={styles.layout}>
             <Title />
@@ -147,7 +146,7 @@ export default function App(props) {
                 </Footbar>
             </main>
 
-            {/* <RightSidebar className={styles.right} toggleMenu={toggleMenu} wid={widRight} isOpen={isOpenRight} canvasRef={canvasRef} state={state} canvas={canvas} /> */}
+            <RightSidebar className={styles.right}/>
         </div>
     );
 }
@@ -167,5 +166,3 @@ export default function App(props) {
 //https://cocook.tistory.com/137 -이미지 중앙
 //https://parra.tistory.com/entry/CSS-transform%EC%9C%BC%EB%A1%9C-zoom-%ED%9A%A8%EA%B3%BC-%EB%82%B4%EA%B8%B0
 //https://codesandbox.io/s/wonderful-cerf-69doe?file=/src/App.js:563-672
-//icon
-//https://ant.design/components/icon/#components-icon-demo-custom

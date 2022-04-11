@@ -1,5 +1,10 @@
-
-
+.container{
+  overflow-y: auto;
+  height:calc(100vh - 150px)
+}
+.container::-webkit-scrollbar {
+  display: none;
+}
 .detail{
     box-sizing: border-box;
     /* border: 2px solid #202020; */
