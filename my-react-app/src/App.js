@@ -223,12 +223,12 @@ export default function App(props) {
                 {canvas && <Header canvas={canvas} imageRef={imageRef} image={image}setImage={setImage}stateRef={stateRef} modsRef={modsRef} objectNumRef={objectNumRef} />}
 
                 {/* center로 통합 필요 */}
-                <main className={styles.mainContainer}>
+                <div className={styles.mainContainer}>
                     <canvas id="canvas" />
-                    <Layer canvas={canvas}></Layer>
-                    {canvas && <Editormenu canvas={canvas} imageRef={imageRef} />}
-                    <div id="layer"></div>
-                </main>
+                    {/* <Layer canvas={canvas}></Layer> */}
+                    {/* {canvas && <Editormenu canvas={canvas} imageRef={imageRef} />} */}
+                    {/* <div id="layer"></div> */}
+                </div>
 
                 <Footbar />{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
             </div>

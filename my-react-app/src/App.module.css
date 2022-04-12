@@ -9,11 +9,9 @@
     display: flex;
 }
 .center{
-    display:flex;
-    flex-direction: column; /* 이거 도움이되나? */
-    justify-content: center;
-    position: relative; /* 이거 도움이되나? */
-    width: calc(100% - 150px);
+    position: relative;
+    width: calc(100% - 150px);/*rightsidebar 크기 빼기*/
+    height: 100%;
     z-index: 99;
     background-color: gray;
     overflow: hidden;
@@ -23,4 +21,6 @@
     justify-content: center;
     align-items: center;
     position: relative;
+    height: calc(100% - 260px);/*footbar+header+title크기만큼*/
+    width: 100% ;
 }

@@ -3,8 +3,10 @@
     margin-top:auto;
     background-color: #202020;
     position: absolute;
-    bottom: 80px;
+    bottom: 80px;/*height만큼*/
     width:100%;
+
+    flex-grow: 0;
 }
 .contents{
     width:100%;

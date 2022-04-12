@@ -4,7 +4,7 @@
     visibility: visible;
     white-space: nowrap;
 
-    position: absolute;
+    position: relative;
     top:0;
     z-index: 50;
 
@@ -15,6 +15,8 @@
     display:flex;
 
     box-sizing: border-box; /*테두리포함 크기로 계산*/
+
+    flex-grow: 0;
 }
 .editorHeader input[type="file"]{
     display: none;
