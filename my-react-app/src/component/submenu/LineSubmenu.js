@@ -1,50 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { fabric } from "fabric";
 import ColorPicker from "./ColorPicker";
+import * as common from "./common"
 export default function LineSubmenu(props) {
     const canvas = props.canvas;
-    const stateRef = props.stateRef;
-    const objectNumRef = props.objectNumRef;
     const color = useRef('black');  // : 값이 바뀌어도 렌더링되지 않음.
 
-
-
-    function addLayer(object) {  //레이어에 객체 추가 
-        const div = document.createElement('div');
-        div.id = objectNumRef.current
-        div.style.border = ' solid #0000FF';
-        div.style.width = '130px';
-        const el = document.getElementById('layer');
-
-        const objectBtn = document.createElement('button');
-        objectBtn.innerHTML = object.type;
-        objectBtn.className = "layer-object";
-        objectBtn.onclick = () => {
-            canvas.setActiveObject(object);
-            canvas.renderAll();
-        }
-        const deleteBtn = document.createElement('button');
-        deleteBtn.innerHTML = 'delete';
-        deleteBtn.className = 'delete-btn';
-        deleteBtn.onclick = () => {
-            canvas.remove(object);
-            document.getElementById(object.id).remove();
-            updateModifications(true);
-        }
-
-
-        div.appendChild(objectBtn);
-        div.appendChild(deleteBtn);
-        el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 
-    }
-
-    function updateModifications(savehistory) {
-        if (savehistory === true) {
-            var myjson = canvas.toDatalessJSON(['width', 'height', 'id']);
-            stateRef.current.push(myjson);
-        }
-
-    }
 
     function drawCurve() {
         canvas.off('mouse:down');
@@ -67,15 +28,10 @@ export default function LineSubmenu(props) {
         }
         canvas.on('mouse:up', () => {
             canvas.discardActiveObject().renderAll(); // 곡선 그리고 나면 활성화되는 것 끄기 ( canvas.off('object:added') 로 하면 redo 할 때 활성화가 안됨)
-            canvas.item(canvas.getObjects().length - 1).set({ id: `${++objectNumRef.current}` })
-            addLayer(canvas.item(canvas.getObjects().length - 1));
-            var objects = canvas.getActiveObjects();
+            canvas.item(canvas.getObjects().length - 1).set({ id:++canvas.objectNum,
+            selectable:false })
 
-            objects.forEach((object) => {
-                if (document.getElementById(object.id))
-                    document.getElementById(object.id).style.border = 'solid red'
-            })
-            updateModifications(true);
+            common.updateStates(canvas);
 
 
         })
@@ -102,7 +58,7 @@ export default function LineSubmenu(props) {
                 stroke: `${color.current}`,
                 originX: 'center',
                 originY: 'center',
-                id: `${++objectNumRef.current}`
+                id: ++canvas.objectNume,
             });
             canvas.add(line);
         });
@@ -122,9 +78,9 @@ export default function LineSubmenu(props) {
             isDown = false;
             canvas.off('mouse:down');
             canvas.off('mouse:up');
-            updateModifications(true);
             canvas.defaultCursor = 'default';
-            addLayer(line);
+            common.updateStates(canvas);
+            common.addLayer(canvas,line);
 
             var objects = canvas.getActiveObjects();
             objects.forEach((object) => {
@@ -144,7 +100,13 @@ export default function LineSubmenu(props) {
     var vLinePatternBrush = new fabric.PatternBrush(canvas);
     var squarePatternBrush = new fabric.PatternBrush(canvas);
     var diamondPatternBrush = new fabric.PatternBrush(canvas);
-
+    canvas.freeDrawingBrush.shadow = new fabric.Shadow({
+        blur: 0,
+        offsetX: 0,
+        offsetY: 0,
+        affectStroke: true,
+        color: color.current,
+    });
     hLinePatternBrush.getPatternSrc = function () {
 
         var patternCanvas = fabric.document.createElement('canvas');

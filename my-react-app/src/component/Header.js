@@ -8,6 +8,9 @@ import {
 import { useEffect } from "react";
 import styles from "./Header.module.css"
 
+
+import * as common from  './submenu/common'
+import { CommentOutlined } from "@ant-design/icons";
 //2번째 줄- 즉시 효과를 갖는, 사이드바를 구성하기에 부적합한 부가적인 기능들    
 //앞으로 가져오기 -rotate(90) 
 //<DownOutlined />
@@ -29,12 +32,7 @@ import styles from "./Header.module.css"
 //<DeleteOutlined />
 
 export default function Header(props) {
-    const stateRef = props.stateRef;
-    const modsRef = props.modsRef;
-    const objectNumRef = props.objectNumRef;
     const canvas = props.canvas;
-
-    //FIXME:불러오는 이미지가 캔버스보다 클 때 submenu를 넘어가는 것 수정 필요 
    
     useEffect(() => {
         document.onkeydown = function (e) { 
@@ -52,131 +50,67 @@ export default function Header(props) {
        
     },[]);
 
-    function updateModifications(savehistory) {
-        if (savehistory === true) {
-            var myjson = canvas.toDatalessJSON(['width', 'height', 'id']);
-            stateRef.current.push(myjson);
-            console.log(myjson)
-        }
-    }
-
-    function setCanvasCenter(canvas) { //캔버스를 div 내 가운데에 위치 시키는 함수 
-        var wrapWidth = document.getElementsByClassName('wrap')[0].offsetWidth;
-        var wrapHeight = document.getElementsByClassName('wrap')[0].offsetHeight;
-
-        var canvasLeft = (wrapWidth - canvas.width) / 2 + 'px';
-        var canvasTop = (wrapHeight - canvas.height) / 2 + 'px';
-
-        var canvases = document.getElementsByTagName('canvas')
-        for (var i = 0; i < canvases.length; i++) {
-            canvases[i].style.left = canvasLeft
-            canvases[i].style.top = canvasTop
-        }
-    }
-
-    function addLayer(object) {  //레이어에 객체 추가 
-        console.log(object.type)
-          
-        const div = document.createElement('div');
-        div.id = object.id;
-        div.style.border = ' solid #0000FF';
-        div.style.width = '130px';
-        const el = document.getElementById('layer');
-
-        const deleteBtn = document.createElement('button');
-        deleteBtn.innerHTML = 'delete';
-        deleteBtn.className = 'delete-btn';
-        deleteBtn.onclick = () => {
-            canvas.remove(object);
-            document.getElementById(object.id).remove();
-            updateModifications(true);
-        }
-
-        const objectBtn = document.createElement('button');
-        objectBtn.innerHTML = object.type;
-        objectBtn.className = "layer-object";
-        objectBtn.onclick = () => {
-            canvas.setActiveObject(object);
-            canvas.renderAll();
-        }
-
-        div.appendChild(objectBtn);
-        div.appendChild(deleteBtn);
-        el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
-    }
-
-    function colorActiveLayer() {   // 활성화(선택) 되어 있는 layer 빨간색으로 표시 
-        var layerElements = document.getElementById('layer');
-        for (let i = 0; i < layerElements.children.length; i++) {
-            layerElements.children[i].style.border = 'solid blue';
-        }
-        var objects = canvas.getActiveObjects();
-        objects.forEach((object) => {
-            if (document.getElementById(object.id))
-                document.getElementById(object.id).style.border = 'solid red'
-        })
-    }
-
-    function removeAllLayer() {
-        var prevObjects = canvas.getObjects(); //undo 하기 전에 layer 제거 
-        prevObjects.forEach((object) => {
-            try {
-                document.getElementById(object.id).remove();
-            } catch (e) {
-            }
-        })
-    }
     function importImage(e) {
         props.imageRef.current = true;
         props.setImage(!props.image);
         e.target.value = '' //같은 이름의 이미지 파일 업로드가 안되는 것 방지 
+
         document.getElementById('import-image-file').onchange = function (e) {
+            common.initalCanvas(canvas);
             var file = e.target.files[0];
             var reader = new FileReader();
-            var prev_objects = canvas.getObjects();
-            removeAllLayer(); //이전 객체들의 layer 삭제  
-            prev_objects.forEach((object) => {  //이미지를 불러오면 이전의 캔버스의 객체들을 다 지움 
-                canvas.remove(object);
-            })
+            
             reader.onload = function (f) {
                 var data = f.target.result;
                 fabric.Image.fromURL(data, function (img) {
-                    canvas.setHeight(img.height);
-                    canvas.setWidth(img.width);
+                     canvas.initialWidth = img.width;
+                     canvas.initialHeight = img.height;
+
+                    var windowWidth = window.innerWidth -50 //50 : leftsidbar
+                    var windowHeight = window.innerHeight -240;
+                    var ratio = img.width/img.height;
+
+                   
+                    if(img.width >windowWidth || img.height>windowHeight){
+                        if(windowWidth-img.width >windowHeight-img.height){
+                            canvas.setHeight( windowHeight);
+                            canvas.setWidth( canvas.height *(ratio)); 
+                        }else{
+                            canvas.setWidth(windowWidth);
+                            canvas.setHeight(canvas.width * (1/ratio))
+                        }
+                        
+                    }else{
+                    canvas.setWidth(canvas.initialWidth);
+                    canvas.setHeight(canvas.initialHeight)
+                    }
                     canvas.setBackgroundImage(img);
+
+                    canvas.backgroundImage.scaleX =  canvas.width / canvas.backgroundImage.width
+                    canvas.backgroundImage.scaleY = canvas.height / canvas.backgroundImage.height
+
+                    console.log(canvas.initialWidth);
+                    console.log(canvas.getZoom())
                     canvas.renderAll();
-                    var myjson = canvas.toDatalessJSON(['width', 'height']);
-                    stateRef.current.push(myjson);
-                    stateRef.current = [];
-                    modsRef.current = 0;
-                    setCanvasCenter(img);
-
-
+                    common.setCanvasCenter(canvas);
+                    common.updateStates(canvas);
                 });
             };
             reader.readAsDataURL(file);
         };
-
-
-        //필터 값들 기본 값으로 설정 
-        var filters = document.getElementsByClassName('filter');
-        for (var i = 0; i < filters.length; i++) {
-            filters[i].value = document.getElementsByClassName('filter')[0].defaultValue;
-            filters[i].checked = false;
-        }
     }
 
     //새 프로젝트 
     function clearCanvas() { //캔버스 초기화 
-        // window.location.reload();
-        props.imageRef.current = true;
-        props.setImage(!props.image);
-        stateRef.current = [];
-        removeAllLayer();
-        canvas.clear().renderAll();
-        canvas.backgroundColor='white';
+    
+        common.removeAllObjects(canvas);
+        common.initalCanvas(canvas);
+        common.updateStates(canvas);
+        common.setCanvasCenter(canvas);
         canvas.renderAll();
-        modsRef.current = 0;
+        console.log(canvas);
+        
+       
     }
 
     //이미지 다운로드
@@ -190,7 +124,9 @@ export default function Header(props) {
 
     // 직렬화 
     function serialization() {
-        var json = canvas.toDatalessJSON(['id', 'width', 'height', 'objectNum'])
+        var json = canvas.toDatalessJSON(['initialWidth', 'initialHeight', 'objectNum', 'id','mods','filterValues']);
+        // states는 순환 참조가 발생하므로 보낼 수 없음 
+        console.log(canvas);
         json = JSON.stringify(json);
 
 
@@ -204,54 +140,61 @@ export default function Header(props) {
     }
 
     // 역직렬화
-    function Deserialization() {
-        var prevObjects = canvas.getObjects(); //undo 하기 전에 layer 제거 
-        prevObjects.forEach((object) => {
-            document.getElementById(object.id).remove();
-        })
+    function Deserialization(e) {
+        e.target.value = '' //같은 이름의 이미지 파일 업로드가 안되는 것 방지 
         document.getElementById("Deserialization-json-file").onchange = function (e) {
             var reader = new FileReader();
             reader.onload = function (e) { //onload(): 읽기 성공 시 실행되는 핸들러
                 canvas.loadFromJSON(reader.result, () => {
-                    canvas.setHeight(canvas.height);
-                    canvas.setWidth(canvas.width);
-                    var prevCanvasObjects = canvas.getObjects().length;
-                    objectNumRef.current = prevCanvasObjects;
-                    stateRef.current = [];
-                    modsRef.current = 0;
-                    canvas.renderAll.bind(canvas);
-                    var objects = canvas.getObjects();
-                    objects.forEach((object) => {
-                        addLayer(object);
+                    common.initalCanvas(canvas);
+                    canvas.setWidth(canvas.initialWidth);
+                    canvas.setHeight(canvas.initialHeight);
+                    common.setCanvasCenter(canvas);
+                    common.updateStates(canvas);
+                    var Objects = canvas.getObjects();
+                    Objects.forEach((object)=>{
+                        common.addLayer(canvas,object);
                     })
-                    stateRef.current.push(canvas.toDatalessJSON(['width', 'height', 'id']));
-                    var activeObjects = canvas.getActiveObjects();
-                    activeObjects.forEach((object) => {
-                        if (document.getElementById(object.id))
-                            document.getElementById(object.id).style.border = 'solid red'
-                    })
+                    common.colorActiveLayer(canvas);
+                    canvas.renderAll();
                 });
-                canvas.renderAll();
             }
             reader.readAsText(e.target.files[0]); // dataURL 형식으로 파일 읽음
         }
     }
-    function undo() {
-        if (modsRef.current < stateRef.current.length - 1 && stateRef.current.length > 1) {
 
-            removeAllLayer();
-            canvas.clear().renderAll();
-            var json = stateRef.current[stateRef.current.length - 2 - modsRef.current];
+    function undo(){
+        if(canvas.undoStack.length>1){
+            common.removeAllObjects(canvas);
+            var current = canvas.undoStack.pop();
+            canvas.redoStack.push(current);
+            var json = canvas.undoStack[canvas.undoStack.length-1]; 
+
+            var width = canvas.width;
+            var height = canvas.height;
+            common.setCanvasCenter(canvas);
 
             canvas.loadFromJSON(json, () => {
-
-                
+                console.log(json);
+                // canvas.setWidth(canvas.initialWidth);
+                // canvas.setHeight(canvas.initialHeight)
+  
+                canvas.renderAll();
+                if (canvas.backgroundImage) {
+                    canvas.backgroundImage.scaleX =  canvas.initialWidth / canvas.backgroundImage.width
+                    canvas.backgroundImage.scaleY = canvas.initialHeight / canvas.backgroundImage.height
+                }
                 try { // 이전 state의 filter value들 값 할당 
-                    var state = canvas.filterListState;
+                    var state = canvas.filterValues;
                     var inputNodes = document.getElementById('filter-list').getElementsByTagName('input');
+                    if(state===''){
+                        for (var i = 0; i < inputNodes.length; i++) {
+                            inputNodes[i].checked = false;
+                            inputNodes[i].value = inputNodes[i].defaultValue;
+                        }
+                    }
                     for (var i = 0; i < inputNodes.length; i++) {
                         var id = inputNodes[i].id;
-
                         if (inputNodes[i].type === 'checkbox') {
                             document.getElementById(id).checked = state[0][id];
                         } else if (inputNodes[i].type === 'range') {
@@ -263,39 +206,48 @@ export default function Header(props) {
                     }
                 } catch (e) { }
 
-                if (json.width) {
-                    if (json.width) canvas.setWidth(json.width);
-                    if (json.height) canvas.setHeight(json.height);
-                    setCanvasCenter(json);
 
-                }
-                modsRef.current += 1;
                 var objects = canvas.getObjects();
+                if(objects.length!==0){
                 objects.forEach((object) => {
-                    addLayer(object);
-                    colorActiveLayer();
+                    if(object.type!=='path' && object.type!=='selection')
+                    common.addLayer(canvas,object);
+                });
+                common.colorActiveLayer(canvas);
+            }                  canvas.renderAll();    
 
-                }
-                )
-
-            });
-            //After loading JSON it’s important to call canvas.renderAll(). In the 2nd parameter of canvas.loadFromJSON(json, callback) you can define a cllback function which is invoked after all objects are loaded/added.
-
+             });
         }
     }
 
-    function redo() {
-        if (modsRef.current > 0) {
-            removeAllLayer();
-            canvas.clear().renderAll();
-            var json = stateRef.current[stateRef.current.length - modsRef.current];
+    function redo(){
+        if(canvas.redoStack.length>0){
+            common.removeAllObjects(canvas);
+
+            var json = canvas.redoStack.pop();
+            canvas.undoStack.push(json);
+
+            var width = canvas.width;
+            var height = canvas.height;
             canvas.loadFromJSON(json, () => {
+                // canvas.setWidth(width);
+                // canvas.setHeight(height);
+                if (canvas.backgroundImage) {
+                        canvas.backgroundImage.scaleX =  canvas.initialWidth / canvas.backgroundImage.width
+                        canvas.backgroundImage.scaleY = canvas.initialHeight / canvas.backgroundImage.height
+                    }
+                
                 try {
-                    var state = canvas.filterListState;
+                    var state = canvas.filterValues;
                     var inputNodes = document.getElementById('filter-list').getElementsByTagName('input');
+                    if(state===''){
+                        for (var i = 0; i < inputNodes.length; i++) {
+                            inputNodes[i].checked = false;
+                            inputNodes[i].value = inputNodes[i].defaultValue;
+                        }
+                    }
                     for (var i = 0; i < inputNodes.length; i++) {
                         var id = inputNodes[i].id;
-
                         if (inputNodes[i].type === 'checkbox') {
                             document.getElementById(id).checked = state[0][id];
                         } else if (inputNodes[i].type === 'range') {
@@ -306,37 +258,31 @@ export default function Header(props) {
 
                     }
                 } catch (e) { }
-
-                setCanvasCenter(json);
-                canvas.renderAll.bind(canvas);
-                modsRef.current -= 1;
                 var objects = canvas.getObjects();
+                if(objects.length!==0){
                 objects.forEach((object) => {
-                    addLayer(object);
-                    document.getElementById('layer')
-                    colorActiveLayer();
-
-                }
-                )
+                    if(object.type!=='path'){
+                    common.addLayer(canvas,object);
+                    }
+                });
+                common.colorActiveLayer(canvas);
+            }
+                canvas.renderAll();
             });
         }
-
     }
-    var test = []
-    //FIXME:  redo undo 할 때 activeselection 좌표 이상함 
-    //http://jsfiddle.net/softvar/7Hsdh/1/
+
     var _clipboard;
     function copy() {
+        if(canvas.getActiveObject())
         canvas.getActiveObject().clone(function(cloned) {
             _clipboard = cloned;
         });
     }
     
-    var _clipboard;
     function paste() {
-       
+        if(_clipboard)
         _clipboard.clone(function(clonedObj) {
-            canvas.discardActiveObject();
             console.log(clonedObj.left);
             clonedObj.set({
                 left: clonedObj.left + 10,
@@ -350,27 +296,28 @@ export default function Header(props) {
                 clonedObj.forEachObject(function(obj) {
                     
                     obj.set({
-                        id: `${++objectNumRef.current}`,
+                        id: ++canvas.objectNum,
                     })
 
                     canvas.add(obj);
-                    obj.selection = false; 
-                    updateModifications(true);
-                    addLayer(obj);
+                    canvas.setActiveObject(obj);
+                    common.addLayer(canvas,obj);
+                    common.colorActiveLayer(canvas);
+                    common.updateStates(canvas);
                 });
-                canvas.discardActiveObject();
                 canvas.renderAll();
                 // this should solve the unselectability
                 clonedObj.setCoords();
             } else {
-                clonedObj.set({ id:`${++objectNumRef.current}`
+                clonedObj.set({ id:++canvas.objectNum,
             })
                 canvas.add(clonedObj);
-                updateModifications(true);
+                canvas.setActiveObject(clonedObj);
+                common.addLayer(canvas,clonedObj);
+                common.colorActiveLayer(canvas);
+                common.updateStates(canvas);
                 canvas.requestRenderAll();
-                addLayer(clonedObj);
             }
-            colorActiveLayer();
 
             _clipboard.top += 10;
             _clipboard.left += 10;

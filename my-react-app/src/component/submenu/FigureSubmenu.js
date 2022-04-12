@@ -2,65 +2,25 @@ import { useRef } from "react";
 import { fabric } from "fabric";
 import ColorPicker from "./ColorPicker";
 
+import * as common from "./common"
 export default function FigureSubmenu(props) {
-    const stateRef = props.stateRef;
     const canvas = props.canvas;
     const color = useRef('black');
-    const objectNumRef = props.objectNumRef;
-    canvas.off('object:added');
-
-    function colorActiveLayer() {
-        var layerElements = document.getElementById('layer');
-        for (let i = 0; i < layerElements.children.length; i++) {
-            layerElements.children[i].style.border = 'solid blue';
-        }
-        var objects = canvas.getActiveObjects();
-        objects.forEach((object) => {
-            document.getElementById(object.id).style.border = 'solid red'
-        })
-    }
-
-    function updateModifications(savehistory) {
-        if (savehistory === true) {
-            var myjson = canvas.toDatalessJSON(['width', 'height', 'id']);
-            stateRef.current.push(myjson);
-        }
-
-    }
-    function addLayer(object) {  //레이어에 객체 추가 
-        const div = document.createElement('div');
-        div.id = objectNumRef.current
-        div.style.border = ' solid #0000FF';
-        div.style.width = '130px';
-        const el = document.getElementById('layer');
-
-        const objectBtn = document.createElement('button');
-        objectBtn.innerHTML = object.type;
-        objectBtn.className = "layer-object";
-        objectBtn.onclick = () => {
-            canvas.setActiveObject(object);
-            canvas.renderAll();
-        }
-        const deleteBtn = document.createElement('button');
-        deleteBtn.innerHTML = 'delete';
-        deleteBtn.className = 'delete-btn';
-        deleteBtn.onclick = () => {
-            canvas.remove(object);
-            document.getElementById(object.id).remove();
-            updateModifications(true);
-        }
 
 
-        div.appendChild(objectBtn);
-        div.appendChild(deleteBtn);
-        el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 
-    }
-
-    function addRect() {
-        document.getElementById('add-rect').disabled =true;
+    function mouseEventOff(){
         canvas.off('mouse:down');
         canvas.off('mouse:up');
         canvas.off('mouse:move');
+        document.getElementById('add-rect').disabled =false;
+        document.getElementById('add-circle').disabled =false;
+        document.getElementById('add-triangle').disabled =false;
+
+    }
+
+    function addRect() {
+        mouseEventOff();
+        document.getElementById('add-rect').disabled =true;
         canvas.defaultCursor = 'crosshair';
         var rect, isDown, origX, origY;
         canvas.on('mouse:down', function (o) {
@@ -77,10 +37,10 @@ export default function FigureSubmenu(props) {
                 height: pointer.y - origY,
                 angle: 0,
                 fill: `${color.current}`,
-                transparentCorners: false,
                 type: 'rect',
-                id: `${++objectNumRef.current}`
+                id: ++canvas.objectNum,
             });
+            common.addLayer(canvas,rect);
             canvas.add(rect);
 
         });
@@ -103,26 +63,19 @@ export default function FigureSubmenu(props) {
 
         canvas.on('mouse:up', function (o) {
             document.getElementById('add-rect').disabled =false;
-            updateModifications(true);
             isDown = false;
             canvas.defaultCursor = 'default';
-            addLayer(rect);
-            canvas.off('mouse:down');
-            canvas.off('mouse:up');
-            canvas.off('mouse:move');
-            colorActiveLayer();
-
+            mouseEventOff();
+            common.updateStates(canvas);
         });
 
     }
 
     function addCircle() {
+        mouseEventOff();
         document.getElementById('add-circle').disabled =true;
         canvas.defaultCursor = 'crosshair';
         var circle, isDown, origX, origY;
-        canvas.off('mouse:down');
-        canvas.off('mouse:up');
-        canvas.off('mouse:move');
         canvas.on('mouse:down', function (o) {
             isDown = true;
             var pointer = canvas.getPointer(o.e);
@@ -135,11 +88,12 @@ export default function FigureSubmenu(props) {
                 originY: 'top',
                 radius: (pointer.x - origX) / 2,
                 fill: `${color.current}`,
-                transparentCorners: false,
-                id: `${++objectNumRef.current}`
+                id: ++canvas.objectNum,
             });
 
+            common.addLayer(canvas,circle);
             canvas.add(circle);
+            
 
         });
 
@@ -155,36 +109,27 @@ export default function FigureSubmenu(props) {
             }
 
             circle.set({ radius: Math.abs(origX - pointer.x) / 2 });
-
-
             canvas.renderAll();
         });
 
         canvas.on('mouse:up', function (o) {
             document.getElementById('add-circle').disabled =false;
             canvas.renderAll();
-            updateModifications(true);
             isDown = false;
             // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.defaultCursor = 'default';
-            canvas.off('mouse:down');
-            canvas.off('mouse:up');
-            canvas.off('mouse:move');
-
-            addLayer(circle);
-            colorActiveLayer();
+            mouseEventOff(); 
+            common.updateStates(canvas);
 
         });
 
     }
 
     function addTriangle() {
+        mouseEventOff();
         document.getElementById('add-triangle').disabled =true;
         canvas.defaultCursor = 'crosshair';
         var triangle, isDown, origX, origY;
-        canvas.off('mouse:down');
-        canvas.off('mouse:up');
-        canvas.off('mouse:move');
         canvas.on('mouse:down', function (o) {
             isDown = true;
             var pointer = canvas.getPointer(o.e);
@@ -199,13 +144,11 @@ export default function FigureSubmenu(props) {
                 height: pointer.y - origY,
                 angle: 0,
                 fill: `${color.current}`,
-                transparentCorners: false,
-                id: `${++objectNumRef.current}`,
+                id: ++canvas.objectNum,
                 type: 'triangle'
             });
-
+            common.addLayer(canvas,triangle);
             canvas.add(triangle);
-
 
         });
 
@@ -228,18 +171,13 @@ export default function FigureSubmenu(props) {
         });
 
         canvas.on('mouse:up', function (o) {
-            document.getElementById('add-triangle').disabled =false;
+            document.getElementById('add-triangle').disabled = false;
             canvas.renderAll();
-            updateModifications(true);
             isDown = false;
             // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.defaultCursor = 'default';
-            canvas.off('mouse:down');
-            canvas.off('mouse:up');
-            canvas.off('mouse:move');
-
-            addLayer(triangle);
-            colorActiveLayer();
+            mouseEventOff();
+            common.updateStates(canvas);
 
         });
     }

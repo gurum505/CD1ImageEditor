@@ -26,7 +26,7 @@ import RightSidebar from './Layout/RightSidebar';
 import Header from "./component/Header";
 import Editormenu from "./Editormenu";
 import Layer from "./component/Layer";
-
+import * as common from "./component/submenu/common"
 //TODO: Canvas:이미지 드래그앤 드롭으로 이미지 집어넣기, 복사 붙여넣기로 집어넣기
 //TODO: Canvas:객체들고 옮길때 canvas에 중앙선or경계 표시
 
@@ -40,19 +40,180 @@ export default function App(props) {
     const objectNumRef = useRef(0); // object 에 id값을 주어서 객체 단위로 처리가 가능 
       //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
 
+  
     useEffect(() => {  //rendering 후 한 번 실행  
         setCanvas(initCanvas());
 
+        // let scale = 1; //canvas를 포함하는 wrap element를 마우스 휠로 zoom in/out 
+        // const el = document.querySelector('.wrap');
+        // el.addEventListener('wheel', (event)=>{
+        //     event.preventDefault();
+        //     scale += event.deltaY * -0.001;
+        //     // Restrict scale
+        //     scale = Math.min(Math.max(.125, scale), 4);
+        //     // Apply scale transform
+        //     el.style.transform = `scale(${scale})`;
+
+        // });
+    
     }, []);
 
-        const initCanvas = () => (
-            new fabric.Canvas('canvas', {
-                height: 400,
-                width: 600,
-                backgroundColor: 'white'
-            })
-        )
+    useEffect(()=>{
+        if (canvas) {
+            common.updateStates(canvas);
+            common.setCanvasCenter(canvas);
+            canvas.on({
+                'mouse:wheel': (opt) => {
+           
+                    var delta = opt.e.deltaY;
+                    var zoom = canvas.getZoom();
+                    zoom *= 0.999 ** delta;
+                    if (zoom > 20) zoom = 10;
+                    if (zoom < 0.01) zoom = 0.01;
+                    canvas.setZoom(zoom);
+                    opt.e.preventDefault();
+                    opt.e.stopPropagation();
+                    if (canvas.backgroundImage) {
+                        canvas.backgroundImage.scaleX =  canvas.initialWidth / canvas.backgroundImage.width
+                        canvas.backgroundImage.scaleY = canvas.initialHeight / canvas.backgroundImage.height
+                    }
+                    canvas.setWidth(canvas.initialWidth * zoom);
+                    canvas.setHeight(canvas.initialHeight * zoom);
+                    canvas.renderAll();
+                    common.setCanvasCenter(canvas);
+                },
+                'object:removed': () => {
+                    console.log('object:removed');
+                },
+                'selection:cleared': () => {
+                    console.log('selection:cleared');
+                    common.colorActiveLayer(canvas);
+                    document.getElementById('remove-object').disabled = true;
+                    
+                },
+                'selection:created': () => {
+                    console.log('selection:created');
+                    common.colorActiveLayer(canvas);
+                    document.getElementById('remove-object').disabled = false;
+                },
+                'object:added': () => {
 
+                    console.log('object:added');
+                    var objects = canvas.getObjects();
+                    var object = objects[objects.length-1];
+                    if(object.type!=='path'&& object.type!=='selection')
+                    canvas.setActiveObject(object);
+                    common.colorActiveLayer(canvas);
+
+                    document.getElementById('remove-object').disabled = false;
+
+                },
+                'object:modified': () => {
+                    console.log('object:modified');
+                    common.updateStates(canvas);
+                    // document.getElementById('remove-object').disabled = false
+                },
+                'object:updated': () => {
+                    console.log('object:updated');
+                    document.getElementById('remove-object').disabled = false
+                },
+                
+            });
+           
+              window.addEventListener("resize", function(opt) { //브라우저 크기 resize에 따른 이벤트 
+            
+                var windowWidth = window.innerWidth -50 //50 : leftsidbar
+                var windowHeight = window.innerHeight -240;
+                var ratio = canvas.width/canvas.height;
+                var zoom = 1; 
+                //  if((canvas.width>windowWidth || canvas.width<windowWidth)
+
+                if(windowWidth<canvas.initialWidth || windowHeight<canvas.initialHeight){
+                if(canvas.width>windowWidth){
+                    zoom = windowWidth/canvas.initialWidth;
+                    canvas.setWidth(windowWidth);
+                    canvas.setHeight(windowWidth * (1/ratio))
+                }else if (canvas.height>windowHeight){
+                    zoom = windowHeight/canvas.initialHeight;
+                    canvas.setHeight(windowHeight);
+                    canvas.setWidth(windowHeight * ratio);
+                }else 
+                    {   
+                        if(windowWidth<canvas.initialWidth){
+                        zoom = windowWidth/canvas.initialWidth;
+                        canvas.setWidth(windowWidth);
+                        canvas.setHeight(windowWidth * (1/ratio))
+                        }else if(windowHeight<canvas.initialHeight){
+                            zoom = windowHeight/canvas.initialHeight;
+                    canvas.setHeight(windowHeight);
+                    canvas.setWidth(windowHeight * ratio);
+                        }
+                    
+                }
+              
+                if (canvas.backgroundImage) {
+                    canvas.backgroundImage.scaleX =  canvas.initialWidth / canvas.backgroundImage.width
+                    canvas.backgroundImage.scaleY = canvas.initialHeight / canvas.backgroundImage.height
+                }
+                canvas.renderAll();
+                
+                canvas.setZoom(zoom);
+           
+            
+            
+            }
+            common.setCanvasCenter(canvas);
+
+            });
+    
+            window.onkeydown = function (e) { // delete, backspace 키로 삭제
+                if(!canvas.getActiveObject()) return //선택된 객체가 없으면 종료 
+    
+                if (e.key === 'Delete' || e.key ==='Backspace') {   // 텍스트 입력 중 backspace눌러도 객체 삭제 되지 않도록 
+                    if(canvas.getActiveObject().type==='textbox'&& canvas.getActiveObject().isEditing ){ 
+                        console.log(canvas.getActiveObject().editable);
+                        return;}
+                    var o = canvas.getActiveObjects();
+                    o.forEach((object) => {
+                        canvas.remove(object);
+                        document.getElementById(object.id).remove();
+                    });
+    
+                    canvas.discardActiveObject(); // 그룹 삭제 시 빈 sizebox 남아있는 거 제거 
+                    common.updateStates(canvas);
+    
+                }
+            }
+        }
+    },[canvas])
+   
+
+    const initCanvas = () => {
+        var windowWidth= window.innerWidth-50;
+        var windowHeight = window.innerHeight-240;
+        var width, height; 
+        if(windowWidth>windowHeight){
+                height = windowHeight*0.9;
+                width =windowWidth*0.8;
+        }else{
+            width = windowWidth*0.9;
+            height = height*0.8
+        }
+        return (
+        new fabric.Canvas('canvas', {
+            height: 400,
+            width: 600,
+            initialWidth: 600,
+            initialHeight:400, 
+            objectNum : 0,
+            undoStack :[],
+            redoStack :[],
+            filterValues : '',
+
+            backgroundColor: 'white'
+        })
+    )
+    }
        
     return (
         <div className={styles.layout}>
@@ -65,7 +226,7 @@ export default function App(props) {
                 <main className={styles.mainContainer}>
                     <canvas id="canvas" />
                     <Layer canvas={canvas}></Layer>
-                    {canvas && <Editormenu canvas={canvas} imageRef={imageRef} stateRef={stateRef} objectNumRef={objectNumRef}/>}
+                    {canvas && <Editormenu canvas={canvas} imageRef={imageRef} />}
                     <div id="layer"></div>
                 </main>
 

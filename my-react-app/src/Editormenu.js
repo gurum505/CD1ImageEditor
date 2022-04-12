@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import Submenu from "./component/Submenu";
 import DefaultMenu from "./component/submenu/DefaultSubmenu";
 
+import * as common from './component/submenu/common';
 export default function EditorMenu(props) {
     const canvas = props.canvas;
-    // console.log(canvas);
-    const stateRef = props.stateRef;
     const [buttonType, setButtonType] = useState("");  //어떤 종류의 object를 추가할 것인지 
     canvas.isDrawingMode = false;
     canvas.defaultCursor = 'default'; //커서 모양 기본 
@@ -16,12 +15,6 @@ export default function EditorMenu(props) {
         setButtonType('');
     }
 
-    function updateModifications(savehistory) {
-        if (savehistory === true) {
-            var myjson = canvas.toDatalessJSON(['width', 'height', 'id', 'filterListState']);
-            stateRef.current.push(myjson);
-        }
-    }
 
     function colorActiveLayer() {
         var layerElements = document.getElementById('layer');
@@ -43,16 +36,13 @@ export default function EditorMenu(props) {
             })
         } catch (e) { }
 
-        if (stateRef.current.length === 0) {
-            updateModifications(true);
-        }
+      
 
         const figure = ['rect', 'circle', 'triangle'];
         const line = ['line', 'path'];
         document.getElementById('remove-object').disabled = true;
         var selectType;
 
-        if (buttonType !== 'crop')
             canvas.on({
                 'selection:updated': () => {
 
@@ -67,43 +57,7 @@ export default function EditorMenu(props) {
                         colorActiveLayer();
                     }
                 },
-                'object:removed': () => {
-                    console.log('object:removed');
-                },
-                'selection:cleared': () => {
-                    console.log('selection:cleared');
-                    document.getElementById('remove-object').disabled = true;
-                    var layerElements = document.getElementById('layer');
-                    for (let i = 0; i < layerElements.children.length; i++) {
-                        layerElements.children[i].style.border = 'solid blue';
-                    }
-                },
-                'selection:created': () => {
-                    console.log('selection:created');
-                    document.getElementById('remove-object').disabled = false;
-
-                    var objects = canvas.getActiveObjects();
-                    objects.forEach((object) => {
-                        if (document.getElementById(object.id))
-                            document.getElementById(object.id).style.border = 'solid red'
-                    })
-                },
-                'object:added': () => {
-                    console.log('object:added');
-                    canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
-
-                    selectType = canvas.getActiveObject().type;
-                    document.getElementById('remove-object').disabled = false;
-
-                },
-                'object:modified': () => {
-                    console.log('object:modified');
-                    // document.getElementById('remove-object').disabled = false
-                },
-                'object:updated': () => {
-                    console.log('object:updated');
-                    document.getElementById('remove-object').disabled = false
-                },
+                
 
             });
     });
@@ -134,7 +88,7 @@ export default function EditorMenu(props) {
             document.getElementById(object.id).remove();
         });
         canvas.discardActiveObject(); // 그룹 삭제 시 빈 sizebox 남아있는 거 제거 
-        updateModifications(true);
+        common.updateStates(canvas);
     }
 
     //이미지 추가 

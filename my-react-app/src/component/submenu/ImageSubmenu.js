@@ -1,47 +1,9 @@
 import { fabric } from "fabric";
 import OnlineImage from "./OnlineImage";
+import * as common from './common'
 
 export default function ImageSubmenu(props) {
     const canvas = props.canvas;
-    const stateRef = props.stateRef;
-    const objectNumRef = props.objectNumRef;
-    canvas.off();
-    function updateModifications(savehistory) {
-        if (savehistory === true) {
-            var myjson = canvas.toDatalessJSON(['width', 'height', 'id']);
-            stateRef.current.push(myjson);
-        }
-
-    }
-
-    function addLayer(object) {  //레이어에 객체 추가 
-        const div = document.createElement('div');
-        div.id = objectNumRef.current
-        div.style.border = ' solid #0000FF';
-        div.style.width = '130px';
-        const el = document.getElementById('layer');
-
-        const objectBtn = document.createElement('button');
-        objectBtn.innerHTML = object.type;
-        objectBtn.className = "layer-object";
-        objectBtn.onclick = () => {
-            canvas.setActiveObject(object);
-            canvas.renderAll();
-        }
-        const deleteBtn = document.createElement('button');
-        deleteBtn.innerHTML = 'delete';
-        deleteBtn.className = 'delete-btn';
-        deleteBtn.onclick = () => {
-            canvas.remove(object);
-            document.getElementById(object.id).remove();
-            updateModifications(true);
-        }
-
-
-        div.appendChild(objectBtn);
-        div.appendChild(deleteBtn);
-        el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 
-    }
 
     function addLocalImage(e) {
         e.target.value = ''
@@ -54,14 +16,20 @@ export default function ImageSubmenu(props) {
                 image.onload = function () {
                     var img = new fabric.Image(image);
                     img.set({
-                        id : `${++objectNumRef.current}`,
+                        id : ++canvas.objectNum,
                         left: Math.floor(Math.random() * 101),
                         top: Math.floor(Math.random() * 101),
                     });
 
+                    if (img.width > canvas.width || img.height > canvas.height) {
+                        img.scaleToWidth(canvas.width / 2);
+                        img.scaleToHeight(canvas.height / 2);
+                    }
+
+                   
                     canvas.add(img).setActiveObject(img);
-                    updateModifications(true);
-                    addLayer(img);
+                    common.updateStates(canvas);
+                    common.addLayer(canvas,img);
                     
                     var objects = canvas.getActiveObjects();
                     objects.forEach((object) => {
