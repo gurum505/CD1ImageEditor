@@ -3,6 +3,13 @@
 //캔버스 관련
 
 
+export function getInnerSize(){
+    var dict= {}
+    dict['innerWidth'] = window.innerWidth-180;
+    dict['innerHeight'] = window.innerHeight-180;
+
+    return dict; 
+}   
 export function initalCanvas(canvas){
     canvas.set({
         backgroundColor:'white',
@@ -18,21 +25,27 @@ export function initalCanvas(canvas){
 
 export function setCanvasCenter(canvas) { //캔버스를 내 가운데에 위치 시키는 함수 
     if(canvas){
-        var innerWidth =window.innerWidth -183 //50 : leftsidbar width 
-        var innerHeight = window.innerHeight -60; // 240 :header + toolbar height
+
+        var innerWidth= getInnerSize()['innerWidth'];
+        var innerHeight =getInnerSize()['innerHeight']
 
         var upperCanvas = document.getElementsByClassName('upper-canvas')[0];
         var lowerCanvas = document.getElementsByClassName('lower-canvas')[0];
+        
 
         var styleWidth = upperCanvas.style.width.substr(0, upperCanvas.style.width.length-2)
         var styleHeight = upperCanvas.style.height.substr(0, upperCanvas.style.height.length-2)
 
-        upperCanvas.style.left = (innerWidth- styleWidth)/2 +'px';
-        upperCanvas.style.top = (innerHeight- styleHeight)/2 +'px';
+        var left = (innerWidth-styleWidth)/2;
+        var top = (innerHeight-styleHeight)/2+60;
 
-        lowerCanvas.style.left = (innerWidth- styleWidth)/2 +'px';
-        lowerCanvas.style.top = (innerHeight- styleHeight)/2 +'px';
-   
+        if(top<100) top=100;
+        upperCanvas.style.left = left+'px';
+        upperCanvas.style.top = top+'px';
+
+        lowerCanvas.style.left = left+'px';
+        lowerCanvas.style.top = top+'px';
+
     }
 }
 
@@ -41,7 +54,6 @@ export function updateStates(canvas){
     canvas.currentHeight = canvas.Height;
     var json = canvas.toDatalessJSON(['undoStack','redoStack','initialWidth', 'initialHeight', 'objectNum', 'id','filterValues']);
     canvas.undoStack.push(json);
-    console.log("추가햇어요 ㅋ")
 
 }
 

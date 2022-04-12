@@ -1,3 +1,9 @@
+html, body{
+    margin:0;
+    padding:0;
+    height:100%;
+}
+
 .layout{
     position: fixed;
     top: 80px; /*header 크기만큼 */
@@ -13,13 +19,15 @@
     /* justify-content: center; */
     position: relative; /* 이거 도움이되나? */
     width: calc(100% - 150px);
-    /* z-index: 99; */
+    z-index: 99;
     background-color: gray;
     overflow: hidden;
 }
 .mainContainer{
-    display: flex;
+    /* display: flex; */
     /* justify-content: center;  */
     /* align-items: center; */
     position: relative;
-}
+ 
+
+}   

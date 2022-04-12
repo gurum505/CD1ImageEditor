@@ -65,8 +65,7 @@ export default function App(props) {
     useEffect(()=>{
         if (canvas) {
             common.updateStates(canvas);
-            common.setCanvasCenter(canvas);
-
+            common.setCanvasCenter(canvas)
             
             canvas.on({
                 'mouse:wheel': (opt) => {
@@ -87,6 +86,7 @@ export default function App(props) {
                         canvasElem[i].style.height = canvas.height*zoom + 'px';
                         
                     }
+
                     common.setCanvasCenter(canvas);
 
                  
@@ -132,52 +132,48 @@ export default function App(props) {
            
               window.addEventListener("resize", function(opt) { //브라우저 크기 resize에 따른 이벤트 
                 zoom =1;
-                common.setCanvasCenter(canvas);
-
-                var innerWidth = window.innerWidth - 183;  // 50 : leftmenubar width 
-                var innerHeight = window.innerHeight - 60;
+            
+                var innerWidth= common.getInnerSize()['innerWidth'];
+                var innerHeight =common.getInnerSize()['innerHeight']
                 var ratio = canvas.width/canvas.height;
 
                 const lowerCanvas = document.getElementsByClassName('lower-canvas')[0];
                 const upperCanvas = document.getElementsByClassName('upper-canvas')[0];
 
-                var canvasStyleWidth = lowerCanvas.style.width.substr(0, lowerCanvas.style.width.length-2);
-                var canvasStyleHeight = lowerCanvas.style.height.substr(0, lowerCanvas.style.height.length-2);
-
-              
-                if(innerWidth<canvasStyleWidth){
+                var styleWidth = lowerCanvas.style.width.substr(0, lowerCanvas.style.width.length-2);
+                var styleHeight = lowerCanvas.style.height.substr(0, lowerCanvas.style.height.length-2);
+                
+                if(innerWidth<styleWidth){
                     lowerCanvas.style.width = innerWidth+'px';
                     lowerCanvas.style.height = innerWidth * (1/ratio) + 'px';
 
                     upperCanvas.style.width = innerWidth+'px';
                     upperCanvas.style.height = innerWidth * (1/ratio) + 'px';
-                }else if (innerHeight<canvasStyleHeight){
+                }else if (innerHeight-80<styleHeight){
                     lowerCanvas.style.height = innerHeight;
-                    lowerCanvas.style.width = innerHeight*ratio+'px';
+                    lowerCanvas.style.width = (innerHeight)*ratio+'px';
 
-                    upperCanvas.style.height = innerHeight; 
-                    upperCanvas.style.width = innerHeight*ratio+'px';
+                    upperCanvas.style.height =  innerHeight;
+                    upperCanvas.style.width =  (innerHeight)*ratio+'px';
                 }else{
-
-                    if(innerWidth<canvas.width && canvasStyleWidth < innerWidth){
-                        console.log("ㅈㅅ")
+                    if(innerWidth<canvas.width && styleWidth < innerWidth){
                     lowerCanvas.style.width = innerWidth+'px';
                     lowerCanvas.style.height = innerWidth * (1/ratio) + 'px';
 
                     upperCanvas.style.width = innerWidth+'px';
                     upperCanvas.style.height = innerWidth * (1/ratio) + 'px';
-                    }else if (innerHeight<canvasStyleHeight && canvasStyleHeight<canvas.height){
-                        console.log("너냐")
+                    }else if (innerHeight<styleHeight && styleHeight<innerHeight){
                         lowerCanvas.style.height = innerHeight;
                         lowerCanvas.style.width = innerHeight*ratio+'px';
     
                         upperCanvas.style.height = innerHeight; 
                         upperCanvas.style.width = innerHeight*ratio+'px';
                     }
-                }
-            
-        
+                }               
 
+                common.setCanvasCenter(canvas);
+
+        
             });
     
             window.onkeydown = function (e) { // delete, backspace 키로 삭제
@@ -240,7 +236,7 @@ export default function App(props) {
                 <main className={styles.mainContainer}>
                     <canvas id="canvas" />
                     <Layer canvas={canvas}></Layer>
-                    {/* {canvas && <Editormenu canvas={canvas} imageRef={imageRef} />} */}
+                    {canvas && <Editormenu canvas={canvas} imageRef={imageRef} />}
                     <div id="layer"></div>
                 </main>
 

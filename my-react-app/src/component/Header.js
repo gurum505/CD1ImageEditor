@@ -51,53 +51,51 @@ export default function Header(props) {
     },[]);
 
     function importImage(e) {
-        props.imageRef.current = true;
-        props.setImage(!props.image);
-        e.target.value = '' //같은 이름의 이미지 파일 업로드가 안되는 것 방지 
+    //     props.imageRef.current = true;
+    //     props.setImage(!props.image);
+    //     e.target.value = '' //같은 이름의 이미지 파일 업로드가 안되는 것 방지 
 
-        document.getElementById('import-image-file').onchange = function (e) {
-            common.initalCanvas(canvas);
-            var file = e.target.files[0];
-            var reader = new FileReader();
+    //     document.getElementById('import-image-file').onchange = function (e) {
+    //         common.initalCanvas(canvas);
+    //         var file = e.target.files[0];
+    //         var reader = new FileReader();
             
-            reader.onload = function (f) {
-                var data = f.target.result;
-                fabric.Image.fromURL(data, function (img) {
-                     canvas.initialWidth = img.width;
-                     canvas.initialHeight = img.height;
+    //         reader.onload = function (f) {
+    //             var data = f.target.result;
+    //             fabric.Image.fromURL(data, function (img) {
+    //                  canvas.initialWidth = img.width;
+    //                  canvas.initialHeight = img.height;
 
-                    var windowWidth = window.innerWidth -50 //50 : leftsidbar
-                    var windowHeight = window.innerHeight -240;
-                    var ratio = img.width/img.height;
-
+    //                 var ratio = img.width/img.height;
                    
-                    if(img.width >windowWidth || img.height>windowHeight){
-                        if(windowWidth-img.width >windowHeight-img.height){
-                            canvas.setHeight( windowHeight);
-                            canvas.setWidth( canvas.height *(ratio)); 
-                        }else{
-                            canvas.setWidth(windowWidth);
-                            canvas.setHeight(canvas.width * (1/ratio))
-                        }
+    //                 if(img.width >innerWidth || img.height>innerWidth){
+    //                     if(innerWidth-img.width >innerWidth-img.height){
+
+    //                         // canvas.setHeight( windowHeight);
+    //                         canvas.setWidth( canvas.height *(ratio)); 
+    //                     }else{
+    //                         // canvas.setWidth(windowWidth);
+    //                         canvas.setHeight(canvas.width * (1/ratio))
+    //                     }
                         
-                    }else{
-                    canvas.setWidth(canvas.initialWidth);
-                    canvas.setHeight(canvas.initialHeight)
-                    }
-                    canvas.setBackgroundImage(img);
+    //                 }else{
+    //                 canvas.setWidth(canvas.initialWidth);
+    //                 canvas.setHeight(canvas.initialHeight)
+    //                 }
+    //                 canvas.setBackgroundImage(img);
 
-                    canvas.backgroundImage.scaleX =  canvas.width / canvas.backgroundImage.width
-                    canvas.backgroundImage.scaleY = canvas.height / canvas.backgroundImage.height
+    //                 canvas.backgroundImage.scaleX =  canvas.width / canvas.backgroundImage.width
+    //                 canvas.backgroundImage.scaleY = canvas.height / canvas.backgroundImage.height
 
-                    console.log(canvas.initialWidth);
-                    console.log(canvas.getZoom())
-                    canvas.renderAll();
-                    common.setCanvasCenter(canvas);
-                    common.updateStates(canvas);
-                });
-            };
-            reader.readAsDataURL(file);
-        };
+    //                 console.log(canvas.initialWidth);
+    //                 console.log(canvas.getZoom())
+    //                 canvas.renderAll();
+    //                 common.setCanvasCenter(canvas);
+    //                 common.updateStates(canvas);
+    //             });
+    //         };
+    //         reader.readAsDataURL(file);
+    //     };
     }
 
     //새 프로젝트 
