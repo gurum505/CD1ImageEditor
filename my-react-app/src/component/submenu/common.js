@@ -18,15 +18,21 @@ export function initalCanvas(canvas){
 
 export function setCanvasCenter(canvas) { //캔버스를 내 가운데에 위치 시키는 함수 
     if(canvas){
-        var windowWidth =window.innerWidth -50 //50 : leftsidbar width 
-        var windowHeight = window.innerHeight -240; // 240 :header + toolbar height
+        var innerWidth =window.innerWidth -183 //50 : leftsidbar width 
+        var innerHeight = window.innerHeight -60; // 240 :header + toolbar height
 
-        var canvasContainer =document.getElementsByClassName('canvas-container')[0];
-        var left = (windowWidth - canvas.width)/2+'px'
-        var top = (windowHeight-canvas.height)/2+'px'
+        var upperCanvas = document.getElementsByClassName('upper-canvas')[0];
+        var lowerCanvas = document.getElementsByClassName('lower-canvas')[0];
 
-        canvasContainer.style.marginLeft = left;
-        canvasContainer.style.marginTop = top;
+        var styleWidth = upperCanvas.style.width.substr(0, upperCanvas.style.width.length-2)
+        var styleHeight = upperCanvas.style.height.substr(0, upperCanvas.style.height.length-2)
+
+        upperCanvas.style.left = (innerWidth- styleWidth)/2 +'px';
+        upperCanvas.style.top = (innerHeight- styleHeight)/2 +'px';
+
+        lowerCanvas.style.left = (innerWidth- styleWidth)/2 +'px';
+        lowerCanvas.style.top = (innerHeight- styleHeight)/2 +'px';
+   
     }
 }
 

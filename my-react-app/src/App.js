@@ -58,29 +58,39 @@ export default function App(props) {
     
     }, []);
 
+    let zoom =1;
+    const ZOOM_SPEED =0.1 ;
+
+
     useEffect(()=>{
         if (canvas) {
             common.updateStates(canvas);
             common.setCanvasCenter(canvas);
+
+            
             canvas.on({
                 'mouse:wheel': (opt) => {
-           
-                    var delta = opt.e.deltaY;
-                    var zoom = canvas.getZoom();
-                    zoom *= 0.999 ** delta;
-                    if (zoom > 20) zoom = 10;
-                    if (zoom < 0.01) zoom = 0.01;
-                    canvas.setZoom(zoom);
-                    opt.e.preventDefault();
-                    opt.e.stopPropagation();
-                    if (canvas.backgroundImage) {
-                        canvas.backgroundImage.scaleX =  canvas.initialWidth / canvas.backgroundImage.width
-                        canvas.backgroundImage.scaleY = canvas.initialHeight / canvas.backgroundImage.height
+                     var delta = opt.e.deltaY;
+                    console.log(delta)
+                    if(delta<0){
+                        zoom+=ZOOM_SPEED;
+                    }else{
+                        zoom-=ZOOM_SPEED
                     }
-                    canvas.setWidth(canvas.initialWidth * zoom);
-                    canvas.setHeight(canvas.initialHeight * zoom);
-                    canvas.renderAll();
+
+
+           
+
+                    var canvasElem = document.getElementsByTagName('canvas');
+                    for (var i =0; i<canvasElem.length; i++){
+                        canvasElem[i].style.width = canvas.width * zoom + 'px';
+                        canvasElem[i].style.height = canvas.height*zoom + 'px';
+                        
+                    }
                     common.setCanvasCenter(canvas);
+
+                 
+                
                 },
                 'object:removed': () => {
                     console.log('object:removed');
@@ -121,48 +131,52 @@ export default function App(props) {
             });
            
               window.addEventListener("resize", function(opt) { //브라우저 크기 resize에 따른 이벤트 
-            
-                var windowWidth = window.innerWidth -50 //50 : leftsidbar
-                var windowHeight = window.innerHeight -240;
-                var ratio = canvas.width/canvas.height;
-                var zoom = 1; 
-                //  if((canvas.width>windowWidth || canvas.width<windowWidth)
+                zoom =1;
+                common.setCanvasCenter(canvas);
 
-                if(windowWidth<canvas.initialWidth || windowHeight<canvas.initialHeight){
-                if(canvas.width>windowWidth){
-                    zoom = windowWidth/canvas.initialWidth;
-                    canvas.setWidth(windowWidth);
-                    canvas.setHeight(windowWidth * (1/ratio))
-                }else if (canvas.height>windowHeight){
-                    zoom = windowHeight/canvas.initialHeight;
-                    canvas.setHeight(windowHeight);
-                    canvas.setWidth(windowHeight * ratio);
-                }else 
-                    {   
-                        if(windowWidth<canvas.initialWidth){
-                        zoom = windowWidth/canvas.initialWidth;
-                        canvas.setWidth(windowWidth);
-                        canvas.setHeight(windowWidth * (1/ratio))
-                        }else if(windowHeight<canvas.initialHeight){
-                            zoom = windowHeight/canvas.initialHeight;
-                    canvas.setHeight(windowHeight);
-                    canvas.setWidth(windowHeight * ratio);
-                        }
-                    
-                }
+                var innerWidth = window.innerWidth - 183;  // 50 : leftmenubar width 
+                var innerHeight = window.innerHeight - 60;
+                var ratio = canvas.width/canvas.height;
+
+                const lowerCanvas = document.getElementsByClassName('lower-canvas')[0];
+                const upperCanvas = document.getElementsByClassName('upper-canvas')[0];
+
+                var canvasStyleWidth = lowerCanvas.style.width.substr(0, lowerCanvas.style.width.length-2);
+                var canvasStyleHeight = lowerCanvas.style.height.substr(0, lowerCanvas.style.height.length-2);
+
               
-                if (canvas.backgroundImage) {
-                    canvas.backgroundImage.scaleX =  canvas.initialWidth / canvas.backgroundImage.width
-                    canvas.backgroundImage.scaleY = canvas.initialHeight / canvas.backgroundImage.height
+                if(innerWidth<canvasStyleWidth){
+                    lowerCanvas.style.width = innerWidth+'px';
+                    lowerCanvas.style.height = innerWidth * (1/ratio) + 'px';
+
+                    upperCanvas.style.width = innerWidth+'px';
+                    upperCanvas.style.height = innerWidth * (1/ratio) + 'px';
+                }else if (innerHeight<canvasStyleHeight){
+                    lowerCanvas.style.height = innerHeight;
+                    lowerCanvas.style.width = innerHeight*ratio+'px';
+
+                    upperCanvas.style.height = innerHeight; 
+                    upperCanvas.style.width = innerHeight*ratio+'px';
+                }else{
+
+                    if(innerWidth<canvas.width && canvasStyleWidth < innerWidth){
+                        console.log("ㅈㅅ")
+                    lowerCanvas.style.width = innerWidth+'px';
+                    lowerCanvas.style.height = innerWidth * (1/ratio) + 'px';
+
+                    upperCanvas.style.width = innerWidth+'px';
+                    upperCanvas.style.height = innerWidth * (1/ratio) + 'px';
+                    }else if (innerHeight<canvasStyleHeight && canvasStyleHeight<canvas.height){
+                        console.log("너냐")
+                        lowerCanvas.style.height = innerHeight;
+                        lowerCanvas.style.width = innerHeight*ratio+'px';
+    
+                        upperCanvas.style.height = innerHeight; 
+                        upperCanvas.style.width = innerHeight*ratio+'px';
+                    }
                 }
-                canvas.renderAll();
-                
-                canvas.setZoom(zoom);
-           
             
-            
-            }
-            common.setCanvasCenter(canvas);
+        
 
             });
     
@@ -226,7 +240,7 @@ export default function App(props) {
                 <main className={styles.mainContainer}>
                     <canvas id="canvas" />
                     <Layer canvas={canvas}></Layer>
-                    {canvas && <Editormenu canvas={canvas} imageRef={imageRef} />}
+                    {/* {canvas && <Editormenu canvas={canvas} imageRef={imageRef} />} */}
                     <div id="layer"></div>
                 </main>
 
