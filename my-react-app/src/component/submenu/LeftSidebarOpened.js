@@ -69,18 +69,18 @@ export default function LeftSidebarOpened({ toggleMenu, currentRoute}) {
                 <label style={{ marginLeft: "15px" }}>글꼴</label>
                 <ul>
                     <li>
-                        <BoldOutlinedIcon children={"직선 그리기"} />
+                        <BoldOutlinedIcon />
                     </li>
                     <li>
-                        <ItalicOutlinedIcon children={"자유그리기 모드"} />
+                        <ItalicOutlinedIcon  />
                     </li>
                 </ul>
             </details>
             <details className={styles.detail} open={Open(currentRoute, "Line")}>
                 <summary>Drawing</summary>
                 <p>
-                    <LineOutlinedIcon />
-                    <HighlightOutlinedIcon />
+                    <LineOutlinedIcon  children={"직선 그리기"}/>
+                    <HighlightOutlinedIcon children={"자유그리기 모드"}/>
                 </p>
                 <p><label> color</label> <input type="color" /></p>
             </details>

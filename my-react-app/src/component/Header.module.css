@@ -1,6 +1,6 @@
 .editorHeader{
     justify-content: center;
-    align-content: center;
+    align-items: center;
     visibility: visible;
     white-space: nowrap;
 
@@ -12,7 +12,8 @@
     width: 100%;
     background-color: #202020;
 
-    display: flex;
+    display:flex;
+
     box-sizing: border-box; /*테두리포함 크기로 계산*/
 }
 .editorHeader input[type="file"]{

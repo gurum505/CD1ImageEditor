@@ -4,8 +4,6 @@ import React, { useState, useEffect, useRef } from "react";
 //layout
 import styles from './App.module.css';
 import Title from './Layout/Title';
-// import Toolbar from './Layout/Toolbar';
-// import Center from './Layout/Center';
 import Footbar from './Layout/Footbar';
 import LeftSidebar from './Layout/LeftSidebar';
 import RightSidebar from './Layout/RightSidebar';
@@ -13,13 +11,9 @@ import RightSidebar from './Layout/RightSidebar';
 //TODO: 완료후) github: mainpage를 my react app으로 변경, RightSidebar같은 쓸데없는 것들, 주석 다지우기
 //TODO: Canvas: 버튼기능구현 layout으로 분배
 //FIXME: Sidebar:canvas크기구현할때 왼쪽 사이드바까지 고려해서 집어넣어야함
-//FIXME: sidebar: 목록이 펼쳐지기도 전에 이미 그려짐=>미리그려놓고 보여줌으로써 성능개선을 꾀하는 방법이 있었는데...
 //TODO: 전체가 계속 다시 렌더링 됨으로써 remove함수나 여러 함수가 동시에 실행된다.막자
 //TODO:ESLint사용해 정리해보자 https://velog.io/@velopert/eslint-and-prettier-in-react
 //TODO: tooltip 예쁘게 https://css-tricks.com/exploring-what-the-details-and-summary-elements-can-do/
-/*FIXME: display:flex하면 header오른쪽으로 footbar가 오는데 
-그것을 leftsidebar쪽으로 옮기기 위해 left:calc() 
-canvas 아래에 relative로 붙일까=> item에 flex를 줘서 밀리지는 않지만 화면에 따라 줄어들게*/
 
 //TODO: Sidebar:스크롤바 안보이게 세로만
 //Sidebar:type:radio
