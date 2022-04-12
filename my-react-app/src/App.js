@@ -58,38 +58,35 @@ export default function App(props) {
     
     }, []);
 
-    let zoom =1;
-    const ZOOM_SPEED =0.1 ;
+    // let zoom =1;
+    const ZOOM_SPEED =0.07 ;
 
 
     useEffect(()=>{
         if (canvas) {
+            console.log(canvas.width);
             common.updateStates(canvas);
             common.setCanvasCenter(canvas)
             
             canvas.on({
                 'mouse:wheel': (opt) => {
                      var delta = opt.e.deltaY;
-                    console.log(delta)
                     if(delta<0){
-                        zoom+=ZOOM_SPEED;
+                        canvas.zoom+=ZOOM_SPEED;
                     }else{
-                        zoom-=ZOOM_SPEED
+                        canvas.zoom-=ZOOM_SPEED
                     }
 
-
-           
-
+                    console.log(canvas.zoom)
+    
                     var canvasElem = document.getElementsByTagName('canvas');
                     for (var i =0; i<canvasElem.length; i++){
-                        canvasElem[i].style.width = canvas.width * zoom + 'px';
-                        canvasElem[i].style.height = canvas.height*zoom + 'px';
+                        console.log(canvas.initialWidth);
+                        canvasElem[i].style.width = canvas.initialWidth * canvas.zoom + 'px';
+                        canvasElem[i].style.height = canvas.initialHeight*canvas.zoom + 'px';
                         
                     }
-
                     common.setCanvasCenter(canvas);
-
-                 
                 
                 },
                 'object:removed': () => {
@@ -131,7 +128,7 @@ export default function App(props) {
             });
            
               window.addEventListener("resize", function(opt) { //브라우저 크기 resize에 따른 이벤트 
-                zoom =1;
+                // zoom =1;
             
                 var innerWidth= common.getInnerSize()['innerWidth'];
                 var innerHeight =common.getInnerSize()['innerHeight']
@@ -148,12 +145,15 @@ export default function App(props) {
                     lowerCanvas.style.height = innerWidth * (1/ratio) + 'px';
 
                     upperCanvas.style.width = innerWidth+'px';
+                    
                     upperCanvas.style.height = innerWidth * (1/ratio) + 'px';
-                }else if (innerHeight-80<styleHeight){
-                    lowerCanvas.style.height = innerHeight;
+                }else if (innerHeight<styleHeight){
+                    console.log(innerHeight)
+                    console.log(upperCanvas.style.height)
+                    lowerCanvas.style.height = innerHeight+'px';
                     lowerCanvas.style.width = (innerHeight)*ratio+'px';
 
-                    upperCanvas.style.height =  innerHeight;
+                    upperCanvas.style.height =  innerHeight+'px';
                     upperCanvas.style.width =  (innerHeight)*ratio+'px';
                 }else{
                     if(innerWidth<canvas.width && styleWidth < innerWidth){
@@ -199,16 +199,16 @@ export default function App(props) {
    
 
     const initCanvas = () => {
-        var windowWidth= window.innerWidth-50;
-        var windowHeight = window.innerHeight-240;
-        var width, height; 
-        if(windowWidth>windowHeight){
-                height = windowHeight*0.9;
-                width =windowWidth*0.8;
-        }else{
-            width = windowWidth*0.9;
-            height = height*0.8
-        }
+        // var windowWidth= window.innerWidth-50;
+        // var windowHeight = window.innerHeight-240;
+        // var width, height; 
+        // if(windowWidth>windowHeight){
+        //         height = windowHeight*0.9;
+        //         width =windowWidth*0.8;
+        // }else{
+        //     width = windowWidth*0.9;
+        //     height = height*0.8
+        // }
         return (
         new fabric.Canvas('canvas', {
             height: 400,
@@ -219,8 +219,9 @@ export default function App(props) {
             undoStack :[],
             redoStack :[],
             filterValues : '',
-
-            backgroundColor: 'white'
+            backgroundColor: 'white',
+            zoom :1
+           
         })
     )
     }

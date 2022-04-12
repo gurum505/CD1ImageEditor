@@ -10,6 +10,8 @@ export function getInnerSize(){
 
     return dict; 
 }   
+
+
 export function initalCanvas(canvas){
     canvas.set({
         backgroundColor:'white',
@@ -23,9 +25,18 @@ export function initalCanvas(canvas){
     canvas.setZoom(1);
 }
 
+export function setCanvasStyleSize(width,height){
+    var upperCanvas = document.getElementsByClassName('upper-canvas')[0];
+    var lowerCanvas = document.getElementsByClassName('lower-canvas')[0];
+
+    upperCanvas.style.width = width+'px';
+    upperCanvas.style.height = height+'px';
+    lowerCanvas.style.width = width+'px';
+    lowerCanvas.style.height = height+'px';
+}
+
 export function setCanvasCenter(canvas) { //캔버스를 내 가운데에 위치 시키는 함수 
     if(canvas){
-
         var innerWidth= getInnerSize()['innerWidth'];
         var innerHeight =getInnerSize()['innerHeight']
 
@@ -39,7 +50,7 @@ export function setCanvasCenter(canvas) { //캔버스를 내 가운데에 위치
         var left = (innerWidth-styleWidth)/2;
         var top = (innerHeight-styleHeight)/2+60;
 
-        if(top<100) top=100;
+        // if(top<100) top =100;
         upperCanvas.style.left = left+'px';
         upperCanvas.style.top = top+'px';
 
@@ -52,7 +63,7 @@ export function setCanvasCenter(canvas) { //캔버스를 내 가운데에 위치
 export function updateStates(canvas){
     canvas.currentWidth = canvas.width;
     canvas.currentHeight = canvas.Height;
-    var json = canvas.toDatalessJSON(['undoStack','redoStack','initialWidth', 'initialHeight', 'objectNum', 'id','filterValues']);
+    var json = canvas.toDatalessJSON(['undoStack','redoStack','initialWidth', 'initialHeight', 'objectNum', 'id','filterValues','recentStyleSize']);
     canvas.undoStack.push(json);
 
 }

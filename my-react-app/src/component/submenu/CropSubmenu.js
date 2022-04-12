@@ -4,7 +4,6 @@ export default function CropSubmenu(props) {
     const canvas = props.canvas;
     var currentImage;
     var selectionRect;
-    canvas.off();
     // var left1 = 0;
     // var top1 = 0;
     // var scale1x = 0;
@@ -54,6 +53,14 @@ export default function CropSubmenu(props) {
         }
     });
 
+    function getCanvasStyleWidth(){
+        var upperCanvas = document.getElementsByClassName('upper-canvas')[0];
+        return upperCanvas.style.width.substr(0,upperCanvas.style.width.length-2);
+    }
+    function getCanvasStyleHeight(){
+        var upperCanvas = document.getElementsByClassName('upper-canvas')[0];
+        return upperCanvas.style.height.substr(0,upperCanvas.style.height.length-2);
+    }
     function addSelectionRect(ratio = '') {
         canvas.discardActiveObject();
 
@@ -99,6 +106,8 @@ export default function CropSubmenu(props) {
     }
 
     function apply() {
+        canvas.undoStack[canvas.undoStack.length-1].recentStyleSize = [getCanvasStyleWidth(),getCanvasStyleHeight()];
+
         if (canvas.getActiveObject() === selectionRect) canvas.remove(selectionRect);
         var prevObjects = canvas.getObjects(); //undo 하기 전에 layer 제거 
         prevObjects.forEach((object) => {
@@ -135,11 +144,9 @@ export default function CropSubmenu(props) {
             });
             canvas.initialWidth = currentImage.width;
             canvas.initialHeight = currentImage.height;
-            
-            canvas.undo=true;
-            console.log(canvas)
             common.setCanvasCenter(canvas);
             common.updateStates(canvas);
+            console.log(canvas);
             props.setButtonType('');
         });
         
@@ -235,7 +242,6 @@ export default function CropSubmenu(props) {
                 btn.disabled = false;
             })
             canvas.defaultCursor = 'default';
-            canvas.selection = true;
             
 
         });
