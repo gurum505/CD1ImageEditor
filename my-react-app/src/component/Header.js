@@ -50,10 +50,28 @@ export default function Header(props) {
        
     },[]);
 
+    function getCanvasStyleWidth(){
+        var upperCanvas = document.getElementsByClassName('upper-canvas')[0];
+        return upperCanvas.style.width.substr(0,upperCanvas.style.width.length-2);
+    }
+    function getCanvasStyleHeight(){
+        var upperCanvas = document.getElementsByClassName('upper-canvas')[0];
+        return upperCanvas.style.height.substr(0,upperCanvas.style.height.length-2);
+    }
+    function getZoom(){
+        var upperCanvas = document.getElementsByClassName('upper-canvas')[0];
+        console.log(canvas.initialWidth)
+        console.log(upperCanvas.style.width)
+        return getCanvasStyleWidth()/canvas.initialWidth;
+    }
+
     function importImage(e) {
         props.imageRef.current = true;
         props.setImage(!props.image);
         e.target.value = '' //같은 이름의 이미지 파일 업로드가 안되는 것 방지 
+
+        var innerWidth = common.getInnerSize()['innerWidth'];
+        var innerHeight = common.getInnerSize()['innerHeight'];
 
         document.getElementById('import-image-file').onchange = function (e) {
             common.initalCanvas(canvas);
@@ -63,34 +81,26 @@ export default function Header(props) {
             reader.onload = function (f) {
                 var data = f.target.result;
                 fabric.Image.fromURL(data, function (img) {
-                     canvas.initialWidth = img.width;
-                     canvas.initialHeight = img.height;
+                    
+                    canvas.setWidth(img.width);
+                    canvas.setHeight(img.height);
+                    canvas.setBackgroundImage(img); 
+                    canvas.initialWidth = img.width;
+                    canvas.initialHeight= img.height
 
-                    var windowWidth = window.innerWidth -50 //50 : leftsidbar
-                    var windowHeight = window.innerHeight -240;
                     var ratio = img.width/img.height;
-
                    
-                    if(img.width >windowWidth || img.height>windowHeight){
-                        if(windowWidth-img.width >windowHeight-img.height){
-                            canvas.setHeight( windowHeight);
-                            canvas.setWidth( canvas.height *(ratio)); 
+                    if(img.width >innerWidth || img.height>innerHeight){
+                        if(innerWidth-img.width >innerHeight-img.height){
+                            common.setCanvasStyleSize(innerHeight *(ratio)*0.8,innerHeight*0.8)
+                            canvas.initialWidth  =innerHeight *(ratio)*0.8;
+                            canvas.initialHeight  =innerHeight*0.8
                         }else{
-                            canvas.setWidth(windowWidth);
-                            canvas.setHeight(canvas.width * (1/ratio))
-                        }
-                        
-                    }else{
-                    canvas.setWidth(canvas.initialWidth);
-                    canvas.setHeight(canvas.initialHeight)
+                            common.setCanvasStyleSize(innerWidth*0.8,innerWidth*(1/ratio)*0.8)
+                            canvas.initialWidth  =innerWidth*0.8;
+                            canvas.initialHeight  =innerWidth*(1/ratio)*0.8
+                        }   
                     }
-                    canvas.setBackgroundImage(img);
-
-                    canvas.backgroundImage.scaleX =  canvas.width / canvas.backgroundImage.width
-                    canvas.backgroundImage.scaleY = canvas.height / canvas.backgroundImage.height
-
-                    console.log(canvas.initialWidth);
-                    console.log(canvas.getZoom())
                     canvas.renderAll();
                     common.setCanvasCenter(canvas);
                     common.updateStates(canvas);
@@ -102,7 +112,7 @@ export default function Header(props) {
 
     //새 프로젝트 
     function clearCanvas() { //캔버스 초기화 
-    
+        console.log(getZoom());
         common.removeAllObjects(canvas);
         common.initalCanvas(canvas);
         common.updateStates(canvas);
@@ -167,23 +177,31 @@ export default function Header(props) {
         if(canvas.undoStack.length>1){
             common.removeAllObjects(canvas);
             var current = canvas.undoStack.pop();
+            // current.recentStyleSize=[getCanvasStyleWidth(),getCanvasStyleHeight()];
+        
+            console.log(current);
             canvas.redoStack.push(current);
             var json = canvas.undoStack[canvas.undoStack.length-1]; 
 
             var width = canvas.width;
             var height = canvas.height;
             common.setCanvasCenter(canvas);
-
+            console.log(canvas)
             canvas.loadFromJSON(json, () => {
-                console.log(json);
-                // canvas.setWidth(canvas.initialWidth);
-                // canvas.setHeight(canvas.initialHeight)
-  
-                canvas.renderAll();
-                if (canvas.backgroundImage) {
-                    canvas.backgroundImage.scaleX =  canvas.initialWidth / canvas.backgroundImage.width
-                    canvas.backgroundImage.scaleY = canvas.initialHeight / canvas.backgroundImage.height
+                console.log(canvas.width)
+                console.log(canvas.zoom);
+                if(canvas.recentStyleSize){
+                    
+                canvas.setWidth(canvas.initialWidth);
+                canvas.setHeight(canvas.initialHeight);
+                common.setCanvasStyleSize(canvas.recentStyleSize[0],canvas.recentStyleSize[1])
                 }
+                common.setCanvasCenter(canvas);
+                canvas.renderAll();
+                // if (canvas.backgroundImage) {
+                //     canvas.backgroundImage.scaleX =  canvas.initialWidth / canvas.backgroundImage.width
+                //     canvas.backgroundImage.scaleY = canvas.initialHeight / canvas.backgroundImage.height
+                // }
                 try { // 이전 state의 filter value들 값 할당 
                     var state = canvas.filterValues;
                     var inputNodes = document.getElementById('filter-list').getElementsByTagName('input');
@@ -215,6 +233,7 @@ export default function Header(props) {
                 });
                 common.colorActiveLayer(canvas);
             }                  canvas.renderAll();    
+            canvas.zoom=1
 
              });
         }
@@ -223,15 +242,24 @@ export default function Header(props) {
     function redo(){
         if(canvas.redoStack.length>0){
             common.removeAllObjects(canvas);
-
             var json = canvas.redoStack.pop();
+            console.log(json);
             canvas.undoStack.push(json);
 
-            var width = canvas.width;
-            var height = canvas.height;
             canvas.loadFromJSON(json, () => {
-                // canvas.setWidth(width);
-                // canvas.setHeight(height);
+                canvas.zoom=1;
+                console.log(json)
+                if(canvas.recentStyleSize){
+                    console.log("왜")
+                    canvas.setWidth(canvas.initialWidth);
+                    canvas.setHeight(canvas.initialHeight);
+                    console.log(canvas.initialWidth);
+                    console.log(canvas);
+                    canvas.renderAll();
+                    // common.setCanvasStyleSize(canvas.recentStyleSize[0],canvas.recentStyleSize[1])
+
+                    }
+                common.setCanvasCenter(canvas);
                 if (canvas.backgroundImage) {
                         canvas.backgroundImage.scaleX =  canvas.initialWidth / canvas.backgroundImage.width
                         canvas.backgroundImage.scaleY = canvas.initialHeight / canvas.backgroundImage.height
@@ -268,6 +296,8 @@ export default function Header(props) {
                 common.colorActiveLayer(canvas);
             }
                 canvas.renderAll();
+                canvas.zoom=1
+
             });
         }
     }

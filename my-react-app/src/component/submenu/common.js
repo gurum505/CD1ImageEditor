@@ -3,6 +3,15 @@
 //캔버스 관련
 
 
+export function getInnerSize(){
+    var dict= {}
+    dict['innerWidth'] = window.innerWidth-180;
+    dict['innerHeight'] = window.innerHeight-180;
+
+    return dict; 
+}   
+
+
 export function initalCanvas(canvas){
     canvas.set({
         backgroundColor:'white',
@@ -16,26 +25,46 @@ export function initalCanvas(canvas){
     canvas.setZoom(1);
 }
 
+export function setCanvasStyleSize(width,height){
+    var upperCanvas = document.getElementsByClassName('upper-canvas')[0];
+    var lowerCanvas = document.getElementsByClassName('lower-canvas')[0];
+
+    upperCanvas.style.width = width+'px';
+    upperCanvas.style.height = height+'px';
+    lowerCanvas.style.width = width+'px';
+    lowerCanvas.style.height = height+'px';
+}
+
 export function setCanvasCenter(canvas) { //캔버스를 내 가운데에 위치 시키는 함수 
     if(canvas){
-        var windowWidth =window.innerWidth -50 //50 : leftsidbar width 
-        var windowHeight = window.innerHeight -240; // 240 :header + toolbar height
+        var innerWidth= getInnerSize()['innerWidth'];
+        var innerHeight =getInnerSize()['innerHeight']
 
-        var canvasContainer =document.getElementsByClassName('canvas-container')[0];
-        var left = (windowWidth - canvas.width)/2+'px'
-        var top = (windowHeight-canvas.height)/2+'px'
+        var upperCanvas = document.getElementsByClassName('upper-canvas')[0];
+        var lowerCanvas = document.getElementsByClassName('lower-canvas')[0];
+        
 
-        canvasContainer.style.marginLeft = left;
-        canvasContainer.style.marginTop = top;
+        var styleWidth = upperCanvas.style.width.substr(0, upperCanvas.style.width.length-2)
+        var styleHeight = upperCanvas.style.height.substr(0, upperCanvas.style.height.length-2)
+
+        var left = (innerWidth-styleWidth)/2;
+        var top = (innerHeight-styleHeight)/2+60;
+
+        // if(top<100) top =100;
+        upperCanvas.style.left = left+'px';
+        upperCanvas.style.top = top+'px';
+
+        lowerCanvas.style.left = left+'px';
+        lowerCanvas.style.top = top+'px';
+
     }
 }
 
 export function updateStates(canvas){
     canvas.currentWidth = canvas.width;
     canvas.currentHeight = canvas.Height;
-    var json = canvas.toDatalessJSON(['undoStack','redoStack','initialWidth', 'initialHeight', 'objectNum', 'id','filterValues']);
+    var json = canvas.toDatalessJSON(['undoStack','redoStack','initialWidth', 'initialHeight', 'objectNum', 'id','filterValues','recentStyleSize']);
     canvas.undoStack.push(json);
-    console.log("추가햇어요 ㅋ")
 
 }
 

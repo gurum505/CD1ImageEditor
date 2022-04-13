@@ -58,29 +58,36 @@ export default function App(props) {
     
     }, []);
 
+    // let zoom =1;
+    const ZOOM_SPEED =0.07 ;
+
+
     useEffect(()=>{
         if (canvas) {
+            console.log(canvas.width);
             common.updateStates(canvas);
-            common.setCanvasCenter(canvas);
+            common.setCanvasCenter(canvas)
+            
             canvas.on({
                 'mouse:wheel': (opt) => {
-           
-                    var delta = opt.e.deltaY;
-                    var zoom = canvas.getZoom();
-                    zoom *= 0.999 ** delta;
-                    if (zoom > 20) zoom = 10;
-                    if (zoom < 0.01) zoom = 0.01;
-                    canvas.setZoom(zoom);
-                    opt.e.preventDefault();
-                    opt.e.stopPropagation();
-                    if (canvas.backgroundImage) {
-                        canvas.backgroundImage.scaleX =  canvas.initialWidth / canvas.backgroundImage.width
-                        canvas.backgroundImage.scaleY = canvas.initialHeight / canvas.backgroundImage.height
+                     var delta = opt.e.deltaY;
+                    if(delta<0){
+                        canvas.zoom+=ZOOM_SPEED;
+                    }else{
+                        canvas.zoom-=ZOOM_SPEED
                     }
-                    canvas.setWidth(canvas.initialWidth * zoom);
-                    canvas.setHeight(canvas.initialHeight * zoom);
-                    canvas.renderAll();
+
+                    console.log(canvas.zoom)
+    
+                    var canvasElem = document.getElementsByTagName('canvas');
+                    for (var i =0; i<canvasElem.length; i++){
+                        console.log(canvas.initialWidth);
+                        canvasElem[i].style.width = canvas.initialWidth * canvas.zoom + 'px';
+                        canvasElem[i].style.height = canvas.initialHeight*canvas.zoom + 'px';
+                        
+                    }
                     common.setCanvasCenter(canvas);
+                
                 },
                 'object:removed': () => {
                     console.log('object:removed');
@@ -121,49 +128,52 @@ export default function App(props) {
             });
            
               window.addEventListener("resize", function(opt) { //브라우저 크기 resize에 따른 이벤트 
+                // zoom =1;
             
-                var windowWidth = window.innerWidth -50 //50 : leftsidbar
-                var windowHeight = window.innerHeight -240;
+                var innerWidth= common.getInnerSize()['innerWidth'];
+                var innerHeight =common.getInnerSize()['innerHeight']
                 var ratio = canvas.width/canvas.height;
-                var zoom = 1; 
-                //  if((canvas.width>windowWidth || canvas.width<windowWidth)
 
-                if(windowWidth<canvas.initialWidth || windowHeight<canvas.initialHeight){
-                if(canvas.width>windowWidth){
-                    zoom = windowWidth/canvas.initialWidth;
-                    canvas.setWidth(windowWidth);
-                    canvas.setHeight(windowWidth * (1/ratio))
-                }else if (canvas.height>windowHeight){
-                    zoom = windowHeight/canvas.initialHeight;
-                    canvas.setHeight(windowHeight);
-                    canvas.setWidth(windowHeight * ratio);
-                }else 
-                    {   
-                        if(windowWidth<canvas.initialWidth){
-                        zoom = windowWidth/canvas.initialWidth;
-                        canvas.setWidth(windowWidth);
-                        canvas.setHeight(windowWidth * (1/ratio))
-                        }else if(windowHeight<canvas.initialHeight){
-                            zoom = windowHeight/canvas.initialHeight;
-                    canvas.setHeight(windowHeight);
-                    canvas.setWidth(windowHeight * ratio);
-                        }
-                    
-                }
-              
-                if (canvas.backgroundImage) {
-                    canvas.backgroundImage.scaleX =  canvas.initialWidth / canvas.backgroundImage.width
-                    canvas.backgroundImage.scaleY = canvas.initialHeight / canvas.backgroundImage.height
-                }
-                canvas.renderAll();
+                const lowerCanvas = document.getElementsByClassName('lower-canvas')[0];
+                const upperCanvas = document.getElementsByClassName('upper-canvas')[0];
+
+                var styleWidth = lowerCanvas.style.width.substr(0, lowerCanvas.style.width.length-2);
+                var styleHeight = lowerCanvas.style.height.substr(0, lowerCanvas.style.height.length-2);
                 
-                canvas.setZoom(zoom);
-           
-            
-            
-            }
-            common.setCanvasCenter(canvas);
+                if(innerWidth<styleWidth){
+                    lowerCanvas.style.width = innerWidth+'px';
+                    lowerCanvas.style.height = innerWidth * (1/ratio) + 'px';
 
+                    upperCanvas.style.width = innerWidth+'px';
+                    
+                    upperCanvas.style.height = innerWidth * (1/ratio) + 'px';
+                }else if (innerHeight<styleHeight){
+                    console.log(innerHeight)
+                    console.log(upperCanvas.style.height)
+                    lowerCanvas.style.height = innerHeight+'px';
+                    lowerCanvas.style.width = (innerHeight)*ratio+'px';
+
+                    upperCanvas.style.height =  innerHeight+'px';
+                    upperCanvas.style.width =  (innerHeight)*ratio+'px';
+                }else{
+                    if(innerWidth<canvas.width && styleWidth < innerWidth){
+                    lowerCanvas.style.width = innerWidth+'px';
+                    lowerCanvas.style.height = innerWidth * (1/ratio) + 'px';
+
+                    upperCanvas.style.width = innerWidth+'px';
+                    upperCanvas.style.height = innerWidth * (1/ratio) + 'px';
+                    }else if (innerHeight<styleHeight && styleHeight<innerHeight){
+                        lowerCanvas.style.height = innerHeight;
+                        lowerCanvas.style.width = innerHeight*ratio+'px';
+    
+                        upperCanvas.style.height = innerHeight; 
+                        upperCanvas.style.width = innerHeight*ratio+'px';
+                    }
+                }               
+
+                common.setCanvasCenter(canvas);
+
+        
             });
     
             window.onkeydown = function (e) { // delete, backspace 키로 삭제
@@ -189,16 +199,16 @@ export default function App(props) {
    
 
     const initCanvas = () => {
-        var windowWidth= window.innerWidth-50;
-        var windowHeight = window.innerHeight-240;
-        var width, height; 
-        if(windowWidth>windowHeight){
-                height = windowHeight*0.9;
-                width =windowWidth*0.8;
-        }else{
-            width = windowWidth*0.9;
-            height = height*0.8
-        }
+        // var windowWidth= window.innerWidth-50;
+        // var windowHeight = window.innerHeight-240;
+        // var width, height; 
+        // if(windowWidth>windowHeight){
+        //         height = windowHeight*0.9;
+        //         width =windowWidth*0.8;
+        // }else{
+        //     width = windowWidth*0.9;
+        //     height = height*0.8
+        // }
         return (
         new fabric.Canvas('canvas', {
             height: 400,
@@ -209,8 +219,9 @@ export default function App(props) {
             undoStack :[],
             redoStack :[],
             filterValues : '',
-
-            backgroundColor: 'white'
+            backgroundColor: 'white',
+            zoom :1
+           
         })
     )
     }
