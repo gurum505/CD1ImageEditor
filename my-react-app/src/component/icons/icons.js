@@ -1,7 +1,7 @@
 import {FontSizeOutlined,MenuOutlined,BorderOutlined,AreaChartOutlined, LineOutlined
 ,SettingOutlined,AlignLeftOutlined,AlignCenterOutlined,AlignRightOutlined,HighlightOutlined 
 ,BoldOutlined,ItalicOutlined,LineHeightOutlined,GithubOutlined,CloseOutlined,
-    FolderOpenOutlined,CloudDownloadOutlined,UploadOutlined,
+    FolderOpenOutlined,CloudDownloadOutlined,UploadOutlined,UnderlineOutlined,
     FileImageOutlined,RedoOutlined,UndoOutlined,DownloadOutlined,
     EditOutlined,DragOutlined,ZoomInOutlined,ZoomOutOutlined,
     ExpandOutlined,EyeOutlined,CopyOutlined,DiffOutlined,PlusOutlined} from "@ant-design/icons"
@@ -26,6 +26,19 @@ import { ReactComponent as ImageFromInternet} from './ImageFromInternetIcon.svg'
 //<ColumnWidthOutlined />
 //height
 //<ColumnHeightOutlined />
+<UnderlineOutlined />
+
+export const UnderlineOutlinedIcon=({onClick, children, htmlFor})=>{
+    return(
+        <span className={styles.container}>
+            <label htmlFor={htmlFor}>
+            <UnderlineOutlined className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+            </label>
+        </span>
+    )
+}
+
 export const CloseOutlinedIcon=({onClick, children, htmlFor})=>{
     return(
         <span className={styles.container}>

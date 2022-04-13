@@ -26,6 +26,9 @@
   border-radius: 5px;
 
 }
+.detail summary::marker{
+  display:none;
+}
 .detail summary:hover{/*details위에 마우스를 갖다 댔을때*/
   background-color: gray;
   cursor: pointer;
@@ -49,22 +52,52 @@
 .detail input[type="text"]{
   width:50px;
   box-sizing: border-box;
-  color:gray;
+  color:white;
   outline-style: none;
   padding-left: 5px;
   border-radius: 5px;
+  background-color: #202020;
+  border-color: #202020;
 }
 .detail input[type="color"]{
   width:50px;
-  border:none;
+  margin:0;
+  padding: 0;
   cursor: pointer;
   box-sizing: border-box;
   border-radius: 5px;
+  background-color: #202020;
+  outline-style: none;
+  /* text의 움푹들어간 effect흉낸내는 부분 */
+  border-top: 2px solid black;
+  border-left: 2px solid black;
+  border-right: none;
+  border-bottom: none;
 }
+/* 내부칼라 만지는 부분 */
+.detail input[type="color"]::-webkit-color-swatch{
+  border: none;
+  border-radius: 5px;
+  padding: 0;
+}
+
 .detail input[type="range"]{
   width:150px;
   cursor: pointer;
 }
+.detail select{
+  /* width:80px; */
+  cursor: pointer;
+  background-color: #202020;
+  border-top: 2px solid black;
+  border-left: 2px solid black;
+  border-right: none;
+  border-bottom: none;
+  color:white;
+  list-style: none;
+  border-radius: 5px;
+}
+
 .detail ul{
   display:flex;
   /* border-top: 2px solid #202020; */
