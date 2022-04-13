@@ -1,5 +1,5 @@
 .container {
-  background-color: #ccf711;
+  background-color: #161616;
   position:fixed;
   right:0;
   height:100%;
@@ -17,7 +17,7 @@
   padding: 0;
   margin: 5px 0 0px 0;
 
-  border: 1px solid white;/*#666565*/
+  border: 1px solid #666565;/*#666565*/
   width: 110px; /*container크기만큼*/
   background-color: #202020;
   border-radius: 5px;
@@ -43,7 +43,7 @@
 }
 .addItem{
   background-color: #202020;
-  border: 2px solid white;
+  border: 2px solid #666565;
   box-sizing: border-box;
   border-radius: 5px;
   width: 100px;
@@ -60,7 +60,7 @@
 .addItem:hover{
   cursor: pointer;
   transition: 0.3s;
-  border: 2px solid red;
+  border: 2px solid white;
 }
 .itemScroll{
   height: calc(100vh - 150px);
