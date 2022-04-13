@@ -1,39 +1,69 @@
 .container {
-    background-color: #ccf711;
-    display:flex;
-    flex-direction: column;
-    outline:none;
-    overflow-y: auto;
-    align-items: center;
-    
-    position: relative;
-    width: 150px;
-    /* top: 80px; */
-    /* bottom: 0; */
-    right: 0px;
-    height: 100vh;
-    z-index: 99;
+  background-color: #ccf711;
+  
+  width: 120px;
+  z-index: 99;
+  user-select: none;
 }
 .container::-webkit-scrollbar {
   display: none;
 }
 .title{
-  /* position:relative; */
-  height: 50px;
-  border: 2px solid gray;
-  text-align: center;
-  /* top:-15px; */
-  width:100%;
-}
-.addItem{
-  margin: 5px 15px 5px 15px;
-  border: 2px solid gray;
-  box-sizing: border-box;
-  width: 100px;
-  height: 60px;
+  position:absolute;
+  height: 40px;
+  top: 0px;
+  padding: 0;
+  margin: 5px 0 5px 0;
+
+  border: 1px solid white;/*#666565*/
+  width: 120px; /*container크기만큼*/
+  background-color: #202020;
+  border-radius: 5px;
+  /* font-weight: bold; */
+  color:white;
+  font-size: 15pt;
+
+  display: flex;
   align-items: center;
   justify-content: center;
 }
-.Icon{
-  height:80px;
+.title:hover{
+  cursor: default;
+}
+.itemList{
+  position:absolute;
+  top: 50px; /*위에서 띄고싶은 만큼, title크기만큼*/
+
+  display:flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+}
+.addItem{
+  background-color: #202020;
+  border: 2px solid white;
+  box-sizing: border-box;
+  border-radius: 5px;
+  width: 100px;
+  height: 60px;
+
+  position:relative;
+  left:10px;
+  /* padding:0; */
+  /* margin:0; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.addItem:hover{
+  cursor: pointer;
+  transition: 0.3s;
+  border: 2px solid red;
+}
+.itemScroll{
+  height: calc(100vh - 200px);/*200은 임의로 준값*/
+  overflow-y: auto;
+}
+.itemScroll::-webkit-scrollbar {
+  display: none;
 }
