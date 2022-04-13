@@ -10,13 +10,12 @@ import RightSidebar from './Layout/RightSidebar';
 
 //TODO: 완료후) github: mainpage를 my react app으로 변경, RightSidebar같은 쓸데없는 것들, 주석 다지우기
 //TODO: Canvas: 버튼기능구현 layout으로 분배
-//TODO:ESLint사용해 정리해보자 https://velog.io/@velopert/eslint-and-prettier-in-react
+//TODO: ESLint사용해 정리해보자 https://velog.io/@velopert/eslint-and-prettier-in-react
 //TODO: tooltip 예쁘게 https://css-tricks.com/exploring-what-the-details-and-summary-elements-can-do/
 
 //Sidebar:type:radio
 //TODO: canvas: CUSTOM CORNERS  https://objectcomputing.com/resources/publications/sett/june-2014-drawing-with-fabricjs
 //TODO: sidebar: texticon 하나만 덩그라니 이상함
-//TODO: sidebar: tooltip from internet, 자유그리기 수정
 //TODO: 한글 영어 혼용, 대문자소문자 통일
 
 

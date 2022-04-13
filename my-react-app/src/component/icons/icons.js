@@ -88,7 +88,7 @@ export const ImageFromInternetIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <ImageFromInternet className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextleft}>{children}</span>
             </label>
         </span>
     )
@@ -104,9 +104,6 @@ export const ImageIcon=({onClick, children, htmlFor})=>{
         </span>
     )
 }
-
-
-
 
 export const EditOutlinedIcon=({onClick, children, htmlFor})=>{
     return(
@@ -405,7 +402,7 @@ export const HighlightOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <HighlightOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextleft}>{children}</span>
             </label>
         </span>
     )
