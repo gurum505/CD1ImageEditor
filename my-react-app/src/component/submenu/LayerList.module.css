@@ -1,5 +1,5 @@
 .Item{
-  border: 2px solid white;
+  border: 2px solid #666565;
   box-sizing: border-box;
   width: 100px;
   height: 60px;
@@ -7,6 +7,11 @@
   margin:5px 10px 5px 10px;
   background-color: #202020;/*TODO: 배경바꾸기 */
   border-radius: 5px;
+}
+.Item:hover{
+  cursor: default;
+  transition: 0.3s;
+  border: 2px solid white;
 }
 .ItemButton{
   position:absolute;

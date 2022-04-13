@@ -20,3 +20,8 @@
 .corner{
     position: fixed;
 }
+.header:hover{
+    cursor: default;
+    user-select: none;
+}
+

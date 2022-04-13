@@ -1,6 +1,5 @@
 .container {
   background-color: #ccf711;
-  
   width: 120px;
   z-index: 99;
   user-select: none;
@@ -11,12 +10,12 @@
 .title{
   position:absolute;
   height: 40px;
-  top: 0px;
+  right: 3px;
   padding: 0;
-  margin: 5px 0 5px 0;
+  margin: 5px 0 0px 0;
 
   border: 1px solid white;/*#666565*/
-  width: 120px; /*container크기만큼*/
+  width: 110px; /*container크기만큼*/
   background-color: #202020;
   border-radius: 5px;
   /* font-weight: bold; */
@@ -32,7 +31,7 @@
 }
 .itemList{
   position:absolute;
-  top: 50px; /*위에서 띄고싶은 만큼, title크기만큼*/
+  top: 5px; /*위에서 띄고싶은 만큼, title크기만큼*/
 
   display:flex;
   flex-direction: column;
@@ -61,7 +60,7 @@
   border: 2px solid red;
 }
 .itemScroll{
-  height: calc(100vh - 200px);/*200은 임의로 준값*/
+  height: calc(100vh - 150px);
   overflow-y: auto;
 }
 .itemScroll::-webkit-scrollbar {

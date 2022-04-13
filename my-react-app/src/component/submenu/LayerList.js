@@ -5,14 +5,14 @@ export default function LayerList({Items, delItem}){
     
     return(
         <>
-            {Items.map((item,index)=>(
-                <div className={styles.Item} key={index}>
+            {Items.map((Item)=>(
+                <div className={styles.Item} key={Item.id}>
                     <>
-                    <div onClick={delItem}>
+                    <div onClick={()=>delItem(Item.id)}>
                       <DashOutlined className={styles.ItemButton} />
                     </div>
                     <div className={styles.ItemContent}>
-                        {item}/
+                        {Item.name}
                     </div>
                     </>
                 </div>
