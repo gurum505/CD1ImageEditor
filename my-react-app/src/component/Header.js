@@ -10,7 +10,7 @@ import styles from "./Header.module.css"
 
 
 import * as common from  './submenu/common'
-import { CommentOutlined } from "@ant-design/icons";
+// import { CommentOutlined } from "@ant-design/icons";
 //2번째 줄- 즉시 효과를 갖는, 사이드바를 구성하기에 부적합한 부가적인 기능들    
 //앞으로 가져오기 -rotate(90) 
 //<DownOutlined />
@@ -50,20 +50,6 @@ export default function Header(props) {
        
     },[]);
 
-    function getCanvasStyleWidth(){
-        var upperCanvas = document.getElementsByClassName('upper-canvas')[0];
-        return upperCanvas.style.width.substr(0,upperCanvas.style.width.length-2);
-    }
-    function getCanvasStyleHeight(){
-        var upperCanvas = document.getElementsByClassName('upper-canvas')[0];
-        return upperCanvas.style.height.substr(0,upperCanvas.style.height.length-2);
-    }
-    function getZoom(){
-        var upperCanvas = document.getElementsByClassName('upper-canvas')[0];
-        console.log(canvas.initialWidth)
-        console.log(upperCanvas.style.width)
-        return getCanvasStyleWidth()/canvas.initialWidth;
-    }
 
     function importImage(e) {
         props.imageRef.current = true;
@@ -112,14 +98,11 @@ export default function Header(props) {
 
     //새 프로젝트 
     function clearCanvas() { //캔버스 초기화 
-        console.log(getZoom());
         common.removeAllObjects(canvas);
         common.initalCanvas(canvas);
         common.updateStates(canvas);
         common.setCanvasCenter(canvas);
         canvas.renderAll();
-        console.log(canvas);
-        
        
     }
 
@@ -177,21 +160,15 @@ export default function Header(props) {
         if(canvas.undoStack.length>1){
             common.removeAllObjects(canvas);
             var current = canvas.undoStack.pop();
-            // current.recentStyleSize=[getCanvasStyleWidth(),getCanvasStyleHeight()];
         
             console.log(current);
             canvas.redoStack.push(current);
             var json = canvas.undoStack[canvas.undoStack.length-1]; 
 
-            var width = canvas.width;
-            var height = canvas.height;
+
             common.setCanvasCenter(canvas);
-            console.log(canvas)
             canvas.loadFromJSON(json, () => {
-                console.log(canvas.width)
-                console.log(canvas.zoom);
                 if(canvas.recentStyleSize){
-                    
                 canvas.setWidth(canvas.initialWidth);
                 canvas.setHeight(canvas.initialHeight);
                 common.setCanvasStyleSize(canvas.recentStyleSize[0],canvas.recentStyleSize[1])
@@ -211,11 +188,11 @@ export default function Header(props) {
                             inputNodes[i].value = inputNodes[i].defaultValue;
                         }
                     }
-                    for (var i = 0; i < inputNodes.length; i++) {
-                        var id = inputNodes[i].id;
-                        if (inputNodes[i].type === 'checkbox') {
+                    for (var j = 0; j < inputNodes.length; j++) {
+                        var id = inputNodes[j].id;
+                        if (inputNodes[j].type === 'checkbox') {
                             document.getElementById(id).checked = state[0][id];
-                        } else if (inputNodes[i].type === 'range') {
+                        } else if (inputNodes[j].type === 'range') {
                             document.getElementById(id).value = Number(state[1][id]);
                         } else {
                             document.getElementById(id).value = state[2][id];
@@ -256,14 +233,10 @@ export default function Header(props) {
                     console.log(canvas.initialWidth);
                     console.log(canvas);
                     canvas.renderAll();
-                    // common.setCanvasStyleSize(canvas.recentStyleSize[0],canvas.recentStyleSize[1])
 
                     }
                 common.setCanvasCenter(canvas);
-                if (canvas.backgroundImage) {
-                        canvas.backgroundImage.scaleX =  canvas.initialWidth / canvas.backgroundImage.width
-                        canvas.backgroundImage.scaleY = canvas.initialHeight / canvas.backgroundImage.height
-                    }
+             
                 
                 try {
                     var state = canvas.filterValues;
@@ -274,11 +247,11 @@ export default function Header(props) {
                             inputNodes[i].value = inputNodes[i].defaultValue;
                         }
                     }
-                    for (var i = 0; i < inputNodes.length; i++) {
-                        var id = inputNodes[i].id;
-                        if (inputNodes[i].type === 'checkbox') {
+                    for (var j = 0; j < inputNodes.length; j++) {
+                        var id = inputNodes[j].id;
+                        if (inputNodes[j].type === 'checkbox') {
                             document.getElementById(id).checked = state[0][id];
-                        } else if (inputNodes[i].type === 'range') {
+                        } else if (inputNodes[j].type === 'range') {
                             document.getElementById(id).value = Number(state[1][id]);
                         } else {
                             document.getElementById(id).value = state[2][id];

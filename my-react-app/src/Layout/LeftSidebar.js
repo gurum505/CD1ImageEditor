@@ -54,7 +54,7 @@ const LeftSidebar = ({children, canvas, stateRef, objectNumRef}) => {
 
   return (
     <div className={styles.container} >
-      <div style={{ width: `${wid}px`, height: '100%', transition:'0.5s ease' ,overflow:"hidden"}}>
+      <div className='leftbar'style={{ width: `${wid}px`, height: '100%', transition:'0.5s ease' ,overflow:"hidden"}}>
         
         <div className={styles.content}>
           {children}

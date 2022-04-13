@@ -57,36 +57,21 @@ export default function App(props) {
         // });
     
     }, []);
-
-    // let zoom =1;
-    const ZOOM_SPEED =0.07 ;
-
-
+    
     useEffect(()=>{
         if (canvas) {
-            console.log(canvas.width);
             common.updateStates(canvas);
             common.setCanvasCenter(canvas)
-            
             canvas.on({
                 'mouse:wheel': (opt) => {
                      var delta = opt.e.deltaY;
                     if(delta<0){
-                        canvas.zoom+=ZOOM_SPEED;
+                        common.zoom(canvas,1.1);
                     }else{
-                        canvas.zoom-=ZOOM_SPEED
+                        common.zoom(canvas,0.9)
                     }
 
-                    console.log(canvas.zoom)
-    
-                    var canvasElem = document.getElementsByTagName('canvas');
-                    for (var i =0; i<canvasElem.length; i++){
-                        console.log(canvas.initialWidth);
-                        canvasElem[i].style.width = canvas.initialWidth * canvas.zoom + 'px';
-                        canvasElem[i].style.height = canvas.initialHeight*canvas.zoom + 'px';
-                        
-                    }
-                    common.setCanvasCenter(canvas);
+
                 
                 },
                 'object:removed': () => {
@@ -220,7 +205,6 @@ export default function App(props) {
             redoStack :[],
             filterValues : '',
             backgroundColor: 'white',
-            zoom :1
            
         })
     )
@@ -241,7 +225,7 @@ export default function App(props) {
                     <div id="layer"></div>
                 </main>
 
-                <Footbar />{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
+                <Footbar canvas={canvas}/>{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
             </div>
             <RightSidebar/>
         </div>
