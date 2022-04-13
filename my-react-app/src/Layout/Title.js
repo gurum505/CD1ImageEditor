@@ -7,7 +7,7 @@ const Title=()=>{
             
             <div className={styles.contents}>
                 <h1>
-                   <span><GithubOutlined/>  </span> 
+                   <span><GithubOutlined/></span> 
                     CDImageEditor  
                 </h1>
                 <h3>

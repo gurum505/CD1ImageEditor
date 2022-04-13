@@ -218,12 +218,12 @@ export default function App(props) {
                 {canvas && <Header canvas={canvas} imageRef={imageRef} image={image}setImage={setImage}stateRef={stateRef} modsRef={modsRef} objectNumRef={objectNumRef} />}
 
                 {/* center로 통합 필요 */}
-                <main className={styles.mainContainer}>
+                <div className={styles.mainContainer}>
                     <canvas id="canvas" />
                     <Layer canvas={canvas}></Layer>
                     {canvas && <Editormenu canvas={canvas} imageRef={imageRef} />}
                     <div id="layer"></div>
-                </main>
+                </div>
 
                 <Footbar canvas={canvas}/>{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
             </div>
@@ -247,3 +247,6 @@ export default function App(props) {
 //https://cocook.tistory.com/137 -이미지 중앙
 //https://parra.tistory.com/entry/CSS-transform%EC%9C%BC%EB%A1%9C-zoom-%ED%9A%A8%EA%B3%BC-%EB%82%B4%EA%B8%B0
 //https://codesandbox.io/s/wonderful-cerf-69doe?file=/src/App.js:563-672
+//rightsidebar
+//https://velog.io/@fltxld3/React-%EB%B0%B0%EC%97%B4-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0-List-%EB%A0%8C%EB%8D%94%EB%A7%81-%EC%A1%B0%ED%9A%8C
+//
