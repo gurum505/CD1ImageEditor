@@ -1,16 +1,16 @@
 .layout{
     position: fixed;
     top: 80px; /*header 크기만큼 */
+    right: 120px;/*rightsidebar 크기만큼*/
     left:0;
-    bottom: 0;
-    right: 0;
-    width:100%;
+    /* bottom: 0; */
     height:100%;
+    width:calc(100% - 120px);/*rightsidebar 크기만큼*/
     display: flex;
 }
 .center{
     position: relative;
-    width: calc(100% - 150px);/*rightsidebar 크기 빼기*/
+    width: calc(100%);/*rightsidebar 크기 빼기*/
     height: 100%;
     z-index: 99;
     background-color: gray;

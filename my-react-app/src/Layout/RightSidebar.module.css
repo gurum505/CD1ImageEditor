@@ -1,5 +1,8 @@
 .container {
   background-color: #ccf711;
+  position:fixed;
+  right:0;
+  height:100%;
   width: 120px;
   z-index: 99;
   user-select: none;
