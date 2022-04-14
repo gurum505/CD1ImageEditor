@@ -40,7 +40,6 @@ export default function App(props) {
     const objectNumRef = useRef(0); // object 에 id값을 주어서 객체 단위로 처리가 가능 
       //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
 
-    console.log("ㅋㅋ")
     useEffect(() => {  //rendering 후 한 번 실행  
         setCanvas(initCanvas());
 
@@ -115,11 +114,31 @@ export default function App(props) {
                 
             });
             
-
+            var flag;
               window.addEventListener("resize", function(opt) { //브라우저 크기 resize에 따른 이벤트 
-                // zoom =1;
-                common.setCanvasCenter(canvas);
+                common.setCanvasCenter(canvas)
+                var innerWidth =common.getInnerSize(canvas)['innerWidth'];
+                var innerHeight =common.getInnerSize(canvas)['innerHeight'];
+                
+                var currentWidth = common.getCanvasStyleWidth();
+                var currentHeight = common.getCanvasStyleHeight();
 
+                var ratio = canvas.width/canvas.height;
+
+                if(innerWidth<currentWidth){
+                    flag = 'width';
+                    common.setCanvasStyleSize(innerWidth,innerWidth*(1/ratio))
+                }
+                else if(innerHeight<currentHeight){
+                    flag  ='height'
+                    common.setCanvasStyleSize(innerHeight*ratio,innerHeight)
+                }else{
+                    if(currentHeight<canvas.height &&flag ==='height' )
+                    common.setCanvasStyleSize(innerHeight*ratio,innerHeight)
+                    
+                    if(currentWidth<canvas.width &&flag ==='width' )
+                        common.setCanvasStyleSize(innerWidth,innerWidth*(1/ratio))
+                }
 
 
         
@@ -146,11 +165,7 @@ export default function App(props) {
         }
     },[canvas])
    
-    console.log('what')
-
     const initCanvas = () => {
-        console.log(document.getElementsByClassName('leftbar'))
-
         // var windowWidth= window.innerWidth-50;
         // var windowHeight = window.innerHeight-240;
         // var width, height; 

@@ -53,11 +53,11 @@ export default function Header(props) {
 
     function importImage(e) {
         props.imageRef.current = true;
-        props.setImage(!props.image);
+        // props.setImage(!props.image);
         e.target.value = '' //같은 이름의 이미지 파일 업로드가 안되는 것 방지 
 
-        var innerWidth = common.getInnerSize()['innerWidth'];
-        var innerHeight = common.getInnerSize()['innerHeight'];
+        var innerWidth = common.getInnerSize(canvas)['innerWidth'];
+        var innerHeight = common.getInnerSize(canvas)['innerHeight'];
 
         document.getElementById('import-image-file').onchange = function (e) {
             common.initalCanvas(canvas);
@@ -75,18 +75,8 @@ export default function Header(props) {
                     canvas.initialHeight= img.height
 
                     var ratio = img.width/img.height;
-                   
-                    if(img.width >innerWidth || img.height>innerHeight){
-                        if(innerWidth-img.width >innerHeight-img.height){
-                            common.setCanvasStyleSize(innerHeight *(ratio)*0.8,innerHeight*0.8)
-                            canvas.initialWidth  =innerHeight *(ratio)*0.8;
-                            canvas.initialHeight  =innerHeight*0.8
-                        }else{
-                            common.setCanvasStyleSize(innerWidth*0.8,innerWidth*(1/ratio)*0.8)
-                            canvas.initialWidth  =innerWidth*0.8;
-                            canvas.initialHeight  =innerWidth*(1/ratio)*0.8
-                        }   
-                    }
+                    common.fitToProportion(canvas)
+                    
                     canvas.renderAll();
                     common.setCanvasCenter(canvas);
                     common.updateStates(canvas);

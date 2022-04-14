@@ -22,20 +22,24 @@ const Footbar = (props) => {
     }
 
     var isPreviewOn = false;
-    var isLeftbarOpenend = false;
+    var isLeftbarOpenend = '';
+
     if (canvas)
         var recentStyleSize;
     function preview() {
-        if (canvas.componentSize['leftbar'] === 200) {
-            isLeftbarOpenend = true;
-        }
-        console.log(isPreviewOn)
+        
         var headerEditorHeader = document.getElementsByClassName('Header_editorHeader__6Q4uw')[0];
         var rightSidebarContainer = document.getElementsByClassName('RightSidebar_container__L2Lbe')[0];
         var leftSidebarContent = document.getElementsByClassName('LeftSidebar_content__G+DQS')[0];
         var leftbar = document.getElementsByClassName('leftbar')[0];
         var displayValue = '';
+       
         if (!isPreviewOn) {
+            if (canvas.componentSize['leftbar'] === 200) {
+                isLeftbarOpenend = true;
+            }else{
+                isLeftbarOpenend=false;
+            }
             displayValue = 'none';
             canvas.noHeaderEditor = true;
             isPreviewOn = true;
@@ -56,46 +60,17 @@ const Footbar = (props) => {
             isPreviewOn = false;
             canvas.componentSize['leftbar'] = isLeftbarOpenend ? 200 : 50;
             canvas.componentSize['rightbar'] = 120;
-            canvas.componentSize['editorHeader'] = 100;
+            canvas.componentSize['editorHeader'] = 60;
             headerEditorHeader.style.display = 'flex';
             rightSidebarContainer.style.display = 'block'
             leftSidebarContent.style.display = 'block'
             leftbar.style.display = 'block'
-            console.log(recentStyleSize)
             common.setCanvasStyleSize(recentStyleSize['width'], recentStyleSize['height'])
 
         }
-
-        // headerEditorHeader.style.display =displayValue;
-        // rightSidebarContainer.style.display =displayValue;
-        // leftSidebarContent.style.display =displayValue;
-        // leftbar.style.display =displayValue;
-
-
-        console.log(common.getInnerSize(canvas)['innerWidth'])
-        console.log(common.getInnerSize(canvas)['innerHeight'])
-        console.log(window.innerHeight)
-        console.log(window.innerWidth)
+     
         common.setCanvasCenter(canvas)
 
-        // var upperCanvas = document.getElementsByClassName('upper-canvas')[0];
-        // var lowerCanvas = document.getElementsByClassName('lower-canvas')[0];
-        // var innerHeight = window.innerHeight -80;
-        // var innerWidth = window.innerWidth;
-
-        // var styleWidth = upperCanvas.style.width.substr(0, upperCanvas.style.width.length-2)
-        // var styleHeight = upperCanvas.style.height.substr(0, upperCanvas.style.height.length-2)
-
-        // var left = (innerWidth-styleWidth)/2;
-        // var top = (innerHeight-styleHeight)/2-40;
-
-        // // if(top<100) top =100;
-        // upperCanvas.style.left = left+'px';
-        // upperCanvas.style.top = top+'px';
-
-        // lowerCanvas.style.left = left+'px';
-        // lowerCanvas.style.top = top+'px';
-        // canvas.setWidth(window.innerWidth);
 
 
     }

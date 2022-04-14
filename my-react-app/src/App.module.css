@@ -29,6 +29,6 @@ html, body{
     display: flex;
     /* justify-content: center; */
     /* align-items: center; */
-    height: calc(100% - 260px);/*footbar+header+title크기만큼*/
+    height: calc(100% - 200px);/*footbar+header+title크기만큼*/
     width: calc(100%) ;
 }

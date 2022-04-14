@@ -103,14 +103,24 @@ export function fitToProportion(canvas){ // 사진이 다른 컴포넌트를 넘
     var innerWidth = getInnerSize(canvas)['innerWidth'];
     var innerHeight = getInnerSize(canvas)['innerHeight'];
     
+    if(getCanvasStyleWidth()>innerWidth || getCanvasStyleHeight()>innerHeight){
+        while(1){
+            if(getCanvasStyleWidth()<getInnerSize(canvas)['innerWidth'] && getCanvasStyleHeight()<getInnerSize(canvas)['innerWidth']) break;
+           zoom(canvas,0.9);
+        }
+        zoom(canvas,0.9);
+
+    }
+    
     if(getCanvasStyleWidth()<innerWidth || getCanvasStyleHeight()<innerHeight){
     while(1){
-        if(getCanvasStyleWidth()<innerWidth && getCanvasStyleHeight()<innerHeight)
+        if(getCanvasStyleWidth()*1.1<innerWidth && getCanvasStyleHeight()*1.1<innerHeight)
         zoom(canvas,1.1);
-        else break;
+        else return ;
     }
-    }
+    
 
+}
 }
 
 export function updateStates(canvas){
