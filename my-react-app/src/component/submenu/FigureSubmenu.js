@@ -1,26 +1,32 @@
 import { useRef } from "react";
 import { fabric } from "fabric";
 import ColorPicker from "./ColorPicker";
-
+import {
+    TriangleIcon, CircleIcon
+    , RectangleIcon
+} from "../icons/icons";
 import * as common from "./common"
+import styles from "./LeftSidebarOpened.module.css"
+
+//FIXME:colorpicker선택 후 캔버스 누르면 다른 키 안먹힘 
 export default function FigureSubmenu(props) {
     const canvas = props.canvas;
     const color = useRef('black');
 
 
-    function mouseEventOff(){
+    function mouseEventOff() {
         canvas.off('mouse:down');
         canvas.off('mouse:up');
         canvas.off('mouse:move');
-        document.getElementById('add-rect').disabled =false;
-        document.getElementById('add-circle').disabled =false;
-        document.getElementById('add-triangle').disabled =false;
+        // document.getElementById('add-rect').disabled =false;
+        // document.getElementById('add-circle').disabled =false;
+        // document.getElementById('add-triangle').disabled =false;
 
     }
 
-    function addRect() {
+    function addRect(e) {
         mouseEventOff();
-        document.getElementById('add-rect').disabled =true;
+        // document.getElementById('add-rect').disabled =true;
         canvas.defaultCursor = 'crosshair';
         var rect, isDown, origX, origY;
         canvas.on('mouse:down', function (o) {
@@ -40,7 +46,7 @@ export default function FigureSubmenu(props) {
                 type: 'rect',
                 id: ++canvas.objectNum,
             });
-            common.addLayer(canvas,rect);
+            common.addLayer(canvas, rect);
             canvas.add(rect);
 
         });
@@ -62,7 +68,7 @@ export default function FigureSubmenu(props) {
         });
 
         canvas.on('mouse:up', function (o) {
-            document.getElementById('add-rect').disabled =false;
+            // document.getElementById('add-rect').disabled =false;
             isDown = false;
             canvas.defaultCursor = 'default';
             mouseEventOff();
@@ -73,7 +79,7 @@ export default function FigureSubmenu(props) {
 
     function addCircle() {
         mouseEventOff();
-        document.getElementById('add-circle').disabled =true;
+        // document.getElementById('add-circle').disabled =true;
         canvas.defaultCursor = 'crosshair';
         var circle, isDown, origX, origY;
         canvas.on('mouse:down', function (o) {
@@ -91,9 +97,9 @@ export default function FigureSubmenu(props) {
                 id: ++canvas.objectNum,
             });
 
-            common.addLayer(canvas,circle);
+            common.addLayer(canvas, circle);
             canvas.add(circle);
-            
+
 
         });
 
@@ -113,12 +119,12 @@ export default function FigureSubmenu(props) {
         });
 
         canvas.on('mouse:up', function (o) {
-            document.getElementById('add-circle').disabled =false;
+            // document.getElementById('add-circle').disabled =false;
             canvas.renderAll();
             isDown = false;
             // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.defaultCursor = 'default';
-            mouseEventOff(); 
+            mouseEventOff();
             common.updateStates(canvas);
 
         });
@@ -127,7 +133,7 @@ export default function FigureSubmenu(props) {
 
     function addTriangle() {
         mouseEventOff();
-        document.getElementById('add-triangle').disabled =true;
+        // document.getElementById('add-triangle').disabled =true;
         canvas.defaultCursor = 'crosshair';
         var triangle, isDown, origX, origY;
         canvas.on('mouse:down', function (o) {
@@ -147,7 +153,7 @@ export default function FigureSubmenu(props) {
                 id: ++canvas.objectNum,
                 type: 'triangle'
             });
-            common.addLayer(canvas,triangle);
+            common.addLayer(canvas, triangle);
             canvas.add(triangle);
 
         });
@@ -171,7 +177,7 @@ export default function FigureSubmenu(props) {
         });
 
         canvas.on('mouse:up', function (o) {
-            document.getElementById('add-triangle').disabled = false;
+            // document.getElementById('add-triangle').disabled = false;
             canvas.renderAll();
             isDown = false;
             // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
@@ -184,17 +190,12 @@ export default function FigureSubmenu(props) {
     return (
         <>
             <div>
-                <button id='add-rect'onClick={addRect}>
-                    사각형
-                </button>
-                <button id='add-circle'onClick={addCircle}>
-                    원
-                </button>
-                <button id='add-triangle' onClick={addTriangle}>
-                    삼각형
-                </button>
-                &nbsp; &nbsp;
-                <ColorPicker canvas={canvas} color={color} />
+                <p>
+                    <RectangleIcon id='add-rect' onClick={addRect} />
+                    <CircleIcon id='add-circle' onClick={addCircle} />
+                    <TriangleIcon id='add-triangle' onClick={addTriangle} />
+                </p>
+                <p><label>color</label><ColorPicker canvas={canvas} color={color} /></p>
             </div>
         </>
     )

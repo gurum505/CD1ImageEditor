@@ -4,7 +4,7 @@ import {FontSizeOutlined,MenuOutlined,BorderOutlined,AreaChartOutlined, LineOutl
     FolderOpenOutlined,CloudDownloadOutlined,UploadOutlined,
     FileImageOutlined,RedoOutlined,UndoOutlined,DownloadOutlined,
     EditOutlined,DragOutlined,ZoomInOutlined,ZoomOutOutlined,
-    ExpandOutlined,EyeOutlined,CopyOutlined,DiffOutlined,PlusOutlined} from "@ant-design/icons"
+    ExpandOutlined,EyeOutlined,CopyOutlined,DiffOutlined,PlusOutlined,UnderlineOutlined,SearchOutlined} from "@ant-design/icons"
 import styles from "./icons.module.css"
 import { ReactComponent as Triangle} from './TriangleIcon.svg';
 import { ReactComponent as Circle} from './CircleIcon.svg';
@@ -36,6 +36,29 @@ export const CloseOutlinedIcon=({onClick, children, htmlFor})=>{
         </span>
     )
 }
+
+export const SearchOutlinedIcon =({onClick, children, htmlFor})=>{
+    return(
+        <span className={styles.container}>
+            <label htmlFor={htmlFor}>
+            <SearchOutlined className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+            </label>
+        </span>
+    )
+}
+export const UnderlineOutlinedIcon =({onClick, children, htmlFor})=>{
+    return(
+        <span className={styles.container}>
+            <label htmlFor={htmlFor}>
+            <UnderlineOutlined className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+            </label>
+        </span>
+    )
+}
+
+
 
 export const PlusOutlinedIcon=({onClick, children, htmlFor})=>{
     return(

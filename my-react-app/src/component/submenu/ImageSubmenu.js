@@ -1,9 +1,14 @@
 import { fabric } from "fabric";
 import OnlineImage from "./OnlineImage";
 import * as common from './common'
+import {ImageIcon,ImageFromInternetIcon}from "../icons/icons";
+import styles from "./LeftSidebarOpened.module.css"
+import { useState } from "react";
+
 
 export default function ImageSubmenu(props) {
     const canvas = props.canvas;
+    const [onlineImageOption,setOnlineImageOption] = useState(false);
 
     function addLocalImage(e) {
         e.target.value = ''
@@ -46,21 +51,17 @@ export default function ImageSubmenu(props) {
     }
 
     function addOnlineImage() {
-        console.log("미구현");
+        setOnlineImageOption(!onlineImageOption)
     }
     return (
         <>
-        <OnlineImage />
-            <button id="add-image">
-                <label htmlFor="add-local-image-file">
-                    로컬 이미지 추가
-                </label>
-            </button>
-            <input type="file" id="add-local-image-file" name="chooseFile" accept="image/*" onClick={addLocalImage} />
-
-            <button  onClick={addOnlineImage}>
-                온라인에서 가져오기
-            </button>
+         <p><ImageIcon htmlFor={"add-local-image-file"} children={"from file"}/>
+            <input type="file" id="add-local-image-file" name="chooseFile" accept="image/*" onClick={addLocalImage} style={{display:'none'}}/>
+         <ImageFromInternetIcon htmlFor={"put htmlFor"} children={"from internet"} onClick={addOnlineImage}/>
+         </p>
+      
+        {onlineImageOption&& <OnlineImage />}
+           
         </>
     )
 }

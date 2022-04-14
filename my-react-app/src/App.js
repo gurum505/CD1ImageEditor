@@ -82,13 +82,13 @@ export default function App(props) {
                 'selection:cleared': () => {
                     console.log('selection:cleared');
                     common.colorActiveLayer(canvas);
-                    document.getElementById('remove-object').disabled = true;
+                    // document.getElementById('remove-object').disabled = true;
                     
                 },
                 'selection:created': () => {
                     console.log('selection:created');
                     common.colorActiveLayer(canvas);
-                    document.getElementById('remove-object').disabled = false;
+                    // document.getElementById('remove-object').disabled = false;
                 },
                 'object:added': () => {
 
@@ -99,17 +99,17 @@ export default function App(props) {
                     canvas.setActiveObject(object);
                     common.colorActiveLayer(canvas);
 
-                    document.getElementById('remove-object').disabled = false;
+                    // document.getElementById('remove-object').disabled = false;
 
                 },
                 'object:modified': () => {
                     console.log('object:modified');
-                    common.updateStates(canvas);
+                    // common.updateStates(canvas);
                     // document.getElementById('remove-object').disabled = false
                 },
                 'object:updated': () => {
                     console.log('object:updated');
-                    document.getElementById('remove-object').disabled = false
+                    // document.getElementById('remove-object').disabled = false
                 },
                 
             });
@@ -149,7 +149,6 @@ export default function App(props) {
     
                 if (e.key === 'Delete' || e.key ==='Backspace') {   // 텍스트 입력 중 backspace눌러도 객체 삭제 되지 않도록 
                     if(canvas.getActiveObject().type==='textbox'&& canvas.getActiveObject().isEditing ){ 
-                        console.log(canvas.getActiveObject().editable);
                         return;}
                     var o = canvas.getActiveObjects();
                     o.forEach((object) => {
@@ -195,15 +194,14 @@ export default function App(props) {
     return (
         <div className={styles.layout}>
             <Title />
-            {canvas&& <LeftSidebar canvas={canvas} stateRef={stateRef} objectNumRef={objectNumRef} />}
+            {canvas&& <LeftSidebar canvas={canvas}  />}
             <div  className={styles.center}>
-                {canvas && <Header canvas={canvas} imageRef={imageRef} image={image}setImage={setImage}stateRef={stateRef} modsRef={modsRef} objectNumRef={objectNumRef} />}
+                {canvas && <Header canvas={canvas} imageRef={imageRef} image={image}setImage={setImage} />}
 
                 {/* center로 통합 필요 */}
                 <div className={styles.mainContainer}>
                     <canvas id="canvas" />
                     <Layer canvas={canvas}></Layer>
-                    {canvas && <Editormenu canvas={canvas} imageRef={imageRef} />}
                     <div id="layer"></div>
                 </div>
 

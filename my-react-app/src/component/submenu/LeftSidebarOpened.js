@@ -1,14 +1,13 @@
 import {FontSizeOutlinedIcon, MenuOutlinedIcon
-    , LineOutlinedIcon, AlignLeftOutlinedIcon
-    , AlignCenterOutlinedIcon, AlignRightOutlinedIcon, HighlightOutlinedIcon
-    , BoldOutlinedIcon, ItalicOutlinedIcon, TriangleIcon, CircleIcon
-    , RectangleIcon, ImageIcon, ImageFromInternetIcon
+    , LineOutlinedIcon
+    , ImageIcon, ImageFromInternetIcon,HighlightOutlinedIcon
 } from "../icons/icons";
 import styles from "./LeftSidebarOpened.module.css"
-import * as common from './common'
-import { useEffect } from "react";
-
-
+import FigureSubmenu from './FigureSubmenu'
+import TextBoxSubmenu from "./TextBoxSubmenu";
+import LineSubmenu from "./LineSubmenu";
+import ImageSubmenu from './ImageSubmenu';
+import FilterSubmenu from './FilterSubmenu';
 export default function LeftSidebarOpened({ toggleMenu, currentRoute,canvas}) {
 
 
@@ -30,7 +29,6 @@ export default function LeftSidebarOpened({ toggleMenu, currentRoute,canvas}) {
     //       })
     //     });
     // });
-
     function Open(currentRoute, detailName) {
         if (currentRoute === detailName) {
             return true;
@@ -45,15 +43,18 @@ export default function LeftSidebarOpened({ toggleMenu, currentRoute,canvas}) {
             <div className={styles.container}>
             <details className={styles.detail} open={Open(currentRoute, "Object")}>
                 <summary>Object</summary>
-                <p><RectangleIcon /><TriangleIcon /><CircleIcon /> </p>
+                <FigureSubmenu canvas={canvas}/>
+                <ImageSubmenu canvas={canvas}/>
+                {/* <p><RectangleIcon /><TriangleIcon /><CircleIcon /> </p>
                 <p><ImageIcon htmlFor={"put htmlfor"} children={"from file"}/><ImageFromInternetIcon htmlFor={"put htmlFor"} children={"from internet"}/></p>
                 <p><label> width</label> <input type="text" /></p>
                 <p><label> height</label> <input type="text" /></p>
-                <p><label> color</label> <input type="color" /></p>
+                <p><label> color</label> <input type="color" /></p>   */}
             </details>
             <details className={styles.detail} open={Open(currentRoute, "Text")}>
                 <summary>Text</summary>
-                <p><FontSizeOutlinedIcon /></p>
+                <TextBoxSubmenu canvas={canvas}/>
+                {/* <p><FontSizeOutlinedIcon /></p>
                 <p><label> font size </label><input type="text" /></p>
                 <p><label> color </label><input type="color" /></p>
                 <label style={{ marginLeft: "15px" }}>정렬</label>
@@ -67,8 +68,8 @@ export default function LeftSidebarOpened({ toggleMenu, currentRoute,canvas}) {
                     <li>
                         <AlignRightOutlinedIcon />
                     </li>
-                </ul>
-                <label style={{ marginLeft: "15px" }}>글꼴</label>
+                </ul> */}
+                {/* <label style={{ marginLeft: "15px" }}>글꼴</label>
                 <ul>
                     <li>
                         <BoldOutlinedIcon />
@@ -77,26 +78,29 @@ export default function LeftSidebarOpened({ toggleMenu, currentRoute,canvas}) {
                         <ItalicOutlinedIcon  />
                     </li>
                 </ul>
+            </details> */} 
             </details>
             <details className={styles.detail} open={Open(currentRoute, "Line")}>
                 <summary>Drawing</summary>
-                <p>
+                <LineSubmenu canvas={canvas}/>
+                {/* <p>
                     <LineOutlinedIcon  children={"직선 그리기"}/>
                     <HighlightOutlinedIcon children={"자유그리기 모드"}/>
                 </p>
-                <p><label> color</label> <input type="color" /></p>
+                <p><label> color</label> <input type="color" /></p> */}
             </details>
             <details className={styles.detail} open={Open(currentRoute, "Image")}>
                 <summary>Canvas</summary>
-                <p><label> width</label> <input type="text" /></p>
+                <FilterSubmenu canvas={canvas}/>
+                {/* <p><label> width</label> <input type="text" /></p>
                 <p> <label> height</label> <input type="text" /></p>
                 <label style={{ marginLeft: "15px" }}>필터</label>
                 <div className={styles.effectContainer}>
                     <label> blur</label> <input type="range" min="0" max="5" defaultValue="0" step="1" />
                     <label> opacity</label> <input type="range" min="0" max="5" defaultValue="5" step="1" />
                     <label> brightness</label> <input type="range" min="-3" max="3" defaultValue="0" step="1" />
-                    <label> pixelate</label> <input type="range" min="0" max="5" defaultValue="0" step="1" />
-                </div>
+                    <label> pixelate</label> <input type="range" min="0" max="5" defaultValue="0" step="1" /> */}
+                {/* </div> */}
 
 
 

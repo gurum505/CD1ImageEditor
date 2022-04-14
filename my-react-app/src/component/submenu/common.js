@@ -180,8 +180,7 @@ export function colorActiveLayer(canvas) {
 
 // 객체 생성될 때 레이어 추가 
 export function addLayer(canvas, object) {  //레이어에 객체 추가 
-    console.log(object.type)
-      
+    
     const div = document.createElement('div');
     div.id = object.id;
     div.style.border = ' solid #0000FF';

@@ -1,7 +1,7 @@
 
 import styles from "./OnlineImage.module.css"
 import { fabric } from "fabric";
-
+import {SearchOutlined, SearchOutlinedIcon} from  "../icons/icons";
 
 //FIXME: 이미지 불러오면 div가 스크롤 되게 하고 싶은데 overflow 설정해도 적용이 안됨 
 //TODO: 드래그 후 드랍할 때 마우스 위치를 어떻게 ??
@@ -121,16 +121,18 @@ export default function OnelineImage(props) {
                 pic.appendChild(span);
                 document.querySelector(".gallery").appendChild(pic);
             });
-            console.log(data);
         }
         CuratedPhotos(page_num);
     }
     return (
         <div>
             <div className="search">
-                <label htmlFor="">이미지 검색</label>
-                <input id='query' type="text" />
-                <button onClick={loadImage} className="searchbutton">search</button>
+                <p><label htmlFor="">이미지 검색</label></p>
+                <p>
+                    <input id='query' type="text" style={{'width':'120px', 'height':'30px'}} />
+                    <SearchOutlinedIcon onClick={loadImage} className="searchbutton" style={{fontSize:'10%'}} />
+                </p>
+            
             </div>
             <div className="gallery">
 

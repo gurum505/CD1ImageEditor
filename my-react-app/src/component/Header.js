@@ -74,8 +74,8 @@ export default function Header(props) {
                     canvas.initialWidth = img.width;
                     canvas.initialHeight= img.height
 
-                    var ratio = img.width/img.height;
-                    common.fitToProportion(canvas)
+                    if(img.width>innerWidth || img.height>innerHeight)
+                        common.fitToProportion(canvas)
                     
                     canvas.renderAll();
                     common.setCanvasCenter(canvas);
@@ -109,7 +109,6 @@ export default function Header(props) {
     function serialization() {
         var json = canvas.toDatalessJSON(['initialWidth', 'initialHeight', 'objectNum', 'id','mods','filterValues']);
         // states는 순환 참조가 발생하므로 보낼 수 없음 
-        console.log(canvas);
         json = JSON.stringify(json);
 
 
@@ -151,7 +150,6 @@ export default function Header(props) {
             common.removeAllObjects(canvas);
             var current = canvas.undoStack.pop();
         
-            console.log(current);
             canvas.redoStack.push(current);
             var json = canvas.undoStack[canvas.undoStack.length-1]; 
 
@@ -195,7 +193,7 @@ export default function Header(props) {
                 var objects = canvas.getObjects();
                 if(objects.length!==0){
                 objects.forEach((object) => {
-                    if(object.type!=='path' && object.type!=='selection')
+                    if(object.type!=='path' && object.type!=='group' ||object.type!=='selection')
                     common.addLayer(canvas,object);
                 });
                 common.colorActiveLayer(canvas);
@@ -210,18 +208,13 @@ export default function Header(props) {
         if(canvas.redoStack.length>0){
             common.removeAllObjects(canvas);
             var json = canvas.redoStack.pop();
-            console.log(json);
             canvas.undoStack.push(json);
 
             canvas.loadFromJSON(json, () => {
                 canvas.zoom=1;
-                console.log(json)
                 if(canvas.recentStyleSize){
-                    console.log("왜")
                     canvas.setWidth(canvas.initialWidth);
                     canvas.setHeight(canvas.initialHeight);
-                    console.log(canvas.initialWidth);
-                    console.log(canvas);
                     canvas.renderAll();
 
                     }
@@ -276,7 +269,6 @@ export default function Header(props) {
     function paste() {
         if(_clipboard)
         _clipboard.clone(function(clonedObj) {
-            console.log(clonedObj.left);
             clonedObj.set({
                 left: clonedObj.left + 10,
                 top: clonedObj.top + 10,

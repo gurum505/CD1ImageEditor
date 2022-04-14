@@ -2,6 +2,12 @@ import { useRef } from "react";
 import { fabric } from "fabric";
 import ColorPicker from "./ColorPicker";
 import * as common from "./common"
+import styles from "./LeftSidebarOpened.module.css"
+
+import {
+     LineOutlinedIcon
+    ,HighlightOutlinedIcon
+} from "../icons/icons";
 export default function LineSubmenu(props) {
     const canvas = props.canvas;
     const color = useRef('black');  // : 값이 바뀌어도 렌더링되지 않음.
@@ -14,14 +20,14 @@ export default function LineSubmenu(props) {
         if (canvas.isDrawingMode) { //곡선 그리기가 꺼져있는 상태에서 곡선버튼을 눌렀을 때  
             canvas.isDrawingMode = false;
             canvas.defaultCursor = 'default';
-            document.getElementById('curve').disabled =false;
-            document.getElementById('straight').disabled =false;
+            // document.getElementById('curve').disabled =false;
+            // document.getElementById('straight').disabled =false;
 
             return;
         }
         else {
             canvas.isDrawingMode = true;
-            document.getElementById('curve').disabled =true;
+            // document.getElementById('curve').disabled =true;
 
             canvas.defaultCursor = 'crosshair';
 
@@ -40,8 +46,8 @@ export default function LineSubmenu(props) {
 
 
     function drawStraight() {
-        document.getElementById('curve').disabled =false;
-        document.getElementById('straight').disabled =true;
+        // document.getElementById('curve').disabled =false;
+        // document.getElementById('straight').disabled =true;
 
         canvas.defaultCursor = 'crosshair';
         canvas.isDrawingMode = false;
@@ -73,7 +79,7 @@ export default function LineSubmenu(props) {
 
         });
         canvas.on('mouse:up', function (o) {
-            document.getElementById('straight').disabled =false;
+            // document.getElementById('straight').disabled =false;
 
             isDown = false;
             canvas.off('mouse:down');
@@ -232,10 +238,14 @@ export default function LineSubmenu(props) {
 
     return (<>
         <div>
-            <button id="curve" onClick={drawCurve}>
-                곡선
-            </button>
-            <select id='drawing-mode' onChange={setDrawingMode}>
+            <p>
+                <LineOutlinedIcon children={"직선그리기"} onClick={drawStraight}/>
+                <HighlightOutlinedIcon children={"자유그리기 모드"} onClick={drawCurve}/>
+            </p>
+            <p>
+            <select id='drawing-mode' onChange={setDrawingMode} style={{}}>
+            <option value="">--choose drawing option--</option>
+
                 <option>Pencil</option>
                 <option>Circle</option>
                 <option>Spray</option>
@@ -244,23 +254,15 @@ export default function LineSubmenu(props) {
                 <option>Square</option>
                 <option>Diamond</option>
             </select>
-            <br/>
-            <button id='straight' onClick={drawStraight}>
-                직선
-            </button>
-            &nbsp; &nbsp;
-            <p>
-                <label>Line width: <input type="range" id="line-width" defaultValue="30" min="0" max="150" step="1" onChange={setLineWidth} /></label>
             </p>
-            <p>
-                <label>Shadow width: <input type="range" id="shadow-width" defaultValue="0" min="0" max="50" step="1" onChange={setShadowWidth} /></label>
-            </p>
-            <p>
-                <label>Shadow offset: <input type="range" id="shadow-offset" defaultValue="0" min="0" max="50" step="1" onChange={setShadowOffset} /></label>
-            </p>
-
-            <label>Line color: <ColorPicker canvas={canvas} color={color} /> </label>
-
+          
+          
+            <div className={styles.effectContainer}>
+                <label>Line width:</label><input type="range" id="line-width" defaultValue="30" min="0" max="150" step="1" onChange={setLineWidth} />
+                <label>Shadow width:</label><input type="range" id="shadow-width" defaultValue="0" min="0" max="50" step="1" onChange={setShadowWidth} />
+                <label>Shadow offset: </label> <input type="range" id="shadow-offset" defaultValue="0" min="0" max="50" step="1" onChange={setShadowOffset} />
+            </div>
+            <p><label> color</label> <ColorPicker canvas={canvas} color={color}/></p> 
         </div>
     </>);
 }
