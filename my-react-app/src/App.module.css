@@ -7,10 +7,14 @@ html, body{
 .layout{
     position: fixed;
     top: 80px; /*header 크기만큼 */
-    right: 120px;/*rightsidebar 크기만큼*/
     left:0;
     height:100%;
-    width:calc(100% - 120px);/*rightsidebar 크기만큼*/
+    width :100%;
+
+
+   /* right: 120px; /*  rightsidebar 크기만큼  */
+   /* width:calc(100% - 120px);   /*rightsidebar 크기만큼 */
+    
     display: flex;
 }
 .center{
@@ -23,8 +27,8 @@ html, body{
 }
 .mainContainer{
     display: flex;
-    justify-content: center;
-    align-items: center;
+    /* justify-content: center; */
+    /* align-items: center; */
     height: calc(100% - 260px);/*footbar+header+title크기만큼*/
     width: calc(100%) ;
 }

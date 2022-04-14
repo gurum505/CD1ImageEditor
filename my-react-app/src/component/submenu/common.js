@@ -5,32 +5,54 @@
 import { CommentOutlined } from "@ant-design/icons";
 
 
-export function getInnerSize(){
-    var dict= {}
-    var leftbar = document.getElementsByClassName('leftbar')[0].offsetWidth;
-    var rightSidbarContainer = document.getElementsByClassName('RightSidebar_container__L2Lbe')[0].offsetWidth;
-    var HeaderEditorHeader = document.getElementsByClassName('Header_editorHeader__6Q4uw')[0].offsetHeight;
-    var titleContents=document.getElementsByClassName('Title_contents__NSiUr')[0].offsetHeight;
-    var footbarContents = document.getElementsByClassName('Footbar_contents__zIqCh')[0].offsetHeight;
-    dict['innerWidth'] = window.innerWidth-(leftbar+rightSidbarContainer);
-    dict['innerHeight'] = window.innerHeight-(HeaderEditorHeader+footbarContents);
-    return dict; 
+export function initialComponentSize(){ //현재 페이지 구성요소들의 크기 
+
+    var dict ={};
+    dict['leftbar']= document.getElementsByClassName('leftbar')[0].offsetWidth;
+    dict['rightbar'] = document.getElementsByClassName('RightSidebar_container__L2Lbe')[0].offsetWidth;
+    dict['titleHeader']=document.getElementsByClassName('Title_contents__NSiUr')[0].offsetHeight;
+    dict['editorHeader'] = document.getElementsByClassName('Header_editorHeader__6Q4uw')[0].offsetHeight;
+    dict['footer']=document.getElementsByClassName('Footbar_contents__zIqCh')[0].offsetHeight;
+
+    return dict;
+}
+
+export function getInnerSize(canvas){ //캔버스가 포함되는 영역의 크기(회색부분)
+    var dict ={};
+
+    var component = canvas.componentSize;
+    dict['innerWidth'] = window.innerWidth - (component['leftbar']+component['rightbar']);
+    dict['innerHeight'] = window.innerHeight - (component['titleHeader']+component['editorHeader']+component['footer']);
+    return dict;
 }   
 
-// export   function fitToProportion(canvas){
-//     var innerWidth = getInnerSize()['innerWidth'];
-//     var innerHeight = getInnerSize()['innerHeight'];
+export function setCanvasCenter(canvas) { //캔버스를 내 가운데에 위치 시키는 함수 
+    if(canvas){
+        var inner = getInnerSize(canvas);
+        var innerWidth=  inner['innerWidth'];
+        var innerHeight = inner['innerHeight'];
 
-//     var ratio = canvas.width/canvas.height;
+        var upperCanvas = document.getElementsByClassName('upper-canvas')[0];
+        var lowerCanvas = document.getElementsByClassName('lower-canvas')[0];
+        
 
-//     if(Math.abs(innerWidth-getCanvasStyleWidth)>Math.abs(innerHeight-getCanvasStyleHeight)){
-//         setCanvasStyleSize(innerHeight*0.8*ratio,innerHeight*0.8)
-//     }else{
-//         setCanvasStyleSize(innerWidth*0.8,innerWidth*0.8*(1/ratio))
-//     }
-//     setCanvasCenter(canvas)
-// }
+        var styleWidth = upperCanvas.style.width.substr(0, upperCanvas.style.width.length-2)
+        var styleHeight = upperCanvas.style.height.substr(0, upperCanvas.style.height.length-2)
 
+
+        var left = (innerWidth-styleWidth)/2;
+        var top = (innerHeight-styleHeight)/2
+        ;
+
+        // if(top<100) top =100;
+        upperCanvas.style.left = left+'px';
+        upperCanvas.style.top = top+'px';
+
+        lowerCanvas.style.left = left+'px';
+        lowerCanvas.style.top = top+'px';
+
+    }
+}
 
 export function zoom(canvas,ratio){
     var canvasElem = document.getElementsByTagName('canvas');
@@ -38,12 +60,10 @@ export function zoom(canvas,ratio){
         canvasElem[i].style.width = getCanvasStyleWidth() * ratio + 'px';
         canvasElem[i].style.height = getCanvasStyleHeight()* ratio+ 'px';
     }
-    // var zoomLevel =  document.getElementById('zoom-level').value;
-    // console.log(zoomLevel)
-    // zoomLevel = zoomLevel.substr(0,zoomLevel.length-1);
-    // document.getElementById('zoom-level').value =zoomLevel+ +'%';
+
     setCanvasCenter(canvas);
 }
+
 export function initalCanvas(canvas){
     canvas.set({
         backgroundImage:null,
@@ -79,49 +99,18 @@ export function setCanvasStyleSize(width,height){
     lowerCanvas.style.height = height+'px';
 }
 
-export function fitToProportion(canvas){
-    var innerWidth = getInnerSize()['innerWidth'];
-    var innerHeight = getInnerSize()['innerHeight'];
-    console.log(innerHeight);
-    console.log(innerWidth)
-    var ratio = canvas.width/canvas.height;
-
-    if(Math.abs(innerWidth-getCanvasStyleWidth)>Math.abs(innerHeight-getCanvasStyleHeight)){
-        setCanvasStyleSize(innerHeight*0.8*ratio,innerHeight*0.8)
-    }else{
-        setCanvasStyleSize(innerWidth*0.8,innerWidth*0.8*(1/ratio))
+export function fitToProportion(canvas){ // 사진이 다른 컴포넌트를 넘지 않는 선에서 최대한 꽉 차게 비율을 맞춤
+    var innerWidth = getInnerSize(canvas)['innerWidth'];
+    var innerHeight = getInnerSize(canvas)['innerHeight'];
+    
+    if(getCanvasStyleWidth()<innerWidth || getCanvasStyleHeight()<innerHeight){
+    while(1){
+        if(getCanvasStyleWidth()<innerWidth && getCanvasStyleHeight()<innerHeight)
+        zoom(canvas,1.1);
+        else break;
     }
-    // common.setCanvasCenter(canvas)
-}
-
-export function setCanvasCenter(canvas) { //캔버스를 내 가운데에 위치 시키는 함수 
-    if(canvas){
-        var innerWidth= getInnerSize()['innerWidth'];
-        var innerHeight =getInnerSize()['innerHeight']
-
-        var upperCanvas = document.getElementsByClassName('upper-canvas')[0];
-        var lowerCanvas = document.getElementsByClassName('lower-canvas')[0];
-        
-
-        var styleWidth = upperCanvas.style.width.substr(0, upperCanvas.style.width.length-2)
-        var styleHeight = upperCanvas.style.height.substr(0, upperCanvas.style.height.length-2)
-
-        var titleContents=document.getElementsByClassName('Title_contents__NSiUr')[0].offsetHeight;
-        var HeaderEditorHeader = document.getElementsByClassName('Header_editorHeader__6Q4uw')[0].offsetHeight;
-
-        if(!canvas.noHeaderEditor) titleContents=0;
-        var left = (innerWidth-styleWidth)/2;
-        var top = (innerHeight-styleHeight)/2+ HeaderEditorHeader/2- titleContents/2;
-        ;
-
-        // if(top<100) top =100;
-        upperCanvas.style.left = left+'px';
-        upperCanvas.style.top = top+'px';
-
-        lowerCanvas.style.left = left+'px';
-        lowerCanvas.style.top = top+'px';
-
     }
+
 }
 
 export function updateStates(canvas){

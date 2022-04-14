@@ -5,9 +5,11 @@ import {FontSizeOutlinedIcon, MenuOutlinedIcon
     , RectangleIcon, ImageIcon, ImageFromInternetIcon
 } from "../icons/icons";
 import styles from "./LeftSidebarOpened.module.css"
+import * as common from './common'
+import { useEffect } from "react";
 
 
-export default function LeftSidebarOpened({ toggleMenu, currentRoute}) {
+export default function LeftSidebarOpened({ toggleMenu, currentRoute,canvas}) {
 
 
     //detail 한메뉴가 열리면 나머지가 닫히는 함수

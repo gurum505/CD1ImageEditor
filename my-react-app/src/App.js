@@ -40,7 +40,7 @@ export default function App(props) {
     const objectNumRef = useRef(0); // object 에 id값을 주어서 객체 단위로 처리가 가능 
       //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
 
-  
+    console.log("ㅋㅋ")
     useEffect(() => {  //rendering 후 한 번 실행  
         setCanvas(initCanvas());
 
@@ -60,15 +60,18 @@ export default function App(props) {
     
     useEffect(()=>{
         if (canvas) {
+           
+            canvas.componentSize = common.initialComponentSize();
+            common.setCanvasCenter(canvas);
             common.updateStates(canvas);
-            common.setCanvasCenter(canvas)
+            common.getInnerSize(canvas)
             canvas.on({
                 'mouse:wheel': (opt) => {
                      var delta = opt.e.deltaY;
                     if(delta<0){
-                        common.zoom(canvas,1.1);
+                        common.zoom(canvas,1.07);
                     }else{
-                        common.zoom(canvas,0.9)
+                        common.zoom(canvas,0.93)
                     }
 
 
@@ -111,52 +114,13 @@ export default function App(props) {
                 },
                 
             });
-           
+            
+
               window.addEventListener("resize", function(opt) { //브라우저 크기 resize에 따른 이벤트 
                 // zoom =1;
-            
-                var innerWidth= common.getInnerSize()['innerWidth'];
-                var innerHeight =common.getInnerSize()['innerHeight']
-                var ratio = canvas.width/canvas.height;
-
-                const lowerCanvas = document.getElementsByClassName('lower-canvas')[0];
-                const upperCanvas = document.getElementsByClassName('upper-canvas')[0];
-
-                var styleWidth = lowerCanvas.style.width.substr(0, lowerCanvas.style.width.length-2);
-                var styleHeight = lowerCanvas.style.height.substr(0, lowerCanvas.style.height.length-2);
-                
-                if(innerWidth<styleWidth){
-                    lowerCanvas.style.width = innerWidth+'px';
-                    lowerCanvas.style.height = innerWidth * (1/ratio) + 'px';
-
-                    upperCanvas.style.width = innerWidth+'px';
-                    
-                    upperCanvas.style.height = innerWidth * (1/ratio) + 'px';
-                }else if (innerHeight<styleHeight){
-                    console.log(innerHeight)
-                    console.log(upperCanvas.style.height)
-                    lowerCanvas.style.height = innerHeight+'px';
-                    lowerCanvas.style.width = (innerHeight)*ratio+'px';
-
-                    upperCanvas.style.height =  innerHeight+'px';
-                    upperCanvas.style.width =  (innerHeight)*ratio+'px';
-                }else{
-                    if(innerWidth<canvas.width && styleWidth < innerWidth){
-                    lowerCanvas.style.width = innerWidth+'px';
-                    lowerCanvas.style.height = innerWidth * (1/ratio) + 'px';
-
-                    upperCanvas.style.width = innerWidth+'px';
-                    upperCanvas.style.height = innerWidth * (1/ratio) + 'px';
-                    }else if (innerHeight<styleHeight && styleHeight<innerHeight){
-                        lowerCanvas.style.height = innerHeight;
-                        lowerCanvas.style.width = innerHeight*ratio+'px';
-    
-                        upperCanvas.style.height = innerHeight; 
-                        upperCanvas.style.width = innerHeight*ratio+'px';
-                    }
-                }               
-
                 common.setCanvasCenter(canvas);
+
+
 
         
             });
@@ -182,8 +146,11 @@ export default function App(props) {
         }
     },[canvas])
    
+    console.log('what')
 
     const initCanvas = () => {
+        console.log(document.getElementsByClassName('leftbar'))
+
         // var windowWidth= window.innerWidth-50;
         // var windowHeight = window.innerHeight-240;
         // var width, height; 
@@ -205,7 +172,7 @@ export default function App(props) {
             redoStack :[],
             filterValues : '',
             backgroundColor: 'white',
-           
+            componentSize:'',
         })
     )
     }
