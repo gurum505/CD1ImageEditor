@@ -3,9 +3,13 @@ import {
     , AreaChartOutlinedIcon, LineOutlinedIcon
 } from "../icons/icons";
 
-export default function LeftSidebarClosed({ toggleMenu, SetCurrentRoute }) {
+import * as common from './common'
+import { useEffect } from "react";
+export default function LeftSidebarClosed({ toggleMenu, SetCurrentRoute,canvas }) {
     //버튼 함수들
-    
+
+  
+    // });
 
     return (
         <div style={{ display: "flex", flexDirection: "column", outline: "none"}} >

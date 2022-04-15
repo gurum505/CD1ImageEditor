@@ -3,14 +3,14 @@
     margin-top:auto;
     background-color: #202020;
     position: absolute;/*zoom기능할거면 absolute가 맞겠지?*/
-    bottom: 80px;/*height만큼*/
+    bottom: 60px;/*height만큼*/
     width:100%;
 
     flex-grow: 0;
 }
 .contents{
     width:100%;
-    height:100%;
+    height:60px;
     display:flex;
     align-items: center; /* 세로축 정렬*/
     justify-content:center; /* 가로축 정렬*/

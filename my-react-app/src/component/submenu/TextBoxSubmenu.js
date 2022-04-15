@@ -1,20 +1,23 @@
-import { CommentOutlined } from "@ant-design/icons";
+import { CommentOutlined, UnderlineOutlined } from "@ant-design/icons";
 import { fabric } from "fabric";
 import {  useEffect, useRef } from "react";
 import ColorPicker from "./ColorPicker";
 import * as common from "./common"
+import {AlignLeftOutlinedIcon,UnderlineOutlinedIcon
+    , AlignCenterOutlinedIcon, AlignRightOutlinedIcon, HighlightOutlinedIcon
+    , BoldOutlinedIcon, ItalicOutlinedIcon, FontSizeOutlinedIcon, LineHeightOutlinedIcon}from "../icons/icons";
 
 export default function TextBoxSubmenu(props) {
     const canvas = props.canvas;
     const color = useRef('black');
- 
+    canvas.isDrawingMode =false;
     useEffect(()=>{
         canvas.off('mouse:down');
         canvas.defaultCursor = 'default';
     })
 
     function addTextBox() {
-        document.getElementById('add-textbox').disabled =true;
+        // document.getElementById('add-textbox').disabled =true;
         canvas.defaultCursor = 'text';
         canvas.on('mouse:down', (o) => {
             const pointer = canvas.getPointer(o.e);
@@ -27,11 +30,10 @@ export default function TextBoxSubmenu(props) {
                 id : ++canvas.objectNum,
             });
             canvas.add(textbox);
-            document.getElementById('add-textbox').disabled =false;
+            // document.getElementById('add-textbox').disabled =false;
             common.updateStates(canvas);
             common.addLayer(canvas,textbox);
             canvas.off('mouse:down');
-            document.getElementById(textbox.id).style.border = 'solid red';
             canvas.defaultCursor = 'default';
 
         });
@@ -98,29 +100,35 @@ export default function TextBoxSubmenu(props) {
     return(
     <>
         <div className="textbox-submenu">
-            <button id='add-textbox' onClick = {addTextBox}>텍스트상자 추가 </button>
-            &nbsp; &nbsp;
-            <button onClick={makeTextBold} id='bold' >
-                진하게
-            </button>
-            <button onClick={italicizeText} id='italic'>
-                이탤릭
-            </button>
-            <button onClick={underlineText} id='underline'>
-                밑줄선
-            </button>
-            &nbsp; &nbsp;
-            <button onClick={() => alignText('left')}>
-                왼쪽정렬
-            </button>
-            <button onClick={() => alignText('center')}>
-                가운데정렬
-            </button>
-            <button onClick={() => alignText('right')}>
-                오른쪽정렬
-            </button>
-            &nbsp; &nbsp;
-            <ColorPicker  canvas={canvas} color ={color}/>
+            
+            <p><FontSizeOutlinedIcon id='add-textbox' onClick={addTextBox} /></p>
+            <p><label>font size </label><input type="text" /></p>
+            <p><label>font color</label> <ColorPicker canvas={canvas} color={color}/></p> 
+            <label style ={{marginLeft:"15px"}} >정렬</label>
+
+            <ul>
+                <li>
+                    <AlignLeftOutlinedIcon onClick={() => alignText('left')}/>
+                </li>
+                <li>
+                    <AlignCenterOutlinedIcon onClick={() => alignText('center')}/>
+                </li>
+                <li>
+                    <AlignRightOutlinedIcon onClick={() => alignText('right')}/>
+                </li>
+            </ul>
+            <label style={{marginLeft:"15px"}}>글꼴</label>
+            <ul>
+                <li>
+                    <BoldOutlinedIcon onClick={makeTextBold}/>
+                </li>
+                <li>
+                    <ItalicOutlinedIcon onClick={italicizeText}/>
+                </li>
+                <li>
+                    <UnderlineOutlinedIcon onClick={underlineText}/>
+                </li>
+            </ul>         
         </div>
     </>);
 }

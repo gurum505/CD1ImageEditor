@@ -27,20 +27,15 @@ import * as common from "./component/submenu/common"
 //TODO: Canvas:이미지 드래그앤 드롭으로 이미지 집어넣기, 복사 붙여넣기로 집어넣기
 //TODO: Canvas:객체들고 옮길때 canvas에 중앙선or경계 표시
 
+
+var test=[] ;
 export default function App(props) {
     const [canvas, setCanvas] = useState(''); //useEffect()후 렌더링 하기 위한 state
     const[image,setImage] = useState(false); //이미지 불러왔을 때 전체 렌더링을 위한 state 
     const imageRef = useRef(false); // 이미지를 불러오면 header에서 setImage()를 통해 렌더링을 시키고, Editor.js에서 imageRef값이 변경 되면 submenu들을 렌더링 함 
 
-    const stateRef = useRef([]); // undo/redo 를 위해 특정 canvas 상태를 저장하는 배열 
-    const modsRef = useRef(0); // undo 시작 위치를 결정
-    const objectNumRef = useRef(0); // object 에 id값을 주어서 객체 단위로 처리가 가능 
-      //렌더링 되어도 동일 참조값을 유지, 값이 바뀌어도 렌더링하지 않음 
-
-  
     useEffect(() => {  //rendering 후 한 번 실행  
         setCanvas(initCanvas());
-
         // let scale = 1; //canvas를 포함하는 wrap element를 마우스 휠로 zoom in/out 
         // const el = document.querySelector('.wrap');
         // el.addEventListener('wheel', (event)=>{
@@ -54,36 +49,23 @@ export default function App(props) {
         // });
     
     }, []);
-
-    // let zoom =1;
-    const ZOOM_SPEED =0.07 ;
-
-
+    
     useEffect(()=>{
         if (canvas) {
-            console.log(canvas.width);
+            canvas.componentSize = common.initialComponentSize();
+            common.setCanvasCenter(canvas);
             common.updateStates(canvas);
-            common.setCanvasCenter(canvas)
-            
+            common.getInnerSize(canvas)
             canvas.on({
                 'mouse:wheel': (opt) => {
                      var delta = opt.e.deltaY;
                     if(delta<0){
-                        canvas.zoom+=ZOOM_SPEED;
+                        common.zoom(canvas,1.07);
                     }else{
-                        canvas.zoom-=ZOOM_SPEED
+                        common.zoom(canvas,0.93)
                     }
 
-                    console.log(canvas.zoom)
-    
-                    var canvasElem = document.getElementsByTagName('canvas');
-                    for (var i =0; i<canvasElem.length; i++){
-                        console.log(canvas.initialWidth);
-                        canvasElem[i].style.width = canvas.initialWidth * canvas.zoom + 'px';
-                        canvasElem[i].style.height = canvas.initialHeight*canvas.zoom + 'px';
-                        
-                    }
-                    common.setCanvasCenter(canvas);
+
                 
                 },
                 'object:removed': () => {
@@ -92,24 +74,24 @@ export default function App(props) {
                 'selection:cleared': () => {
                     console.log('selection:cleared');
                     common.colorActiveLayer(canvas);
-                    document.getElementById('remove-object').disabled = true;
+                    // document.getElementById('remove-object').disabled = true;
                     
                 },
                 'selection:created': () => {
                     console.log('selection:created');
                     common.colorActiveLayer(canvas);
-                    document.getElementById('remove-object').disabled = false;
+                    // document.getElementById('remove-object').disabled = false;
                 },
                 'object:added': () => {
 
                     console.log('object:added');
                     var objects = canvas.getObjects();
                     var object = objects[objects.length-1];
-                    if(object.type!=='path'&& object.type!=='selection')
+                    if(object.type!=='path'&& object.type!=='selection' && object.type!=='group')
                     canvas.setActiveObject(object);
                     common.colorActiveLayer(canvas);
 
-                    document.getElementById('remove-object').disabled = false;
+                    // document.getElementById('remove-object').disabled = false;
 
                 },
                 'object:modified': () => {
@@ -119,56 +101,37 @@ export default function App(props) {
                 },
                 'object:updated': () => {
                     console.log('object:updated');
-                    document.getElementById('remove-object').disabled = false
+                    // document.getElementById('remove-object').disabled = false
                 },
                 
             });
-           
-              window.addEventListener("resize", function(opt) { //브라우저 크기 resize에 따른 이벤트 
-                // zoom =1;
             
-                var innerWidth= common.getInnerSize()['innerWidth'];
-                var innerHeight =common.getInnerSize()['innerHeight']
+            var flag;
+              window.addEventListener("resize", function(opt) { //브라우저 크기 resize에 따른 이벤트 
+                common.setCanvasCenter(canvas)
+                var innerWidth =common.getInnerSize(canvas)['innerWidth'];
+                var innerHeight =common.getInnerSize(canvas)['innerHeight'];
+                
+                var currentWidth = common.getCanvasStyleWidth();
+                var currentHeight = common.getCanvasStyleHeight();
+
                 var ratio = canvas.width/canvas.height;
 
-                const lowerCanvas = document.getElementsByClassName('lower-canvas')[0];
-                const upperCanvas = document.getElementsByClassName('upper-canvas')[0];
-
-                var styleWidth = lowerCanvas.style.width.substr(0, lowerCanvas.style.width.length-2);
-                var styleHeight = lowerCanvas.style.height.substr(0, lowerCanvas.style.height.length-2);
-                
-                if(innerWidth<styleWidth){
-                    lowerCanvas.style.width = innerWidth+'px';
-                    lowerCanvas.style.height = innerWidth * (1/ratio) + 'px';
-
-                    upperCanvas.style.width = innerWidth+'px';
-                    
-                    upperCanvas.style.height = innerWidth * (1/ratio) + 'px';
-                }else if (innerHeight<styleHeight){
-                    console.log(innerHeight)
-                    console.log(upperCanvas.style.height)
-                    lowerCanvas.style.height = innerHeight+'px';
-                    lowerCanvas.style.width = (innerHeight)*ratio+'px';
-
-                    upperCanvas.style.height =  innerHeight+'px';
-                    upperCanvas.style.width =  (innerHeight)*ratio+'px';
+                if(innerWidth<currentWidth){
+                    flag = 'width';
+                    common.setCanvasStyleSize(innerWidth,innerWidth*(1/ratio))
+                }
+                else if(innerHeight<currentHeight){
+                    flag  ='height'
+                    common.setCanvasStyleSize(innerHeight*ratio,innerHeight)
                 }else{
-                    if(innerWidth<canvas.width && styleWidth < innerWidth){
-                    lowerCanvas.style.width = innerWidth+'px';
-                    lowerCanvas.style.height = innerWidth * (1/ratio) + 'px';
+                    if(currentHeight<canvas.height &&flag ==='height' )
+                    common.setCanvasStyleSize(innerHeight*ratio,innerHeight)
+                    
+                    if(currentWidth<canvas.width &&flag ==='width' )
+                        common.setCanvasStyleSize(innerWidth,innerWidth*(1/ratio))
+                }
 
-                    upperCanvas.style.width = innerWidth+'px';
-                    upperCanvas.style.height = innerWidth * (1/ratio) + 'px';
-                    }else if (innerHeight<styleHeight && styleHeight<innerHeight){
-                        lowerCanvas.style.height = innerHeight;
-                        lowerCanvas.style.width = innerHeight*ratio+'px';
-    
-                        upperCanvas.style.height = innerHeight; 
-                        upperCanvas.style.width = innerHeight*ratio+'px';
-                    }
-                }               
-
-                common.setCanvasCenter(canvas);
 
         
             });
@@ -178,7 +141,6 @@ export default function App(props) {
     
                 if (e.key === 'Delete' || e.key ==='Backspace') {   // 텍스트 입력 중 backspace눌러도 객체 삭제 되지 않도록 
                     if(canvas.getActiveObject().type==='textbox'&& canvas.getActiveObject().isEditing ){ 
-                        console.log(canvas.getActiveObject().editable);
                         return;}
                     var o = canvas.getActiveObjects();
                     o.forEach((object) => {
@@ -194,7 +156,6 @@ export default function App(props) {
         }
     },[canvas])
    
-
     const initCanvas = () => {
         // var windowWidth= window.innerWidth-50;
         // var windowHeight = window.innerHeight-240;
@@ -217,8 +178,7 @@ export default function App(props) {
             redoStack :[],
             filterValues : '',
             backgroundColor: 'white',
-            zoom :1
-           
+            componentSize:'',
         })
     )
     }
@@ -226,22 +186,21 @@ export default function App(props) {
     return (
         <div className={styles.layout}>
             <Title />
-            {canvas&& <LeftSidebar canvas={canvas} stateRef={stateRef} objectNumRef={objectNumRef} />}
+            {canvas&& <LeftSidebar canvas={canvas} image={image}  imageRef={imageRef}/>}
             <div  className={styles.center}>
-                {canvas && <Header canvas={canvas} imageRef={imageRef} image={image}setImage={setImage}stateRef={stateRef} modsRef={modsRef} objectNumRef={objectNumRef} />}
+                {canvas && <Header canvas={canvas} image={image} setImage={setImage}imageRef={imageRef}/>}
 
                 {/* center로 통합 필요 */}
                 <div className={styles.mainContainer}>
                     <canvas id="canvas" />
                     <Layer canvas={canvas}></Layer>
-                    {canvas && <Editormenu canvas={canvas} imageRef={imageRef} />}
                     <div id="layer"></div>
                 </div>
-
-                <Footbar />{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
+                <Footbar canvas={canvas}/>{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
             </div>
-            <RightSidebar/>
+            <RightSidebar/>            
         </div>
+        
     );
 }
 
