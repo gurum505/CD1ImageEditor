@@ -131,7 +131,6 @@ export default function CropSubmenu(props) {
                 height: selectionRect.getScaledHeight()
             });
 
-            canvas.add(currentImage);
             canvas.setBackgroundImage(currentImage).renderAll();
             var prevObjects = canvas.getObjects();
             prevObjects.forEach((object) => {
@@ -146,7 +145,6 @@ export default function CropSubmenu(props) {
             canvas.initialHeight = currentImage.height;
             common.setCanvasCenter(canvas);
             common.updateStates(canvas);
-            console.log(canvas);
             props.setButtonType('');
         });
         
@@ -242,8 +240,6 @@ export default function CropSubmenu(props) {
                 btn.disabled = false;
             })
             canvas.defaultCursor = 'default';
-            
-
         });
 
     }
@@ -259,17 +255,19 @@ export default function CropSubmenu(props) {
 
 
     return (
-
-        <ul style={{ listStyle: "none", }}>
-            <li ><button className="crop-button" onClick={cropCustom}>코스튬</button></li>
-            <li ><button className="crop-button" onClick={() => crop('1:1')}>정방형</button></li>
-            <li ><button className="crop-button" onClick={() => crop('3:2')}>3:2</button></li>
-            <li ><button className="crop-button" onClick={() => crop('4:3')}>4:3</button></li>
-            <li ><button className="crop-button" onClick={() => crop('16:9')}>16:9</button></li>
+        <div>
+        <p>
+            <button className="crop-button" onClick={cropCustom}>코스튬</button>
+            <button className="crop-button" onClick={() => crop('1:1')}>정방형</button>
+        </p>
+        <p>
+            <button className="crop-button" onClick={() => crop('3:2')}>3:2</button>
+            <button className="crop-button" onClick={() => crop('4:3')}>4:3</button>
+            <button className="crop-button" onClick={() => crop('16:9')}>16:9</button>
+        </p>
             <hr></hr>
-            <li><button onClick={apply}>적용</button></li>
-            <li><button onClick={cancle}>취소</button></li>
-        </ul>
-
+            <p><button onClick={apply}>적용</button>
+            <button onClick={cancle}>취소</button></p>
+            </div>
     )
 }

@@ -67,15 +67,17 @@ export default function App(props) {
                     }else{
                         common.zoom(canvas,0.93)
                     }
-
-
-                
+                },
+                'selection:updated':()=>{
+                    console.log('selection:updated')
+                    common.colorActiveLayer(canvas);
                 },
                 'object:removed': () => {
                     console.log('object:removed');
                 },
                 'selection:cleared': () => {
                     console.log('selection:cleared');
+                    canvas.renderAll();
                     common.colorActiveLayer(canvas);
                     // document.getElementById('remove-object').disabled = true;
                     
@@ -90,16 +92,24 @@ export default function App(props) {
                     console.log('object:added');
                     var objects = canvas.getObjects();
                     var object = objects[objects.length-1];
-                    if(object.type!=='path'&& object.type!=='selection' && object.type!=='group')
+                    if(object.type!=='path'&& object.type!=='selection' && object.type!=='group' && object.cropRect!==true)
+                    {
                     canvas.setActiveObject(object);
+                    common.addLayer(canvas,object)
                     common.colorActiveLayer(canvas);
-
+                    }
                     // document.getElementById('remove-object').disabled = false;
 
                 },
                 'object:modified': () => {
                     console.log('object:modified');
+                    var objects  = canvas.getActiveObjects();
+                   if (!canvas.getActiveObject().cropRect) {//crop을 위해 생성된 사각형은 modified되어도 undo stack에 쌓이면 안됨
                     common.updateStates(canvas);
+                    objects.forEach((object)=>{
+                        common.modifyLayer(object);
+                    })
+                   }
                     // document.getElementById('remove-object').disabled = false
                 },
                 'object:updated': () => {
@@ -138,10 +148,14 @@ export default function App(props) {
 
         
             });
-    
+            
+          
             window.onkeydown = function (e) { // delete, backspace 키로 삭제
                 if(!canvas.getActiveObject()) return //선택된 객체가 없으면 종료 
-    
+                
+                if(canvas.getActiveObject().isEditing) {
+                    common.modifyLayer(canvas.getActiveObject())
+                }
                 if (e.key === 'Delete' || e.key ==='Backspace') {   // 텍스트 입력 중 backspace눌러도 객체 삭제 되지 않도록 
                     if(canvas.getActiveObject().type==='textbox'&& canvas.getActiveObject().isEditing ){ 
                         return;}

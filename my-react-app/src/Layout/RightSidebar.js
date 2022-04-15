@@ -44,11 +44,13 @@ const RightSidebar = () => {
         Layer
       </p> */}
       <div className={styles.itemList}>
-        <div className={styles.addItem} onClick={addLayerItem}>
-          <PlusOutlined style={{fontSize:"20pt", color:"gray"}} />
+        {/* <div className={styles.addItem} onClick={addLayerItem} style={{color:'white'}}> 객체  */}
+          {/* <PlusOutlined style={{fontSize:"20pt", color:"gray"}} /> */}
+        <div className={styles.addItem}  style={{color:'white'}}> 객체 
+
         </div>
         <div className={styles.itemScroll}>
-          <LayerList Items={Items} delItem={delItem}/>
+          {/* <LayerList Items={Items} delItem={delItem}/> */}
         </div>
         
       </div>

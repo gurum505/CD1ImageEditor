@@ -8,6 +8,7 @@ import TextBoxSubmenu from "./TextBoxSubmenu";
 import LineSubmenu from "./LineSubmenu";
 import ImageSubmenu from './ImageSubmenu';
 import FilterSubmenu from './FilterSubmenu';
+import CropSubmenu from "./CropSubmenu";
 export default function LeftSidebarOpened({ toggleMenu, currentRoute,canvas}) {
 
     //detail 한메뉴가 열리면 나머지가 닫히는 함수
@@ -100,8 +101,10 @@ export default function LeftSidebarOpened({ toggleMenu, currentRoute,canvas}) {
                     <label> brightness</label> <input type="range" min="-3" max="3" defaultValue="0" step="1" />
                     <label> pixelate</label> <input type="range" min="0" max="5" defaultValue="0" step="1" /> */}
                 {/* </div> */}
-
-
+            </details>
+            <details className={styles.detail} open={Open(currentRoute, "Crop")}>
+                <summary>Crop</summary>
+                <CropSubmenu canvas={canvas}/>
 
             </details>
         </div>

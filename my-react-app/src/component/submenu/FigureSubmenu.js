@@ -24,7 +24,7 @@ export default function FigureSubmenu(props) {
 
     }
 
-    function addRect(e) {
+    function addRect() {
         mouseEventOff();
         // document.getElementById('add-rect').disabled =true;
         canvas.defaultCursor = 'crosshair';
@@ -47,6 +47,7 @@ export default function FigureSubmenu(props) {
                 id: ++canvas.objectNum,
             });
             canvas.add(rect);
+
 
         });
 
@@ -71,7 +72,7 @@ export default function FigureSubmenu(props) {
             isDown = false;
             canvas.defaultCursor = 'default';
             mouseEventOff();
-            common.addLayer(canvas,rect)
+            common.modifyLayer(rect)
             common.updateStates(canvas);
         });
 
@@ -96,7 +97,7 @@ export default function FigureSubmenu(props) {
                 fill: `${color.current}`,
                 id: ++canvas.objectNum,
             });
-
+            
             canvas.add(circle);
 
 
@@ -124,7 +125,7 @@ export default function FigureSubmenu(props) {
             // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.defaultCursor = 'default';
             mouseEventOff();
-            common.addLayer(canvas, circle);
+            common.modifyLayer(circle)
             common.updateStates(canvas);
 
         });
@@ -182,8 +183,7 @@ export default function FigureSubmenu(props) {
             // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.defaultCursor = 'default';
             mouseEventOff();
-            common.addLayer(canvas, triangle);
-
+            common.modifyLayer(triangle)
             common.updateStates(canvas);
 
         });
@@ -196,6 +196,7 @@ export default function FigureSubmenu(props) {
                     <CircleIcon id='add-circle' onClick={addCircle} />
                     <TriangleIcon id='add-triangle' onClick={addTriangle} />
                 </p>
+                {/* <input type="color" /> */}
                 <p><label>color</label><ColorPicker canvas={canvas} color={color} /></p>
             </div>
         </>

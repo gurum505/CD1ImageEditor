@@ -136,6 +136,15 @@ export function updateStates(canvas){
 
 //객체 관련 
 
+export function getActiveObjectsByType(canvas,objectType){
+    var results = []
+    var objects = canvas.getObjects();
+    objects.forEach((object)=>{
+        if(object.type===objectType) results.push(object);
+    })
+    return results;
+}
+
 //캔버스 위의 모든 객체, 레이어 제거 
 export function removeAllObjects(canvas){
     var objects = canvas.getObjects();
@@ -166,34 +175,37 @@ export  function removeAllLayer(canvas) {
 // 활성화(선택) 되어 있는 layer 빨간색으로 표시 
 export function colorActiveLayer(canvas) {   
     
-    var layerElements = document.getElementById('layer');
-    for (let i = 0; i < layerElements.children.length; i++) {
-        layerElements.children[i].style.border = 'solid gray';
+    var layerElements = document.getElementsByClassName('layer-list');
+    for (let i = 0; i < layerElements.length; i++) {
+        layerElements[i].style.border = 'solid gray';
     }
     var objects = canvas.getActiveObjects();
     objects.forEach((object) => {
         if (document.getElementById(object.id))
-            document.getElementById(object.id).style.border = 'solid blue'
+            document.getElementById(object.id).style.border = 'solid 2px blue'
     })
 
 }
 
-
+export function modifyLayer(object){
+    var layer = document.getElementById(object.id);
+    var img = layer.querySelector('img');
+    var src;
+    try{
+        src = object.toDataURL();
+        }catch(e){
+            src= object.src;
+        }
+    img.src = src;
+}
 export function addLayer(canvas, object) {  //레이어에 객체 추가 
+    if(document.getElementById(object.id)) return ;
     const layerCanvas = new fabric.Canvas();
     layerCanvas.setWidth(canvas.width);
     layerCanvas.setHeight(canvas.height);
     layerCanvas.backgroundColor='red';
-    console.log(layerCanvas)
-    var circle = new fabric.Rect({
-        width:50,
-        height:50,
-        fill:'blue'
-    })
-
+  
     var imgTag = document.createElement('img');
-    imgTag.crossOrigin='anonymous';
-    object.crossOrigin='Anonymous'
     var src;
     try{
     src = object.toDataURL();
@@ -206,44 +218,37 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     imgTag.style.objectFit ='contain';
     imgTag.style.width = '80px';
     imgTag.style.height ='50px'
-    // fabric.Image.fromURL(layerCanvas.toDataURL(), img => {
-    //     canvas.add(img)
-    //     img.scaleToWidth(50);
-    //     img.scaleToHeight(50);
-    //     var img_div =document.createElement('div');
-    //     img_div.innerHTML='ddd'
-    //     let url = img.toDataURL();
-    //     img_div.style.backgroundImage = 'url(' + test+')';
-    //     // var el= document.getElementsByClassName('RightSidebar_addItem__ltY2N')[0];
-    //     var el = document.getElementById('layer')
-    //     el.appendChild(img_div)
-    // });
+   
+    imgTag.onclick=()=>{
+        canvas.setActiveObject(object);
+        canvas.renderAll();
+    }
     const div = document.createElement('div');
     div.id = object.id;
     div.className='layer-list'
     div.style.textAlign='center'
-    div.style.border = ' solid #0000FF';
     div.style.height = '80px'
     div.style.width = '110px';
-    const el = document.getElementById('layer');
+    div.style.backgroundColor='gray'
+    const el = document.getElementsByClassName('RightSidebar_itemScroll__b+ukB')[0]
 
+    const objectBtn = document.createElement('button');
+    objectBtn.innerHTML = 'select'
+    objectBtn.className = "layer-object";
+    objectBtn.onclick = () => {
+        canvas.setActiveObject(object);
+        canvas.renderAll();
+    }
     const deleteBtn = document.createElement('button');
     deleteBtn.innerHTML = 'delete';
     deleteBtn.className = 'delete-btn';
+
     deleteBtn.onclick = () => {
         canvas.remove(object);
         document.getElementById(object.id).remove();
         updateStates(canvas);
     }
 
-    const objectBtn = document.createElement('button');
-    objectBtn.innerHTML = 'select'
-    objectBtn.className = "layer-object";
-    objectBtn.onclick = () => {
-        console.log(object)
-        canvas.setActiveObject(object);
-        canvas.renderAll();
-    }
     
     div.appendChild(imgTag)
     div.appendChild(objectBtn);

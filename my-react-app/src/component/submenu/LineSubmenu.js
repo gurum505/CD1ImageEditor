@@ -64,7 +64,7 @@ export default function LineSubmenu(props) {
                 stroke: `${color.current}`,
                 originX: 'center',
                 originY: 'center',
-                id: ++canvas.objectNume,
+                id: ++canvas.objectNum,
             });
             canvas.add(line);
         });
@@ -86,9 +86,7 @@ export default function LineSubmenu(props) {
             canvas.off('mouse:up');
             canvas.defaultCursor = 'default';
             common.updateStates(canvas);
-            common.addLayer(canvas,line);
-
-            var objects = canvas.getActiveObjects();
+            common.modifyLayer(line)
           
 
         });

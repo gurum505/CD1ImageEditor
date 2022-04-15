@@ -18,6 +18,7 @@ export default function LeftSidebarClosed({ toggleMenu, SetCurrentRoute,canvas }
             <FontSizeOutlinedIcon onClick={() => { SetCurrentRoute("Text"); toggleMenu(); }} />
             <LineOutlinedIcon onClick={() => { SetCurrentRoute("Line"); toggleMenu(); }}/>
             <AreaChartOutlinedIcon onClick={() => { SetCurrentRoute("Image"); toggleMenu(); }}/>
+            <button onClick={() => { SetCurrentRoute("Crop"); toggleMenu(); }}>자르기</button>
         </div>
     );
 }

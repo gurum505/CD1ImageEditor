@@ -28,6 +28,7 @@ export default function TextBoxSubmenu(props) {
                 left: pointer.x - 125,
                 top: pointer.y - 20,
                 id : ++canvas.objectNum,
+                type:'textbox'
             });
             canvas.add(textbox);
             // document.getElementById('add-textbox').disabled =false;
@@ -41,14 +42,14 @@ export default function TextBoxSubmenu(props) {
 
     //추후 보완할 점 : 드래그 범위 bold 지정, 커서 위치 문자의 bold 여부에 따라 button 변경
     function makeTextBold() {
-        if (canvas.getActiveObject()) {
-            var fontWeight = canvas.getActiveObject().fontWeight === 'bold' ? 'normal' : 'bold';
-            // document.getElementById("bold").style.fontWeight = `${fontWeight}`;
-            const text = canvas.getActiveObject();
-            // text.setSelectionStyles({ fontWeight: `${fontWeight}` }, text.selectionStart,99 );
-            text.set("fontWeight", fontWeight);
-            canvas.renderAll();
-        }
+        var objects = canvas.getActiveObjects();
+        objects.forEach((object)=>{
+            if(object.type==='textbox'){
+                var fontWeight = object.fontWeight === 'bold' ? 'normal' : 'bold';    
+                object.set("fontWeight", fontWeight);
+                canvas.renderAll();
+            }
+        })
     }
 
         //TODO:커서 범위에 따라 스타일 지정
@@ -65,23 +66,28 @@ export default function TextBoxSubmenu(props) {
     
 
     function italicizeText() {
-        if (canvas.getActiveObject()) {
-            var fontFamily = canvas.getActiveObject().fontStyle === 'italic' ? 'normal' : 'italic';
-            const text = canvas.getActiveObject();
-            // text.setSelectionStyles({ fontWeight: `${fontWeight}` }, text.selectionStart,99 );
-            text.set("fontStyle", fontFamily);
-            canvas.renderAll();
-        }
+        var objects = canvas.getActiveObjects();
+        objects.forEach((object)=>{
+            if(object.type==='textbox'){
+                var fontFamily = object.fontStyle ==='italic' ? 'normal' : 'italic';
+                object.set("fontStyle", fontFamily);
+                canvas.renderAll();
+            }
+        })
     }
 
 
     //밑줄
     function underlineText() {
         if (canvas.getActiveObject()) {
-            var underline = !canvas.getActiveObject().underline;
-            const text = canvas.getActiveObject();
-            text.set('underline', underline);
-            canvas.renderAll();
+            var objects = canvas.getActiveObjects();
+            objects.forEach((object)=>{
+                if(object.type==='textbox'){
+                    var underline = !object.underline;
+                    object.set('underline', underline);
+                    canvas.renderAll();
+                }
+            })
             // text.set('fontWeight','italic');
             // document.getElementById("bold").style.fontWeight = `${fontWeight}`;
             // text.setSelectionStyles({ underline: underline }, text.selectionStart,99 );
@@ -90,19 +96,21 @@ export default function TextBoxSubmenu(props) {
     
     // 정렬 
     function alignText(to) {
-        if (canvas.getActiveObject().type === 'textbox') {
-            const text = canvas.getActiveObject();
-            text.set({ textAlign: `${to}` });
-            canvas.renderAll();
-        }
+        var objects = canvas.getActiveObjects();
+        objects.forEach((object)=>{
+            if(object.type==='textbox'){
+                object.set({ textAlign: `${to}` });
+                canvas.renderAll();
+            }
+        })
     }
 
+    
     return(
     <>
         <div className="textbox-submenu">
             
             <p><FontSizeOutlinedIcon id='add-textbox' onClick={addTextBox} /></p>
-            <p><label>font size </label><input type="text" /></p>
             <p><label>font color</label> <ColorPicker canvas={canvas} color={color}/></p> 
             <label style ={{marginLeft:"15px"}} >정렬</label>
 
