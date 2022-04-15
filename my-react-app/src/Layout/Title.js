@@ -3,7 +3,7 @@ import {GithubOutlined} from "@ant-design/icons"
 // import {GithubOutlinedIcon} from "../icons/icons"
 const Title=()=>{
     return(
-        <div className={styles.header}>
+        <div id="title" className={styles.header}>
             
             <div className={styles.contents}>
                 <h1>

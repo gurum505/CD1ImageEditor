@@ -9,11 +9,11 @@ export function initialComponentSize(){ //현재 페이지 구성요소들의 �
 
     var dict ={};
 
-    dict['leftbar']= document.getElementsByClassName('leftbar')[0].offsetWidth;
-    dict['rightbar'] = document.getElementsByClassName(/RightSidebar_container{\D}+/)[0].offsetWidth;
-    dict['titleHeader']=document.getElementsByClassName('Title_contents__NSiUr')[0].offsetHeight;
-    dict['editorHeader'] = document.getElementsByClassName('Header_editorHeader__6Q4uw')[0].offsetHeight;
-    dict['footer']=document.getElementsByClassName('Footbar_contents__zIqCh')[0].offsetHeight;
+    dict['leftbar']= document.getElementById('leftbar').offsestWidth;
+    dict['rightbar'] = document.getElementById('rightsidebar').offsetWidth;
+    dict['titleHeader']=document.getElementById('title').offsetHeight;
+    dict['editorHeader'] = document.getElementById('header').offsetHeight;
+    dict['footer']=document.getElementById('footer').offsetHeight;
 
     return dict;
 }

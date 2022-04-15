@@ -39,7 +39,7 @@ const RightSidebar = () => {
 
   return (
     <>
-    <div className={styles.container}>
+    <div id ="rightsidebar" className={styles.container}>
       {/* <p className={styles.title}>
         Layer
       </p> */}

@@ -316,7 +316,7 @@ export default function Header(props) {
     }
 
     return (
-        <div className={styles.editorHeader}>
+        <div id="header" className={styles.editorHeader}>
             {/* 새프로젝트 */}
             <FolderOpenOutlinedIcon onClick={clearCanvas} className="new-project" children={"새 프로젝트"} />
 

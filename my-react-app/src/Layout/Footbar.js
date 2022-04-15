@@ -78,7 +78,7 @@ const Footbar = (props) => {
 
     }
     return (
-        <div className={styles.footbar}>
+        <div id="footer" className={styles.footbar}>
             <div className={styles.contents}>
                 <h2 className={styles.title}>
                 </h2>
