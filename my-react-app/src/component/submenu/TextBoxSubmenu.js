@@ -104,7 +104,7 @@ export default function TextBoxSubmenu(props) {
             <p><FontSizeOutlinedIcon id='add-textbox' onClick={addTextBox} /></p>
             <p><label>font size </label><input type="text" /></p>
             <p><label>font color</label> <ColorPicker canvas={canvas} color={color}/></p> 
-            <label style ={{marginLeft:"15px"}} >정렬</label>
+            <label style ={{marginLeft:"15px"}} >align</label>
 
             <ul>
                 <li>
@@ -117,7 +117,7 @@ export default function TextBoxSubmenu(props) {
                     <AlignRightOutlinedIcon onClick={() => alignText('right')}/>
                 </li>
             </ul>
-            <label style={{marginLeft:"15px"}}>글꼴</label>
+            <label style={{marginLeft:"15px"}}>font</label>
             <ul>
                 <li>
                     <BoldOutlinedIcon onClick={makeTextBold}/>

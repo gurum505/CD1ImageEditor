@@ -83,10 +83,12 @@ const Footbar = (props) => {
                 <h2 className={styles.title}>
                 </h2>
 
-                <ZoomOutOutlinedIcon onClick={zoomOut} children={"줌아웃"} />
-                {/* <input type="text" id='zoom-level' defaultValue={'100%'} style={{width:'50px'}} /> */}
-                <ZoomInOutlinedIcon onClick={zoomIn} children={"줌인"} />
                 <ExpandOutlinedIcon onClick={fitToProportion} children={"비율에 맞추기"} />
+                <span></span>
+                <ZoomOutOutlinedIcon onClick={zoomOut} children={"줌아웃"} />
+                <input type="text" id='zoom-level' defaultValue={'100%'} className={styles.inputdesign} disabled/>
+                <ZoomInOutlinedIcon onClick={zoomIn} children={"줌인"} />
+                <span></span>
                 <EyeOutlinedIcon onClick={preview} children={"미리보기"} />
             </div>
         </div>

@@ -1,7 +1,7 @@
 
 
 //캔버스 관련
-
+import RightSidebar from "../../Layout/RightSidebar";
 import { CommentOutlined } from "@ant-design/icons";
 import { fabric } from "fabric";
 
@@ -181,75 +181,79 @@ export function colorActiveLayer(canvas) {
 
 
 export function addLayer(canvas, object) {  //레이어에 객체 추가 
-    const layerCanvas = new fabric.Canvas();
-    layerCanvas.setWidth(canvas.width);
-    layerCanvas.setHeight(canvas.height);
-    layerCanvas.backgroundColor='red';
-    console.log(layerCanvas)
-    var circle = new fabric.Rect({
-        width:50,
-        height:50,
-        fill:'blue'
-    })
 
-    var imgTag = document.createElement('img');
-    imgTag.crossOrigin='anonymous';
-    object.crossOrigin='Anonymous'
-    var src;
-    try{
-    src = object.toDataURL();
-    }catch(e){
-        src= object.src;
-    }
-    imgTag.src = src;
-    imgTag.margin = 0;
-    imgTag.padding =0;
-    imgTag.style.objectFit ='contain';
-    imgTag.style.width = '80px';
-    imgTag.style.height ='50px'
-    // fabric.Image.fromURL(layerCanvas.toDataURL(), img => {
-    //     canvas.add(img)
-    //     img.scaleToWidth(50);
-    //     img.scaleToHeight(50);
-    //     var img_div =document.createElement('div');
-    //     img_div.innerHTML='ddd'
-    //     let url = img.toDataURL();
-    //     img_div.style.backgroundImage = 'url(' + test+')';
-    //     // var el= document.getElementsByClassName('RightSidebar_addItem__ltY2N')[0];
-    //     var el = document.getElementById('layer')
-    //     el.appendChild(img_div)
-    // });
-    const div = document.createElement('div');
-    div.id = object.id;
-    div.className='layer-list'
-    div.style.textAlign='center'
-    div.style.border = ' solid #0000FF';
-    div.style.height = '80px'
-    div.style.width = '110px';
-    const el = document.getElementById('layer');
-
-    const deleteBtn = document.createElement('button');
-    deleteBtn.innerHTML = 'delete';
-    deleteBtn.className = 'delete-btn';
-    deleteBtn.onclick = () => {
-        canvas.remove(object);
-        document.getElementById(object.id).remove();
-        updateStates(canvas);
-    }
-
-    const objectBtn = document.createElement('button');
-    objectBtn.innerHTML = 'select'
-    objectBtn.className = "layer-object";
-    objectBtn.onclick = () => {
-        console.log(object)
-        canvas.setActiveObject(object);
-        canvas.renderAll();
-    }
     
-    div.appendChild(imgTag)
-    div.appendChild(objectBtn);
-    div.appendChild(deleteBtn);
-    el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
+
+
+    // const layerCanvas = new fabric.Canvas();
+    // layerCanvas.setWidth(canvas.width);
+    // layerCanvas.setHeight(canvas.height);
+    // layerCanvas.backgroundColor='red';
+    // console.log(layerCanvas)
+    // var circle = new fabric.Rect({
+    //     width:50,
+    //     height:50,
+    //     fill:'blue'
+    // })
+
+    // var imgTag = document.createElement('img');
+    // imgTag.crossOrigin='anonymous';
+    // object.crossOrigin='Anonymous'
+    // var src;
+    // try{
+    // src = object.toDataURL();
+    // }catch(e){
+    //     src= object.src;
+    // }
+    // imgTag.src = src;
+    // imgTag.margin = 0;
+    // imgTag.padding =0;
+    // imgTag.style.objectFit ='contain';
+    // imgTag.style.width = '80px';
+    // imgTag.style.height ='50px'
+    // // fabric.Image.fromURL(layerCanvas.toDataURL(), img => {
+    // //     canvas.add(img)
+    // //     img.scaleToWidth(50);
+    // //     img.scaleToHeight(50);
+    // //     var img_div =document.createElement('div');
+    // //     img_div.innerHTML='ddd'
+    // //     let url = img.toDataURL();
+    // //     img_div.style.backgroundImage = 'url(' + test+')';
+    // //     // var el= document.getElementsByClassName('RightSidebar_addItem__ltY2N')[0];
+    // //     var el = document.getElementById('layer')
+    // //     el.appendChild(img_div)
+    // // });
+    // const div = document.createElement('div');
+    // div.id = object.id;
+    // div.className='layer-list'
+    // div.style.textAlign='center'
+    // div.style.border = ' solid #0000FF';
+    // div.style.height = '80px'
+    // div.style.width = '110px';
+    // const el = document.getElementById('layer');
+
+    // const deleteBtn = document.createElement('button');
+    // deleteBtn.innerHTML = 'delete';
+    // deleteBtn.className = 'delete-btn';
+    // deleteBtn.onclick = () => {
+    //     canvas.remove(object);
+    //     document.getElementById(object.id).remove();
+    //     updateStates(canvas);
+    // }
+
+    // const objectBtn = document.createElement('button');
+    // objectBtn.innerHTML = 'select'
+    // objectBtn.className = "layer-object";
+    // objectBtn.onclick = () => {
+    //     console.log(object)
+    //     canvas.setActiveObject(object);
+    //     canvas.renderAll();
+    // }
+    
+    // div.appendChild(imgTag)
+    // div.appendChild(objectBtn);
+    // div.appendChild(deleteBtn);
+    // el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
 }
 
 

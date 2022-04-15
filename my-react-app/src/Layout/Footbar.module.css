@@ -21,3 +21,24 @@
     font-weight: 600;
     font-size: 20px;
 }
+/*TODO:leftopenedmodule에 있는 것과 중복 없앨수 없을까?*/
+.inputdesign{ 
+    width:50px;
+    height:30px;
+    box-sizing: border-box;
+    color:white;
+    outline-style: none;
+    padding-left: 5px;
+    border-radius: 5px;
+    background-color: #202020;
+    border-color: #202020;
+}
+.inputdesign:hover{
+    cursor:default;
+}
+
+/* 파란색span없애는 방법이 안통해서일단 편법으로*/
+.inputdesign::selection{
+    color:white; 
+    background:#666565;
+}
