@@ -10,7 +10,7 @@ import {AlignLeftOutlinedIcon,UnderlineOutlinedIcon
 export default function TextBoxSubmenu(props) {
     const canvas = props.canvas;
     const color = useRef('black');
- 
+    canvas.isDrawingMode =false;
     useEffect(()=>{
         canvas.off('mouse:down');
         canvas.defaultCursor = 'default';
@@ -34,7 +34,6 @@ export default function TextBoxSubmenu(props) {
             common.updateStates(canvas);
             common.addLayer(canvas,textbox);
             canvas.off('mouse:down');
-            document.getElementById(textbox.id).style.border = 'solid red';
             canvas.defaultCursor = 'default';
 
         });

@@ -20,15 +20,14 @@ export default function FilterSubmenu(props) {
                 inputElements[i].disabled = true;
             }
         }
-
-    },)
+    })
 
     useEffect(() => {
         const divElem = document.getElementById('filter-list');
         const inputElements = divElem.querySelectorAll("input,range, checkbox")
         inputElements.forEach((input) => {
-            input.addEventListener('change', (e) => { 
-                canvas.filterValues=getRangeState();
+            input.addEventListener('change', (e) => {
+                canvas.filterValues = getRangeState();
                 common.updateStates(canvas);
             })
         })
@@ -41,7 +40,14 @@ export default function FilterSubmenu(props) {
     const canvas = props.canvas;
     const f = fabric.Image.filters;
 
-
+    function resizeCanvasWidth(e) {
+        canvas.setWidth(e.target.value);
+        canvas.initialWidth = e.target.value;
+    }
+    function resizeCanvasHeight(e) {
+        canvas.setHeight(e.target.value);
+        canvas.initialHeight = e.target.value;
+    }
     function getRangeState() {
         var list = [];
         var checkbox = {};
@@ -85,7 +91,7 @@ export default function FilterSubmenu(props) {
         obj.filters[index] = filter;
         obj.applyFilters();
         canvas.renderAll();
-        // common.updateStates(canvas);
+        canvas.filterValues = getRangeState();
     }
 
     function getFilter(index) {
@@ -182,43 +188,42 @@ export default function FilterSubmenu(props) {
     }
 
 
-    
+
 
 
     return (
 
         <div id='filter-list'>
-            <p><label> width</label> <input type="text" /></p>
-            <p> <label> height</label> <input type="text" /></p>
+
 
             <div className={styles.effectContainer}>
 
-            <input type="button" id="reset" value="reset" onClick={resetFilter} />
-            
+                <input type="button" id="reset" value="reset" onClick={resetFilter} />
+
                 <label htmlFor="invert">Invert <input type="checkbox" id='invert' value='인버트' onClick={invert} /> </label>
-               
-            
+
+
                 <label>Brightness <input type="checkbox" id="brightness" onClick={brightness} /> </label>
-                <input type="range" id="brightness-value" defaultValue="0" min="-1" max="1" step="0.003921" onChange={brightnessValue}  />
-            
+                <input type="range" id="brightness-value" defaultValue="0" min="-1" max="1" step="0.003921" onChange={brightnessValue} />
+
 
                 <label>Gamma <input type="checkbox" id="gamma" onClick={gamma} /></label>
-                Red <input type="range" id="gamma-red" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaRed} style={{'width':'100px'}}/>
+                Red <input type="range" id="gamma-red" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaRed} style={{ 'width': '100px' }} />
                 Green <input type="range" id="gamma-green" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaGreen} />
-                Blue <input type="range" id="gamma-blue" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaBlue}/>
+                Blue <input type="range" id="gamma-blue" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaBlue} />
 
                 <label>Contrast <input type="checkbox" id="contrast" onClick={contrast} /></label>
-                <input type="range" id="contrast-value" defaultValue="0" min="-1" max="1" step="0.003921" onChange={contrastValue}  />
+                <input type="range" id="contrast-value" defaultValue="0" min="-1" max="1" step="0.003921" onChange={contrastValue} />
 
                 <label>Noise <input type="checkbox" id="noise" onClick={noise} /></label>
                 <input type="range" id="noise-value" defaultValue="0" min="0" max="600" step="50" onChange={noiseValue} />
 
                 <label>Pixelate <input type="checkbox" id="pixelate" onClick={pixelate} /></label>
-                <input type="range" id="pixelate-value" defaultValue="1" min="1" max="20" step="3" onChange={pixelateValue}  />
+                <input type="range" id="pixelate-value" defaultValue="1" min="1" max="20" step="3" onChange={pixelateValue} />
 
                 <label>Blur <input type="checkbox" id="blur" onClick={blur} /></label>
-                 <input type="range" id="blur-value" defaultValue="0" min="0" max="1" step="0.1" onChange={blurValue}   />
-        </div>
+                <input type="range" id="blur-value" defaultValue="0" min="0" max="1" step="0.1" onChange={blurValue} />
+            </div>
         </div>
 
     )

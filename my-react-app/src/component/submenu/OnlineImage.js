@@ -2,13 +2,11 @@
 import styles from "./OnlineImage.module.css"
 import { fabric } from "fabric";
 import {SearchOutlined, SearchOutlinedIcon} from  "../icons/icons";
-
+import * as common from './common'
 //FIXME: 이미지 불러오면 div가 스크롤 되게 하고 싶은데 overflow 설정해도 적용이 안됨 
 //TODO: 드래그 후 드랍할 때 마우스 위치를 어떻게 ??
 export default function OnelineImage(props) {
     const canvas = props.canvas;
-    const stateRef = props.stateRef;
-    const objectNumRef = props.objectNumRef;
 
     const apikey = "26628044-6a51b2056c4c10fd1fccc159d";
     const lang = 'ko' //검색 지역 
@@ -18,53 +16,6 @@ export default function OnelineImage(props) {
     let page_num = 1;
     let search = false;
     let query = "";
-
-    function updateModifications(savehistory) {
-        if (savehistory === true) {
-            var myjson = canvas.toJSON();
-            stateRef.current.push(myjson);
-        }
-    }
-
-    function addLayer(object) {  //레이어에 객체 추가 
-        const div = document.createElement('div');
-        div.id = objectNumRef.current
-        div.style.border = ' solid #0000FF';
-        div.style.width = '130px';
-        const el = document.getElementById('layer');
-
-        const objectBtn = document.createElement('button');
-        objectBtn.innerHTML = object.type;
-        objectBtn.className = "layer-object";
-        objectBtn.onclick = () => {
-            canvas.setActiveObject(object);
-            canvas.renderAll();
-        }
-        const deleteBtn = document.createElement('button');
-        deleteBtn.innerHTML = 'delete';
-        deleteBtn.className = 'delete-btn';
-        deleteBtn.onclick = () => {
-            canvas.remove(object);
-            document.getElementById(object.id).remove();
-            updateModifications(true);
-        }
-
-
-        div.appendChild(objectBtn);
-        div.appendChild(deleteBtn);
-        el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 
-    }
-
-    function colorActiveLayer() {
-        var layerElements = document.getElementById('layer');
-        for (let i = 0; i < layerElements.children.length; i++) {
-            layerElements.children[i].style.border = 'solid blue';
-        }
-        var objects = canvas.getActiveObjects();
-        objects.forEach((object) => {
-            document.getElementById(object.id).style.border = 'solid red'
-        })
-    }
 
     function loadImage() {
         if (query = '') return
@@ -79,23 +30,29 @@ export default function OnelineImage(props) {
             // console.log(response);
             result.hits.forEach((photo) => {
                 var pic = document.createElement('div');
-                var imgTag = document.createElement('img');
+                var imgtag = document.createElement('img');
                 var span = document.createElement('p');
+
                 span.innerHTML= 'by : '+photo.user;
-                imgTag.src = photo.webformatURL;
-                imgTag.onclick = () => {
+                imgtag.src = photo.webformatURL;
+                imgtag.crossOrigin='anonymous';
+                imgtag.onclick = () => {
+                    console.log(canvas)
+                    console.log(photo.webformatURL)
                     var img = new fabric.Image.fromURL(photo.webformatURL, image => {
-                        image.id = ++objectNumRef.current;
+                        image.src = photo.webformatURL;
+                        image.crossOrigin='*';
+                        image.id = ++canvas.objectNum;
                         image.left = Math.floor(Math.random() * 101);
                         image.top = Math.floor(Math.random() * 101);
                         image.scaleToWidth(200, false);
                         image.scaleToHeight(200, false);
                         image.transparentCorners = false;
                         canvas.add(image);
+                        console.log(image)
                         canvas.renderAll();
-                        updateModifications(true);
-                        addLayer(image);
-                        colorActiveLayer()
+                        common.updateStates(canvas)
+                        common.addLayer(canvas,image);
                     });
 
                 };
@@ -116,8 +73,8 @@ export default function OnelineImage(props) {
                 //         colorActiveLayer()
                 //     });
                 // };
-                imgTag.ondragstart=()=>{console.log('드래그시작')}
-                pic.appendChild(imgTag);
+                imgtag.ondragstart=()=>{console.log('드래그시작')}
+                pic.appendChild(imgtag);
                 pic.appendChild(span);
                 document.querySelector(".gallery").appendChild(pic);
             });

@@ -35,12 +35,6 @@ export default function ImageSubmenu(props) {
                     canvas.add(img).setActiveObject(img);
                     common.updateStates(canvas);
                     common.addLayer(canvas,img);
-                    
-                    var objects = canvas.getActiveObjects();
-                    objects.forEach((object) => {
-                        if (document.getElementById(object.id))
-                            document.getElementById(object.id).style.border = 'solid red'
-                    })
 
                     canvas.renderAll();
 
@@ -60,7 +54,7 @@ export default function ImageSubmenu(props) {
          <ImageFromInternetIcon htmlFor={"put htmlFor"} children={"from internet"} onClick={addOnlineImage}/>
          </p>
       
-        {onlineImageOption&& <OnlineImage />}
+        {onlineImageOption&& <OnlineImage  canvas={canvas}/>}
            
         </>
     )

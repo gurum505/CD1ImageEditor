@@ -10,7 +10,6 @@ import ImageSubmenu from './ImageSubmenu';
 import FilterSubmenu from './FilterSubmenu';
 export default function LeftSidebarOpened({ toggleMenu, currentRoute,canvas}) {
 
-
     //detail 한메뉴가 열리면 나머지가 닫히는 함수
     //필요없을 시 그냥 삭제
     //click으로 구현은 너무 비효율적

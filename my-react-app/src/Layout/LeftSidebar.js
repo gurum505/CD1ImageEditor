@@ -3,7 +3,7 @@ import LeftSidebarClosed from "../component/submenu/LeftSidebarClosed";
 import LeftSidebarOpened from "../component/submenu/LeftSidebarOpened";
 import { useEffect, useRef, useState} from "react";
 import * as common from "../component/submenu/common"
-const LeftSidebar = ({children, canvas, stateRef, objectNumRef}) => {
+const LeftSidebar = ({children, canvas, imageRef,image}) => {
   const [wid, setX] = useState(50)
   const [isOpen, setOpen] = useState(false);
   const [currentRoute,SetCurrentRoute] =useState("Menu");
@@ -25,8 +25,19 @@ const LeftSidebar = ({children, canvas, stateRef, objectNumRef}) => {
   //     window.removeEventListener('click', handleClose);
   //   };
   // })
- 
+  
+
   const beforeLeftbarOpenedSize = useRef(''); //leftbar 닫았을 때 닫기 전 캔버스 크기 유지를 위한 변수 
+  
+  useEffect(()=>{
+    if( imageRef.current){
+      console.log(imageRef.current)
+      imageRef.current = !imageRef.current;
+    setX(50);
+    setOpen(false);
+      canvas.componentSize['leftbar']=50;
+    }
+  },[image])
 
   function toggleMenu() {
       if (wid > 50) {
@@ -50,7 +61,7 @@ const LeftSidebar = ({children, canvas, stateRef, objectNumRef}) => {
          common.fitToProportion(canvas)
       }
       return( 
-        <LeftSidebarOpened toggleMenu={toggleMenu} currentRoute={currentRoute} canvas={canvas} stateRef={stateRef} objectNumRef={objectNumRef}/>
+        <LeftSidebarOpened toggleMenu={toggleMenu} currentRoute={currentRoute} canvas={canvas} />
       )
 
     }

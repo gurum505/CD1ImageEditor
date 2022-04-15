@@ -52,12 +52,10 @@ export default function Header(props) {
 
 
     function importImage(e) {
-        props.imageRef.current = true;
-        // props.setImage(!props.image);
         e.target.value = '' //같은 이름의 이미지 파일 업로드가 안되는 것 방지 
-
         var innerWidth = common.getInnerSize(canvas)['innerWidth'];
         var innerHeight = common.getInnerSize(canvas)['innerHeight'];
+        console.log(!props.imageRef.current)
 
         document.getElementById('import-image-file').onchange = function (e) {
             common.initalCanvas(canvas);
@@ -65,6 +63,8 @@ export default function Header(props) {
             var reader = new FileReader();
             
             reader.onload = function (f) {
+                props.setImage(!props.image);
+                props.imageRef.current = true;
                 var data = f.target.result;
                 fabric.Image.fromURL(data, function (img) {
                     
@@ -80,6 +80,7 @@ export default function Header(props) {
                     canvas.renderAll();
                     common.setCanvasCenter(canvas);
                     common.updateStates(canvas);
+                 
                 });
             };
             reader.readAsDataURL(file);
@@ -128,9 +129,10 @@ export default function Header(props) {
             var reader = new FileReader();
             reader.onload = function (e) { //onload(): 읽기 성공 시 실행되는 핸들러
                 canvas.loadFromJSON(reader.result, () => {
-                    common.initalCanvas(canvas);
+                    common.initalCanvas(canvas,true);
                     canvas.setWidth(canvas.initialWidth);
                     canvas.setHeight(canvas.initialHeight);
+                    console.log(canvas.objectNum)
                     common.setCanvasCenter(canvas);
                     common.updateStates(canvas);
                     var Objects = canvas.getObjects();
@@ -175,30 +177,34 @@ export default function Header(props) {
                             inputNodes[i].checked = false;
                             inputNodes[i].value = inputNodes[i].defaultValue;
                         }
+
                     }
                     for (var j = 0; j < inputNodes.length; j++) {
+                       
                         var id = inputNodes[j].id;
                         if (inputNodes[j].type === 'checkbox') {
                             document.getElementById(id).checked = state[0][id];
                         } else if (inputNodes[j].type === 'range') {
+                           
                             document.getElementById(id).value = Number(state[1][id]);
                         } else {
                             document.getElementById(id).value = state[2][id];
                         }
 
                     }
-                } catch (e) { }
+                } catch (e) { 
+                    console.log('ㅈㅅㅋㅋ')
+                }
 
 
                 var objects = canvas.getObjects();
                 if(objects.length!==0){
                 objects.forEach((object) => {
-                    if(object.type!=='path' && object.type!=='group' ||object.type!=='selection')
+                    if(object.type!=='path' && object.type!=='group' &&object.type!=='selection')
                     common.addLayer(canvas,object);
                 });
                 common.colorActiveLayer(canvas);
             }                  canvas.renderAll();    
-            canvas.zoom=1
 
              });
         }
@@ -211,7 +217,6 @@ export default function Header(props) {
             canvas.undoStack.push(json);
 
             canvas.loadFromJSON(json, () => {
-                canvas.zoom=1;
                 if(canvas.recentStyleSize){
                     canvas.setWidth(canvas.initialWidth);
                     canvas.setHeight(canvas.initialHeight);
@@ -245,9 +250,8 @@ export default function Header(props) {
                 var objects = canvas.getObjects();
                 if(objects.length!==0){
                 objects.forEach((object) => {
-                    if(object.type!=='path'){
+                    if(object.type!=='path' && object.type!=='group' &&object.type!=='selection')
                     common.addLayer(canvas,object);
-                    }
                 });
                 common.colorActiveLayer(canvas);
             }
@@ -329,7 +333,7 @@ export default function Header(props) {
                     onClick={Deserialization} />
 
             {/* 이미지 가져오기 */}
-            <CloudDownloadOutlinedIcon htmlFor="import-image-file" onClick={importImage} children={"이미지 가져오기"} />
+            <CloudDownloadOutlinedIcon htmlFor="import-image-file" children={"이미지 가져오기"} />
             <input type="file" id="import-image-file" name="chooseFile" accept="image/*"
                     onClick={importImage} />
                     

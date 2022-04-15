@@ -89,11 +89,7 @@ export default function LineSubmenu(props) {
             common.addLayer(canvas,line);
 
             var objects = canvas.getActiveObjects();
-            objects.forEach((object) => {
-                if (document.getElementById(object.id))
-                    document.getElementById(object.id).style.border = 'solid red'
-            })
-
+          
 
         });
     }

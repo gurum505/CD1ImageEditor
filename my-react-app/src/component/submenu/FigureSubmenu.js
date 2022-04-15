@@ -46,7 +46,6 @@ export default function FigureSubmenu(props) {
                 type: 'rect',
                 id: ++canvas.objectNum,
             });
-            common.addLayer(canvas, rect);
             canvas.add(rect);
 
         });
@@ -72,6 +71,7 @@ export default function FigureSubmenu(props) {
             isDown = false;
             canvas.defaultCursor = 'default';
             mouseEventOff();
+            common.addLayer(canvas,rect)
             common.updateStates(canvas);
         });
 
@@ -97,7 +97,6 @@ export default function FigureSubmenu(props) {
                 id: ++canvas.objectNum,
             });
 
-            common.addLayer(canvas, circle);
             canvas.add(circle);
 
 
@@ -125,6 +124,7 @@ export default function FigureSubmenu(props) {
             // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.defaultCursor = 'default';
             mouseEventOff();
+            common.addLayer(canvas, circle);
             common.updateStates(canvas);
 
         });
@@ -153,7 +153,6 @@ export default function FigureSubmenu(props) {
                 id: ++canvas.objectNum,
                 type: 'triangle'
             });
-            common.addLayer(canvas, triangle);
             canvas.add(triangle);
 
         });
@@ -183,6 +182,8 @@ export default function FigureSubmenu(props) {
             // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
             canvas.defaultCursor = 'default';
             mouseEventOff();
+            common.addLayer(canvas, triangle);
+
             common.updateStates(canvas);
 
         });
