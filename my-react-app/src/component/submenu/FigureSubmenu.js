@@ -196,6 +196,8 @@ export default function FigureSubmenu(props) {
                     <CircleIcon id='add-circle' onClick={addCircle} />
                     <TriangleIcon id='add-triangle' onClick={addTriangle} />
                 </p>
+                <p><label> width</label> <input type="text" /></p>
+                <p><label> height</label> <input type="text" /></p>
                 <p><label>color</label><ColorPicker canvas={canvas} color={color} /></p>
             </div>
         </>

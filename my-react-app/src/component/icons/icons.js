@@ -89,7 +89,7 @@ export const DiffOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <DiffOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )
@@ -100,7 +100,7 @@ export const CopyOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <CopyOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )
@@ -199,7 +199,7 @@ export const DownloadOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <DownloadOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )
@@ -210,7 +210,7 @@ export const FolderOpenOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <FolderOpenOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )
@@ -220,7 +220,7 @@ export const CloudDownloadOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <CloudDownloadOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )
@@ -230,7 +230,7 @@ export const UploadOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <UploadOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )
@@ -240,7 +240,7 @@ export const FileImageOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <FileImageOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )
@@ -250,7 +250,7 @@ export const RedoOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <RedoOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )
@@ -260,7 +260,7 @@ export const UndoOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <UndoOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )

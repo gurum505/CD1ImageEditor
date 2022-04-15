@@ -53,3 +53,18 @@
   /* 이부분만다르다 */
   right: 0px;
 }
+.tooltiptextdown{
+  background-color: gray;
+  position: absolute;
+  z-index: 100;
+
+  visibility: hidden;
+  border-radius: 5px;
+  padding: 0 5px 0 5px;
+  
+  text-align: center;
+  white-space: nowrap;
+  /* 이부분만다르다 */
+  top: 50px;
+  left:0;
+}
