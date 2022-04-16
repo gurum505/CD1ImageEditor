@@ -1,15 +1,12 @@
-import {FontSizeOutlinedIcon, MenuOutlinedIcon
-    , LineOutlinedIcon
-    , ImageIcon, ImageFromInternetIcon,HighlightOutlinedIcon
-} from "../icons/icons";
+import {MenuOutlinedIcon} from "../icons/icons";
 import styles from "./LeftSidebarOpened.module.css"
 import FigureSubmenu from './FigureSubmenu'
 import TextBoxSubmenu from "./TextBoxSubmenu";
 import LineSubmenu from "./LineSubmenu";
 import ImageSubmenu from './ImageSubmenu';
 import FilterSubmenu from './FilterSubmenu';
-export default function LeftSidebarOpened({ toggleMenu, currentRoute,canvas}) {
-
+export default function LeftSidebarOpened(props) {
+    const { toggleMenu, currentRoute,canvas}=props;
     //detail 한메뉴가 열리면 나머지가 닫히는 함수
     //필요없을 시 그냥 삭제
     //click으로 구현은 너무 비효율적
@@ -38,7 +35,7 @@ export default function LeftSidebarOpened({ toggleMenu, currentRoute,canvas}) {
             <div className={styles.container}>
             <details className={styles.detail} open={Open(currentRoute, "Object")}>
                 <summary>Object</summary>
-                <FigureSubmenu canvas={canvas}/>
+                <FigureSubmenu canvas={canvas} addLayerItem={props.addLayerItem}/>
                 <ImageSubmenu canvas={canvas}/>
             </details>
             <details className={styles.detail} open={Open(currentRoute, "Text")}>

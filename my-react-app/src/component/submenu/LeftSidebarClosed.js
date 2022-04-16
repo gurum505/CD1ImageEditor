@@ -3,9 +3,8 @@ import {
     , AreaChartOutlinedIcon, LineOutlinedIcon
 } from "../icons/icons";
 
-import * as common from './common'
-import { useEffect } from "react";
-export default function LeftSidebarClosed({ toggleMenu, SetCurrentRoute,canvas }) {
+export default function LeftSidebarClosed(props) {
+    const { toggleMenu, SetCurrentRoute,canvas}=props;
     //버튼 함수들
 
   

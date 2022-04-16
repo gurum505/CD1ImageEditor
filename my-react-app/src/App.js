@@ -17,18 +17,22 @@ import RightSidebar from './Layout/RightSidebar';
 //TODO: canvas: CUSTOM CORNERS  https://objectcomputing.com/resources/publications/sett/june-2014-drawing-with-fabricjs
 //TODO: sidebar: texticon 하나만 덩그라니 이상함
 //TODO: 한글 영어 혼용, 대문자소문자 통일
+//TODO: leftsidebarclose에 메뉴늘리고 바로 클릭할수 있도록
+
+//rightsidebar
+//TODO: 드래그앤 드롭 구현
+// import { TriangleIcon, CircleIcon, RectangleIcon } from "./component/icons/icons";
 
 
 //canvas
 import Header from "./component/Header";
-import Editormenu from "./Editormenu";
+// import Editormenu from "./Editormenu";
 import Layer from "./component/Layer";
 import * as common from "./component/submenu/common"
 //TODO: Canvas:이미지 드래그앤 드롭으로 이미지 집어넣기, 복사 붙여넣기로 집어넣기
 //TODO: Canvas:객체들고 옮길때 canvas에 중앙선or경계 표시
 
 
-var test=[] ;
 export default function App(props) {
     const [canvas, setCanvas] = useState(''); //useEffect()후 렌더링 하기 위한 state
     const[image,setImage] = useState(false); //이미지 불러왔을 때 전체 렌더링을 위한 state 
@@ -36,18 +40,6 @@ export default function App(props) {
 
     useEffect(() => {  //rendering 후 한 번 실행  
         setCanvas(initCanvas());
-        // let scale = 1; //canvas를 포함하는 wrap element를 마우스 휠로 zoom in/out 
-        // const el = document.querySelector('.wrap');
-        // el.addEventListener('wheel', (event)=>{
-        //     event.preventDefault();
-        //     scale += event.deltaY * -0.001;
-        //     // Restrict scale
-        //     scale = Math.min(Math.max(.125, scale), 4);
-        //     // Apply scale transform
-        //     el.style.transform = `scale(${scale})`;
-
-        // });
-    
     }, []);
     
     useEffect(()=>{
@@ -182,13 +174,36 @@ export default function App(props) {
         })
     )
     }
-       
+
+    //Rightsidebar
+    const [Items,setItems]=useState([]);
+    const nextId=useRef(1);
+
+    function delItem(id){
+        setItems(
+        Items=>(Items.filter(Item=>Item.id !== id))
+        )
+    }
+
+    //TODO: 객체도 되는지
+    function addLayerItem(select){
+        //setitems
+        let newItems=[
+        ...Items,
+        {name:"items"+(nextId.current),
+        id:(nextId.current)}
+        ];
+        newItems=newItems.sort((a,b)=>(b.id-a.id));
+        setItems(newItems);
+        nextId.current+=1;
+    }
+
     return (
         <div className={styles.layout}>
             <Title />
-            {canvas&& <LeftSidebar canvas={canvas} image={image}  imageRef={imageRef}/>}
+            {canvas&& <LeftSidebar canvas={canvas} image={image} imageRef={imageRef} addLayerItem={addLayerItem}/>}
             <div  className={styles.center}>
-                {canvas && <Header canvas={canvas} image={image} setImage={setImage}imageRef={imageRef}/>}
+                {canvas && <Header canvas={canvas} image={image} setImage={setImage} imageRef={imageRef}/>}
 
                 {/* center로 통합 필요 */}
                 <div className={styles.mainContainer}>
@@ -198,7 +213,7 @@ export default function App(props) {
                 </div>
                 <Footbar canvas={canvas}/>{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
             </div>
-            <RightSidebar/>            
+            <RightSidebar addLayerItem={addLayerItem} delItem={delItem} Items={Items}/>            
         </div>
         
     );
