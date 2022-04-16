@@ -20,7 +20,7 @@ import RightSidebar from './Layout/RightSidebar';
 //TODO: leftsidebarclose에 메뉴늘리고 바로 클릭할수 있도록
 
 //rightsidebar
-//TODO: 드래그앤 드롭 구현
+
 // import { TriangleIcon, CircleIcon, RectangleIcon } from "./component/icons/icons";
 
 
@@ -179,6 +179,7 @@ export default function App(props) {
     const [Items,setItems]=useState([]);
     const nextId=useRef(1);
 
+    //TODO: 실제로 객체도 지워지도록
     function delItem(id){
         setItems(
         Items=>(Items.filter(Item=>Item.id !== id))
@@ -186,24 +187,46 @@ export default function App(props) {
     }
 
     //TODO: 객체도 되는지
+    //TODO: 드래그앤 드롭 구현
+    //TODO: 누르면 element생성하도록: popup창?
     function addLayerItem(select){
         //setitems
         let newItems=[
-        ...Items,
         {name:"items"+(nextId.current),
-        id:(nextId.current)}
+        id:(nextId.current)},
+        ...Items
         ];
-        newItems=newItems.sort((a,b)=>(b.id-a.id));
+        // newItems=newItems.sort((a,b)=>(b.id-a.id));
         setItems(newItems);
         nextId.current+=1;
     }
 
+    function sortLayerItem(newItems){
+        setItems(newItems);
+    }
+    const moveDown =(contents, value)=>{
+        const index= contents.findIndex(obj=>obj.id === Number(value));
+        let newPos=index+1;
+        const newContents=[...contents];
+        if(newPos>=contents.length){
+          newPos = contents.length;
+        }
+        // console.log(newContents)
+        newContents.splice(index,1);
+        // console.log(newContents)
+        newContents.splice(newPos,0,contents[index]);
+        // console.log(newContents)
+        setItems(newContents);
+    }
     return (
         <div className={styles.layout}>
             <Title />
-            {canvas&& <LeftSidebar canvas={canvas} image={image} imageRef={imageRef} addLayerItem={addLayerItem}/>}
+            {canvas&& <LeftSidebar 
+                        canvas={canvas} image={image} 
+                        imageRef={imageRef} addLayerItem={addLayerItem}/>}
             <div  className={styles.center}>
-                {canvas && <Header canvas={canvas} image={image} setImage={setImage} imageRef={imageRef}/>}
+                {canvas && <Header canvas={canvas} image={image} 
+                        setImage={setImage} imageRef={imageRef}/>}
 
                 {/* center로 통합 필요 */}
                 <div className={styles.mainContainer}>
@@ -213,7 +236,10 @@ export default function App(props) {
                 </div>
                 <Footbar canvas={canvas}/>{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
             </div>
-            <RightSidebar addLayerItem={addLayerItem} delItem={delItem} Items={Items}/>            
+            <RightSidebar addLayerItem={addLayerItem} 
+                    delItem={delItem} 
+                    moveDown={moveDown}
+                    Items={Items}/>            
         </div>
         
     );
@@ -236,4 +262,4 @@ export default function App(props) {
 //https://codesandbox.io/s/wonderful-cerf-69doe?file=/src/App.js:563-672
 //rightsidebar
 //https://velog.io/@fltxld3/React-%EB%B0%B0%EC%97%B4-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0-List-%EB%A0%8C%EB%8D%94%EB%A7%81-%EC%A1%B0%ED%9A%8C
-//
+//https://moong-bee.com/posts/react-drag-and-drop-list-sortable

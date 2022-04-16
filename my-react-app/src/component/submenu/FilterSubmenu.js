@@ -195,7 +195,9 @@ export default function FilterSubmenu(props) {
 
         <div id='filter-list'>
 
-
+            <p><label> width</label> <input type="text" /></p>
+            <p><label> height</label> <input type="text" /></p>
+                
             <div className={styles.effectContainer}>
 
                 <input type="button" id="reset" value="reset" onClick={resetFilter} />

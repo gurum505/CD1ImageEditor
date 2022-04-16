@@ -1,13 +1,20 @@
 import styles from "./LayerList.module.css";
 import {DashOutlined} from "@ant-design/icons"
 
-export default function LayerList({Items, delItem}){
-    
+export default function LayerList(props){
+    const {Items, delItem,handleDragStart, handleDragOver, handleDrop}=props
     
     return(
         <>
             {Items.map((Item)=>(
-                <div className={styles.Item} key={Item.id}>
+                <div draggable 
+                    className={styles.Item}
+                    key={Item.id} 
+                    id={Item.id} 
+                    onDragStart={handleDragStart}
+                    onDragOver={handleDragOver}
+                    onDrop={handleDrop}
+                >
                     <>
                     <div onClick={()=>delItem(Item.id)}>
                       <DashOutlined className={styles.ItemButton} />
