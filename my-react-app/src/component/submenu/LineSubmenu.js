@@ -129,7 +129,7 @@ export default function LineSubmenu(props) {
         patternCanvas.width = patternCanvas.height = 10;
         var ctx = patternCanvas.getContext('2d');
 
-        ctx.strokeStyle = this.color;
+        ctx.strokeStyle = color.current;
         ctx.lineWidth = 5;
         ctx.beginPath();
         ctx.moveTo(0, 5);

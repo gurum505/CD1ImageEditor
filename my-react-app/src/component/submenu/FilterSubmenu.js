@@ -10,24 +10,24 @@ export default function FilterSubmenu(props) {
         'polaroid', 'blend-color', 'gamma', 'kodachrome',
         'blackwhite', 'blend-image', 'hue', 'resize'];
 
-    useEffect(() => {
-        //이미지가 없을 때는 필터 기능 disabled
-        if (canvas.backgroundImage === null) {
-            const divElem = document.getElementById('filter-list');
+    // useEffect(() => {
+    //     //이미지가 없을 때는 필터 기능 disabled
+    //     if (getMainImage() === null) {
+    //         const divElem = document.getElementById('filter-list');
 
-            const inputElements = divElem.querySelectorAll("input[type=range], input[type=checkbox], input[type=button]")
-            for (var i = 0; i < inputElements.length; i++) {
-                inputElements[i].disabled = true;
-            }
-        }
-    })
+    //         const inputElements = divElem.querySelectorAll("input[type=range], input[type=checkbox], input[type=button]")
+    //         for (var i = 0; i < inputElements.length; i++) {
+    //             inputElements[i].disabled = true;
+    //         }
+    //     }
+    // })
 
     useEffect(() => {
         const divElem = document.getElementById('filter-list');
         const inputElements = divElem.querySelectorAll("input,range, checkbox")
         inputElements.forEach((input) => {
             input.addEventListener('change', (e) => {
-                canvas.filterValues = getRangeState();
+                canvas.filterValues = common.getRangeState();
                 common.updateStates(canvas);
             })
         })
@@ -40,43 +40,9 @@ export default function FilterSubmenu(props) {
     const canvas = props.canvas;
     const f = fabric.Image.filters;
 
-    function resizeCanvasWidth(e) {
-        canvas.setWidth(e.target.value);
-        canvas.initialWidth = e.target.value;
-    }
-    function resizeCanvasHeight(e) {
-        canvas.setHeight(e.target.value);
-        canvas.initialHeight = e.target.value;
-    }
-    function getRangeState() {
-        var list = [];
-        var checkbox = {};
-        var range = {};
-        var button = {};
-
-        var inputNodes = document.getElementById('filter-list').getElementsByTagName('input');
-        for (var i = 0; i < inputNodes.length; i++) {
-            var id = inputNodes[i].id;
-            var isChecked = inputNodes[i].checked;
-            var value = inputNodes[i].value;
-
-            if (inputNodes[i].type === 'checkbox') {
-                checkbox[id] = isChecked;
-            } else if (inputNodes[i].type === 'range') {
-                range[id] = value;
-            } else {
-                button[id] = value;
-            }
-
-        }
-        list.push(checkbox);
-        list.push(range)
-        list.push(button);
-        return list;
-    }
-
+  
     function resetFilter() { //필터 초기화 
-        const obj = canvas.backgroundImage;
+        const obj = common.getMainImage(canvas);
         var inputNodes = document.getElementById('filter-list').getElementsByTagName('input');
         for (var i = 0; i < inputNodes.length; i++) {
             inputNodes[i].value = inputNodes[i].defaultValue;
@@ -87,20 +53,21 @@ export default function FilterSubmenu(props) {
         canvas.renderAll();
     }
     function applyFilter(index, filter) { //필터 적용
-        const obj = canvas.backgroundImage;
+        const obj = common.getMainImage(canvas);
+        console.log(obj);
         obj.filters[index] = filter;
         obj.applyFilters();
         canvas.renderAll();
-        canvas.filterValues = getRangeState();
+        canvas.filterValues = common.getRangeState();
     }
 
     function getFilter(index) {
-        var obj = canvas.backgroundImage;
+        const obj = common.getMainImage(canvas);
         return obj.filters[index];
     }
 
     function applyFilterValue(index, prop, value) {
-        var obj = canvas.backgroundImage;
+        const obj = common.getMainImage(canvas);
         if (obj.filters[index]) {
             obj.filters[index][prop] = value;
             obj.applyFilters();

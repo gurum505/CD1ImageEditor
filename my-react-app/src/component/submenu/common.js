@@ -4,6 +4,8 @@
 
 import { CommentOutlined } from "@ant-design/icons";
 import { fabric } from "fabric";
+import backgroundImage from '../../img/background.png'
+
 
 export function initialComponentSize(){ //현재 페이지 구성요소들의 크기 
 
@@ -31,18 +33,14 @@ export function setCanvasCenter(canvas) { //캔버스를 내 가운데에 위치
         var inner = getInnerSize(canvas);
         var innerWidth=  inner['innerWidth'];
         var innerHeight = inner['innerHeight'];
-
         var upperCanvas = document.getElementsByClassName('upper-canvas')[0];
         var lowerCanvas = document.getElementsByClassName('lower-canvas')[0];
         
-
         var styleWidth = upperCanvas.style.width.substr(0, upperCanvas.style.width.length-2)
         var styleHeight = upperCanvas.style.height.substr(0, upperCanvas.style.height.length-2)
-
-
+   
         var left = (innerWidth-styleWidth)/2;
-        var top = (innerHeight-styleHeight)/2
-        ;
+        var top = (innerHeight-styleHeight)/2;
 
         // if(top<100) top =100;
         upperCanvas.style.left = left+'px';
@@ -50,7 +48,6 @@ export function setCanvasCenter(canvas) { //캔버스를 내 가운데에 위치
 
         lowerCanvas.style.left = left+'px';
         lowerCanvas.style.top = top+'px';
-
     }
 }
 
@@ -60,21 +57,24 @@ export function zoom(canvas,ratio){
         canvasElem[i].style.width = getCanvasStyleWidth() * ratio + 'px';
         canvasElem[i].style.height = getCanvasStyleHeight()* ratio+ 'px';
     }
-
     setCanvasCenter(canvas);
+
 }
 
 export function initalCanvas(canvas,loadPrevCanvas=false){
     canvas.set({
-        backgroundImage:null,
-        backgroundColor:'white',
         undoStack:[],
         redoStack:[],
-        filterValues:'',
         initialWidth:600,
         initialHeight:400,
     });
-
+    fabric.Image.fromURL(backgroundImage,(img)=>{
+        img.default = true;
+        canvas.setBackgroundImage(img,canvas.renderAll.bind(canvas),{
+        });
+        canvas.renderAll();
+    })
+    
     if(!loadPrevCanvas) canvas.objectNum =0;  
     canvas.setWidth(600);
     canvas.setHeight(400);
@@ -106,7 +106,7 @@ export function fitToProportion(canvas){ // 사진이 다른 컴포넌트를 넘
     
     if(getCanvasStyleWidth()>innerWidth || getCanvasStyleHeight()>innerHeight){
         while(1){
-            if(getCanvasStyleWidth()<getInnerSize(canvas)['innerWidth'] && getCanvasStyleHeight()<getInnerSize(canvas)['innerWidth']) break;
+            if(getCanvasStyleWidth()<getInnerSize(canvas)['innerWidth'] && getCanvasStyleHeight()<getInnerSize(canvas)['innerHeight']) break;
            zoom(canvas,0.9);
         }
         zoom(canvas,0.9);
@@ -124,17 +124,74 @@ export function fitToProportion(canvas){ // 사진이 다른 컴포넌트를 넘
 }
 }
 
-export function updateStates(canvas){
+export function getRangeState(){
+        var list = [];
+        var checkbox = {};
+        var range = {};
+        var button = {};
+
+        if(document.getElementById('filter-list')){
+        var inputNodes = document.getElementById('filter-list').getElementsByTagName('input');
+        for (var i = 0; i < inputNodes.length; i++) {
+            var id = inputNodes[i].id;
+            var isChecked = inputNodes[i].checked;
+            var value = inputNodes[i].value;
+
+            if (inputNodes[i].type === 'checkbox') {
+                checkbox[id] = isChecked;
+            } else if (inputNodes[i].type === 'range') {
+                range[id] = value;
+            } else {
+                button[id] = value;
+            }
+
+        }
+        list.push(checkbox);
+        list.push(range)
+        list.push(button);
+        return list;
+    }
+    
+}
+export function updateStates(canvas,isCropped=false){
+    console.log(canvas.undoStack);
     canvas.currentWidth = canvas.width;
     canvas.currentHeight = canvas.Height;
-    var json = canvas.toDatalessJSON(['undoStack','redoStack','initialWidth', 'initialHeight', 'objectNum', 'id','filterValues','recentStyleSize']);
-    canvas.undoStack.push(json);
+    var newFilters = [];
+    var newObjects =[];
+    var filters = getMainImage(canvas)? getMainImage(canvas).filters : []; 
+    var objects = canvas.getObjects();
+    if(objects.length>0)
+    for (var j=0; j<objects.length; j++){
+        // let clonedOject = Object.assign(Object.create(Object.getPrototypeOf(objects[j])), objects[j])
+        objects[j].clone((cloned)=>{newObjects.push(cloned)},['id','main'])
+    }
 
+    if(filters){
+    for(var i =0; i<filters.length ; i++){
+        if(!filters[i]) continue;
+        else {
+            let clonedFilter = Object.assign(Object.create(Object.getPrototypeOf(filters[i])), filters[i])
+            newFilters[i]=clonedFilter;
+        }
+    } 
+}
+        canvas.undoStack.push({'objects': newObjects,'filters':newFilters,'filterRangeState': getRangeState(),'isCropped':isCropped,'initialWidth':canvas.initialWidth,'initialHeight':canvas.initialHeight, 'image': getMainImage(canvas)});
 }
 
 
 
 //객체 관련 
+export  function getMainImage(canvas){ //필터할 이미지 반환 
+    var result= null;
+    var objects = canvas.getObjects();
+    for(var i =0; i<objects.length; i++){
+        if (objects[i].main===true){
+            result = objects[i];
+        }
+    }
+    return result
+}
 
 export function getActiveObjectsByType(canvas,objectType){
     var results = []
@@ -146,15 +203,17 @@ export function getActiveObjectsByType(canvas,objectType){
 }
 
 //캔버스 위의 모든 객체, 레이어 제거 
-export function removeAllObjects(canvas){
+export function removeAllObjects(canvas,clear=false){
     var objects = canvas.getObjects();
     objects.forEach((object)=>{
+        if(!object.main || clear)
         canvas.remove(object); // 캔버스 위의 객체 제거
         
         try{
+        if(!object.main)
+
         document.getElementById(object.id).remove(); // 레이어 제거
         }catch(e){
-            console.log('path');
         } 
     })
 }
@@ -199,6 +258,7 @@ export function modifyLayer(object){
     img.src = src;
 }
 export function addLayer(canvas, object) {  //레이어에 객체 추가 
+    if(object.main) return ;
     if(document.getElementById(object.id)) return ;
     const layerCanvas = new fabric.Canvas();
     layerCanvas.setWidth(canvas.width);
@@ -220,6 +280,7 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     imgTag.style.height ='50px'
    
     imgTag.onclick=()=>{
+        console.log(canvas.getActiveObjects())
         canvas.setActiveObject(object);
         canvas.renderAll();
     }

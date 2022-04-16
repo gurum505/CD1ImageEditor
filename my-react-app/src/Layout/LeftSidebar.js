@@ -3,7 +3,7 @@ import LeftSidebarClosed from "../component/submenu/LeftSidebarClosed";
 import LeftSidebarOpened from "../component/submenu/LeftSidebarOpened";
 import { useEffect, useRef, useState} from "react";
 import * as common from "../component/submenu/common"
-const LeftSidebar = ({children, canvas, imageRef,image}) => {
+const LeftSidebar = ({children, canvas, imageRef,image,setCanvas}) => {
   const [wid, setX] = useState(50)
   const [isOpen, setOpen] = useState(false);
   const [currentRoute,SetCurrentRoute] =useState("Menu");
@@ -61,7 +61,7 @@ const LeftSidebar = ({children, canvas, imageRef,image}) => {
          common.fitToProportion(canvas)
       }
       return( 
-        <LeftSidebarOpened toggleMenu={toggleMenu} currentRoute={currentRoute} canvas={canvas} />
+        <LeftSidebarOpened toggleMenu={toggleMenu} currentRoute={currentRoute} setCanvas={setCanvas}canvas={canvas} />
       )
 
     }

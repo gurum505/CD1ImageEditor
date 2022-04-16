@@ -1,6 +1,6 @@
 import { fabric } from "fabric";
 import React, { useState, useEffect, useRef } from "react";
-
+import backgroundImage from './img/background.png'
 //layout
 import styles from './App.module.css';
 import Title from './Layout/Title';
@@ -31,7 +31,6 @@ import * as common from "./component/submenu/common"
 //TODO: Canvas:객체들고 옮길때 canvas에 중앙선or경계 표시
 
 
-var test=[] ;
 export default function App(props) {
     const [canvas, setCanvas] = useState(''); //useEffect()후 렌더링 하기 위한 state
     const[image,setImage] = useState(false); //이미지 불러왔을 때 전체 렌더링을 위한 state 
@@ -39,8 +38,9 @@ export default function App(props) {
 
     useEffect(() => {  //rendering 후 한 번 실행  
         setCanvas(initCanvas());
+
         // let scale = 1; //canvas를 포함하는 wrap element를 마우스 휠로 zoom in/out 
-        // const el = document.querySelector('.wrap');
+        // const el = document.querySelector('.App_mainContainer__CaT4T');
         // el.addEventListener('wheel', (event)=>{
         //     event.preventDefault();
         //     scale += event.deltaY * -0.001;
@@ -48,7 +48,7 @@ export default function App(props) {
         //     scale = Math.min(Math.max(.125, scale), 4);
         //     // Apply scale transform
         //     el.style.transform = `scale(${scale})`;
-
+        //     common.setCanvasCenter(canvas)
         // });
     
     }, []);
@@ -57,8 +57,16 @@ export default function App(props) {
         if (canvas) {
             canvas.componentSize = common.initialComponentSize();
             common.setCanvasCenter(canvas);
-            common.updateStates(canvas);
-            common.getInnerSize(canvas)
+
+            fabric.Image.fromURL(backgroundImage,(img)=>{
+                img.default = true;
+                canvas.setBackgroundImage(img,canvas.renderAll.bind(canvas),{
+                });
+                canvas.renderAll();
+                common.updateStates(canvas);
+
+            })
+            
             canvas.on({
                 'mouse:wheel': (opt) => {
                      var delta = opt.e.deltaY;
@@ -67,6 +75,7 @@ export default function App(props) {
                     }else{
                         common.zoom(canvas,0.93)
                     }
+                    common.setCanvasCenter(canvas);
                 },
                 'selection:updated':()=>{
                     console.log('selection:updated')
@@ -85,6 +94,8 @@ export default function App(props) {
                 'selection:created': () => {
                     console.log('selection:created');
                     common.colorActiveLayer(canvas);
+                    var object = canvas.getActiveObject();
+                    // if(object.main) canvas.discardActiveObject(object)
                     // document.getElementById('remove-object').disabled = false;
                 },
                 'object:added': () => {
@@ -98,6 +109,8 @@ export default function App(props) {
                     common.addLayer(canvas,object)
                     common.colorActiveLayer(canvas);
                     }
+
+                    // if(object.main) canvas.discardActiveObject(object);
                     // document.getElementById('remove-object').disabled = false;
 
                 },
@@ -174,27 +187,18 @@ export default function App(props) {
     },[canvas])
    
     const initCanvas = () => {
-        // var windowWidth= window.innerWidth-50;
-        // var windowHeight = window.innerHeight-240;
-        // var width, height; 
-        // if(windowWidth>windowHeight){
-        //         height = windowHeight*0.9;
-        //         width =windowWidth*0.8;
-        // }else{
-        //     width = windowWidth*0.9;
-        //     height = height*0.8
-        // }
+        
         return (
         new fabric.Canvas('canvas', {
-            height: 400,
             width: 600,
+            height: 400,
             initialWidth: 600,
             initialHeight:400, 
             objectNum : 0,
             undoStack :[],
             redoStack :[],
-            filterValues : '',
-            backgroundColor: 'white',
+            // filterValues : '',
+            // backgroundColor: 'white',
             componentSize:'',
         })
     )
@@ -203,7 +207,7 @@ export default function App(props) {
     return (
         <div className={styles.layout}>
             <Title />
-            {canvas&& <LeftSidebar canvas={canvas} image={image}  imageRef={imageRef}/>}
+            {canvas&& <LeftSidebar canvas={canvas} setCanvas={setCanvas}image={image}  imageRef={imageRef}/>}
             <div  className={styles.center}>
                 {canvas && <Header canvas={canvas} image={image} setImage={setImage}imageRef={imageRef}/>}
 
