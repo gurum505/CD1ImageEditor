@@ -119,7 +119,9 @@ export default function Header(props) {
             })
         });
         else{
-            var image = canvas.toDataURL();  //canvas 그림을 문자열 형태로 
+            var image = canvas.toDataURL({
+                crossOrigin: 'anonymous'
+            });  //canvas 그림을 문자열 형태로 
             var link = document.createElement('a'); //<a> 생성
             link.href = image;
             link.download = "image.png";
@@ -178,9 +180,9 @@ export default function Header(props) {
             var json = canvas.undoStack[canvas.undoStack.length-1]; 
             var objects  = json['objects'];
             objects.forEach((object)=>{
-                if(!object.main){
+                if(!object.main)
                 canvas.add(object)
-                }
+
             })
             
             var filters = json['filters'];
@@ -191,7 +193,7 @@ export default function Header(props) {
 
             common.setCanvasCenter(canvas);
             if(json['recentStyleSize']){
-                common.removeAllObjects(canvas,true);
+                common.removeAllObjects(canvas);
                 canvas.setWidth(json['initialWidth']);
                 canvas.setHeight(json['initialHeight']);
                 if(json['recentStyleSize']['mainImage'])
@@ -264,12 +266,13 @@ export default function Header(props) {
             objects.forEach((object)=>{
                 if(!object.main)
                 canvas.add(object)
+
             })
 
             if(common.getMainImage(canvas)) common.getMainImage(canvas).applyFilters(filters);
             canvas.renderAll();
             if(json['isCropped']){
-                        common.removeAllObjects(canvas,true);
+                        common.removeAllObjects(canvas);
                         canvas.setWidth(json['initialWidth']);
                         canvas.setHeight(json['initialHeight']);
                         canvas.add(json['image']);

@@ -37,7 +37,10 @@ export default function OnelineImage(props) {
                 imgtag.crossOrigin='anonymous';
                 imgtag.onclick = () => {
                     var img = new fabric.Image.fromURL(photo.webformatURL, image => {
-                        image.src = photo.webformatURL;
+                        // image.src = photo.webformatURL;
+                        console.log(image.getCrossOrigin())
+                        image.setSrc(photo.webformatURL,()=>{} ,{'crossOrigin':'anonymous'})
+                        console.log(image)
                         image.id = ++canvas.objectNum;
                         image.left = Math.floor(Math.random() * 101);
                         image.top = Math.floor(Math.random() * 101);
