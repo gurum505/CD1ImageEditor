@@ -233,13 +233,12 @@ export default function LineSubmenu(props) {
     return (<>
         <div>
             <p>
-                <LineOutlinedIcon children={"직선그리기"} onClick={drawStraight}/>
-                <HighlightOutlinedIcon children={"자유그리기 모드"} onClick={drawCurve}/>
+                <LineOutlinedIcon children={"straight line"} onClick={drawStraight}/>
+                <HighlightOutlinedIcon children={"free drawing mode"} onClick={drawCurve}/>
             </p>
             <p>
             <select id='drawing-mode' onChange={setDrawingMode} style={{}}>
             <option value="">--choose drawing option--</option>
-
                 <option>Pencil</option>
                 <option>Circle</option>
                 <option>Spray</option>
@@ -251,12 +250,12 @@ export default function LineSubmenu(props) {
             </p>
           
           
+            <p><label> color</label> <ColorPicker canvas={canvas} color={color}/></p> 
             <div className={styles.effectContainer}>
                 <label>Line width:</label><input type="range" id="line-width" defaultValue="30" min="0" max="150" step="1" onChange={setLineWidth} />
                 <label>Shadow width:</label><input type="range" id="shadow-width" defaultValue="0" min="0" max="50" step="1" onChange={setShadowWidth} />
                 <label>Shadow offset: </label> <input type="range" id="shadow-offset" defaultValue="0" min="0" max="50" step="1" onChange={setShadowOffset} />
             </div>
-            <p><label> color</label> <ColorPicker canvas={canvas} color={color}/></p> 
         </div>
     </>);
 }

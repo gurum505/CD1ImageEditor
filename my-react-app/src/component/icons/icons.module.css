@@ -8,6 +8,7 @@
     box-sizing: border-box;
     color: gray;
     border-radius: 5px;
+    user-select: none;
   }
 .icon:focus{
   outline:none;/*클릭시 파란테두리 없애기*/
@@ -18,18 +19,18 @@
   box-shadow: inset 1px 0 #ddd, inset -1px 0 #ddd;
   transition: 0.3s ;
 }
-
 .container:hover span{
   visibility: visible;
-  z-index: 99;
 }
 .container{
   position: relative;
-  /* z-index: 1; */
+  z-index: 100;
 }
 .tooltiptext{
   background-color: gray;
   position: absolute;
+  z-index: 100;
+
   visibility: hidden;
   border-radius: 5px;
   padding: 0 5px 0 5px;
@@ -37,4 +38,33 @@
   left: 0px;
   text-align: center;
   white-space: nowrap;
+}
+.tooltiptextleft{
+  background-color: gray;
+  position: absolute;
+  z-index: 100;
+
+  visibility: hidden;
+  border-radius: 5px;
+  padding: 0 5px 0 5px;
+  top: -25px;
+  text-align: center;
+  white-space: nowrap;
+  /* 이부분만다르다 */
+  right: 0px;
+}
+.tooltiptextdown{
+  background-color: gray;
+  position: absolute;
+  z-index: 100;
+
+  visibility: hidden;
+  border-radius: 5px;
+  padding: 0 5px 0 5px;
+  
+  text-align: center;
+  white-space: nowrap;
+  /* 이부분만다르다 */
+  top: 50px;
+  left:0;
 }

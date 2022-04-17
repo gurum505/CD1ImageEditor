@@ -1,10 +1,10 @@
 import {FontSizeOutlined,MenuOutlined,BorderOutlined,AreaChartOutlined, LineOutlined
 ,SettingOutlined,AlignLeftOutlined,AlignCenterOutlined,AlignRightOutlined,HighlightOutlined 
 ,BoldOutlined,ItalicOutlined,LineHeightOutlined,GithubOutlined,CloseOutlined,
-    FolderOpenOutlined,CloudDownloadOutlined,UploadOutlined,
-    FileImageOutlined,RedoOutlined,UndoOutlined,DownloadOutlined,
-    EditOutlined,DragOutlined,ZoomInOutlined,ZoomOutOutlined,
-    ExpandOutlined,EyeOutlined,CopyOutlined,DiffOutlined,PlusOutlined,UnderlineOutlined,SearchOutlined} from "@ant-design/icons"
+    FolderOpenOutlined,CloudDownloadOutlined,UploadOutlined,UnderlineOutlined,
+    FileImageOutlined,RedoOutlined,UndoOutlined,DownloadOutlined,AppstoreOutlined,
+    EditOutlined,DragOutlined,ZoomInOutlined,ZoomOutOutlined,ScissorOutlined,FormOutlined,
+    ExpandOutlined,EyeOutlined,CopyOutlined,DiffOutlined,PlusOutlined,SearchOutlined} from "@ant-design/icons"
 import styles from "./icons.module.css"
 import { ReactComponent as Triangle} from './TriangleIcon.svg';
 import { ReactComponent as Circle} from './CircleIcon.svg';
@@ -15,6 +15,7 @@ import { ReactComponent as ImageFromInternet} from './ImageFromInternetIcon.svg'
 
 //https://ant.design/components/icon/#components-icon-demo-custom
 //https://icon-icons.com/ko/
+//https://www.svgrepo.com/
 
 //색 적용
 //<BgColorsOutlined />
@@ -26,6 +27,54 @@ import { ReactComponent as ImageFromInternet} from './ImageFromInternetIcon.svg'
 //<ColumnWidthOutlined />
 //height
 //<ColumnHeightOutlined />
+{/* <UnderlineOutlined />
+
+export const UnderlineOutlinedIcon=({onClick, children, htmlFor})=>{
+    return(
+        <span className={styles.container}>
+            <label htmlFor={htmlFor}>
+            <UnderlineOutlined className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+            </label>
+        </span>
+    )
+} */}
+
+
+export const FormOutlinedIcon=({onClick, children, htmlFor})=>{
+    return(
+        <span className={styles.container}>
+            <label htmlFor={htmlFor}>
+            <FormOutlined className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+            </label>
+        </span>
+    )
+}
+
+
+export const AppstoreOutlinedIcon=({onClick, children, htmlFor})=>{
+    return(
+        <span className={styles.container}>
+            <label htmlFor={htmlFor}>
+            <AppstoreOutlined className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+            </label>
+        </span>
+    )
+}
+
+export const ScissorOutlinedIcon=({onClick, children, htmlFor})=>{
+    return(
+        <span className={styles.container}>
+            <label htmlFor={htmlFor}>
+            <ScissorOutlined className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+            </label>
+        </span>
+    )
+}
+
 export const CloseOutlinedIcon=({onClick, children, htmlFor})=>{
     return(
         <span className={styles.container}>
@@ -76,7 +125,7 @@ export const DiffOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <DiffOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )
@@ -87,7 +136,7 @@ export const CopyOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <CopyOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )
@@ -98,7 +147,7 @@ export const ImageFromInternetIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <ImageFromInternet className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextleft}>{children}</span>
             </label>
         </span>
     )
@@ -114,9 +163,6 @@ export const ImageIcon=({onClick, children, htmlFor})=>{
         </span>
     )
 }
-
-
-
 
 export const EditOutlinedIcon=({onClick, children, htmlFor})=>{
     return(
@@ -189,7 +235,7 @@ export const DownloadOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <DownloadOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )
@@ -200,7 +246,7 @@ export const FolderOpenOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <FolderOpenOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )
@@ -210,7 +256,7 @@ export const CloudDownloadOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <CloudDownloadOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )
@@ -220,7 +266,7 @@ export const UploadOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <UploadOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )
@@ -230,7 +276,7 @@ export const FileImageOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <FileImageOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )
@@ -240,7 +286,7 @@ export const RedoOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <RedoOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )
@@ -250,7 +296,7 @@ export const UndoOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <UndoOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextdown}>{children}</span>
             </label>
         </span>
     )
@@ -415,7 +461,7 @@ export const HighlightOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <HighlightOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
+            <span className={styles.tooltiptextleft}>{children}</span>
             </label>
         </span>
     )

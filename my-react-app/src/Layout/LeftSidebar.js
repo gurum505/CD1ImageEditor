@@ -3,7 +3,13 @@ import LeftSidebarClosed from "../component/submenu/LeftSidebarClosed";
 import LeftSidebarOpened from "../component/submenu/LeftSidebarOpened";
 import { useEffect, useRef, useState} from "react";
 import * as common from "../component/submenu/common"
+<<<<<<< HEAD
+const LeftSidebar = (props) => {
+  const {canvas, imageRef,image}=props;
+
+=======
 const LeftSidebar = ({children, canvas, imageRef,image,setCanvas}) => {
+>>>>>>> 0cdc4821b660b5f22057718bc840e14a32071887
   const [wid, setX] = useState(50)
   const [isOpen, setOpen] = useState(false);
   const [currentRoute,SetCurrentRoute] =useState("Menu");
@@ -37,7 +43,7 @@ const LeftSidebar = ({children, canvas, imageRef,image,setCanvas}) => {
     setOpen(false);
       canvas.componentSize['leftbar']=50;
     }
-  },[image])
+  },[imageRef,canvas.componentSize,image])//FIXME: image=>imageRef로 바꾸고 dependency추가했는데 의도에 맞나요?
 
   function toggleMenu() {
       if (wid > 50) {
@@ -61,7 +67,11 @@ const LeftSidebar = ({children, canvas, imageRef,image,setCanvas}) => {
          common.fitToProportion(canvas)
       }
       return( 
+<<<<<<< HEAD
+        <LeftSidebarOpened toggleMenu={toggleMenu} currentRoute={currentRoute} canvas={canvas} addLayerItem={props.addLayerItem}/>
+=======
         <LeftSidebarOpened toggleMenu={toggleMenu} currentRoute={currentRoute} setCanvas={setCanvas}canvas={canvas} />
+>>>>>>> 0cdc4821b660b5f22057718bc840e14a32071887
       )
 
     }
@@ -76,10 +86,9 @@ const LeftSidebar = ({children, canvas, imageRef,image,setCanvas}) => {
 
   return (
     <div className={styles.container} >
-      <div className='leftbar'style={{ width: `${wid}px`, height: '100%', transition:'0.5s ease' ,overflow:"hidden"}}>
+      <div id='leftbar'style={{ width: `${wid}px`, height: '100%', transition:'0.5s ease' ,overflow:"hidden"}}>
         
         <div className={styles.content}>
-          {children}
           {page(isOpen)}
         </div>
       </div>

@@ -1,49 +1,71 @@
 import styles from "./RightSidebar.module.css";
-import { useState,useRef } from "react";
 import LayerList from "../component/submenu/LayerList.js"
 import { PlusOutlined}from "@ant-design/icons";
+import { useState } from "react";
+import Modal from "../component/Modal.js"
 
-const RightSidebar = () => { 
-  //https://velog.io/@fltxld3/React-%EB%B0%B0%EC%97%B4-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0-List-%EB%A0%8C%EB%8D%94%EB%A7%81-%EC%A1%B0%ED%9A%8C
 
-  const [Items,setItems]=useState([]);
-  const nextId=useRef(1);
+export default function RightSidebar (props) { 
 
-  function delItem(id){
-    setItems(
-      Items=>(Items.filter(Item=>Item.id !== id))
-    )
-    // console.log(Items);
-    // console.log(id);
-    // nextId.current-=1;
+  const [isDragging,setIsDragging]=useState(false);
+  const [isDragOver,setIsDragOver]=useState(false);
+
+  const handleDragStart=(e)=>{
+    setIsDragging(true); //내가 현재 drag중인가?
+    e.dataTransfer.effectedAllowed = "move"; //드래그시 마우스 아래 생기는 십자가 버튼 막기
+    e.dataTransfer.setData("targetId",e.target.id); //잡은 item의 data를 담는다.[key],[value]
   }
+  const handleDragOver = (e) => {
+    e.preventDefault(); // touch같은 기본으로 발동하는 다른 이벤트를 막는다.
 
-  //TODO: 객체도 되는지
-  function addLayerItem(){
-    let newItems=[
-      ...Items,
-      {name:"items"+(nextId.current),
-      id:(nextId.current)}
-    ];
-    newItems=sortItems(newItems);
-    setItems(newItems);
-    nextId.current+=1;
-    // console.log(Items);
-  }
 
-  //id 내림차순으로 정렬
-  function sortItems(Items){
-    Items.sort((a,b)=>(b.id-a.id));
-    return Items;
+    console.log(e.target.innerText.substr(5,));
+
+  };
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    let newId = e.dataTransfer.getData('targetId'); // Start에서 저장한 데이터 풀어준다
+    // console.log(e.target.innerText);//FIXME:ID가안잡혀서 innerText로 했다.
+    let oriId=e.target.innerText.substr(5,)
+    // item의 위치를 바꿔주는 함수
+    props.moveItem(props.Items,newId,oriId);
+  };
+
+  const dragOverItem=()=>{
+
   }
+  
+  const [isModalOpen,setIsModalOpen]=useState(false);
+  const openModal= ()=>{
+      setIsModalOpen(true);
+  }
+  const closeModal= ()=>{
+      setIsModalOpen(false);
+  }
+  
 
   return (
     <>
-    <div className={styles.container}>
-      {/* <p className={styles.title}>
-        Layer
-      </p> */}
+    <div id ="rightsidebar" className={styles.container}>
       <div className={styles.itemList}>
+<<<<<<< HEAD
+      {/* props.addLayerItem */}
+        <Modal isModalOpen={isModalOpen} closeModal={closeModal} />
+        <div className={styles.addItem} onClick={openModal}>
+          <PlusOutlined style={{fontSize:"20pt", color:"gray"}} />
+        </div>
+        <div className={styles.itemScroll}>
+          <LayerList 
+              Items={props.Items} 
+              delItem={props.delItem} 
+              handleDragStart={handleDragStart}
+              handleDragOver={handleDragOver}
+              isDragOver={isDragOver}
+              handleDrop={handleDrop}
+              canvas={props.canvas}/>
+=======
         {/* <div className={styles.addItem} onClick={addLayerItem} style={{color:'white'}}> 객체  */}
           {/* <PlusOutlined style={{fontSize:"20pt", color:"gray"}} /> */}
         <div className={styles.addItem}  style={{color:'white'}}> 객체 
@@ -51,14 +73,10 @@ const RightSidebar = () => {
         </div>
         <div className={styles.itemScroll}>
           {/* <LayerList Items={Items} delItem={delItem}/> */}
+>>>>>>> 0cdc4821b660b5f22057718bc840e14a32071887
         </div>
-        
       </div>
-      
     </div>
     </>
   );
 };
-
-
-export default RightSidebar;

@@ -10,21 +10,24 @@ import RightSidebar from './Layout/RightSidebar';
 
 //TODO: 완료후) github: mainpage를 my react app으로 변경, RightSidebar같은 쓸데없는 것들, 주석 다지우기
 //TODO: Canvas: 버튼기능구현 layout으로 분배
-//FIXME: Sidebar:canvas크기구현할때 왼쪽 사이드바까지 고려해서 집어넣어야함
-//TODO: 전체가 계속 다시 렌더링 됨으로써 remove함수나 여러 함수가 동시에 실행된다.막자
-//TODO:ESLint사용해 정리해보자 https://velog.io/@velopert/eslint-and-prettier-in-react
+//TODO: ESLint사용해 정리해보자 https://velog.io/@velopert/eslint-and-prettier-in-react
 //TODO: tooltip 예쁘게 https://css-tricks.com/exploring-what-the-details-and-summary-elements-can-do/
+//TODO: point색 사용해서 3색으로 정리
 
-//TODO: Sidebar:스크롤바 안보이게 세로만
 //Sidebar:type:radio
-//TODO: Sidebar:colorpicker design
-//TODO: SIdbar: input text를 다른 box로 고민해보기
-//TODO: sidebar: input을change가 아니라 onKeyPress로?
 //TODO: canvas: CUSTOM CORNERS  https://objectcomputing.com/resources/publications/sett/june-2014-drawing-with-fabricjs
+//TODO: sidebar: texticon 하나만 덩그라니 이상함
+//TODO: 한글 영어 혼용, 대문자소문자 통일
+//TODO: leftsidebarclose에 메뉴늘리고 바로 클릭할수 있도록
+
+//rightsidebar
+
+// import { TriangleIcon, CircleIcon, RectangleIcon } from "./component/icons/icons";
+
 
 //canvas
 import Header from "./component/Header";
-import Editormenu from "./Editormenu";
+// import Editormenu from "./Editormenu";
 import Layer from "./component/Layer";
 import * as common from "./component/submenu/common"
 //TODO: Canvas:이미지 드래그앤 드롭으로 이미지 집어넣기, 복사 붙여넣기로 집어넣기
@@ -38,21 +41,9 @@ export default function App(props) {
 
     useEffect(() => {  //rendering 후 한 번 실행  
         setCanvas(initCanvas());
-
-        // let scale = 1; //canvas를 포함하는 wrap element를 마우스 휠로 zoom in/out 
-        // const el = document.querySelector('.App_mainContainer__CaT4T');
-        // el.addEventListener('wheel', (event)=>{
-        //     event.preventDefault();
-        //     scale += event.deltaY * -0.001;
-        //     // Restrict scale
-        //     scale = Math.min(Math.max(.125, scale), 4);
-        //     // Apply scale transform
-        //     el.style.transform = `scale(${scale})`;
-        //     common.setCanvasCenter(canvas)
-        // });
-    
     }, []);
-    
+
+    const zoomInfo=useRef();
     useEffect(()=>{
         if (canvas) {
             canvas.componentSize = common.initialComponentSize();
@@ -71,9 +62,13 @@ export default function App(props) {
                 'mouse:wheel': (opt) => {
                      var delta = opt.e.deltaY;
                     if(delta<0){
-                        common.zoom(canvas,1.07);
+                        common.zoom(canvas,1.1);
+                        let num=Number(zoomInfo.current.value.slice(0,-1));
+                        zoomInfo.current.value=(num*1.1).toFixed(0).toString() + "%";
                     }else{
-                        common.zoom(canvas,0.93)
+                        common.zoom(canvas,0.9);
+                        let num=Number(zoomInfo.current.value.slice(0,-1));
+                        zoomInfo.current.value=(num*0.9).toFixed(0).toString() + "%";
                     }
                     common.setCanvasCenter(canvas);
                 },
@@ -204,13 +199,57 @@ export default function App(props) {
         })
     )
     }
-       
+
+    //Rightsidebar
+    const [Items,setItems]=useState([]);
+    const nextId=useRef(1);
+    // var nextId =useRef(canvas.objectNum);
+
+    //TODO: 실제로 객체도 지워지도록
+    function delItem(id){
+        setItems(
+        Items=>(Items.filter(Item=>Item.id !== id))
+        )
+    }
+
+    //TODO: 객체도 되는지 <canvas를 집어넣네?>
+    //TODO: 객체를 추가했을 때 레이어도 추가되도록, 선택시 레이어도선택되도록
+    //TODO: 누르면 element생성하도록: popup창?
+    //TODO: 효과집어넣기 원래layer빈칸 옮길때 layer색바꾸기 등
+    //TODO: modal 애니메이션 효과추가
+
+    function addLayerItem(canvas,select){
+        //add items
+        let newItems=[
+        {name:"items"+(canvas.objectNum),//nextId.current
+        id:(canvas.objectNum)},//nextId.current
+        ...Items
+        ];
+        setItems(newItems);
+        ++canvas.objectNum;//nextId.current+=1;
+    }
+
+    const moveItem =(contents, value, oriId)=>{
+        const index= contents.findIndex(obj=>obj.id === Number(value));
+        let newPos=contents.findIndex(obj=>obj.id === Number(oriId));
+        const newContents=[...contents];
+        if(newPos<=0){
+          newPos = 0;
+        }
+        newContents.splice(index,1);
+        newContents.splice(newPos,0,contents[index]);
+        setItems(newContents);
+      }
+
     return (
         <div className={styles.layout}>
             <Title />
-            {canvas&& <LeftSidebar canvas={canvas} setCanvas={setCanvas}image={image}  imageRef={imageRef}/>}
+            {canvas&& <LeftSidebar 
+                        canvas={canvas} image={image} 
+                        imageRef={imageRef} addLayerItem={addLayerItem}/>}
             <div  className={styles.center}>
-                {canvas && <Header canvas={canvas} image={image} setImage={setImage}imageRef={imageRef}/>}
+                {canvas && <Header canvas={canvas} image={image} 
+                        setImage={setImage} imageRef={imageRef}/>}
 
                 {/* center로 통합 필요 */}
                 <div className={styles.mainContainer}>
@@ -218,9 +257,13 @@ export default function App(props) {
                     <Layer canvas={canvas}></Layer>
                     <div id="layer"></div>
                 </div>
-                <Footbar canvas={canvas}/>{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
+                <Footbar canvas={canvas} zoomInfo={zoomInfo}/>{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
             </div>
-            <RightSidebar/>            
+            <RightSidebar addLayerItem={addLayerItem} 
+                    delItem={delItem} 
+                    moveItem={moveItem}
+                    Items={Items}
+                    canvas={canvas}/>            
         </div>
         
     );
@@ -243,4 +286,4 @@ export default function App(props) {
 //https://codesandbox.io/s/wonderful-cerf-69doe?file=/src/App.js:563-672
 //rightsidebar
 //https://velog.io/@fltxld3/React-%EB%B0%B0%EC%97%B4-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0-List-%EB%A0%8C%EB%8D%94%EB%A7%81-%EC%A1%B0%ED%9A%8C
-//
+//https://moong-bee.com/posts/react-drag-and-drop-list-sortable

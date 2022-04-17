@@ -1,7 +1,4 @@
-import {FontSizeOutlinedIcon, MenuOutlinedIcon
-    , LineOutlinedIcon
-    , ImageIcon, ImageFromInternetIcon,HighlightOutlinedIcon
-} from "../icons/icons";
+import {MenuOutlinedIcon} from "../icons/icons";
 import styles from "./LeftSidebarOpened.module.css"
 import FigureSubmenu from './FigureSubmenu'
 import TextBoxSubmenu from "./TextBoxSubmenu";
@@ -10,24 +7,18 @@ import ImageSubmenu from './ImageSubmenu';
 import FilterSubmenu from './FilterSubmenu';
 import CropSubmenu from "./CropSubmenu";
 import { useState } from "react";
-export default function LeftSidebarOpened({ toggleMenu, currentRoute,canvas,setCanvas}) {
-
+export default function LeftSidebarOpened(props) {
+    const { toggleMenu, currentRoute,canvas,setCanvas}=props;
     //detail 한메뉴가 열리면 나머지가 닫히는 함수
     //필요없을 시 그냥 삭제
     //click으로 구현은 너무 비효율적
-    
-    // window.addEventListener('DOMContentLoaded', function(){
-    //     console.log("DOMLoaded");
-    //     document.querySelectorAll('details').forEach(function(item){
-    //         item.addEventListener("toggle", event => {
-    //         let toggled = event.target;
-    //         if (toggled.attributes.open) {
-    //           document.querySelectorAll('details[open]').forEach(function(opened){
-    //               if(toggled !== opened)
-    //                 opened.removeAttribute('open'); 
-    //           });
-    //         }
-    //       })
+    // const details = document.querySelectorAll("details");
+    // details.forEach((targetDetail) => {
+    // targetDetail.addEventListener("click", () => {
+    //     details.forEach((detail) => {
+    //     if (detail !== targetDetail) {
+    //         detail.removeAttribute("open");
+    //     }
     //     });
     // });
 
@@ -47,7 +38,7 @@ export default function LeftSidebarOpened({ toggleMenu, currentRoute,canvas,setC
             <div className={styles.container}>
             <details className={styles.detail} open={Open(currentRoute, "Object")}>
                 <summary>Object</summary>
-                <FigureSubmenu canvas={canvas}/>
+                <FigureSubmenu canvas={canvas} addLayerItem={props.addLayerItem}/>
                 <ImageSubmenu canvas={canvas}/>
             </details>
 

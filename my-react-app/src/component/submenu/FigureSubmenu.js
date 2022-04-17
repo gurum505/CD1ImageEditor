@@ -6,7 +6,7 @@ import {
     , RectangleIcon
 } from "../icons/icons";
 import * as common from "./common"
-import styles from "./LeftSidebarOpened.module.css"
+
 
 //FIXME:colorpicker선택 후 캔버스 누르면 다른 키 안먹힘 
 export default function FigureSubmenu(props) {
@@ -21,182 +21,101 @@ export default function FigureSubmenu(props) {
         // document.getElementById('add-rect').disabled =false;
         // document.getElementById('add-circle').disabled =false;
         // document.getElementById('add-triangle').disabled =false;
-
     }
 
-    function addRect() {
+    function addElement(select){
         mouseEventOff();
-        // document.getElementById('add-rect').disabled =true;
         canvas.defaultCursor = 'crosshair';
-        var rect, isDown, origX, origY;
+        var figure,rect,circle,triangle,isDown, origX, origY;
         canvas.on('mouse:down', function (o) {
             isDown = true;
             var pointer = canvas.getPointer(o.e);
             origX = pointer.x; //클릭시 마우스 x좌표
             origY = pointer.y; //클릭시 마우스 y좌표 
-            rect = new fabric.Rect({
-                left: origX,
-                top: origY,
-                originX: 'left',
-                originY: 'top',
-                width: pointer.x - origX,
-                height: pointer.y - origY,
-                angle: 0,
-                fill: `${color.current}`,
-                type: 'rect',
-                id: ++canvas.objectNum,
-            });
-            canvas.add(rect);
-
-
+            if (select==="rect"){
+                rect = new fabric.Rect({
+                    left: origX,
+                    top: origY,
+                    originX: 'left',
+                    originY: 'top',
+                    width: pointer.x - origX,
+                    height: pointer.y - origY,
+                    angle: 0,
+                    fill: `${color.current}`,
+                    type: 'rect',
+                    id: ++canvas.objectNum,
+                });
+                figure=rect;
+            }else if(select==="circle"){
+                circle = new fabric.Circle({
+                    left: origX,
+                    top: origY,
+                    originX: 'left',
+                    originY: 'top',
+                    radius: (pointer.x - origX) / 2,
+                    fill: `${color.current}`,
+                    id: ++canvas.objectNum,
+                });
+                figure=circle;
+            }else if(select==="triangle"){
+                triangle = new fabric.Triangle({
+                    left: origX,
+                    top: origY,
+                    originX: 'left',
+                    originY: 'top',
+                    width: pointer.x - origX,
+                    height: pointer.y - origY,
+                    angle: 0,
+                    fill: `${color.current}`,
+                    id: ++canvas.objectNum,
+                    type: 'triangle'
+                });
+                figure=triangle;
+            }
+            canvas.add(figure);
         });
-
         canvas.on('mouse:move', function (o) {
             if (!isDown) return;
             var pointer = canvas.getPointer(o.e);
 
             if (origX > pointer.x) {
-                rect.set({ left: Math.abs(pointer.x) });
+                figure.set({ left: Math.abs(pointer.x) });
             }
             if (origY > pointer.y) {
-                rect.set({ top: Math.abs(pointer.y) });
+                figure.set({ top: Math.abs(pointer.y) });
             }
 
-            rect.set({ width: Math.abs(origX - pointer.x) });
-            rect.set({ height: Math.abs(origY - pointer.y) });
+            if(select==="circle"){
+                figure.set({ radius: Math.abs(origX - pointer.x) / 2 });
+            }else{
+                figure.set({ width: Math.abs(origX - pointer.x) });
+                figure.set({ height: Math.abs(origY - pointer.y) });
+            }
+
             canvas.renderAll();
         });
-
         canvas.on('mouse:up', function (o) {
-            // document.getElementById('add-rect').disabled =false;
             isDown = false;
             canvas.defaultCursor = 'default';
             mouseEventOff();
-            common.modifyLayer(rect)
+            common.addLayer(canvas,figure)
             common.updateStates(canvas);
+            // common.modifyLayer(figure);
+            props.addLayerItem(canvas);
         });
 
     }
 
-    function addCircle() {
-        mouseEventOff();
-        // document.getElementById('add-circle').disabled =true;
-        canvas.defaultCursor = 'crosshair';
-        var circle, isDown, origX, origY;
-        canvas.on('mouse:down', function (o) {
-            isDown = true;
-            var pointer = canvas.getPointer(o.e);
-            origX = pointer.x; //클릭시 마우스 x좌표
-            origY = pointer.y; //클릭시 마우스 y좌표 
-            circle = new fabric.Circle({
-                left: origX,
-                top: origY,
-                originX: 'left',
-                originY: 'top',
-                radius: (pointer.x - origX) / 2,
-                fill: `${color.current}`,
-                id: ++canvas.objectNum,
-            });
-            
-            canvas.add(circle);
-
-
-        });
-
-        canvas.on('mouse:move', function (o) {
-            if (!isDown) return;
-            var pointer = canvas.getPointer(o.e);
-
-            if (origX > pointer.x) {
-                circle.set({ left: Math.abs(pointer.x) });
-            }
-            if (origY > pointer.y) {
-                circle.set({ top: Math.abs(pointer.y) });
-            }
-
-            circle.set({ radius: Math.abs(origX - pointer.x) / 2 });
-            canvas.renderAll();
-        });
-
-        canvas.on('mouse:up', function (o) {
-            // document.getElementById('add-circle').disabled =false;
-            canvas.renderAll();
-            isDown = false;
-            // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
-            canvas.defaultCursor = 'default';
-            mouseEventOff();
-            common.modifyLayer(circle)
-            common.updateStates(canvas);
-
-        });
-
-    }
-
-    function addTriangle() {
-        mouseEventOff();
-        // document.getElementById('add-triangle').disabled =true;
-        canvas.defaultCursor = 'crosshair';
-        var triangle, isDown, origX, origY;
-        canvas.on('mouse:down', function (o) {
-            isDown = true;
-            var pointer = canvas.getPointer(o.e);
-            origX = pointer.x; //클릭시 마우스 x좌표
-            origY = pointer.y; //클릭시 마우스 y좌표 
-            triangle = new fabric.Triangle({
-                left: origX,
-                top: origY,
-                originX: 'left',
-                originY: 'top',
-                width: pointer.x - origX,
-                height: pointer.y - origY,
-                angle: 0,
-                fill: `${color.current}`,
-                id: ++canvas.objectNum,
-                type: 'triangle'
-            });
-            canvas.add(triangle);
-
-        });
-
-        canvas.on('mouse:move', function (o) {
-            if (!isDown) return;
-            var pointer = canvas.getPointer(o.e);
-
-            if (origX > pointer.x) {
-                triangle.set({ left: Math.abs(pointer.x) });
-            }
-            if (origY > pointer.y) {
-                triangle.set({ top: Math.abs(pointer.y) });
-            }
-
-            triangle.set({ width: Math.abs(origX - pointer.x) });
-            triangle.set({ height: Math.abs(origY - pointer.y) });
-
-
-            canvas.renderAll();
-        });
-
-        canvas.on('mouse:up', function (o) {
-            // document.getElementById('add-triangle').disabled = false;
-            canvas.renderAll();
-            isDown = false;
-            // canvas.setActiveObject(canvas.item(canvas.getObjects().length - 1));
-            canvas.defaultCursor = 'default';
-            mouseEventOff();
-            common.modifyLayer(triangle)
-            common.updateStates(canvas);
-
-        });
-    }
     return (
         <>
             <div>
                 <p>
-                    <RectangleIcon id='add-rect' onClick={addRect} />
-                    <CircleIcon id='add-circle' onClick={addCircle} />
-                    <TriangleIcon id='add-triangle' onClick={addTriangle} />
+                    <RectangleIcon id='add-rect' onClick={()=>addElement("rect")} />
+                    <CircleIcon id='add-circle' onClick={()=>addElement("circle")} />
+                    <TriangleIcon id='add-triangle' onClick={()=>addElement("triangle")} />
                 </p>
-                {/* <input type="color" /> */}
+                <p><label> width</label> <input type="text" /></p>
+                <p><label> height</label> <input type="text" /></p>
                 <p><label>color</label><ColorPicker canvas={canvas} color={color} /></p>
             </div>
         </>

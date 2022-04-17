@@ -1,21 +1,17 @@
 
 
 //캔버스 관련
-
 import { CommentOutlined } from "@ant-design/icons";
 import { fabric } from "fabric";
 import backgroundImage from '../../img/background.png'
 
-
 export function initialComponentSize() { //현재 페이지 구성요소들의 크기 
-
-    var dict = {};
-    dict['leftbar'] = document.getElementsByClassName('leftbar')[0].offsetWidth;
-    dict['rightbar'] = document.getElementsByClassName('RightSidebar_container__L2Lbe')[0].offsetWidth;
-    dict['titleHeader'] = document.getElementsByClassName('Title_contents__NSiUr')[0].offsetHeight;
-    dict['editorHeader'] = document.getElementsByClassName('Header_editorHeader__6Q4uw')[0].offsetHeight;
-    dict['footer'] = document.getElementsByClassName('Footbar_contents__zIqCh')[0].offsetHeight;
-
+    var dict ={};
+    dict['leftbar']= document.getElementById('leftbar').offsetWidth;
+    dict['rightbar'] = document.getElementById('rightsidebar').offsetWidth;
+    dict['titleHeader']=document.getElementById('title').offsetHeight;
+    dict['editorHeader'] = document.getElementById('header').offsetHeight;
+    dict['footer']=document.getElementById('footer').offsetHeight;
     return dict;
 }
 
@@ -243,7 +239,7 @@ export function colorActiveLayer(canvas) {
         if (document.getElementById(object.id))
             document.getElementById(object.id).style.border = 'solid 2px blue'
     })
-
+     
 }
 
 export function modifyLayer(object) {
@@ -258,7 +254,8 @@ export function modifyLayer(object) {
     img.src = src;
 }
 export function addLayer(canvas, object) {  //레이어에 객체 추가 
-    // if (object.main) return;
+    
+    if (object.main) return;
     if (document.getElementById(object.id)) return;
     const layerCanvas = new fabric.Canvas();
     layerCanvas.setWidth(canvas.width);
@@ -321,7 +318,7 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     div.appendChild(imgTag)
     div.appendChild(objectBtn);
     div.appendChild(deleteBtn);
-    el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
+    // el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
 }
 
 

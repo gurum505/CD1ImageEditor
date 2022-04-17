@@ -161,33 +161,37 @@ export default function FilterSubmenu(props) {
 
         <div id='filter-list'>
 
-
+            <p><label> width</label> <input type="text" /></p>
+            <p><label> height</label> <input type="text" /></p>
+            <p>
+                {/* reset버튼을 오른쪽으로 가게하기위한 빈 div */}
+                <div></div>
+                <div></div>
+                <button type="button" id="reset" value="reset" onClick={resetFilter}>
+                    reset
+                </button>
+            </p>  
             <div className={styles.effectContainer}>
 
-                <input type="button" id="reset" value="reset" onClick={resetFilter} />
-
-                <label htmlFor="invert">Invert <input type="checkbox" id='invert' value='인버트' onClick={invert} /> </label>
-
-
-                <label>Brightness <input type="checkbox" id="brightness" onClick={brightness} /> </label>
+                <button id="brightness" onClick={invert} > Invert</button>
+                <button id="brightness" onClick={brightness}> Brightness</button>
                 <input type="range" id="brightness-value" defaultValue="0" min="-1" max="1" step="0.003921" onChange={brightnessValue} />
 
-
-                <label>Gamma <input type="checkbox" id="gamma" onClick={gamma} /></label>
+                <button id="brightness" onClick={gamma}> Gamma</button>
                 Red <input type="range" id="gamma-red" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaRed} style={{ 'width': '100px' }} />
                 Green <input type="range" id="gamma-green" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaGreen} />
                 Blue <input type="range" id="gamma-blue" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaBlue} />
-
-                <label>Contrast <input type="checkbox" id="contrast" onClick={contrast} /></label>
+                
+                <button id="brightness" onClick={contrast}> Contrast</button>
                 <input type="range" id="contrast-value" defaultValue="0" min="-1" max="1" step="0.003921" onChange={contrastValue} />
 
-                <label>Noise <input type="checkbox" id="noise" onClick={noise} /></label>
+                <button id="brightness" onClick={noise}> Noise</button>
                 <input type="range" id="noise-value" defaultValue="0" min="0" max="600" step="50" onChange={noiseValue} />
 
-                <label>Pixelate <input type="checkbox" id="pixelate" onClick={pixelate} /></label>
+                <button id="brightness" onClick={pixelate}>Pixelate</button>
                 <input type="range" id="pixelate-value" defaultValue="1" min="1" max="20" step="3" onChange={pixelateValue} />
 
-                <label>Blur <input type="checkbox" id="blur" onClick={blur} /></label>
+                <button id="brightness" onClick={blur}>Blur</button>
                 <input type="range" id="blur-value" defaultValue="0" min="0" max="1" step="0.1" onChange={blurValue} />
             </div>
         </div>

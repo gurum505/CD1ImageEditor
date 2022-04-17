@@ -1,6 +1,9 @@
 import { fabric } from "fabric";
 import * as common from './common'
 import backgroundImage from '../../img/background.png'
+import {
+    BorderOutlinedIcon,FormOutlinedIcon
+} from "../icons/icons";
 
 export default function CropSubmenu(props) {
     const canvas = props.canvas;
@@ -304,17 +307,17 @@ export default function CropSubmenu(props) {
     return (
         <div>
         <p>
-            <button className="crop-button" onClick={cropCustom}>코스튬</button>
-            <button className="crop-button" onClick={() => crop('1:1')}>정방형</button>
+            <FormOutlinedIcon onClick={cropCustom} children={"custom cut"}/>
+            <BorderOutlinedIcon onClick={() => crop('1:1')} children={"1:1"}/>
         </p>
         <p>
-            <button className="crop-button" onClick={() => crop('3:2')}>3:2</button>
+            <button className="crop-button" >3:2</button>
             <button className="crop-button" onClick={() => crop('4:3')}>4:3</button>
             <button className="crop-button" onClick={() => crop('16:9')}>16:9</button>
         </p>
             <hr></hr>
-            <p><button onClick={apply}>적용</button>
-            <button onClick={cancle}>취소</button></p>
+            <p><button onClick={apply}>apply</button>
+            <button onClick={cancle}>cancel</button></p>
             </div>
     )
 }
