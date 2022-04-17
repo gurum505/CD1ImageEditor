@@ -8,7 +8,7 @@ export function initialComponentSize(){ //현재 페이지 구성요소들의 �
 
     var dict ={};
 
-    dict['leftbar']= document.getElementById('leftbar').offsestWidth;
+    dict['leftbar']= document.getElementById('leftbar').offsetWidth;
     dict['rightbar'] = document.getElementById('rightsidebar').offsetWidth;
     dict['titleHeader']=document.getElementById('title').offsetHeight;
     dict['editorHeader'] = document.getElementById('header').offsetHeight;
@@ -164,20 +164,19 @@ export  function removeAllLayer(canvas) {
 
 
 // 활성화(선택) 되어 있는 layer 빨간색으로 표시 
+//TODO: 선택 취소하면 layer 색 다시 원래대로 돌아가도록
 export function colorActiveLayer(canvas) {   
-    
-    var layerElements = document.getElementById('layer');
-    for (let i = 0; i < layerElements.children.length; i++) {
-        layerElements.children[i].style.border = 'solid gray';
-    }
+    // var layerElements = document.getElementById('layer');
+    // for (let i = 0; i < layerElements.children.length; i++) {
+    //     layerElements.children[i].style.border = 'solid gray';
+    // }
     var objects = canvas.getActiveObjects();
     objects.forEach((object) => {
         if (document.getElementById(object.id))
-            document.getElementById(object.id).style.border = 'solid blue'
+            document.getElementById(object.id).style.border = 'solid blue';
     })
-
+     
 }
-
 
 export function addLayer(canvas, object) {  //레이어에 객체 추가 
     

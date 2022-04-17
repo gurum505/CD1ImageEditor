@@ -182,6 +182,7 @@ export default function App(props) {
     //Rightsidebar
     const [Items,setItems]=useState([]);
     const nextId=useRef(1);
+    // var nextId =useRef(canvas.objectNum);
 
     //TODO: 실제로 객체도 지워지도록
     function delItem(id){
@@ -196,17 +197,15 @@ export default function App(props) {
     //TODO: 효과집어넣기 원래layer빈칸 옮길때 layer색바꾸기 등
     //TODO: modal 애니메이션 효과추가
 
-    
-
-    function addLayerItem(select){
+    function addLayerItem(canvas,select){
         //add items
         let newItems=[
-        {name:"items"+(nextId.current),
-        id:(nextId.current)},
+        {name:"items"+(canvas.objectNum),//nextId.current
+        id:(canvas.objectNum)},//nextId.current
         ...Items
         ];
         setItems(newItems);
-        nextId.current+=1;
+        ++canvas.objectNum;//nextId.current+=1;
     }
 
     const moveItem =(contents, value, oriId)=>{
