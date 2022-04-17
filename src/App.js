@@ -42,6 +42,7 @@ export default function App(props) {
     const zoomInfo=useRef();
     useEffect(()=>{
         if (canvas) {
+           
             canvas.componentSize = common.initialComponentSize();
             common.setCanvasCenter(canvas);
 
@@ -55,6 +56,10 @@ export default function App(props) {
             })
             
             canvas.on({
+                'mouse:down':()=>{
+                    console.log("ㅎㅇ")
+                    document.getElementById('figure-width').readOnly = true;
+                },
                 'mouse:wheel': (opt) => {
                      var delta = opt.e.deltaY;
                     if(delta<0){
@@ -126,8 +131,6 @@ export default function App(props) {
             var flag;
               window.addEventListener("resize", function(opt) { //브라우저 크기 resize에 따른 이벤트 
                 common.setCanvasCenter(canvas)
-                console.log(window.innerHeight);
-                console.log(common.getCanvasStyleHeight())
                 var innerWidth =common.getInnerSize(canvas)['innerWidth'];
                 var innerHeight =common.getInnerSize(canvas)['innerHeight'];
                 
@@ -157,25 +160,8 @@ export default function App(props) {
             
           
             window.onkeydown = function (e) { // delete, backspace 키로 삭제
-                if(!canvas.getActiveObject()) return //선택된 객체가 없으면 종료 
-                
-                if(canvas.getActiveObject().isEditing) {
-                    common.modifyLayer(canvas.getActiveObject())
-                }
-
-                if (e.key === 'Delete' || e.key ==='Backspace') {   // 텍스트 입력 중 backspace눌러도 객체 삭제 되지 않도록 
-                    if(canvas.getActiveObject().type==='textbox'&& canvas.getActiveObject().isEditing ){ 
-                        return;}
-                    var o = canvas.getActiveObjects();
-                    o.forEach((object) => {
-                        canvas.remove(object);
-                        document.getElementById(object.id).remove();
-                    });
-    
-                    canvas.discardActiveObject(); // 그룹 삭제 시 빈 sizebox 남아있는 거 제거 
-                    common.updateStates(canvas);
-    
-                }
+                console.log("ㅋ")
+            //    common.keyDownEvent(canvas,e);
             }
         }
     },[canvas])

@@ -5,6 +5,28 @@ import { CommentOutlined } from "@ant-design/icons";
 import { fabric } from "fabric";
 import backgroundImage from '../../img/background.png'
 
+
+//delete , backspace 눌렀을 때 객체 제거 
+export function keyDownEvent(canvas,e){
+    if(!canvas.getActiveObject()) return //선택된 객체가 없으면 종료 
+                
+    if(canvas.getActiveObject().isEditing) {
+        modifyLayer(canvas.getActiveObject())
+    }
+
+    if (e.key === 'Delete' || e.key ==='Backspace') {   // 텍스트 입력 중 backspace눌러도 객체 삭제 되지 않도록 
+        if(canvas.getActiveObject().type==='textbox'&& canvas.getActiveObject().isEditing ){ 
+            return;}
+        var o = canvas.getActiveObjects();
+        o.forEach((object) => {
+            canvas.remove(object);
+            document.getElementById(object.id).remove();
+        });
+
+       canvas.discardActiveObject(); // 그룹 삭제 시 빈 sizebox 남아있는 거 제거 
+        updateStates(canvas);
+    }
+}
 export function initialComponentSize() { //현재 페이지 구성요소들의 크기 
     var dict ={};
     dict['leftbar']= document.getElementById('leftbar').offsetWidth;
@@ -34,8 +56,7 @@ export function setCanvasCenter(canvas) { //캔버스를 내 가운데에 위치
 
         var styleWidth = upperCanvas.style.width.substr(0, upperCanvas.style.width.length - 2)
         var styleHeight = upperCanvas.style.height.substr(0, upperCanvas.style.height.length - 2)
-        console.log(innerWidth)
-        console.log(innerHeight)
+
         var left = (innerWidth - styleWidth) / 2;
         var top = (innerHeight - styleHeight) / 2;
 
@@ -294,7 +315,7 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     div.style.height = '80px'
     div.style.width = '110px';
     div.style.backgroundColor = 'gray'
-    const el = document.getElementsByClassName('RightSidebar_itemScroll__b+ukB')[0]
+    const el = document.getElementById('rightsidebar-item-scroll')
 
     const objectBtn = document.createElement('button');
     objectBtn.innerHTML = 'select'

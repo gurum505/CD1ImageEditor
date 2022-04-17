@@ -10,6 +10,7 @@ import * as common from "./common"
 
 //FIXME:colorpicker선택 후 캔버스 누르면 다른 키 안먹힘 
 export default function FigureSubmenu(props) {
+    window.onkeydown=(e)=>common.keyDownEvent(canvas,e);
     const canvas = props.canvas;
     const color = useRef('black');
 
@@ -40,6 +41,7 @@ export default function FigureSubmenu(props) {
                     originY: 'top',
                     width: pointer.x - origX,
                     height: pointer.y - origY,
+                    noScaleCache:true,
                     angle: 0,
                     fill: `${color.current}`,
                     type: 'rect',
@@ -104,6 +106,26 @@ export default function FigureSubmenu(props) {
 
     }
 
+    function setFigureWidth(e){
+        window.onkeydown=null;
+        var objects = canvas.getActiveObjects();
+        objects.forEach(object=>{
+            object.width = parseInt(e.target.value);
+        canvas.renderAll(); 
+        })
+        window.onkeydown=(e)=>common.keyDownEvent(canvas,e);
+    }
+    function setFigureHeight(e){
+        window.onkeydown=null;
+        var objects = canvas.getActiveObjects();
+        objects.forEach(object=>{
+            object.height = parseInt(e.target.value);
+        canvas.renderAll(); 
+        })
+        window.onkeydown=(e)=>common.keyDownEvent(canvas,e);
+
+    }
+
     return (
         <>
             <div>
@@ -112,8 +134,8 @@ export default function FigureSubmenu(props) {
                     <CircleIcon id='add-circle' onClick={()=>addElement("circle")} />
                     <TriangleIcon id='add-triangle' onClick={()=>addElement("triangle")} />
                 </p>
-                <p><label> width</label> <input type="text" /></p>
-                <p><label> height</label> <input type="text" /></p>
+                <p><label> width</label> <input id='figure-width' onChange={setFigureWidth}type="text" /></p>
+                <p><label> height</label> <input id='figure-height' onChange={setFigureHeight}type="text" /></p>
                 <p><label>color</label><ColorPicker canvas={canvas} color={color} /></p>
             </div>
         </>

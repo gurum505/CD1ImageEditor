@@ -10,7 +10,6 @@ export default function ColorPicker(props){
 
         var objects = canvas.getActiveObjects();
         objects.forEach((object)=>{
-            console.log(object)
             if (object.type === 'textbox' || figure.includes(object.type)) {
                 object.set({ fill: `${selectedColor}` });
         }
@@ -28,7 +27,6 @@ export default function ColorPicker(props){
         })
       
         if(canvas.isDrawingMode){
-            console.log('ㅋㅋ')
             canvas.freeDrawingBrush.color = color.current;
         }
    

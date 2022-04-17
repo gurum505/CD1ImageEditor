@@ -55,7 +55,7 @@ export default function RightSidebar (props) {
         <div className={styles.addItem} onClick={openModal}>
           <PlusOutlined style={{fontSize:"20pt", color:"gray"}} />
         </div>
-        <div className={styles.itemScroll}>
+        <div id='rightsidebar-item-scroll'className={styles.itemScroll}>
           <LayerList 
               Items={props.Items} 
               delItem={props.delItem} 
