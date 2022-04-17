@@ -382,6 +382,7 @@ export default function Header(props) {
                     
             <CopyOutlinedIcon id='copy' onClick={copy} children={"복사"}/>
             <DiffOutlinedIcon id='paste' onClick={paste} children={"붙여넣기"}/>
+
             {/* 이전 */}
             <UndoOutlinedIcon id='undo' onClick={undo} children={"이전"} />
             {/* 되돌리기 */}

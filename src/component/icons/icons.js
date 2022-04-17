@@ -460,6 +460,7 @@ export const HighlightOutlinedIcon=({onClick, children, htmlFor})=>{
     return(
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
+            <input id={htmlFor} type="checkbox" style={{display:'none'}}/>
             <HighlightOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptextleft}>{children}</span>
             </label>

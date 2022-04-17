@@ -164,9 +164,9 @@ export default function FilterSubmenu(props) {
             <p><label> width</label> <input type="text" /></p>
             <p><label> height</label> <input type="text" /></p>
             <p>
-                {/* reset버튼을 오른쪽으로 가게하기위한 빈 div */}
-                <div></div>
-                <div></div>
+                {/* reset버튼을 오른쪽으로 가게하기위한 빈  span*/}
+                <span></span>
+                <span></span>
                 <button type="button" id="reset" value="reset" onClick={resetFilter}>
                     reset
                 </button>
@@ -178,7 +178,7 @@ export default function FilterSubmenu(props) {
                 <input type="range" id="brightness-value" defaultValue="0" min="-1" max="1" step="0.003921" onChange={brightnessValue} />
 
                 <button id="brightness" onClick={gamma}> Gamma</button>
-                Red <input type="range" id="gamma-red" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaRed} style={{ 'width': '100px' }} />
+                Red <input type="range" id="gamma-red" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaRed}/>
                 Green <input type="range" id="gamma-green" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaGreen} />
                 Blue <input type="range" id="gamma-blue" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaBlue} />
                 

@@ -26,6 +26,9 @@
   position: relative;
   z-index: 100;
 }
+.container input[type="checkbox"]:checked ~ .icon{
+  border: 2px solid blueviolet;
+}
 .tooltiptext{
   background-color: gray;
   position: absolute;
