@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/CD1ImageEditor/static/css/main.3e4b5023.css",
-    "main.js": "/CD1ImageEditor/static/js/main.f9e22e20.js",
+    "main.css": "/CD1ImageEditor/static/css/main.4ec3a861.css",
+    "main.js": "/CD1ImageEditor/static/js/main.ba027290.js",
     "static/media/background.png": "/CD1ImageEditor/static/media/background.d794d18a53411861c4f8.png",
     "static/media/ImageFromInternetIcon.svg": "/CD1ImageEditor/static/media/ImageFromInternetIcon.42ef3dae202d3ca77d16e4a703700a94.svg",
     "index.html": "/CD1ImageEditor/index.html",
@@ -9,11 +9,11 @@
     "static/media/RectangleIcon.svg": "/CD1ImageEditor/static/media/RectangleIcon.bb828e587fa699fef55498f1bc8d4231.svg",
     "static/media/TriangleIcon.svg": "/CD1ImageEditor/static/media/TriangleIcon.d27e59eec6436d5259f34c26552b4dba.svg",
     "static/media/ImageIcon.svg": "/CD1ImageEditor/static/media/ImageIcon.cb732a776a36f3532f27fc40e72b3bb4.svg",
-    "main.3e4b5023.css.map": "/CD1ImageEditor/static/css/main.3e4b5023.css.map",
-    "main.f9e22e20.js.map": "/CD1ImageEditor/static/js/main.f9e22e20.js.map"
+    "main.4ec3a861.css.map": "/CD1ImageEditor/static/css/main.4ec3a861.css.map",
+    "main.ba027290.js.map": "/CD1ImageEditor/static/js/main.ba027290.js.map"
   },
   "entrypoints": [
-    "static/css/main.3e4b5023.css",
-    "static/js/main.f9e22e20.js"
+    "static/css/main.4ec3a861.css",
+    "static/js/main.ba027290.js"
   ]
 }
