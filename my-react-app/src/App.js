@@ -169,6 +169,7 @@ export default function App(props) {
                 if(canvas.getActiveObject().isEditing) {
                     common.modifyLayer(canvas.getActiveObject())
                 }
+
                 if (e.key === 'Delete' || e.key ==='Backspace') {   // 텍스트 입력 중 backspace눌러도 객체 삭제 되지 않도록 
                     if(canvas.getActiveObject().type==='textbox'&& canvas.getActiveObject().isEditing ){ 
                         return;}

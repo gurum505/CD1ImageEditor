@@ -62,10 +62,14 @@ export default function Header(props) {
             var reader = new FileReader();
             
             reader.onload = function (f) {
+                canvas.undoStack=[]
+                canvas.objectNum =0 
                 props.setImage(!props.image);
                 props.imageRef.current = true;
+
                 var data = f.target.result;
                 fabric.Image.fromURL(data, function (img) {
+                    common.removeAllObjects(canvas,true)
                     canvas.setWidth(img.width);
                     canvas.setHeight(img.height);
                     img.main=true;
@@ -85,7 +89,7 @@ export default function Header(props) {
                     common.setCanvasCenter(canvas);
                     common.updateStates(canvas);
                     canvas.renderAll();
-
+                console.log(canvas)                    
                 });
             };
             reader.readAsDataURL(file);
@@ -124,7 +128,7 @@ export default function Header(props) {
     }
     // 직렬화 
     function serialization() {
-        var json = canvas.toDatalessJSON(['initialWidth', 'initialHeight', 'objectNum', 'id','mods','filterValues']);
+        var json = canvas.toDatalessJSON(['initialWidth', 'initialHeight', 'objectNum', 'id','filterValues','main']);
         // states는 순환 참조가 발생하므로 보낼 수 없음 
         json = JSON.stringify(json);
 
@@ -152,8 +156,10 @@ export default function Header(props) {
                     common.updateStates(canvas);
                     var Objects = canvas.getObjects();
                     Objects.forEach((object)=>{
+                        if(!object.main)
                         common.addLayer(canvas,object);
                     })
+                    canvas.discardActiveObject(common.getMainImage())
                     common.colorActiveLayer(canvas);
                     canvas.renderAll();
                 });
@@ -164,8 +170,8 @@ export default function Header(props) {
 
     function undo(){
         if(canvas.undoStack.length>1){
-            console.log('맞냐')
             common.removeAllObjects(canvas);
+
             var current = canvas.undoStack.pop();
             canvas.redoStack.push(current);
 
@@ -176,10 +182,11 @@ export default function Header(props) {
                 canvas.add(object)
                 }
             })
-
+            
             var filters = json['filters'];
             var mainImage = json['image'];
-            mainImage.applyFilters(filters);
+            if(mainImage) mainImage.applyFilters(filters);
+
             canvas.renderAll();
 
             common.setCanvasCenter(canvas);
@@ -187,7 +194,8 @@ export default function Header(props) {
                 common.removeAllObjects(canvas,true);
                 canvas.setWidth(json['initialWidth']);
                 canvas.setHeight(json['initialHeight']);
-                canvas.add(json['recentStyleSize']['mainImage']);
+                if(json['recentStyleSize']['mainImage'])
+                    canvas.add(json['recentStyleSize']['mainImage']);
                 canvas.discardActiveObject(mainImage);
                 common.setCanvasStyleSize(json['recentStyleSize']['width'],json['recentStyleSize']['height']);
                 common.setCanvasCenter(canvas);
@@ -257,14 +265,15 @@ export default function Header(props) {
                 if(!object.main)
                 canvas.add(object)
             })
-            common.getMainImage(canvas).applyFilters(filters);
+
+            if(common.getMainImage(canvas)) common.getMainImage(canvas).applyFilters(filters);
             canvas.renderAll();
             if(json['isCropped']){
                         common.removeAllObjects(canvas,true);
                         canvas.setWidth(json['initialWidth']);
                         canvas.setHeight(json['initialHeight']);
                         canvas.add(json['image']);
-                        // canvas.discardActiveObject(json['image']);
+                        canvas.discardActiveObject(json['image']);
                         common.setCanvasCenter(canvas);
                         canvas.renderAll();
                         }

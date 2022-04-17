@@ -149,6 +149,11 @@ export default function CropSubmenu(props) {
             });
             canvas.renderAll();
         })
+
+        var cropBtn = document.querySelectorAll('.crop-button');
+            cropBtn.forEach((btn) => {
+                btn.disabled = false;
+            });
         // var temp  = canvas.toCanvasElement({'left':100});
         // console.log(temp);
         // console.log(selectionRect);
