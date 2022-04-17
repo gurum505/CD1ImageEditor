@@ -5,8 +5,10 @@ import TextBoxSubmenu from "./TextBoxSubmenu";
 import LineSubmenu from "./LineSubmenu";
 import ImageSubmenu from './ImageSubmenu';
 import FilterSubmenu from './FilterSubmenu';
+import CropSubmenu from "./CropSubmenu";
+import { useState } from "react";
 export default function LeftSidebarOpened(props) {
-    const { toggleMenu, currentRoute,canvas}=props;
+    const { toggleMenu, currentRoute,canvas,setCanvas}=props;
     //detail 한메뉴가 열리면 나머지가 닫히는 함수
     //필요없을 시 그냥 삭제
     //click으로 구현은 너무 비효율적
@@ -19,7 +21,8 @@ export default function LeftSidebarOpened(props) {
     //     }
     //     });
     // });
-    // });
+
+    const [selectedButtonType,setSelectedButtonType] = useState('');
 
     function Open(currentRoute, detailName) {
         if (currentRoute === detailName) {
@@ -38,17 +41,25 @@ export default function LeftSidebarOpened(props) {
                 <FigureSubmenu canvas={canvas} addLayerItem={props.addLayerItem}/>
                 <ImageSubmenu canvas={canvas}/>
             </details>
-            <details className={styles.detail} open={Open(currentRoute, "Text")}>
+
+            {<details className={styles.detail} open={Open(currentRoute, "Text")}>
                 <summary>Text</summary>
                 <TextBoxSubmenu canvas={canvas}/>
-            </details>
+            </details>}
+
             <details className={styles.detail} open={Open(currentRoute, "Line")}>
                 <summary>Drawing</summary>
                 <LineSubmenu canvas={canvas}/>
             </details>
+
             <details className={styles.detail} open={Open(currentRoute, "Image")}>
                 <summary>Canvas</summary>
                 <FilterSubmenu canvas={canvas}/>
+            </details>
+            
+            <details className={styles.detail} open={Open(currentRoute, "Crop")}>
+                <summary>Crop</summary>
+                <CropSubmenu canvas={canvas} setCanvas={setCanvas}/>
             </details>
         </div>
         </>

@@ -23,6 +23,8 @@ img{
 }
 
 .gallery{
+    z-index:21000;
+    background-color: white;
     overflow: scroll;
     border: 1px solid blue;
     height:100%;

@@ -2,8 +2,8 @@ import {FontSizeOutlined,MenuOutlined,BorderOutlined,AreaChartOutlined, LineOutl
 ,SettingOutlined,AlignLeftOutlined,AlignCenterOutlined,AlignRightOutlined,HighlightOutlined 
 ,BoldOutlined,ItalicOutlined,LineHeightOutlined,GithubOutlined,CloseOutlined,
     FolderOpenOutlined,CloudDownloadOutlined,UploadOutlined,UnderlineOutlined,
-    FileImageOutlined,RedoOutlined,UndoOutlined,DownloadOutlined,
-    EditOutlined,DragOutlined,ZoomInOutlined,ZoomOutOutlined,
+    FileImageOutlined,RedoOutlined,UndoOutlined,DownloadOutlined,AppstoreOutlined,
+    EditOutlined,DragOutlined,ZoomInOutlined,ZoomOutOutlined,ScissorOutlined,FormOutlined,
     ExpandOutlined,EyeOutlined,CopyOutlined,DiffOutlined,PlusOutlined,SearchOutlined} from "@ant-design/icons"
 import styles from "./icons.module.css"
 import { ReactComponent as Triangle} from './TriangleIcon.svg';
@@ -15,6 +15,7 @@ import { ReactComponent as ImageFromInternet} from './ImageFromInternetIcon.svg'
 
 //https://ant.design/components/icon/#components-icon-demo-custom
 //https://icon-icons.com/ko/
+//https://www.svgrepo.com/
 
 //색 적용
 //<BgColorsOutlined />
@@ -38,6 +39,41 @@ export const UnderlineOutlinedIcon=({onClick, children, htmlFor})=>{
         </span>
     )
 } */}
+
+
+export const FormOutlinedIcon=({onClick, children, htmlFor})=>{
+    return(
+        <span className={styles.container}>
+            <label htmlFor={htmlFor}>
+            <FormOutlined className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+            </label>
+        </span>
+    )
+}
+
+
+export const AppstoreOutlinedIcon=({onClick, children, htmlFor})=>{
+    return(
+        <span className={styles.container}>
+            <label htmlFor={htmlFor}>
+            <AppstoreOutlined className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+            </label>
+        </span>
+    )
+}
+
+export const ScissorOutlinedIcon=({onClick, children, htmlFor})=>{
+    return(
+        <span className={styles.container}>
+            <label htmlFor={htmlFor}>
+            <ScissorOutlined className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+            </label>
+        </span>
+    )
+}
 
 export const CloseOutlinedIcon=({onClick, children, htmlFor})=>{
     return(

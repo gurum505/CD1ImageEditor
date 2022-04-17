@@ -24,7 +24,7 @@ export default function OnelineImage(props) {
         async function CuratedPhotos(page_num) {
             document.querySelector(".gallery").innerHTML = "";
 
-            const data = await fetch(`https://pixabay.com/api?q=${query}&key=${apikey}&lang=${lang}&colors=${colors}`);
+            const data = await fetch(`https://pixabay.com/api?q=${query}&key=${apikey}&lang=${lang}&colors=${colors}&per_page=50`);
 
             const result = await data.json();   //await : 처리 될 때까지 기다림 
             // console.log(response);
@@ -32,16 +32,12 @@ export default function OnelineImage(props) {
                 var pic = document.createElement('div');
                 var imgtag = document.createElement('img');
                 var span = document.createElement('p');
-
                 span.innerHTML= 'by : '+photo.user;
                 imgtag.src = photo.webformatURL;
                 imgtag.crossOrigin='anonymous';
                 imgtag.onclick = () => {
-                    console.log(canvas)
-                    console.log(photo.webformatURL)
                     var img = new fabric.Image.fromURL(photo.webformatURL, image => {
                         image.src = photo.webformatURL;
-                        image.crossOrigin='*';
                         image.id = ++canvas.objectNum;
                         image.left = Math.floor(Math.random() * 101);
                         image.top = Math.floor(Math.random() * 101);
@@ -49,14 +45,19 @@ export default function OnelineImage(props) {
                         image.scaleToHeight(200, false);
                         image.transparentCorners = false;
                         canvas.add(image);
-                        console.log(image)
                         canvas.renderAll();
                         common.updateStates(canvas)
                         common.addLayer(canvas,image);
                     });
 
                 };
-                //드래그 드랍 했을 때 추가는 되는데 캔버스 기준 마우스 좌표를 얻을 방법이 없는 거 같음. 
+                imgtag.ondragstart=()=>{console.log('드래그시작')}
+                pic.appendChild(imgtag);
+                pic.appendChild(span);
+                document.querySelector(".gallery").appendChild(pic);
+               
+            });
+             //드래그 드랍 했을 때 추가는 되는데 캔버스 기준 마우스 좌표를 얻을 방법이 없는 거 같음. 
                 // imgTag.ondragend = (e) => { 
                 //     console.log(window.event.pageX);
                 //     var img = new fabric.Image.fromURL(photo.webformatURL, image => {
@@ -73,11 +74,6 @@ export default function OnelineImage(props) {
                 //         colorActiveLayer()
                 //     });
                 // };
-                imgtag.ondragstart=()=>{console.log('드래그시작')}
-                pic.appendChild(imgtag);
-                pic.appendChild(span);
-                document.querySelector(".gallery").appendChild(pic);
-            });
         }
         CuratedPhotos(page_num);
     }

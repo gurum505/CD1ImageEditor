@@ -1,6 +1,6 @@
 import { fabric } from "fabric";
 import React, { useState, useEffect, useRef } from "react";
-
+import backgroundImage from './img/background.png'
 //layout
 import styles from './App.module.css';
 import Title from './Layout/Title';
@@ -48,8 +48,16 @@ export default function App(props) {
         if (canvas) {
             canvas.componentSize = common.initialComponentSize();
             common.setCanvasCenter(canvas);
-            common.updateStates(canvas);
-            common.getInnerSize(canvas)
+
+            fabric.Image.fromURL(backgroundImage,(img)=>{
+                img.default = true;
+                canvas.setBackgroundImage(img,canvas.renderAll.bind(canvas),{
+                });
+                canvas.renderAll();
+                common.updateStates(canvas);
+
+            })
+            
             canvas.on({
                 'mouse:wheel': (opt) => {
                      var delta = opt.e.deltaY;
@@ -62,13 +70,18 @@ export default function App(props) {
                         let num=Number(zoomInfo.current.value.slice(0,-1));
                         zoomInfo.current.value=(num*0.9).toFixed(0).toString() + "%";
                     }
-
+                    common.setCanvasCenter(canvas);
+                },
+                'selection:updated':()=>{
+                    console.log('selection:updated')
+                    common.colorActiveLayer(canvas);
                 },
                 'object:removed': () => {
                     console.log('object:removed');
                 },
                 'selection:cleared': () => {
                     console.log('selection:cleared');
+                    canvas.renderAll();
                     common.colorActiveLayer(canvas);
                     // document.getElementById('remove-object').disabled = true;
                     
@@ -76,6 +89,8 @@ export default function App(props) {
                 'selection:created': () => {
                     console.log('selection:created');
                     common.colorActiveLayer(canvas);
+                    var object = canvas.getActiveObject();
+                    // if(object.main) canvas.discardActiveObject(object)
                     // document.getElementById('remove-object').disabled = false;
                 },
                 'object:added': () => {
@@ -83,16 +98,26 @@ export default function App(props) {
                     console.log('object:added');
                     var objects = canvas.getObjects();
                     var object = objects[objects.length-1];
-                    if(object.type!=='path'&& object.type!=='selection' && object.type!=='group')
+                    if(object.type!=='path'&& object.type!=='selection' && object.type!=='group' && object.cropRect!==true)
+                    {
                     canvas.setActiveObject(object);
+                    common.addLayer(canvas,object)
                     common.colorActiveLayer(canvas);
+                    }
 
+                    // if(object.main) canvas.discardActiveObject(object);
                     // document.getElementById('remove-object').disabled = false;
 
                 },
                 'object:modified': () => {
                     console.log('object:modified');
+                    var objects  = canvas.getActiveObjects();
+                   if (!canvas.getActiveObject().cropRect) {//crop을 위해 생성된 사각형은 modified되어도 undo stack에 쌓이면 안됨
                     common.updateStates(canvas);
+                    objects.forEach((object)=>{
+                        common.modifyLayer(object);
+                    })
+                   }
                     // document.getElementById('remove-object').disabled = false
                 },
                 'object:updated': () => {
@@ -131,10 +156,15 @@ export default function App(props) {
 
         
             });
-    
+            
+          
             window.onkeydown = function (e) { // delete, backspace 키로 삭제
                 if(!canvas.getActiveObject()) return //선택된 객체가 없으면 종료 
-    
+                
+                if(canvas.getActiveObject().isEditing) {
+                    common.modifyLayer(canvas.getActiveObject())
+                }
+
                 if (e.key === 'Delete' || e.key ==='Backspace') {   // 텍스트 입력 중 backspace눌러도 객체 삭제 되지 않도록 
                     if(canvas.getActiveObject().type==='textbox'&& canvas.getActiveObject().isEditing ){ 
                         return;}
@@ -153,27 +183,18 @@ export default function App(props) {
     },[canvas])
    
     const initCanvas = () => {
-        // var windowWidth= window.innerWidth-50;
-        // var windowHeight = window.innerHeight-240;
-        // var width, height; 
-        // if(windowWidth>windowHeight){
-        //         height = windowHeight*0.9;
-        //         width =windowWidth*0.8;
-        // }else{
-        //     width = windowWidth*0.9;
-        //     height = height*0.8
-        // }
+        
         return (
         new fabric.Canvas('canvas', {
-            height: 400,
             width: 600,
+            height: 400,
             initialWidth: 600,
             initialHeight:400, 
             objectNum : 0,
             undoStack :[],
             redoStack :[],
-            filterValues : '',
-            backgroundColor: 'white',
+            // filterValues : '',
+            // backgroundColor: 'white',
             componentSize:'',
         })
     )

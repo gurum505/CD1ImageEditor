@@ -64,7 +64,7 @@ export default function LineSubmenu(props) {
                 stroke: `${color.current}`,
                 originX: 'center',
                 originY: 'center',
-                id: ++canvas.objectNume,
+                id: ++canvas.objectNum,
             });
             canvas.add(line);
         });
@@ -86,9 +86,7 @@ export default function LineSubmenu(props) {
             canvas.off('mouse:up');
             canvas.defaultCursor = 'default';
             common.updateStates(canvas);
-            common.addLayer(canvas,line);
-
-            var objects = canvas.getActiveObjects();
+            common.modifyLayer(line)
           
 
         });
@@ -131,7 +129,7 @@ export default function LineSubmenu(props) {
         patternCanvas.width = patternCanvas.height = 10;
         var ctx = patternCanvas.getContext('2d');
 
-        ctx.strokeStyle = this.color;
+        ctx.strokeStyle = color.current;
         ctx.lineWidth = 5;
         ctx.beginPath();
         ctx.moveTo(0, 5);
@@ -241,7 +239,6 @@ export default function LineSubmenu(props) {
             <p>
             <select id='drawing-mode' onChange={setDrawingMode} style={{}}>
             <option value="">--choose drawing option--</option>
-
                 <option>Pencil</option>
                 <option>Circle</option>
                 <option>Spray</option>

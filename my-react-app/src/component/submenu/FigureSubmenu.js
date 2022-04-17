@@ -12,7 +12,7 @@ import * as common from "./common"
 export default function FigureSubmenu(props) {
     const canvas = props.canvas;
     const color = useRef('black');
-
+    console.log("나열림")
 
     function mouseEventOff() {
         canvas.off('mouse:down');
@@ -99,8 +99,9 @@ export default function FigureSubmenu(props) {
             canvas.defaultCursor = 'default';
             mouseEventOff();
             common.addLayer(canvas,figure)
-            props.addLayerItem(canvas);
             common.updateStates(canvas);
+            // common.modifyLayer(figure);
+            props.addLayerItem(canvas);
         });
 
     }
