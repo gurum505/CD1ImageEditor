@@ -42,7 +42,8 @@ export default function App(props) {
     useEffect(() => {  //rendering 후 한 번 실행  
         setCanvas(initCanvas());
     }, []);
-    
+
+    const zoomInfo=useRef();
     useEffect(()=>{
         if (canvas) {
             canvas.componentSize = common.initialComponentSize();
@@ -53,13 +54,15 @@ export default function App(props) {
                 'mouse:wheel': (opt) => {
                      var delta = opt.e.deltaY;
                     if(delta<0){
-                        common.zoom(canvas,1.07);
+                        common.zoom(canvas,1.1);
+                        let num=Number(zoomInfo.current.value.slice(0,-1));
+                        zoomInfo.current.value=(num*1.1).toFixed(0).toString() + "%";
                     }else{
-                        common.zoom(canvas,0.93)
+                        common.zoom(canvas,0.9);
+                        let num=Number(zoomInfo.current.value.slice(0,-1));
+                        zoomInfo.current.value=(num*0.9).toFixed(0).toString() + "%";
                     }
 
-
-                
                 },
                 'object:removed': () => {
                     console.log('object:removed');
@@ -196,7 +199,6 @@ export default function App(props) {
     
 
     function addLayerItem(select){
-
         //add items
         let newItems=[
         {name:"items"+(nextId.current),
@@ -235,7 +237,7 @@ export default function App(props) {
                     <Layer canvas={canvas}></Layer>
                     <div id="layer"></div>
                 </div>
-                <Footbar canvas={canvas}/>{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
+                <Footbar canvas={canvas} zoomInfo={zoomInfo}/>{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
             </div>
             <RightSidebar addLayerItem={addLayerItem} 
                     delItem={delItem} 

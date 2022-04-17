@@ -4,18 +4,23 @@ import {
     ZoomInOutlinedIcon, ZoomOutOutlinedIcon,
     ExpandOutlinedIcon, EyeOutlinedIcon
 } from "../component/icons/icons"
+import { useRef } from 'react'
 
 const Footbar = (props) => {
 
     const canvas = props.canvas;
+    
 
     function zoomIn() {
         common.zoom(canvas, 1.1);
+        let num=Number(props.zoomInfo.current.value.slice(0,-1));
+        props.zoomInfo.current.value=(num*1.1).toFixed(0).toString() + "%";
     }
     function zoomOut() {
         common.zoom(canvas, 0.9);
+        let num=Number(props.zoomInfo.current.value.slice(0,-1));
+        props.zoomInfo.current.value=(num*0.9).toFixed(0).toString() + "%";
     }
-
     function fitToProportion() {
         common.fitToProportion(canvas);
         common.setCanvasCenter(canvas);
@@ -86,7 +91,7 @@ const Footbar = (props) => {
                 <ExpandOutlinedIcon onClick={fitToProportion} children={"비율에 맞추기"} />
                 <span></span>
                 <ZoomOutOutlinedIcon onClick={zoomOut} children={"줌아웃"} />
-                <input type="text" id='zoom-level' defaultValue={'100%'} className={styles.inputdesign} disabled/>
+                <input type="text" ref={props.zoomInfo} defaultValue={'100%'} className={styles.inputdesign} disabled/>
                 <ZoomInOutlinedIcon onClick={zoomIn} children={"줌인"} />
                 <span></span>
                 <EyeOutlinedIcon onClick={preview} children={"미리보기"} />

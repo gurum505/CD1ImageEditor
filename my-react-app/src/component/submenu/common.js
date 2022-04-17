@@ -180,7 +180,7 @@ export function colorActiveLayer(canvas) {
 
 
 export function addLayer(canvas, object) {  //레이어에 객체 추가 
-
+    
     // const layerCanvas = new fabric.Canvas();
     // layerCanvas.setWidth(canvas.width);
     // layerCanvas.setHeight(canvas.height);

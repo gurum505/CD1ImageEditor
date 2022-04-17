@@ -8,6 +8,7 @@
     box-sizing: border-box;
     color: gray;
     border-radius: 5px;
+    user-select: none;
   }
 .icon:focus{
   outline:none;/*클릭시 파란테두리 없애기*/
