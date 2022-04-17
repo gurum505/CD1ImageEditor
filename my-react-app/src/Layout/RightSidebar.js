@@ -50,7 +50,6 @@ export default function RightSidebar (props) {
     <>
     <div id ="rightsidebar" className={styles.container}>
       <div className={styles.itemList}>
-<<<<<<< HEAD
       {/* props.addLayerItem */}
         <Modal isModalOpen={isModalOpen} closeModal={closeModal} />
         <div className={styles.addItem} onClick={openModal}>
@@ -65,15 +64,6 @@ export default function RightSidebar (props) {
               isDragOver={isDragOver}
               handleDrop={handleDrop}
               canvas={props.canvas}/>
-=======
-        {/* <div className={styles.addItem} onClick={addLayerItem} style={{color:'white'}}> 객체  */}
-          {/* <PlusOutlined style={{fontSize:"20pt", color:"gray"}} /> */}
-        <div className={styles.addItem}  style={{color:'white'}}> 객체 
-
-        </div>
-        <div className={styles.itemScroll}>
-          {/* <LayerList Items={Items} delItem={delItem}/> */}
->>>>>>> 0cdc4821b660b5f22057718bc840e14a32071887
         </div>
       </div>
     </div>

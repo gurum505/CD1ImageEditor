@@ -2,6 +2,7 @@
   "name": "my-react-app",
   "version": "0.1.0",
   "private": true,
+  "homepage" : "https://gurum505.github.io/CD1ImageEditor",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@testing-library/jest-dom": "^5.16.2",

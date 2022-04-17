@@ -19,11 +19,7 @@ import RightSidebar from './Layout/RightSidebar';
 //TODO: sidebar: texticon 하나만 덩그라니 이상함
 //TODO: 한글 영어 혼용, 대문자소문자 통일
 //TODO: leftsidebarclose에 메뉴늘리고 바로 클릭할수 있도록
-
-//rightsidebar
-
-// import { TriangleIcon, CircleIcon, RectangleIcon } from "./component/icons/icons";
-
+//FIXME: canvas가 열릴때 렉걸림
 
 //canvas
 import Header from "./component/Header";
@@ -220,6 +216,7 @@ export default function App(props) {
 
     function addLayerItem(canvas,select){
         //add items
+        console.log("addlayer");
         let newItems=[
         {name:"items"+(canvas.objectNum),//nextId.current
         id:(canvas.objectNum)},//nextId.current
