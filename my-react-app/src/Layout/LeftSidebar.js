@@ -7,7 +7,7 @@ const LeftSidebar = ({children, canvas, imageRef,image,setCanvas}) => {
   const [wid, setX] = useState(50)
   const [isOpen, setOpen] = useState(false);
   const [currentRoute,SetCurrentRoute] =useState("Menu");
-
+  
   //사이드바 바깥을 클릭했을 때 닫히도록
   //sidebar, canvas안에서는 안닫히고 나머지에서는 닫히도록
   // const side=useRef();

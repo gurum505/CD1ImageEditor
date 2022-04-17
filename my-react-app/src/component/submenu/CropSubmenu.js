@@ -6,6 +6,7 @@ export default function CropSubmenu(props) {
     const canvas = props.canvas;
     var currentImage;
     var selectionRect;
+    console.log('crop')
     // var left1 = 0;
     // var top1 = 0;
     // var scale1x = 0;

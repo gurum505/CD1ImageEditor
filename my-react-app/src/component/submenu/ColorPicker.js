@@ -4,11 +4,10 @@ export default function ColorPicker(props){
     const color = props.color;
     const figure = ['rect','triangle','circle'];
 
-   
     function selectColor(e) {
         const selectedColor = e.target.value;
         color.current = selectedColor;
-        console.log(canvas.getObjects()[0].type)
+
         var objects = canvas.getActiveObjects();
         objects.forEach((object)=>{
             console.log(object)
@@ -23,14 +22,16 @@ export default function ColorPicker(props){
             }
         }
 
-        if(canvas.isDrawingMode){
-            canvas.freeDrawingBrush.color = color.current;
-        }
-        canvas.freeDrawingBrush.color = 'blue';
+       
 
         common.modifyLayer(object)
         })
       
+        if(canvas.isDrawingMode){
+            console.log('ㅋㅋ')
+            canvas.freeDrawingBrush.color = color.current;
+        }
+   
         canvas.renderAll();
 
     }

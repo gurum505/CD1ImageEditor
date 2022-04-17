@@ -183,6 +183,7 @@ export function updateStates(canvas, isCropped = false) {
 //객체 관련 
 export function getMainImage(canvas) { //필터할 이미지 반환 
     var result = null;
+    if(!canvas) return ;
     var objects = canvas.getObjects();
     for (var i = 0; i < objects.length; i++) {
         if (objects[i].main === true) {
@@ -257,7 +258,7 @@ export function modifyLayer(object) {
     img.src = src;
 }
 export function addLayer(canvas, object) {  //레이어에 객체 추가 
-    if (object.main) return;
+    // if (object.main) return;
     if (document.getElementById(object.id)) return;
     const layerCanvas = new fabric.Canvas();
     layerCanvas.setWidth(canvas.width);
@@ -265,11 +266,15 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     layerCanvas.backgroundColor = 'red';
 
     var imgTag = document.createElement('img');
+    imgTag.crossOrigin = 'anonymous'
     var src;
+    // src = object.toDataURL()
+    console.log(object)
     try {
         src = object.toDataURL();
     } catch (e) {
-        src = object.src;
+        src = object.getSrc();
+        console.log(src)
     }
     imgTag.src = src;
     imgTag.margin = 0;
@@ -279,7 +284,8 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     imgTag.style.height = '50px'
 
     imgTag.onclick = () => {
-        canvas.setActiveObject(object);
+        if(canvas.getActiveObject()===object) canvas.discardActiveObject(object);
+        else canvas.setActiveObject(object);
         console.log(canvas.getActiveObjects())
         canvas.renderAll();
     }
@@ -296,6 +302,8 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     objectBtn.innerHTML = 'select'
     objectBtn.className = "layer-object";
     objectBtn.onclick = () => {
+        if(canvas.getActiveObject()===object) canvas.discardActiveObject(object);
+        else
         canvas.setActiveObject(object);
         canvas.renderAll();
     }

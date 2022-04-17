@@ -10,17 +10,17 @@ export default function FilterSubmenu(props) {
         'polaroid', 'blend-color', 'gamma', 'kodachrome',
         'blackwhite', 'blend-image', 'hue', 'resize'];
 
-    // useEffect(() => {
-    //     //이미지가 없을 때는 필터 기능 disabled
-    //     if (getMainImage() === null) {
-    //         const divElem = document.getElementById('filter-list');
+    useEffect(() => {
+        //이미지가 없을 때는 필터 기능 disabled
+        if (common.getMainImage(canvas) === null) {
+            const divElem = document.getElementById('filter-list');
 
-    //         const inputElements = divElem.querySelectorAll("input[type=range], input[type=checkbox], input[type=button]")
-    //         for (var i = 0; i < inputElements.length; i++) {
-    //             inputElements[i].disabled = true;
-    //         }
-    //     }
-    // })
+            const inputElements = divElem.querySelectorAll("input[type=range], input[type=checkbox], input[type=button]")
+            for (var i = 0; i < inputElements.length; i++) {
+                inputElements[i].disabled = true;
+            }
+        }
+    })
 
     useEffect(() => {
         const divElem = document.getElementById('filter-list');
@@ -54,7 +54,6 @@ export default function FilterSubmenu(props) {
     }
     function applyFilter(index, filter) { //필터 적용
         const obj = common.getMainImage(canvas);
-        console.log(obj);
         obj.filters[index] = filter;
         obj.applyFilters();
         canvas.renderAll();
