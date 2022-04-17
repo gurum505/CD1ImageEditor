@@ -5,13 +5,28 @@
   height: 60px;
   position: relative;
   margin:5px 10px 5px 10px;
-  background-color: #202020;/*TODO: 배경바꾸기 */
+  background-color: #202020;
+  border-radius: 5px;
+}
+.ItemDragOver{
+  border: 2px solid #666565;
+  box-sizing: border-box;
+  width: 100px;
+  height: 60px;
+  position: relative;
+  margin:5px 10px 5px 10px;
+  background-color: #202020;
   border-radius: 5px;
 }
 .Item:hover{
   cursor: default;
   transition: 0.3s;
   border: 2px solid white;
+}
+.Item:active{
+  cursor: move;
+  transition: 0.3s;
+  border: 2px solid blueviolet;
 }
 .ItemButton{
   position:absolute;

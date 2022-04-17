@@ -12,6 +12,7 @@ import RightSidebar from './Layout/RightSidebar';
 //TODO: Canvas: 버튼기능구현 layout으로 분배
 //TODO: ESLint사용해 정리해보자 https://velog.io/@velopert/eslint-and-prettier-in-react
 //TODO: tooltip 예쁘게 https://css-tricks.com/exploring-what-the-details-and-summary-elements-can-do/
+//TODO: point색 사용해서 3색으로 정리
 
 //Sidebar:type:radio
 //TODO: canvas: CUSTOM CORNERS  https://objectcomputing.com/resources/publications/sett/june-2014-drawing-with-fabricjs
@@ -20,6 +21,7 @@ import RightSidebar from './Layout/RightSidebar';
 //TODO: leftsidebarclose에 메뉴늘리고 바로 클릭할수 있도록
 
 //rightsidebar
+import Modal from "./component/Modal.js"
 
 // import { TriangleIcon, CircleIcon, RectangleIcon } from "./component/icons/icons";
 
@@ -186,41 +188,49 @@ export default function App(props) {
         )
     }
 
-    //TODO: 객체도 되는지
-    //TODO: 드래그앤 드롭 구현
+    //TODO: 객체도 되는지 <canvas를 집어넣네?>
+    //TODO: 객체를 추가했을 때 레이어도 추가되도록, 선택시 레이어도선택되도록
     //TODO: 누르면 element생성하도록: popup창?
+    //TODO: 효과집어넣기 원래layer빈칸 옮길때 layer색바꾸기 등
+    //TODO: modal 애니메이션 효과추가
+
+    const [isModalOpen,setIsModalOpen]=useState(false);
+    const openModal= ()=>{
+        setIsModalOpen(true);
+    }
+    const closeModal= ()=>{
+        setIsModalOpen(false);
+    }
+
     function addLayerItem(select){
-        //setitems
+        openModal();
+
+        //add items
         let newItems=[
         {name:"items"+(nextId.current),
         id:(nextId.current)},
         ...Items
         ];
-        // newItems=newItems.sort((a,b)=>(b.id-a.id));
         setItems(newItems);
         nextId.current+=1;
     }
 
-    function sortLayerItem(newItems){
-        setItems(newItems);
-    }
-    const moveDown =(contents, value)=>{
+    const moveItem =(contents, value, oriId)=>{
         const index= contents.findIndex(obj=>obj.id === Number(value));
-        let newPos=index+1;
+        let newPos=contents.findIndex(obj=>obj.id === Number(oriId));
         const newContents=[...contents];
-        if(newPos>=contents.length){
-          newPos = contents.length;
+        if(newPos<=0){
+          newPos = 0;
         }
-        // console.log(newContents)
         newContents.splice(index,1);
-        // console.log(newContents)
         newContents.splice(newPos,0,contents[index]);
-        // console.log(newContents)
         setItems(newContents);
-    }
+      }
+
     return (
         <div className={styles.layout}>
             <Title />
+            <Modal isModalOpen={isModalOpen} closeModal={closeModal} />
             {canvas&& <LeftSidebar 
                         canvas={canvas} image={image} 
                         imageRef={imageRef} addLayerItem={addLayerItem}/>}
@@ -238,8 +248,9 @@ export default function App(props) {
             </div>
             <RightSidebar addLayerItem={addLayerItem} 
                     delItem={delItem} 
-                    moveDown={moveDown}
-                    Items={Items}/>            
+                    moveItem={moveItem}
+                    Items={Items}
+                    canvas={canvas}/>            
         </div>
         
     );

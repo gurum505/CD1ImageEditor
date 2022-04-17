@@ -10,52 +10,39 @@ import { useState } from "react";
 export default function RightSidebar (props) { 
 
   const [isDragging,setIsDragging]=useState(false);
-  const [isDraggOver,setIsDragOver]=useState(false);
-  
+  const [isDragOver,setIsDragOver]=useState(false);
+  // var isDragOver=-1;
 
   const handleDragStart=(e)=>{
     setIsDragging(true); //내가 현재 drag중인가?
     e.dataTransfer.effectedAllowed = "move"; //드래그시 마우스 아래 생기는 십자가 버튼 막기
-    e.dataTransfer.setData("text/html",e.target.id); //잡은 item의 data를 담는다.[key],[value]
-    console.log(props.Items.findIndex(obj=>obj.id === Number(e.target.id)));
+    e.dataTransfer.setData("targetId",e.target.id); //잡은 item의 data를 담는다.[key],[value]
+    // console.log(props.Items.findIndex(obj=>obj.id === Number(e.target.id)));
   }
   const handleDragOver = (e) => {
     e.preventDefault(); // touch같은 기본으로 발동하는 다른 이벤트를 막는다.
-    setIsDragOver(true);
-    // console.log(e) // 현재 요소가 드래그 요소의 아래 깔려있음을 알려준다
+    // isDragOver=(e.target.id);
+    // console.log(e.target) // 현재 요소가 드래그 요소의 아래 깔려있음을 알려준다
     //e.target은 아래깔린 아이템
+
+    console.log(e.target.innerText.substr(5,));
+
   };
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
-    setIsDragOver(false);
-    let newId = e.dataTransfer.getData('text/html'); // Start에서 저장한 데이터 풀어준다
+    //  setIsDragOver(false);
+
+    let newId = e.dataTransfer.getData('targetId'); // Start에서 저장한 데이터 풀어준다
+    // console.log(e.target.innerText);//FIXME:ID가안잡혀서 innerText로 했다.
+    let oriId=e.target.innerText.substr(5,)
+    // let oriId=Number(oriName.substr(5,))
     // item의 위치를 바꿔주는 함수
-    // console.log(newId); //내가 잡은 아이템의 고유ID
-    console.log(e);
-    props.moveDown(props.Items,newId);
+    props.moveItem(props.Items,newId,oriId);
   };
 
-  const swapItems=(Items,oriId,newId)=>{
-    Items.map((item)=>{
-      if(oriId < newId){ 
-        
-      }else if(oriId > newId){
+  const dragOverItem=()=>{
 
-      }
-    })
-  }
-
-  
-  const moveUp =(contents, value)=>{
-    const index= contents.indexOf(value);
-    let newPos=index-1;
-    const newContents=[...contents];
-    if(newPos<=0){
-      newPos = 0;
-    }
-    newContents.splice(index,1);
-    newContents.splice(newPos,0,value);
   }
 
   return (
@@ -72,8 +59,9 @@ export default function RightSidebar (props) {
               delItem={props.delItem} 
               handleDragStart={handleDragStart}
               handleDragOver={handleDragOver}
+              isDragOver={isDragOver}
               handleDrop={handleDrop}
-              moveUp={moveUp}/>
+              canvas={props.canvas}/>
         </div>
       </div>
     </div>
