@@ -21,7 +21,6 @@ import RightSidebar from './Layout/RightSidebar';
 //TODO: leftsidebarclose에 메뉴늘리고 바로 클릭할수 있도록
 
 //rightsidebar
-import Modal from "./component/Modal.js"
 
 // import { TriangleIcon, CircleIcon, RectangleIcon } from "./component/icons/icons";
 
@@ -194,16 +193,9 @@ export default function App(props) {
     //TODO: 효과집어넣기 원래layer빈칸 옮길때 layer색바꾸기 등
     //TODO: modal 애니메이션 효과추가
 
-    const [isModalOpen,setIsModalOpen]=useState(false);
-    const openModal= ()=>{
-        setIsModalOpen(true);
-    }
-    const closeModal= ()=>{
-        setIsModalOpen(false);
-    }
+    
 
     function addLayerItem(select){
-        openModal();
 
         //add items
         let newItems=[
@@ -230,7 +222,6 @@ export default function App(props) {
     return (
         <div className={styles.layout}>
             <Title />
-            <Modal isModalOpen={isModalOpen} closeModal={closeModal} />
             {canvas&& <LeftSidebar 
                         canvas={canvas} image={image} 
                         imageRef={imageRef} addLayerItem={addLayerItem}/>}

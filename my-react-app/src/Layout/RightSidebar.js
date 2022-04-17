@@ -2,6 +2,7 @@ import styles from "./RightSidebar.module.css";
 import LayerList from "../component/submenu/LayerList.js"
 import { PlusOutlined}from "@ant-design/icons";
 import { useState } from "react";
+import Modal from "../component/Modal.js"
 
 
 //drag start 에서 새 list를 하나 만들고 다른 것을 지운뒤 집어넣을 건지
@@ -44,7 +45,13 @@ export default function RightSidebar (props) {
   const dragOverItem=()=>{
 
   }
-
+  const [isModalOpen,setIsModalOpen]=useState(false);
+  const openModal= ()=>{
+      setIsModalOpen(true);
+  }
+  const closeModal= ()=>{
+      setIsModalOpen(false);
+  }
   
 
   return (
@@ -52,7 +59,8 @@ export default function RightSidebar (props) {
     <div id ="rightsidebar" className={styles.container}>
       <div className={styles.itemList}>
       {/* props.addLayerItem */}
-        <div className={styles.addItem} onClick={props.addLayerItem}>
+        <Modal isModalOpen={isModalOpen} closeModal={closeModal} />
+        <div className={styles.addItem} onClick={openModal}>
           <PlusOutlined style={{fontSize:"20pt", color:"gray"}} />
         </div>
         <div className={styles.itemScroll}>
