@@ -22,8 +22,8 @@
   cursor: default;
   transition: 0.3s;
   border: 2px solid white;
-}
-.Item:active{
+} */
+/* .Item:active{
   cursor: move;
   transition: 0.3s;
   border: 2px solid blueviolet;
@@ -34,6 +34,7 @@
   right:0;
   background-color: #666565;/*TODO: bgColor없애기*/
   border-radius: 5px;
+  z-index: 100;
 }
 .ItemButton:hover{
   cursor: pointer;
@@ -46,7 +47,7 @@
   margin:0;
   padding:0;
   z-index: 50;
-  background-color: red;
+  background-color: transparent;
 }
 .ItemContent:hover{
   cursor: default;
@@ -69,6 +70,8 @@
   height: 60px;
   background-color: transparent;
   box-sizing: border-box;
-  z-index:100;
-
+  z-index:90;
+}
+.select:hover{
+  cursor: move;
 }

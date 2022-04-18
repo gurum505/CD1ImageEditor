@@ -46,18 +46,22 @@ export default function App(props) {
     // var nextId =useRef(canvas.objectNum);
 
     //TODO: 실제로 객체도 지워지도록
-    function delItem(id){
+    function delItem(canvas,id){
         setItems(
             Items=>(Items.filter(Item=>Item.id !== id))
             )
-        }
+        // console.log("objectid:",id);
+        canvas.getObjects().forEach(function(object) {
+            if(object.id === id) {
+                canvas.remove(object);
+            }
+        })
+        canvas.discardActiveObject(); // 그룹 삭제 시 빈 sizebox 남아있는 거 제거 
+        common.updateStates(canvas);
+        // canvas.renderAll();
+    }
         
-    //TODO: 객체도 되는지 <canvas를 집어넣네?>
-    //TODO: 객체를 추가했을 때 레이어도 추가되도록, 선택시 레이어도선택되도록
-    //TODO: 누르면 element생성하도록: popup창?
-    //TODO: 효과집어넣기 원래layer빈칸 옮길때 layer색바꾸기 등
     //TODO: modal 애니메이션 효과추가
-        
     function addLayerItem(canvas,imgSrc){
         //add items
         // console.log("addlayer");
