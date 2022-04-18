@@ -9,3 +9,4 @@ You may also see any lint errors in the console.
 ### Dependancy
 
 npm install @ant-design/icons
+npm install gh-pages
