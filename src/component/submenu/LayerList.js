@@ -15,6 +15,19 @@ export default function LayerList(props){
         )
     }
 
+    const selectFromLayer=(canvas,id)=>{
+        let objects = canvas.getObjects();
+        let obj;
+        for (var i = 0; i < objects.length; i++) {
+            if (objects[i].id === id) {
+                obj=objects[i];
+                break;
+            }
+        }
+        console.log(obj);
+        canvas.setActiveObject(obj);
+        canvas.renderAll(); //이게 없으면 화면에 보이지 않음
+      }
     return(
         <>
             {Items.map((Item)=>(
@@ -27,23 +40,16 @@ export default function LayerList(props){
                     onDragOver={handleDragOver}
                     onDrop={handleDrop}>
                     <>
-                    {/* <div>
-                        {Item.name}
-                    </div> */}
+                    
                     <div onClick={()=>delItem(canvas,Item.id)}>
                       <DashOutlined className={styles.ItemButton} />
                     </div>
-                    <div id ={"layer"+Item.id} className={styles.select}>
+                    <div id ={"layer"+Item.id} className={styles.select} onClick={()=>selectFromLayer(canvas,Item.id)}>
                         {/* 선택용 투명 레이어 */}
                     </div>
                     <div className={styles.ItemContent}>
                         {renderImg(Item)}   
-                        {/* <canvas height={"30px"} width={"30px"}/> */}
-                        {/* {console.log(typeof(Item.div))} */}
-                        {/* {Item.name} */}
-                        {/* <renderElement dangerouslySetInnerHTML={{__html:Item.div}}/> */}
-                        {/* <Item.div dangerouslySetInnerHTML={{__html:Item.div}}/> */}
-                        {/* {createJSX(Array.from(Item.div))} */}
+                        
                     </div>
                     
                     </>

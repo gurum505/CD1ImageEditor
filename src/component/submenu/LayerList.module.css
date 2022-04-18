@@ -66,12 +66,18 @@
 }
 .select{
   position: absolute;
+  top:-2px;
+  left:-2px; /*임의로 조정한 값*/
   width:100px;
   height: 60px;
   background-color: transparent;
   box-sizing: border-box;
+  margin:0;
+  padding:0;
+  border-radius: 5px;
   z-index:90;
 }
 .select:hover{
   cursor: move;
+  border: 2px solid white;
 }

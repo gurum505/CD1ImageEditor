@@ -28,18 +28,16 @@ export default function RightSidebar (props) {
     setIsDragging(false);
 
     let newId = e.dataTransfer.getData('targetId'); // Start에서 저장한 데이터 풀어준다
-    console.log("newId",newId);
-    // console.log(e.target.innerText);//FIXME:ID가안잡혀서 innerText로 했다.
+    // console.log("newId",newId);
+    // console.log(e.target.innerText);
 
     let oriId=e.target.id.substr(5,);
-    console.log("oriId",oriId);
+    // console.log("oriId",oriId);
     // item의 위치를 바꿔주는 함수
     props.moveItem(props.Items,newId,oriId);
   };
 
-  const dragOverItem=()=>{
-
-  }
+  
   
   const [isModalOpen,setIsModalOpen]=useState(false);
   const openModal= ()=>{
