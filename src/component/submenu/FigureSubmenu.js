@@ -13,11 +13,7 @@ import * as common from "./common"
 
 export default function FigureSubmenu(props) {
     const canvas = props.canvas;
-<<<<<<< HEAD
-    var colorRef = useRef('#000000'); // default color black 
-=======
     const color = useRef('white');
->>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
 
     console.log('figuresubmenu 렌더링 ')
 
@@ -154,15 +150,10 @@ export default function FigureSubmenu(props) {
             props.addLayerItem(canvas,figure.toDataURL());
             common.modifyLayer(figure);
             common.updateStates(canvas);
-<<<<<<< HEAD
 
             document.getElementById('figure-width').value = Math.round(figure.width);
             document.getElementById('figure-height').value = Math.round(figure.height);
             console.log(figure)
-=======
-            canvas.discardActiveObject(figure)
-            
->>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
         });
     }
 
