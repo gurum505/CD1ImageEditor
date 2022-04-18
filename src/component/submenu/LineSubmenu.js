@@ -10,7 +10,7 @@ import {
 } from "../icons/icons";
 export default function LineSubmenu(props) {
     const canvas = props.canvas;
-    const color = useRef('black');  // : 값이 바뀌어도 렌더링되지 않음.
+    const color = useRef('white');  // : 값이 바뀌어도 렌더링되지 않음.
 
 
     function drawCurve() {

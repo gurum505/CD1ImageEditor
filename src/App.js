@@ -204,7 +204,7 @@ export default function App(props) {
 
     function addLayerItem(canvas,select){
         //add items
-        console.log("addlayer");
+        // console.log("addlayer");
         let newItems=[
         {name:"items"+(canvas.objectNum),//nextId.current
         id:(canvas.objectNum)},//nextId.current

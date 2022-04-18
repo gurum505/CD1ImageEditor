@@ -12,7 +12,7 @@ import * as common from "./common"
 export default function FigureSubmenu(props) {
     window.onkeydown=(e)=>common.keyDownEvent(canvas,e);
     const canvas = props.canvas;
-    const color = useRef('black');
+    const color = useRef('white');
 
 
     function mouseEventOff() {
