@@ -346,7 +346,7 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     // div.appendChild(objectBtn);
     // div.appendChild(deleteBtn);
     // el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
-    return imgTag.src;
+    return src;
 }
 
 

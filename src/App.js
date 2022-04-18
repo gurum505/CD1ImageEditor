@@ -52,22 +52,22 @@ export default function App(props) {
             )
         }
         
-        //TODO: 객체도 되는지 <canvas를 집어넣네?>
-        //TODO: 객체를 추가했을 때 레이어도 추가되도록, 선택시 레이어도선택되도록
-        //TODO: 누르면 element생성하도록: popup창?
-        //TODO: 효과집어넣기 원래layer빈칸 옮길때 layer색바꾸기 등
-        //TODO: modal 애니메이션 효과추가
+    //TODO: 객체도 되는지 <canvas를 집어넣네?>
+    //TODO: 객체를 추가했을 때 레이어도 추가되도록, 선택시 레이어도선택되도록
+    //TODO: 누르면 element생성하도록: popup창?
+    //TODO: 효과집어넣기 원래layer빈칸 옮길때 layer색바꾸기 등
+    //TODO: modal 애니메이션 효과추가
         
     function addLayerItem(canvas,imgSrc){
         //add items
         // console.log("addlayer");
         // let objectcomponent=ReactDOMServer.renderToStaticMarkup(object);
         console.log("origianlItems: ",Items);
-        let newItems=Object.assign([
+        let newItems=[
             {name:"items"+(canvas.objectNum),//nextId.current
             id:(canvas.objectNum),//nextId.current
-            img:imgSrc}
-        ],Items);
+            img:imgSrc},
+        ...Items];
         console.log("obectNum(id): ",canvas.objectNum);
         console.log("newItems: ",newItems);
         setItems(newItems);
@@ -105,7 +105,7 @@ export default function App(props) {
             
             canvas.on({
                 'mouse:down':()=>{
-                    console.log("ㅎㅇ")
+                    console.log("mouse:down")
                     document.getElementById('figure-width').readOnly = true;
                 },
                 'mouse:wheel': (opt) => {
@@ -150,8 +150,9 @@ export default function App(props) {
                     if(object.type!=='path'&& object.type!=='selection' && object.type!=='group' && object.cropRect!==true)
                     {
                         canvas.setActiveObject(object);
+                        // console.log(object.toDataURL());
                         // console.log(common.addLayer(canvas,object));
-                        addLayerItem(canvas,common.addLayer(canvas,object));
+                        // addLayerItem(canvas,object.toDataURL());
                         common.colorActiveLayer(canvas);
                     }
 
@@ -209,7 +210,7 @@ export default function App(props) {
             
           
             window.onkeydown = function (e) { // delete, backspace 키로 삭제
-                console.log("ㅋ")
+                console.log("window.onkeydown")
             //    common.keyDownEvent(canvas,e);
             }
         }
