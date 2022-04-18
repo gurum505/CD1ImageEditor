@@ -78,16 +78,47 @@ export default function App(props) {
         // ++canvas.objectNum;//nextId.current+=1;
     }
 
-    const moveItem =(contents, value, oriId)=>{
-        const index= contents.findIndex(obj=>obj.id === Number(value));
-        let newPos=contents.findIndex(obj=>obj.id === Number(oriId));
+    //index=>nexPos로 아이템이 보내진다.
+    const moveItem =(contents,fromId, toId)=>{
+        let oriPos= contents.findIndex(obj=>obj.id === Number(fromId));
+        let newPos=contents.findIndex(obj=>obj.id === Number(toId));
         const newContents=[...contents];
         if(newPos<=0){
         newPos = 0;
         }
-        newContents.splice(index,1);
-        newContents.splice(newPos,0,contents[index]);
+        console.log("oriPos",oriPos);
+        console.log("newPos",newPos);
+        //3=>0
+        let moveStep=oriPos-newPos;
+
+        newContents.splice(oriPos,1);
+        newContents.splice(newPos,0,contents[oriPos]);
         setItems(newContents);
+
+        //도형앞으로, 뒤로 미루는 부분
+        let objects = canvas.getObjects();
+        let obj;
+        console.log(typeof(fromId));
+        console.log(typeof(objects[0].id));
+        for (var i = 0; i < objects.length; i++) {
+            if (Number(objects[i].id) == fromId) {
+                obj=objects[i];
+                console.log(obj);
+                if(moveStep>0){//upward
+                    for(i=0;i<moveStep;i++){
+                        canvas.bringForward(obj);
+                        console.log(obj);
+                    }
+                }else{
+                    for(i=0;i<(moveStep*-1);i++){
+                        canvas.sendToBack(obj);
+                    }
+                }
+                break
+            }
+        }
+        // canvas.setActiveObject(obj);
+        // canvas.renderAll(); 
     }
 
 
