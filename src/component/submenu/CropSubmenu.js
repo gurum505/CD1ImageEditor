@@ -7,6 +7,7 @@ import {
 import { useEffect } from "react";
 
 export default function CropSubmenu(props) {
+    console.log("크롭메뉴 ")
     const canvas = props.canvas;
     var currentImage;
     var selectionRect;

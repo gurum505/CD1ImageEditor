@@ -9,6 +9,7 @@ import {
     ,HighlightOutlinedIcon
 } from "../icons/icons";
 export default function LineSubmenu(props) {
+    console.log("라인메뉴")
     const canvas = props.canvas;
     const color = useRef('#000000');  // : 값이 바뀌어도 렌더링되지 않음.
 

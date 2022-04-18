@@ -31,7 +31,6 @@ const LeftSidebar = (props) => {
   
 
   const beforeLeftbarOpenedSize = useRef(''); //leftbar 닫았을 때 닫기 전 캔버스 크기 유지를 위한 변수 
-  
   useEffect(()=>{
     if( imageRef.current){
       console.log(imageRef.current)
@@ -64,7 +63,7 @@ const LeftSidebar = (props) => {
          common.fitToProportion(canvas)
       }
       return( 
-        <LeftSidebarOpened toggleMenu={toggleMenu} currentRoute={currentRoute} canvas={canvas} addLayerItem={props.addLayerItem}/>
+        <LeftSidebarOpened toggleMenu={toggleMenu}  currentRoute={currentRoute} canvas={canvas} addLayerItem={props.addLayerItem}/>
       )
 
     }
@@ -79,7 +78,7 @@ const LeftSidebar = (props) => {
 
   return (
     <div className={styles.container} >
-      <div id='leftbar'style={{ width: `${wid}px`, height: '100%', transition:'0.5s ease' ,overflow:"hidden"}}>
+      <div id='leftbar'style={{ width: `${wid}px`, height: '100%', transition:'0.3s ease' ,overflow:"hidden"}}>
         <div id='leftbar-content' className={styles.content}>
           {page(isOpen)}
         </div>

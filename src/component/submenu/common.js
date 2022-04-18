@@ -20,7 +20,6 @@ export function keyDownEvent(canvas,e){
         var o = canvas.getActiveObjects();
         o.forEach((object) => {
             canvas.remove(object);
-            document.getElementById(object.id).remove();
         });
 
        canvas.discardActiveObject(); // 그룹 삭제 시 빈 sizebox 남아있는 거 제거 
@@ -347,6 +346,7 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     // div.appendChild(imgTag)
     // div.appendChild(objectBtn);
     // div.appendChild(deleteBtn);
+    // div.draggable=true;
     // el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
     return src;
 }

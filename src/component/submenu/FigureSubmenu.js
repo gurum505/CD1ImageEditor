@@ -6,6 +6,7 @@ import {
     , RectangleIcon
 } from "../icons/icons";
 import * as common from "./common"
+import { EyeTwoTone } from "@ant-design/icons";
 
 
 //FIXME:colorpicker선택 후 캔버스 누르면 다른 키 안먹힘 
@@ -13,24 +14,23 @@ import * as common from "./common"
 
 export default function FigureSubmenu(props) {
     const canvas = props.canvas;
-    const color = useRef('white');
+    const color = useRef('#FFFFFF');
 
     console.log('figuresubmenu 렌더링 ')
 
+    const flag =useRef(false);
     
     useEffect(()=>{
         window.onkeydown = (e) => common.keyDownEvent(canvas, e);
-
+        var unselectableObject = null;
         canvas.on(
             {   
                 'selection:cleared': (e) => {  // 크기 조정 마치고(캔버스 클릭) 크기 조절 값 입력 못하게 
                     window.onkeydown=(e)=>common.keyDownEvent(canvas,e);
-                    try{
                     document.getElementById('figure-width').readOnly = true;
                     document.getElementById('figure-height').readOnly = true;
-                    document.getElementById('figure-color').readOnly = true;
-                    inputFigureInfo();} catch(e){console.log("수정필요")}
-
+                    document.getElementById('color').readOnly = true;
+                    inputFigureInfo();
                 },
                 'selection:created': (e) => {
                     if (e.selected.length === 1) var object = e.selected[0]
@@ -43,23 +43,33 @@ export default function FigureSubmenu(props) {
                 'object:added': (e) => {
                     var object = e.target;
                     inputFigureInfo(object);
-                }
+                },
+                'mouse:down:before' :(e)=>{ //마우스 클릭 할 때 객체가 있으면 객체가 선택되기 전에 활성화 해제하고, 선택이 안되도록 함
+                    if(e.target&&flag.current){
+                        canvas.discardActiveObject(); 
+                        e.target.selectable=false;
+                        unselectableObject = e.target
+                    }
+                },  
+                'mouse:up:before':(e)=>{ //마우스를 떼면 선택 안되게 한 객체를 다시 선택이 되게 함 
+                    if(unselectableObject)unselectableObject.selectable=true;
+                 }
+              
             })
     },[])
 
     function inputFigureInfo(object){ // figure-width, figure-height id를 갖는 input 영역에 도형의 크기 정보 입력 
-        try{
-        if(object.main) return;
+      
         if (!object) {
             document.getElementById('figure-width').value = '';
             document.getElementById('figure-height').value = '';
-            document.getElementById('figure-color').value = 'blue';
+            document.getElementById('color').value = color.current;
         }
         else {
             document.getElementById('figure-width').value = Math.round(object.width);
             document.getElementById('figure-height').value = Math.round(object.height);
-            document.getElementById('figure-color').value = object.fill;
-        }}catch(e){console.log("수정필요")}
+            document.getElementById('color').value = object.fill;
+        }
     }
     function mouseEventOff() {
         canvas.off('mouse:down');
@@ -69,11 +79,12 @@ export default function FigureSubmenu(props) {
         // document.getElementById('add-circle').disabled =false;
         // document.getElementById('add-triangle').disabled =false;
     }
+   
 
     function addElement(select) {
         mouseEventOff();
-        console.log('gdgdgd')
         canvas.defaultCursor = 'crosshair';
+        flag.current= true; 
         var figure, rect, circle, triangle, isDown, origX, origY;
         canvas.on('mouse:down', function (o) {
             isDown = true;
@@ -148,13 +159,15 @@ export default function FigureSubmenu(props) {
             isDown = false;
             canvas.defaultCursor = 'default';
             mouseEventOff();
+            common.addLayer(canvas,figure);
             props.addLayerItem(canvas,figure.toDataURL());
-            common.modifyLayer(figure);
+            canvas.renderAll()
+            // common.modifyLayer(figure);
             common.updateStates(canvas);
 
             document.getElementById('figure-width').value = Math.round(figure.width);
             document.getElementById('figure-height').value = Math.round(figure.height);
-            console.log(figure)
+            flag.current = false;
         });
     }
 
@@ -203,8 +216,8 @@ export default function FigureSubmenu(props) {
                     <CircleIcon id='add-circle' onClick={() => addElement("circle")} />
                     <TriangleIcon id='add-triangle' onClick={() => addElement("triangle")} />
                 </p>
-                <p><label> width</label> <input id='figure-width' onClick={activateInput} onChange={setFigureWidth} type="text" /></p>
-                <p><label> height</label> <input id='figure-height' onClick={activateInput} onChange={setFigureHeight} type="text" /></p>
+                <p><label> width</label> <input id='figure-width' onClick={activateInput} onSelect={activateInput} onChange={setFigureWidth} type="text" /></p>
+                <p><label> height</label> <input id='figure-height' onClick={activateInput} onSelect={activateInput}onChange={setFigureHeight} type="text" /></p>
                 <p><label>color</label><ColorPicker canvas={canvas}  color={color} /></p>
             </div>
         </>

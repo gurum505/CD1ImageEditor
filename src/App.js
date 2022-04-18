@@ -205,9 +205,9 @@ export default function App(props) {
                     var objects  = canvas.getActiveObjects();
                    if (!canvas.getActiveObject().cropRect) {//crop을 위해 생성된 사각형은 modified되어도 undo stack에 쌓이면 안됨
                     common.updateStates(canvas);
-                    objects.forEach((object)=>{
-                        common.modifyLayer(object);
-                    })
+                    // objects.forEach((object)=>{
+                    //     common.modifyLayer(object);
+                    // })
                    }
                     // document.getElementById('remove-object').disabled = false
                 },

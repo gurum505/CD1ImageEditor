@@ -11,6 +11,7 @@ export default function ImageSubmenu(props) {
     const [onlineImageOption,setOnlineImageOption] = useState(false);
 
     function addLocalImage(e) {
+        console.log("이미지 렌더링")
         e.target.value = ''
         canvas.isDrawingMode = false;
         document.getElementById("add-local-image-file").onchange = function (e) {
