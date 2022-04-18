@@ -10,11 +10,7 @@ import {AlignLeftOutlinedIcon,UnderlineOutlinedIcon
 export default function TextBoxSubmenu(props) {
     // console.log('textbox메뉴')
     const canvas = props.canvas;
-<<<<<<< HEAD
-    var colorRef= useRef('#000000');
-=======
     const color = useRef('white');
->>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
     canvas.isDrawingMode =false;
     useEffect(()=>{
         canvas.off('mouse:down');
@@ -29,7 +25,7 @@ export default function TextBoxSubmenu(props) {
             addTextBox();
             var textbox = new fabric.Textbox('내용 입력', {
                 width: 250,
-                fill: colorRef.current,
+                fill: color.current,
                 left: pointer.x - 125,
                 top: pointer.y - 20,
                 id : ++canvas.objectNum,
@@ -116,7 +112,7 @@ export default function TextBoxSubmenu(props) {
         <div className="textbox-submenu">
             
             <p><FontSizeOutlinedIcon id='add-textbox' onClick={addTextBox} /></p>
-            <p><label>font color</label> <ColorPicker canvas={canvas} colorRef={colorRef}/></p> 
+            <p><label>font color</label> <ColorPicker canvas={canvas} color={color}/></p> 
             <label style ={{marginLeft:"15px"}} >align</label>
 
             <ul>

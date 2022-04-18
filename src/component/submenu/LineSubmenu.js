@@ -10,17 +10,13 @@ import {
 } from "../icons/icons";
 export default function LineSubmenu(props) {
     const canvas = props.canvas;
-<<<<<<< HEAD
-    const colorRef = useRef('#000000');  // : 값이 바뀌어도 렌더링되지 않음.
-=======
-    const color = useRef('white');  // : 값이 바뀌어도 렌더링되지 않음.
->>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
+    const color = useRef('#000000');  // : 값이 바뀌어도 렌더링되지 않음.
 
 
     function drawCurve() {
         canvas.off('mouse:down');
         canvas.off('mouse:up');
-        canvas.freeDrawingBrush.color = colorRef.current;
+        canvas.freeDrawingBrush.color = color.current;
         if (canvas.isDrawingMode) { //곡선 그리기가 꺼져있는 상태에서 곡선버튼을 눌렀을 때  
             canvas.isDrawingMode = false;
             canvas.defaultCursor = 'default';
@@ -65,7 +61,7 @@ export default function LineSubmenu(props) {
             line = new fabric.Line(points, {
                 strokeWidth: 5,
                 fill: 'red',
-                stroke: colorRef.current,
+                stroke: color.current,
                 originX: 'center',
                 originY: 'center',
                 id: ++canvas.objectNum,
@@ -109,7 +105,7 @@ export default function LineSubmenu(props) {
         offsetX: 0,
         offsetY: 0,
         affectStroke: true,
-        color: colorRef.current,
+        color: color.current,
     });
     hLinePatternBrush.getPatternSrc = function () {
 
@@ -117,7 +113,7 @@ export default function LineSubmenu(props) {
         patternCanvas.width = patternCanvas.height = 10;
         var ctx = patternCanvas.getContext('2d');
 
-        ctx.strokeStyle = colorRef.current;
+        ctx.strokeStyle = color.current;
         ctx.lineWidth = 5;
         ctx.beginPath();
         ctx.moveTo(5, 0);
@@ -133,7 +129,7 @@ export default function LineSubmenu(props) {
         patternCanvas.width = patternCanvas.height = 10;
         var ctx = patternCanvas.getContext('2d');
 
-        ctx.strokeStyle = colorRef.current;
+        ctx.strokeStyle = color.current;
         ctx.lineWidth = 5;
         ctx.beginPath();
         ctx.moveTo(0, 5);
@@ -152,7 +148,7 @@ export default function LineSubmenu(props) {
         patternCanvas.width = patternCanvas.height = squareWidth + squareDistance;
         var ctx = patternCanvas.getContext('2d');
 
-        ctx.fillStyle = colorRef.current;
+        ctx.fillStyle = color.current;
         ctx.fillRect(0, 0, squareWidth, squareWidth);
 
         return patternCanvas;
@@ -166,7 +162,7 @@ export default function LineSubmenu(props) {
             width: squareWidth,
             height: squareWidth,
             angle: 45,
-            fill: colorRef.current,
+            fill: color.current,
         });
 
         var canvasWidth = rect.getBoundingRect().width;
@@ -207,7 +203,7 @@ export default function LineSubmenu(props) {
             canvas.freeDrawingBrush = hLinePatternBrush;
         }
 
-        canvas.freeDrawingBrush.color = colorRef.current;
+        canvas.freeDrawingBrush.color = color.current;
         if (canvas.freeDrawingBrush.getPatternSrc) {
             canvas.freeDrawingBrush.source = canvas.freeDrawingBrush.getPatternSrc.call(canvas.freeDrawingBrush);
         }
@@ -217,7 +213,7 @@ export default function LineSubmenu(props) {
             offsetX: parseInt(document.getElementById('shadow-offset').value, 10) || 0,
             offsetY: parseInt(document.getElementById('shadow-offset').value, 10) || 0,
             affectStroke: true,
-            color: colorRef.current,
+            color: color.current,
         });
 
     }
@@ -254,7 +250,7 @@ export default function LineSubmenu(props) {
             </p>
           
           
-            <p><label> color</label> <ColorPicker canvas={canvas} colorRef={colorRef}/></p> 
+            <p><label> color</label> <ColorPicker canvas={canvas} color={color}/></p> 
             <div className={styles.effectContainer}>
                 <label>Line width:</label><input type="range" id="line-width" defaultValue="30" min="0" max="150" step="1" onChange={setLineWidth} />
                 <label>Shadow width:</label><input type="range" id="shadow-width" defaultValue="0" min="0" max="50" step="1" onChange={setShadowWidth} />

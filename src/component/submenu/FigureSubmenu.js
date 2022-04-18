@@ -48,17 +48,18 @@ export default function FigureSubmenu(props) {
     },[])
 
     function inputFigureInfo(object){ // figure-width, figure-height id를 갖는 input 영역에 도형의 크기 정보 입력 
+        try{
         if(object.main) return;
         if (!object) {
             document.getElementById('figure-width').value = '';
             document.getElementById('figure-height').value = '';
-            document.getElementById('figure-color').value = colorRef.current;
+            document.getElementById('figure-color').value = 'blue';
         }
         else {
             document.getElementById('figure-width').value = Math.round(object.width);
             document.getElementById('figure-height').value = Math.round(object.height);
             document.getElementById('figure-color').value = object.fill;
-        }
+        }}catch(e){console.log("수정필요")}
     }
     function mouseEventOff() {
         canvas.off('mouse:down');
@@ -89,7 +90,7 @@ export default function FigureSubmenu(props) {
                     height: pointer.y - origY,
                     noScaleCache: true,
                     angle: 0,
-                    fill: colorRef.current,
+                    fill: color.current,
                     type: 'rect',
                     id: ++canvas.objectNum,
                 });
@@ -101,7 +102,7 @@ export default function FigureSubmenu(props) {
                     originX: 'left',
                     originY: 'top',
                     radius: (pointer.x - origX) / 2,
-                    fill: colorRef.current,
+                    fill: color.current,
                     id: ++canvas.objectNum,
                     type:'circle'
                 });
@@ -115,7 +116,7 @@ export default function FigureSubmenu(props) {
                     width: pointer.x - origX,
                     height: pointer.y - origY,
                     angle: 0,
-                    fill: colorRef.current,
+                    fill: color.current,
                     id: ++canvas.objectNum,
                     type: 'triangle'
                 });
@@ -204,7 +205,7 @@ export default function FigureSubmenu(props) {
                 </p>
                 <p><label> width</label> <input id='figure-width' onClick={activateInput} onChange={setFigureWidth} type="text" /></p>
                 <p><label> height</label> <input id='figure-height' onClick={activateInput} onChange={setFigureHeight} type="text" /></p>
-                <p><label>color</label><ColorPicker canvas={canvas}  colorRef={colorRef} /></p>
+                <p><label>color</label><ColorPicker canvas={canvas}  color={color} /></p>
             </div>
         </>
     )

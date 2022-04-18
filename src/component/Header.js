@@ -172,7 +172,7 @@ export default function Header(props) {
 
     function undo(){
         if(canvas.undoStack.length>1){
-            common.removeAllObjects(canvas);
+            common.removeAllObjects(canvas,true);
 
             var current = canvas.undoStack.pop();
             canvas.redoStack.push(current);
@@ -180,6 +180,7 @@ export default function Header(props) {
             var json = canvas.undoStack[canvas.undoStack.length-1]; 
             var objects  = json['objects'];
             objects.forEach((object)=>{
+                console.log(object)
                 if(!object.main)
                 canvas.add(object)
 
@@ -258,7 +259,7 @@ export default function Header(props) {
 
     function redo(){
         if(canvas.redoStack.length>0){
-            common.removeAllObjects(canvas);
+            common.removeAllObjects(canvas,true);
             var json = canvas.redoStack.pop();
             canvas.undoStack.push(json);
 

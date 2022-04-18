@@ -44,10 +44,6 @@ export default function App(props) {
     }, []);
     
     const zoomInfo=useRef();
-<<<<<<< HEAD
-
-    const figureType = ['rect','circle','triangle','image'];
-=======
     //Rightsidebar
     const [Items,setItems]=useState([]);
     const nextId=useRef(1);
@@ -130,7 +126,6 @@ export default function App(props) {
     }
 
 
->>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
 
     useEffect(()=>{
         if (canvas) {
@@ -149,13 +144,6 @@ export default function App(props) {
             })
             
             canvas.on({
-<<<<<<< HEAD
-=======
-                'mouse:down':()=>{
-                    console.log("mouse:down")
-                    document.getElementById('figure-width').readOnly = true;
-                },
->>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
                 'mouse:wheel': (opt) => {
                      var delta = opt.e.deltaY;
                     if(delta<0){
@@ -187,16 +175,12 @@ export default function App(props) {
                 'selection:created': (e) => {
                     console.log('selection:created');
                     common.colorActiveLayer(canvas);
-<<<<<<< HEAD
                     setMenu(e.selected)
                     // var object = canvas.getActiveObject();
                     // document.getElementById('object-bar').open=true;
 
                     // if(object.main) canvas.discardActiveObject(object)
                     // document.getElementById('remove-object').disabled = false;
-=======
-                    // var object = canvas.getActiveObject();
->>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
                 },
                 'object:added': () => {
 
@@ -264,17 +248,10 @@ export default function App(props) {
         
             });
             
-<<<<<<< HEAD
-=======
-          
-            window.onkeydown = function (e) { // delete, backspace 키로 삭제
-                console.log("window.onkeydown")
-            //    common.keyDownEvent(canvas,e);
-            }
->>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
         }
     },[canvas])
 
+    const figureType=['rect','circle','triangle','image']
     function setMenu(selectedObjects){
         if(selectedObjects.lenght>1) return;
         var object = selectedObjects[0];
@@ -311,18 +288,7 @@ export default function App(props) {
     )
     }
 
-<<<<<<< HEAD
-    //Rightsidebar
-    const [Items,setItems]=useState([]);
-    const nextId=useRef(1);
-    // var nextId =useRef(canvas.objectNum);
 
-    //TODO: 실제로 객체도 지워지도록
-    function delItem(id){
-        setItems(
-        Items=>(Items.filter(Item=>Item.id !== id))
-        )
-    }
 
     //TODO: 객체도 되는지 <canvas를 집어넣네?>
     //TODO: 객체를 추가했을 때 레이어도 추가되도록, 선택시 레이어도선택되도록
@@ -341,20 +307,6 @@ export default function App(props) {
         ++canvas.objectNum;//nextId.current+=1;
     }
 
-    const moveItem =(contents, value, oriId)=>{
-        const index= contents.findIndex(obj=>obj.id === Number(value));
-        let newPos=contents.findIndex(obj=>obj.id === Number(oriId));
-        const newContents=[...contents];
-        if(newPos<=0){
-          newPos = 0;
-        }
-        newContents.splice(index,1);
-        newContents.splice(newPos,0,contents[index]);
-        setItems(newContents);
-      }
-=======
-    
->>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
 
     return (
         <div className={styles.layout}>

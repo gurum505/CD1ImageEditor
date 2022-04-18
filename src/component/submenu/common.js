@@ -294,10 +294,7 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     imgTag.crossOrigin = 'anonymous' //img속성1
     var src;                         
     // src = object.toDataURL()
-<<<<<<< HEAD
-=======
     // console.log(object)
->>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
     try {
         src = object.toDataURL();
     } catch (e) {
