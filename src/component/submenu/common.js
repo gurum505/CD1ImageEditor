@@ -252,21 +252,27 @@ export function removeAllLayer(canvas) {
 // 활성화(선택) 되어 있는 layer 빨간색으로 표시 
 export function colorActiveLayer(canvas) {
 
-    var layerElements = document.getElementsByClassName('layer-list');
-    for (let i = 0; i < layerElements.length; i++) {
-        layerElements[i].style.border = 'solid gray';
+    //FIXME:모든 objectNum을 돌기 때문에 + 매 클릭마다 === 성능걱정이 좀 됌
+    for (let i = 1; i <= canvas.objectNum; i++) {
+        let layerElement = document.getElementById(i);
+        // console.log("layerElement:",layerElements);
+        if (layerElement)
+            layerElement.style.border = 'solid 2px gray';
     }
     var objects = canvas.getActiveObjects();
     objects.forEach((object) => {
         if (document.getElementById(object.id))
-            document.getElementById(object.id).style.border = 'solid 2px blue'
+            document.getElementById(object.id).style.border = 'solid 2px white'
     })
      
 }
 
 export function modifyLayer(object) {
     var layer = document.getElementById(object.id);
+    // console.log(layer);
+    // var layer = document.getElementById('rightsidebar-item-scroll');
     var img = layer.querySelector('img');
+    // console.log(img)
     var src;
     try {
         src = object.toDataURL();
@@ -282,17 +288,22 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     const layerCanvas = new fabric.Canvas();
     layerCanvas.setWidth(canvas.width);
     layerCanvas.setHeight(canvas.height);
-    layerCanvas.backgroundColor = 'red';
+    layerCanvas.backgroundColor = 'red'; //이거 되나?
 
     var imgTag = document.createElement('img');
-    imgTag.crossOrigin = 'anonymous'
-    var src;
+    imgTag.crossOrigin = 'anonymous' //img속성1
+    var src;                         
     // src = object.toDataURL()
+<<<<<<< HEAD
+=======
+    // console.log(object)
+>>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
     try {
         src = object.toDataURL();
     } catch (e) {
         src = object.getSrc();
     }
+    //img속성2
     imgTag.src = src;
     imgTag.margin = 0;
     imgTag.padding = 0;
@@ -306,6 +317,7 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
         console.log(canvas.getActiveObjects())
         canvas.renderAll();
     }
+
     const div = document.createElement('div');
     div.id = object.id;
     div.className = 'layer-list'
@@ -335,10 +347,11 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     }
 
 
-    div.appendChild(imgTag)
-    div.appendChild(objectBtn);
-    div.appendChild(deleteBtn);
-    el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
+    // div.appendChild(imgTag)
+    // div.appendChild(objectBtn);
+    // div.appendChild(deleteBtn);
+    // el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
+    return src;
 }
 
 

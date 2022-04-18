@@ -8,9 +8,13 @@ import {AlignLeftOutlinedIcon,UnderlineOutlinedIcon
     , BoldOutlinedIcon, ItalicOutlinedIcon, FontSizeOutlinedIcon, LineHeightOutlinedIcon}from "../icons/icons";
 
 export default function TextBoxSubmenu(props) {
-    console.log('textbox메뉴')
+    // console.log('textbox메뉴')
     const canvas = props.canvas;
+<<<<<<< HEAD
     var colorRef= useRef('#000000');
+=======
+    const color = useRef('white');
+>>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
     canvas.isDrawingMode =false;
     useEffect(()=>{
         canvas.off('mouse:down');

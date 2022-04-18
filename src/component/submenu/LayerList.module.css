@@ -18,22 +18,23 @@
   background-color: #202020;
   border-radius: 5px;
 }
-.Item:hover{
+/* .Item:hover{
   cursor: default;
   transition: 0.3s;
   border: 2px solid white;
-}
-.Item:active{
+} */
+/* .Item:active{
   cursor: move;
   transition: 0.3s;
   border: 2px solid blueviolet;
-}
+} */
 .ItemButton{
   position:absolute;
   top: 0px;
   right:0;
   background-color: #666565;/*TODO: bgColor없애기*/
   border-radius: 5px;
+  z-index: 100;
 }
 .ItemButton:hover{
   cursor: pointer;
@@ -45,7 +46,38 @@
   height: 100%;
   margin:0;
   padding:0;
+  z-index: 50;
+  background-color: transparent;
 }
 .ItemContent:hover{
   cursor: default;
+}
+.Img{
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  /* background-color: red; */
+  pointer-events: none;
+}
+.select{
+  position: absolute;
+  top:-2px;
+  left:-2px; /*임의로 조정한 값*/
+  width:100px;
+  height: 60px;
+  background-color: transparent;
+  box-sizing: border-box;
+  margin:0;
+  padding:0;
+  border-radius: 5px;
+  z-index:90;
+}
+.select:hover{
+  cursor: move;
+  border: 2px solid white;
 }

@@ -10,7 +10,11 @@ import {
 } from "../icons/icons";
 export default function LineSubmenu(props) {
     const canvas = props.canvas;
+<<<<<<< HEAD
     const colorRef = useRef('#000000');  // : 값이 바뀌어도 렌더링되지 않음.
+=======
+    const color = useRef('white');  // : 값이 바뀌어도 렌더링되지 않음.
+>>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
 
 
     function drawCurve() {
@@ -235,7 +239,6 @@ export default function LineSubmenu(props) {
             <p>
                 <LineOutlinedIcon children={"straight line"} onClick={drawStraight}/>
                 <HighlightOutlinedIcon htmlFor={"freedrawing"} children={"free drawing mode"} onClick={drawCurve}/>
-                
             </p>
             <p>
             <select id='drawing-mode' onChange={setDrawingMode} style={{}}>

@@ -12,14 +12,17 @@ import RightSidebar from './Layout/RightSidebar';
 //TODO: Canvas: 버튼기능구현 layout으로 분배
 //TODO: ESLint사용해 정리해보자 https://velog.io/@velopert/eslint-and-prettier-in-react
 //TODO: tooltip 예쁘게 https://css-tricks.com/exploring-what-the-details-and-summary-elements-can-do/
+//TODO: canvas: CUSTOM CORNERS  https://objectcomputing.com/resources/publications/sett/june-2014-drawing-with-fabricjs
 //TODO: point색 사용해서 3색으로 정리
+//TODO: 한글 영어 혼용, 대문자소문자 통일
 
 //Sidebar:type:radio
-//TODO: canvas: CUSTOM CORNERS  https://objectcomputing.com/resources/publications/sett/june-2014-drawing-with-fabricjs
-//TODO: sidebar: texticon 하나만 덩그라니 이상함
-//TODO: 한글 영어 혼용, 대문자소문자 통일
 //TODO: leftsidebarclose에 메뉴늘리고 바로 클릭할수 있도록
 //FIXME: canvas가 열릴때 렉걸림
+//FIXME:도형위에 그리면 같이 움직임
+//FIXME: colorpicker를 누르면 keydown이 안먹힘
+//FIXME: colorpicker 다시 같은 색으로 누르거나 다른 객체를 선택하고 누를시 적용안됌=>onchange라그런거 같음
+//TODO: colorpicker 사용하고 나서 다시 default로 돌아가도록
 
 //canvas
 import Header from "./component/Header";
@@ -28,6 +31,7 @@ import Layer from "./component/Layer";
 import * as common from "./component/submenu/common"
 //TODO: Canvas:이미지 드래그앤 드롭으로 이미지 집어넣기, 복사 붙여넣기로 집어넣기
 //TODO: Canvas:객체들고 옮길때 canvas에 중앙선or경계 표시
+//TODO: freedrwaing은 레이어가 안생김
 
 
 export default function App(props) {
@@ -38,14 +42,100 @@ export default function App(props) {
     useEffect(() => {  //rendering 후 한 번 실행  
         setCanvas(initCanvas());
     }, []);
-
+    
     const zoomInfo=useRef();
+<<<<<<< HEAD
 
     const figureType = ['rect','circle','triangle','image'];
+=======
+    //Rightsidebar
+    const [Items,setItems]=useState([]);
+    const nextId=useRef(1);
+    // var nextId =useRef(canvas.objectNum);
+
+    //TODO: 실제로 객체도 지워지도록
+    function delItem(canvas,id){
+        setItems(
+            Items=>(Items.filter(Item=>Item.id !== id))
+            )
+        // console.log("objectid:",id);
+        canvas.getObjects().forEach(function(object) {
+            if(object.id === id) {
+                canvas.remove(object);
+            }
+        })
+        canvas.discardActiveObject(); // 그룹 삭제 시 빈 sizebox 남아있는 거 제거 
+        common.updateStates(canvas);
+        // canvas.renderAll();
+    }
+        
+    //TODO: modal 애니메이션 효과추가
+    function addLayerItem(canvas,imgSrc){
+        //add items
+        // console.log("addlayer");
+        // let objectcomponent=ReactDOMServer.renderToStaticMarkup(object);
+        // console.log("origianlItems: ",Items);
+        let newItems=[
+            {name:"items"+(canvas.objectNum),//nextId.current
+            id:(canvas.objectNum),//nextId.current
+            img:imgSrc},
+        ...Items];
+        // console.log("obectNum(id): ",canvas.objectNum);
+        // console.log("newItems: ",newItems);
+        setItems(newItems);
+        // ++canvas.objectNum;//nextId.current+=1;
+    }
+
+    //index=>nexPos로 아이템이 보내진다.
+    const moveItem =(contents,fromId, toId)=>{
+        let oriPos= contents.findIndex(obj=>obj.id === Number(fromId));
+        let newPos=contents.findIndex(obj=>obj.id === Number(toId));
+        const newContents=[...contents];
+        if(newPos<=0){
+        newPos = 0;
+        }
+        console.log("oriPos",oriPos);
+        console.log("newPos",newPos);
+        //3=>0
+        let moveStep=oriPos-newPos;
+
+        newContents.splice(oriPos,1);
+        newContents.splice(newPos,0,contents[oriPos]);
+        setItems(newContents);
+
+        //도형앞으로, 뒤로 미루는 부분
+        let objects = canvas.getObjects();
+        let obj;
+        console.log(typeof(fromId));
+        console.log(typeof(objects[0].id));
+        for (var i = 0; i < objects.length; i++) {
+            if (Number(objects[i].id) == fromId) {
+                obj=objects[i];
+                console.log(obj);
+                if(moveStep>0){//upward
+                    for(i=0;i<moveStep;i++){
+                        canvas.bringForward(obj);
+                        console.log(obj);
+                    }
+                }else{
+                    for(i=0;i<(moveStep*-1);i++){
+                        canvas.sendToBack(obj);
+                    }
+                }
+                break
+            }
+        }
+        // canvas.setActiveObject(obj);
+        // canvas.renderAll(); 
+    }
+
+
+>>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
 
     useEffect(()=>{
         if (canvas) {
-           
+            
+            canvas.preserveObjectStacking = true;
             canvas.componentSize = common.initialComponentSize();
             common.setCanvasCenter(canvas);
 
@@ -59,6 +149,13 @@ export default function App(props) {
             })
             
             canvas.on({
+<<<<<<< HEAD
+=======
+                'mouse:down':()=>{
+                    console.log("mouse:down")
+                    document.getElementById('figure-width').readOnly = true;
+                },
+>>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
                 'mouse:wheel': (opt) => {
                      var delta = opt.e.deltaY;
                     if(delta<0){
@@ -90,12 +187,16 @@ export default function App(props) {
                 'selection:created': (e) => {
                     console.log('selection:created');
                     common.colorActiveLayer(canvas);
+<<<<<<< HEAD
                     setMenu(e.selected)
                     // var object = canvas.getActiveObject();
                     // document.getElementById('object-bar').open=true;
 
                     // if(object.main) canvas.discardActiveObject(object)
                     // document.getElementById('remove-object').disabled = false;
+=======
+                    // var object = canvas.getActiveObject();
+>>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
                 },
                 'object:added': () => {
 
@@ -104,9 +205,11 @@ export default function App(props) {
                     var object = objects[objects.length-1];
                     if(object.type!=='path'&& object.type!=='selection' && object.type!=='group' && object.cropRect!==true)
                     {
-                    canvas.setActiveObject(object);
-                    common.addLayer(canvas,object)
-                    common.colorActiveLayer(canvas);
+                        canvas.setActiveObject(object);
+                        // console.log(object.toDataURL());
+                        // console.log(common.addLayer(canvas,object));
+                        // addLayerItem(canvas,object.toDataURL());
+                        common.colorActiveLayer(canvas);
                     }
 
                     // if(object.main) canvas.discardActiveObject(object);
@@ -161,6 +264,14 @@ export default function App(props) {
         
             });
             
+<<<<<<< HEAD
+=======
+          
+            window.onkeydown = function (e) { // delete, backspace 키로 삭제
+                console.log("window.onkeydown")
+            //    common.keyDownEvent(canvas,e);
+            }
+>>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
         }
     },[canvas])
 
@@ -200,6 +311,7 @@ export default function App(props) {
     )
     }
 
+<<<<<<< HEAD
     //Rightsidebar
     const [Items,setItems]=useState([]);
     const nextId=useRef(1);
@@ -240,6 +352,9 @@ export default function App(props) {
         newContents.splice(newPos,0,contents[index]);
         setItems(newContents);
       }
+=======
+    
+>>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
 
     return (
         <div className={styles.layout}>

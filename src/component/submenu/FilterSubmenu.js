@@ -67,9 +67,17 @@ export default function FilterSubmenu(props) {
         return obj.filters[index];
     }
 
+    //aplyfilters는 obj함수
+    //applyfiltervalue value조절하는 것
+    //applyfilter(index,new f.invert등) 로 적용
+
     function applyFilterValue(index, prop, value) {
         const obj = common.getMainImage(canvas);
-        if (obj.filters[index]) {
+        let tmp=[];
+        tmp[2][2]=1;
+        console.log("tmp",tmp);
+        if (obj.filters[index]) {//FIXME: 이부분땜에 안되는듯 
+            // console.log("getMainImage",typeof(obj.filters[index]));
             obj.filters[index][prop] = value;
             obj.applyFilters();
             canvas.renderAll();
@@ -81,7 +89,7 @@ export default function FilterSubmenu(props) {
     }
 
     function brightness() {
-        applyFilter(5, document.getElementById('brightness').checked && new f.Brightness({
+        applyFilter(5,new f.Brightness({
             brightness: document.getElementById('brightness-value').value
         }));
     }
@@ -165,7 +173,7 @@ export default function FilterSubmenu(props) {
             <p><label> width</label> <input type="text" /></p>
             <p><label> height</label> <input type="text" /></p>
             <p>
-                {/* reset버튼을 오른쪽으로 가게하기위한 빈  span*/}
+                {/* reset버튼을 오른쪽으로 가게하기위한 빈 span*/}
                 <span></span>
                 <span></span>
                 <button type="button" id="reset" value="reset" onClick={resetFilter}>
@@ -173,6 +181,7 @@ export default function FilterSubmenu(props) {
                 </button>
             </p>  
 
+<<<<<<< HEAD
 {/* TODO: input checkbox 형태로 두어야 함. label을 이용해서 label에 스타일을 주려하는데 잘 안됨. */}
             <div id='filter-list-container' className={styles.effectContainer}>
                 <input type="checkbox" id="invert" onClick ={invert} />
@@ -185,10 +194,22 @@ export default function FilterSubmenu(props) {
 
                 <input type="checkbox" id="gamma" onClick={gamma}/>
                 <label htmlFor="gamma">Gamma</label>
+=======
+                {/* e.target.checked */}
+                <button id="invert" onClick={invert} > Invert</button>
+
+                {/* document.getElementById('brightness').checked */}
+                <button id="brightness" onClick={brightness}> Brightness</button>
+                <input type="range" id="brightness-value" defaultValue="0" min="-1" max="1" step="0.003921" onChange={brightnessValue} />
+
+                {/* e.target.checked */}
+                <button id="gamma" onClick={gamma}> Gamma</button>
+>>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
                 Red <input type="range" id="gamma-red" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaRed}/>
                 Green <input type="range" id="gamma-green" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaGreen} />
                 Blue <input type="range" id="gamma-blue" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaBlue} />
                 
+<<<<<<< HEAD
                 <input type='checkbox' id="contrast" onClick={contrast}/> 
                 <label htmlFor="contrast">Contrast</label>
                 <input type="range" id="contrast-value" defaultValue="0" min="-1" max="1" step="0.003921" onChange={contrastValue} />
@@ -203,6 +224,22 @@ export default function FilterSubmenu(props) {
 
                 <input type='checkbox' id="blur" onClick={blur}/>
                 <label htmlFor="blur">Blur</label>
+=======
+                {/* e.target.checked */}
+                <button id="contrast" onClick={contrast}> Contrast</button>
+                <input type="range" id="contrast-value" defaultValue="0" min="-1" max="1" step="0.003921" onChange={contrastValue} />
+
+                {/* e.target.checked */}
+                <button id="noise" onClick={noise}> Noise</button>
+                <input type="range" id="noise-value" defaultValue="0" min="0" max="600" step="50" onChange={noiseValue} />
+
+                {/* e.target.checked */}
+                <button id="pixelate" onClick={pixelate}>Pixelate</button>
+                <input type="range" id="pixelate-value" defaultValue="1" min="1" max="20" step="3" onChange={pixelateValue} />
+                
+                {/* e.target.checked */}
+                <button id="blur" onClick={blur}>Blur</button>
+>>>>>>> dd3791231c766f1d460c18b49841b2a538664f74
                 <input type="range" id="blur-value" defaultValue="0" min="0" max="1" step="0.1" onChange={blurValue} />
             </div>
         </div>
