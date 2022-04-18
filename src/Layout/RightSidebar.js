@@ -13,13 +13,14 @@ export default function RightSidebar (props) {
   const handleDragStart=(e)=>{
     setIsDragging(true); //내가 현재 drag중인가?
     e.dataTransfer.effectedAllowed = "move"; //드래그시 마우스 아래 생기는 십자가 버튼 막기
+    // console.log("handlestart TargetID: ",e.target);
     e.dataTransfer.setData("targetId",e.target.id); //잡은 item의 data를 담는다.[key],[value]
   }
   const handleDragOver = (e) => {
     e.preventDefault(); // touch같은 기본으로 발동하는 다른 이벤트를 막는다.
 
 
-    console.log(e.target.innerText.substr(5,));
+    // console.log(e.target);
 
   };
   const handleDrop = (e) => {
@@ -27,8 +28,11 @@ export default function RightSidebar (props) {
     setIsDragging(false);
 
     let newId = e.dataTransfer.getData('targetId'); // Start에서 저장한 데이터 풀어준다
+    console.log("newId",newId);
     // console.log(e.target.innerText);//FIXME:ID가안잡혀서 innerText로 했다.
-    let oriId=e.target.innerText.substr(5,)
+
+    let oriId=e.target.id.substr(5,);
+    console.log("oriId",oriId);
     // item의 위치를 바꿔주는 함수
     props.moveItem(props.Items,newId,oriId);
   };

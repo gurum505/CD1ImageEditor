@@ -62,14 +62,14 @@ export default function App(props) {
         //add items
         // console.log("addlayer");
         // let objectcomponent=ReactDOMServer.renderToStaticMarkup(object);
-        console.log("origianlItems: ",Items);
+        // console.log("origianlItems: ",Items);
         let newItems=[
             {name:"items"+(canvas.objectNum),//nextId.current
             id:(canvas.objectNum),//nextId.current
             img:imgSrc},
         ...Items];
-        console.log("obectNum(id): ",canvas.objectNum);
-        console.log("newItems: ",newItems);
+        // console.log("obectNum(id): ",canvas.objectNum);
+        // console.log("newItems: ",newItems);
         setItems(newItems);
         // ++canvas.objectNum;//nextId.current+=1;
     }

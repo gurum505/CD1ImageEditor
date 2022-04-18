@@ -101,7 +101,7 @@ export default function FigureSubmenu(props) {
             canvas.defaultCursor = 'default';
             mouseEventOff();
             props.addLayerItem(canvas,figure.toDataURL());
-            // common.modifyLayer(figure);
+            common.modifyLayer(figure);
             common.updateStates(canvas);
         });
 

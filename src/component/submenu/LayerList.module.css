@@ -18,7 +18,7 @@
   background-color: #202020;
   border-radius: 5px;
 }
-.Item:hover{
+/* .Item:hover{
   cursor: default;
   transition: 0.3s;
   border: 2px solid white;
@@ -27,7 +27,7 @@
   cursor: move;
   transition: 0.3s;
   border: 2px solid blueviolet;
-}
+} */
 .ItemButton{
   position:absolute;
   top: 0px;
@@ -45,7 +45,30 @@
   height: 100%;
   margin:0;
   padding:0;
+  z-index: 50;
+  background-color: red;
 }
 .ItemContent:hover{
   cursor: default;
+}
+.Img{
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  /* background-color: red; */
+  pointer-events: none;
+}
+.select{
+  position: absolute;
+  width:100px;
+  height: 60px;
+  background-color: transparent;
+  box-sizing: border-box;
+  z-index:100;
+
 }

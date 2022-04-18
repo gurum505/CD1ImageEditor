@@ -262,7 +262,7 @@ export function colorActiveLayer(canvas) {
     var objects = canvas.getActiveObjects();
     objects.forEach((object) => {
         if (document.getElementById(object.id))
-            document.getElementById(object.id).style.border = 'solid 2px blue'
+            document.getElementById(object.id).style.border = 'solid 2px white'
     })
      
 }
