@@ -235,7 +235,6 @@ export default function LineSubmenu(props) {
             <p>
                 <LineOutlinedIcon children={"straight line"} onClick={drawStraight}/>
                 <HighlightOutlinedIcon htmlFor={"freedrawing"} children={"free drawing mode"} onClick={drawCurve}/>
-                
             </p>
             <p>
             <select id='drawing-mode' onChange={setDrawingMode} style={{}}>
