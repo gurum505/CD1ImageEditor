@@ -138,7 +138,7 @@ export default function App(props) {
                 'selection:created': () => {
                     console.log('selection:created');
                     common.colorActiveLayer(canvas);
-                    var object = canvas.getActiveObject();
+                    // var object = canvas.getActiveObject();
                     // if(object.main) canvas.discardActiveObject(object)
                     // document.getElementById('remove-object').disabled = false;
                 },

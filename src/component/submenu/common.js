@@ -252,9 +252,12 @@ export function removeAllLayer(canvas) {
 // 활성화(선택) 되어 있는 layer 빨간색으로 표시 
 export function colorActiveLayer(canvas) {
 
-    var layerElements = document.getElementsByClassName('layer-list');
-    for (let i = 0; i < layerElements.length; i++) {
-        layerElements[i].style.border = 'solid gray';
+    //FIXME:모든 objectNum을 돌기 때문에 + 매 클릭마다 === 성능걱정이 좀 됌
+    for (let i = 1; i <= canvas.objectNum; i++) {
+        let layerElement = document.getElementById(i);
+        // console.log("layerElement:",layerElements);
+        if (layerElement)
+            layerElement.style.border = 'solid 2px gray';
     }
     var objects = canvas.getActiveObjects();
     objects.forEach((object) => {
