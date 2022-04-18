@@ -266,7 +266,10 @@ export function colorActiveLayer(canvas) {
 
 export function modifyLayer(object) {
     var layer = document.getElementById(object.id);
+    // console.log(layer);
+    // var layer = document.getElementById('rightsidebar-item-scroll');
     var img = layer.querySelector('img');
+    // console.log(img)
     var src;
     try {
         src = object.toDataURL();
@@ -282,19 +285,20 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     const layerCanvas = new fabric.Canvas();
     layerCanvas.setWidth(canvas.width);
     layerCanvas.setHeight(canvas.height);
-    layerCanvas.backgroundColor = 'red';
+    layerCanvas.backgroundColor = 'red'; //이거 되나?
 
     var imgTag = document.createElement('img');
-    imgTag.crossOrigin = 'anonymous'
-    var src;
+    imgTag.crossOrigin = 'anonymous' //img속성1
+    var src;                         
     // src = object.toDataURL()
-    console.log(object)
+    // console.log(object)
     try {
         src = object.toDataURL();
     } catch (e) {
         src = object.getSrc();
         console.log(src)
     }
+    //img속성2
     imgTag.src = src;
     imgTag.margin = 0;
     imgTag.padding = 0;
@@ -308,6 +312,7 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
         console.log(canvas.getActiveObjects())
         canvas.renderAll();
     }
+
     const div = document.createElement('div');
     div.id = object.id;
     div.className = 'layer-list'
@@ -337,10 +342,11 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     }
 
 
-    div.appendChild(imgTag)
-    div.appendChild(objectBtn);
-    div.appendChild(deleteBtn);
-    el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
+    // div.appendChild(imgTag)
+    // div.appendChild(objectBtn);
+    // div.appendChild(deleteBtn);
+    // el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
+    return imgTag.src;
 }
 
 

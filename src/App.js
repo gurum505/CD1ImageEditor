@@ -38,8 +38,56 @@ export default function App(props) {
     useEffect(() => {  //rendering 후 한 번 실행  
         setCanvas(initCanvas());
     }, []);
-
+    
     const zoomInfo=useRef();
+    //Rightsidebar
+    const [Items,setItems]=useState([]);
+    const nextId=useRef(1);
+    // var nextId =useRef(canvas.objectNum);
+
+    //TODO: 실제로 객체도 지워지도록
+    function delItem(id){
+        setItems(
+            Items=>(Items.filter(Item=>Item.id !== id))
+            )
+        }
+        
+        //TODO: 객체도 되는지 <canvas를 집어넣네?>
+        //TODO: 객체를 추가했을 때 레이어도 추가되도록, 선택시 레이어도선택되도록
+        //TODO: 누르면 element생성하도록: popup창?
+        //TODO: 효과집어넣기 원래layer빈칸 옮길때 layer색바꾸기 등
+        //TODO: modal 애니메이션 효과추가
+        
+    function addLayerItem(canvas,imgSrc){
+        //add items
+        // console.log("addlayer");
+        // let objectcomponent=ReactDOMServer.renderToStaticMarkup(object);
+        console.log("origianlItems: ",Items);
+        let newItems=Object.assign([
+            {name:"items"+(canvas.objectNum),//nextId.current
+            id:(canvas.objectNum),//nextId.current
+            img:imgSrc}
+        ],Items);
+        console.log("obectNum(id): ",canvas.objectNum);
+        console.log("newItems: ",newItems);
+        setItems(newItems);
+        // ++canvas.objectNum;//nextId.current+=1;
+    }
+
+    const moveItem =(contents, value, oriId)=>{
+        const index= contents.findIndex(obj=>obj.id === Number(value));
+        let newPos=contents.findIndex(obj=>obj.id === Number(oriId));
+        const newContents=[...contents];
+        if(newPos<=0){
+        newPos = 0;
+        }
+        newContents.splice(index,1);
+        newContents.splice(newPos,0,contents[index]);
+        setItems(newContents);
+    }
+
+
+
     useEffect(()=>{
         if (canvas) {
            
@@ -101,9 +149,10 @@ export default function App(props) {
                     var object = objects[objects.length-1];
                     if(object.type!=='path'&& object.type!=='selection' && object.type!=='group' && object.cropRect!==true)
                     {
-                    canvas.setActiveObject(object);
-                    common.addLayer(canvas,object)
-                    common.colorActiveLayer(canvas);
+                        canvas.setActiveObject(object);
+                        // console.log(common.addLayer(canvas,object));
+                        addLayerItem(canvas,common.addLayer(canvas,object));
+                        common.colorActiveLayer(canvas);
                     }
 
                     // if(object.main) canvas.discardActiveObject(object);
@@ -184,47 +233,7 @@ export default function App(props) {
     )
     }
 
-    //Rightsidebar
-    const [Items,setItems]=useState([]);
-    const nextId=useRef(1);
-    // var nextId =useRef(canvas.objectNum);
-
-    //TODO: 실제로 객체도 지워지도록
-    function delItem(id){
-        setItems(
-        Items=>(Items.filter(Item=>Item.id !== id))
-        )
-    }
-
-    //TODO: 객체도 되는지 <canvas를 집어넣네?>
-    //TODO: 객체를 추가했을 때 레이어도 추가되도록, 선택시 레이어도선택되도록
-    //TODO: 누르면 element생성하도록: popup창?
-    //TODO: 효과집어넣기 원래layer빈칸 옮길때 layer색바꾸기 등
-    //TODO: modal 애니메이션 효과추가
-
-    function addLayerItem(canvas,select){
-        //add items
-        // console.log("addlayer");
-        let newItems=[
-        {name:"items"+(canvas.objectNum),//nextId.current
-        id:(canvas.objectNum)},//nextId.current
-        ...Items
-        ];
-        setItems(newItems);
-        ++canvas.objectNum;//nextId.current+=1;
-    }
-
-    const moveItem =(contents, value, oriId)=>{
-        const index= contents.findIndex(obj=>obj.id === Number(value));
-        let newPos=contents.findIndex(obj=>obj.id === Number(oriId));
-        const newContents=[...contents];
-        if(newPos<=0){
-          newPos = 0;
-        }
-        newContents.splice(index,1);
-        newContents.splice(newPos,0,contents[index]);
-        setItems(newContents);
-      }
+    
 
     return (
         <div className={styles.layout}>
