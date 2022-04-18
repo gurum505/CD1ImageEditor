@@ -12,14 +12,17 @@ import RightSidebar from './Layout/RightSidebar';
 //TODO: Canvas: 버튼기능구현 layout으로 분배
 //TODO: ESLint사용해 정리해보자 https://velog.io/@velopert/eslint-and-prettier-in-react
 //TODO: tooltip 예쁘게 https://css-tricks.com/exploring-what-the-details-and-summary-elements-can-do/
+//TODO: canvas: CUSTOM CORNERS  https://objectcomputing.com/resources/publications/sett/june-2014-drawing-with-fabricjs
 //TODO: point색 사용해서 3색으로 정리
+//TODO: 한글 영어 혼용, 대문자소문자 통일
 
 //Sidebar:type:radio
-//TODO: canvas: CUSTOM CORNERS  https://objectcomputing.com/resources/publications/sett/june-2014-drawing-with-fabricjs
-//TODO: sidebar: texticon 하나만 덩그라니 이상함
-//TODO: 한글 영어 혼용, 대문자소문자 통일
 //TODO: leftsidebarclose에 메뉴늘리고 바로 클릭할수 있도록
 //FIXME: canvas가 열릴때 렉걸림
+//FIXME:도형위에 그리면 같이 움직임
+//FIXME: colorpicker를 누르면 keydown이 안먹힘
+//FIXME: colorpicker 다시 같은 색으로 누르거나 다른 객체를 선택하고 누를시 적용안됌=>onchange라그런거 같음
+//TODO: colorpicker 사용하고 나서 다시 default로 돌아가도록
 
 //canvas
 import Header from "./component/Header";
@@ -28,6 +31,7 @@ import Layer from "./component/Layer";
 import * as common from "./component/submenu/common"
 //TODO: Canvas:이미지 드래그앤 드롭으로 이미지 집어넣기, 복사 붙여넣기로 집어넣기
 //TODO: Canvas:객체들고 옮길때 canvas에 중앙선or경계 표시
+//TODO: freedrwaing은 레이어가 안생김
 
 
 export default function App(props) {

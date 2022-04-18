@@ -103,8 +103,9 @@ export default function FigureSubmenu(props) {
             props.addLayerItem(canvas,figure.toDataURL());
             common.modifyLayer(figure);
             common.updateStates(canvas);
+            canvas.discardActiveObject(figure)
+            
         });
-
     }
 
     function setFigureWidth(e){
