@@ -94,7 +94,8 @@ export default function App(props) {
 
     useEffect(()=>{
         if (canvas) {
-           
+            
+            canvas.preserveObjectStacking = true;
             canvas.componentSize = common.initialComponentSize();
             common.setCanvasCenter(canvas);
 
@@ -143,8 +144,6 @@ export default function App(props) {
                     console.log('selection:created');
                     common.colorActiveLayer(canvas);
                     // var object = canvas.getActiveObject();
-                    // if(object.main) canvas.discardActiveObject(object)
-                    // document.getElementById('remove-object').disabled = false;
                 },
                 'object:added': () => {
 
