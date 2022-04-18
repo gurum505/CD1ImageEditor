@@ -1,12 +1,12 @@
 import * as common from './common'
 export default function ColorPicker(props){
     const canvas = props.canvas;
-    const color = props.color;
+    var colorRef = props.colorRef;
     const figure = ['rect','triangle','circle'];
 
     function selectColor(e) {
         const selectedColor = e.target.value;
-        color.current = selectedColor;
+        colorRef.current = selectedColor;
 
         var objects = canvas.getActiveObjects();
         objects.forEach((object)=>{
@@ -14,26 +14,22 @@ export default function ColorPicker(props){
                 object.set({ fill: `${selectedColor}` });
         }
      
-
         if(object){
             if(object.type==='line' ||object.type==='path'){
                 object.set({stroke: `${selectedColor}`});
             }
         }
 
-       
-
         common.modifyLayer(object)
         })
       
         if(canvas.isDrawingMode){
-            canvas.freeDrawingBrush.color = color.current;
+            canvas.freeDrawingBrush.color = colorRef.current;
         }
-   
         canvas.renderAll();
-
     }
+    
     return (
-        <input id="color" type="color" onChange={selectColor}  />
+        <input id="figure-color" type="color"  onChange={selectColor}  />
     );
 }

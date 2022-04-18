@@ -3,6 +3,8 @@ import LeftSidebarClosed from "../component/submenu/LeftSidebarClosed";
 import LeftSidebarOpened from "../component/submenu/LeftSidebarOpened";
 import { useEffect, useRef, useState} from "react";
 import * as common from "../component/submenu/common"
+
+import Submenu from "../component/Submenu";
 const LeftSidebar = (props) => {
   const {children, canvas, imageRef,image,setCanvas}=props;
   const [wid, setX] = useState(50)
@@ -38,7 +40,7 @@ const LeftSidebar = (props) => {
     setOpen(false);
       canvas.componentSize['leftbar']=50;
     }
-  },[imageRef,canvas.componentSize,image])//FIXME: image=>imageRef로 바꾸고 dependency추가했는데 의도에 맞나요?
+  },[imageRef,canvas.componentSize,image])//FIXME: image=>imageRef로 바꾸고 dependency추가했는데 의도에 맞나요? 
 
   function toggleMenu() {
       if (wid > 50) {
@@ -78,7 +80,6 @@ const LeftSidebar = (props) => {
   return (
     <div className={styles.container} >
       <div id='leftbar'style={{ width: `${wid}px`, height: '100%', transition:'0.5s ease' ,overflow:"hidden"}}>
-        
         <div id='leftbar-content' className={styles.content}>
           {page(isOpen)}
         </div>

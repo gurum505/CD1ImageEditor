@@ -40,6 +40,9 @@ export default function App(props) {
     }, []);
 
     const zoomInfo=useRef();
+
+    const figureType = ['rect','circle','triangle','image'];
+
     useEffect(()=>{
         if (canvas) {
            
@@ -56,10 +59,6 @@ export default function App(props) {
             })
             
             canvas.on({
-                'mouse:down':()=>{
-                    console.log("ㅎㅇ")
-                    document.getElementById('figure-width').readOnly = true;
-                },
                 'mouse:wheel': (opt) => {
                      var delta = opt.e.deltaY;
                     if(delta<0){
@@ -73,24 +72,28 @@ export default function App(props) {
                     }
                     common.setCanvasCenter(canvas);
                 },
-                'selection:updated':()=>{
+                'selection:updated':(e)=>{
                     console.log('selection:updated')
+                    setMenu(e.selected);
                     common.colorActiveLayer(canvas);
                 },
                 'object:removed': () => {
                     console.log('object:removed');
                 },
                 'selection:cleared': () => {
-                    console.log('selection:cleared');
-                    canvas.renderAll();
+                    // console.log('selection:cleared');
+                    // canvas.renderAll();
                     common.colorActiveLayer(canvas);
                     // document.getElementById('remove-object').disabled = true;
                     
                 },
-                'selection:created': () => {
+                'selection:created': (e) => {
                     console.log('selection:created');
                     common.colorActiveLayer(canvas);
-                    var object = canvas.getActiveObject();
+                    setMenu(e.selected)
+                    // var object = canvas.getActiveObject();
+                    // document.getElementById('object-bar').open=true;
+
                     // if(object.main) canvas.discardActiveObject(object)
                     // document.getElementById('remove-object').disabled = false;
                 },
@@ -158,14 +161,27 @@ export default function App(props) {
         
             });
             
-          
-            window.onkeydown = function (e) { // delete, backspace 키로 삭제
-                console.log("ㅋ")
-            //    common.keyDownEvent(canvas,e);
-            }
         }
     },[canvas])
-   
+
+    function setMenu(selectedObjects){
+        if(selectedObjects.lenght>1) return;
+        var object = selectedObjects[0];
+        if(object.cropRect|| object.main) return ;
+        var details = document.querySelector('#opened-leftbar').children;
+        for(var i=0; i<details.length; i++) {
+            details[i].open = false;
+        }
+
+        if(figureType.includes(object.type)){
+            document.querySelector('#object-menu').open=true;
+        }
+
+        if(object.type==='textbox')  document.querySelector('#textbox-menu').open=true;
+
+        if(object.type ==='line' || object.type==='path') document.querySelector('#drawing-menu').open=true;
+    }
+
     const initCanvas = () => {
         
         return (
@@ -204,7 +220,6 @@ export default function App(props) {
 
     function addLayerItem(canvas,select){
         //add items
-        console.log("addlayer");
         let newItems=[
         {name:"items"+(canvas.objectNum),//nextId.current
         id:(canvas.objectNum)},//nextId.current

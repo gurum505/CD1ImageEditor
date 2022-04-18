@@ -4,6 +4,7 @@ import backgroundImage from '../../img/background.png'
 import {
     BorderOutlinedIcon,FormOutlinedIcon
 } from "../icons/icons";
+import { useEffect } from "react";
 
 export default function CropSubmenu(props) {
     const canvas = props.canvas;
@@ -71,7 +72,7 @@ export default function CropSubmenu(props) {
     }
     function addSelectionRect(ratio = '') {
         canvas.discardActiveObject();
-
+        if(selectionRect) canvas.remove(selectionRect);
         var ratio;
         if (ratio === '3:2') ratio = 3 / 2
         else if (ratio === '4:3') ratio = 4 / 3
@@ -85,8 +86,7 @@ export default function CropSubmenu(props) {
             opacity: 1,
             width: canvas.height * ratio,
             height: canvas.height - 3,
-            hasRotatingPoint: false,
-            transparentCorners: false,
+            hasRotatingPoint: true,
             cornerColor: 'white',
             cornerStrokeColor: 'black',
             borderColor: 'black',
@@ -107,16 +107,13 @@ export default function CropSubmenu(props) {
         if (canvas.getActiveObject() === selectionRect) canvas.remove(selectionRect);
         addSelectionRect(ratio);
         canvas.setActiveObject(selectionRect);
-        var cropBtn = document.querySelectorAll('.crop-button');
-        cropBtn.forEach((btn) => {
-            btn.disabled = true;
-        })
+        
     }
 
     function apply() {
         var mainImage = common.getMainImage(canvas);
-        canvas.undoStack[canvas.undoStack.length-1].recentStyleSize = {'width': canvas.initialWidth, 'height':canvas.initialHeight,'mainImage':mainImage}
-        if (canvas.getActiveObject() === selectionRect) canvas.remove(selectionRect);
+        canvas.undoStack[canvas.undoStack.length-1].recentStyleSize = {'width': common.getCanvasStyleWidth(), 'height':common.getCanvasStyleHeight(),'mainImage':mainImage}
+        canvas.remove(selectionRect);
         
         canvas.setBackgroundImage(null);
 
@@ -133,6 +130,7 @@ export default function CropSubmenu(props) {
             });
 
             common.removeAllObjects(canvas,true)
+            console.log(canvas.getObjects())
 
             canvas.setDimensions({ //캔버스 크기 조절
                 width: selectionRect.getScaledWidth(),
@@ -154,71 +152,25 @@ export default function CropSubmenu(props) {
             canvas.renderAll();
         })
 
-        var cropBtn = document.querySelectorAll('.crop-button');
-            cropBtn.forEach((btn) => {
-                btn.disabled = false;
-            });
-        // var temp  = canvas.toCanvasElement({'left':100});
-        // console.log(temp);
-        // console.log(selectionRect);
-        // console.log(canvas)
-        // canvas.set({
-        //     'left': 100,
-        // })
-        // // canvas.undoStack[canvas.undoStack.length-1]['recentStyleSize'] = {'width':getCanvasStyleWidth(), 'height':getCanvasStyleHeight(),'image':canvas.backgroundImage};
-        // canvas.setHeight(300)
-        // canvas.setWidth(300);
-
-        // if (canvas.getActiveObject() === selectionRect) canvas.remove(selectionRect);
-        // var prevObjects = canvas.getObjects(); //undo 하기 전에 layer 제거 
-        // prevObjects.forEach((object) => {
-        //     if (object.cropRect !== true)
-        //         document.getElementById(object.id).remove();
-        // });
-
-        //     canvas.setDimensions({
-        //         width: selectionRect.getScaledWidth(),
-        //         height: selectionRect.getScaledHeight()
-        //     });
-
-        //     canvas.setBackgroundImage(currentImage).renderAll();
-        //     var prevObjects = canvas.getObjects();
-        //     prevObjects.forEach((object) => {
-        //         canvas.remove(object);
-        //     });
-        //     canvas.remove(selectionRect);
-        //     var cropBtn = document.querySelectorAll('.crop-button');
-        //     cropBtn.forEach((btn) => {
-        //         btn.disabled = false;
-        //     });
-        //     canvas.initialWidth = currentImage.width;
-        //     canvas.initialHeight = currentImage.height;
-        //     common.setCanvasCenter(canvas);
-        //     common.updateStates(canvas,true);
-        //     // props.setButtonType('');
-        // });
         
     }
 
 
     function cropCustom() {
         canvas.discardActiveObject();
-
+        if(selectionRect) canvas.remove(selectionRect)
         // canvas.selection = false; 
         var objects = canvas.getObjects();
 
         canvas.defaultCursor = 'crosshair';
         if (canvas.getActiveObject() === selectionRect) canvas.remove(selectionRect);
         var cropBtn = document.querySelectorAll('.crop-button');
-        cropBtn.forEach((btn) => {
-            btn.disabled = true;
-        })
+ 
 
         var isDown, origX, origY;
 
         canvas.on('mouse:down', function (o) {
             // canvas.selection = false;
-
             objects.forEach((object) => {     //드래그 하면 기존의 객체까지 group select가 되어서 제대로 된 left, top 을 얻을 수 없음
                 object.set({'selectable':false})
                 
@@ -228,7 +180,7 @@ export default function CropSubmenu(props) {
             origX = pointer.x; //클릭시 마우스 x좌표
             origY = pointer.y; //클릭시 마우스 y좌표 
             selectionRect = new fabric.Rect({
-                fill: 'transparent',
+                fill: 'rgb(0,0,0,0)',
                 left: origX,
                 top: origY,
                 originX: 'left',
@@ -276,6 +228,8 @@ export default function CropSubmenu(props) {
         });
 
         canvas.on('mouse:up', function (o) {
+
+            canvas.selection=true;
             objects.forEach((object) => {     //드래그 하면 기존의 객체까지 group select가 되어서 제대로 된 left, top 을 얻을 수 없음
                 if(!object.main)
                 object.set('selectable', true);
@@ -286,20 +240,17 @@ export default function CropSubmenu(props) {
             canvas.off('mouse:down');
             canvas.off('mouse:move');
             canvas.off('mouse:up');
-            cropBtn.forEach((btn) => {
-                btn.disabled = false;
-            })
+   
             canvas.defaultCursor = 'default';
         });
+
 
     }
 
     function cancle() {
         if (canvas.getActiveObject() === selectionRect) canvas.remove(selectionRect);
         var cropBtn = document.querySelectorAll('.crop-button');
-        cropBtn.forEach((btn) => {
-            btn.disabled = false;
-        })
+
     }
 
 
@@ -311,13 +262,15 @@ export default function CropSubmenu(props) {
             <BorderOutlinedIcon onClick={() => crop('1:1')} children={"1:1"}/>
         </p>
         <p>
-            <button className="crop-button" >3:2</button>
+            <button className="crop-button" onClick={()=>crop('3:2')}>3:2</button>
             <button className="crop-button" onClick={() => crop('4:3')}>4:3</button>
             <button className="crop-button" onClick={() => crop('16:9')}>16:9</button>
         </p>
             <hr></hr>
-            <p><button onClick={apply}>apply</button>
-            <button onClick={cancle}>cancel</button></p>
+            <p id = "crop-bottom">
+                <button onClick={apply}>apply</button>
+                <button onClick={cancle}>cancel</button>
+            </p>
             </div>
     )
 }

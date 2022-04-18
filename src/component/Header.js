@@ -199,6 +199,7 @@ export default function Header(props) {
                 if(json['recentStyleSize']['mainImage'])
                     canvas.add(json['recentStyleSize']['mainImage']);
                 canvas.discardActiveObject(mainImage);
+
                 common.setCanvasStyleSize(json['recentStyleSize']['width'],json['recentStyleSize']['height']);
                 common.setCanvasCenter(canvas);
  

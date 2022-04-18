@@ -181,7 +181,7 @@ export function updateStates(canvas, isCropped = false) {
     if (objects.length > 0)
         for (var j = 0; j < objects.length; j++) {
             // let clonedOject = Object.assign(Object.create(Object.getPrototypeOf(objects[j])), objects[j])
-            objects[j].clone((cloned) => { newObjects.push(cloned) }, ['id', 'main'])
+            objects[j].clone((cloned) => { newObjects.push(cloned) }, ['id', 'main','fill'])
         }
 
     if (filters) {
@@ -288,12 +288,10 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     imgTag.crossOrigin = 'anonymous'
     var src;
     // src = object.toDataURL()
-    console.log(object)
     try {
         src = object.toDataURL();
     } catch (e) {
         src = object.getSrc();
-        console.log(src)
     }
     imgTag.src = src;
     imgTag.margin = 0;
