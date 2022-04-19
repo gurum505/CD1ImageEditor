@@ -1,4 +1,5 @@
 ### deploy  
+https://gurum505.github.io/CD1ImageEditor/
 
 ### Dependancy
 npm install gh-pages 
