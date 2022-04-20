@@ -2,22 +2,14 @@ import { fabric } from "fabric";
 import {
     FolderOpenOutlinedIcon, CloudDownloadOutlinedIcon, UploadOutlinedIcon,
     FileImageOutlinedIcon, RedoOutlinedIcon, UndoOutlinedIcon, DownloadOutlinedIcon,
-    DiffOutlinedIcon,CopyOutlinedIcon
-
+    DiffOutlinedIcon,CopyOutlinedIcon,DeleteOutlinedIcon
 } from "./icons/icons"
 import { useEffect } from "react";
 import styles from "./Header.module.css"
-import backgroundImage from '../img/background.png'
-
-
+// import backgroundImage from '../img/background.png'
 import * as common from  './submenu/common'
-// import { CommentOutlined } from "@ant-design/icons";
-//2번째 줄- 즉시 효과를 갖는, 사이드바를 구성하기에 부적합한 부가적인 기능들    
 
-//복사 
-//<CopyOutlined />
-//삭제
-//<DeleteOutlined />
+
 
 export default function Header(props) {
     const canvas = props.canvas;
@@ -345,6 +337,21 @@ export default function Header(props) {
         });
     }
 
+    function deleteBtn() {
+        try{
+            var o = canvas.getActiveObjects();
+            o.forEach((object) => {
+                canvas.remove(object);
+                document.getElementById(object.id).remove();
+            });
+    
+           canvas.discardActiveObject(); // 그룹 삭제 시 빈 sizebox 남아있는 거 제거 
+            common.updateStates(canvas);
+        }
+        catch{}
+        
+    }
+
     return (
         <div id="header" className={styles.editorHeader}>
             
@@ -379,10 +386,11 @@ export default function Header(props) {
                 {/* 복붙 */}
                 <CopyOutlinedIcon id='copy' onClick={copy} children={"copy"}/>
                 <DiffOutlinedIcon id='paste' onClick={paste} children={"paste"}/>
+                <DeleteOutlinedIcon id="deleteBtn" onClick={deleteBtn} children={"delete"}/>
             </div>
 
             <div className={styles.sideLine}/>
-            
+
             {/* redo undo */}
             <div>
                 {/* 이전 */}

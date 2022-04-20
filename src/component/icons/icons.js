@@ -1,7 +1,7 @@
 import {FontSizeOutlined,MenuOutlined,BorderOutlined,AreaChartOutlined, LineOutlined
 ,SettingOutlined,AlignLeftOutlined,AlignCenterOutlined,AlignRightOutlined,HighlightOutlined 
 ,BoldOutlined,ItalicOutlined,LineHeightOutlined,GithubOutlined,CloseOutlined,
-    FolderOpenOutlined,CloudDownloadOutlined,UploadOutlined,UnderlineOutlined,
+    FolderOpenOutlined,CloudDownloadOutlined,UploadOutlined,UnderlineOutlined,DeleteOutlined,
     FileImageOutlined,RedoOutlined,UndoOutlined,DownloadOutlined,AppstoreOutlined,
     EditOutlined,DragOutlined,ZoomInOutlined,ZoomOutOutlined,ScissorOutlined,FormOutlined,
     ExpandOutlined,EyeOutlined,CopyOutlined,DiffOutlined,PlusOutlined,SearchOutlined} from "@ant-design/icons"
@@ -40,6 +40,16 @@ export const UnderlineOutlinedIcon=({onClick, children, htmlFor})=>{
     )
 } */}
 
+export const DeleteOutlinedIcon=({onClick, children, htmlFor})=>{
+    return(
+        <span className={styles.container}>
+            <label htmlFor={htmlFor}>
+            <DeleteOutlined className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+            </label>
+        </span>
+    )
+}
 
 export const FormOutlinedIcon=({onClick, children, htmlFor})=>{
     return(
