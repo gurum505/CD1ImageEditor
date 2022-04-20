@@ -1,17 +1,14 @@
 import { fabric } from "fabric";
 import OnlineImage from "./OnlineImage";
 import * as common from './common'
-import {ImageIcon,ImageFromInternetIcon}from "../icons/icons";
-import styles from "./LeftSidebarOpened.module.css"
+import { ImageIcon, ImageFromInternetIcon } from "../icons/icons";
 import { useState } from "react";
-
+import styles from "./LeftSidebarSubmenu.module.css"
 
 export default function ImageSubmenu(props) {
     const canvas = props.canvas;
-    const [onlineImageOption,setOnlineImageOption] = useState(false);
-
+    const [onlineImageOption, setOnlineImageOption] = useState(false);
     function addLocalImage(e) {
-        console.log("이미지 렌더링")
         e.target.value = ''
         canvas.isDrawingMode = false;
         document.getElementById("add-local-image-file").onchange = function (e) {
@@ -22,20 +19,22 @@ export default function ImageSubmenu(props) {
                 image.onload = function () {
                     var img = new fabric.Image(image);
                     img.set({
-                        id : ++canvas.objectNum,
+                        id: ++canvas.objectNum,
                         left: Math.floor(Math.random() * 101),
                         top: Math.floor(Math.random() * 101),
                     });
 
                     if (img.width > canvas.width || img.height > canvas.height) {
+                        var ratio = img.height/img.width;
                         img.scaleToWidth(canvas.width / 2);
-                        img.scaleToHeight(canvas.height / 2);
+                        img.scaleToHeight(canvas.width / 2 * ratio);
+                        console.log(img)
                     }
 
-                   
+
                     canvas.add(img).setActiveObject(img);
                     common.updateStates(canvas);
-                    common.addLayer(canvas,img);
+                    common.addLayer(canvas, img);
 
                     canvas.renderAll();
 
@@ -49,14 +48,12 @@ export default function ImageSubmenu(props) {
         setOnlineImageOption(!onlineImageOption)
     }
     return (
-        <>
-         <p><ImageIcon htmlFor={"add-local-image-file"} children={"from file"}/>
-            <input type="file" id="add-local-image-file" name="chooseFile" accept="image/*" onClick={addLocalImage} style={{display:'none'}}/>
-         <ImageFromInternetIcon htmlFor={"put htmlFor"} children={"from internet"} onClick={addOnlineImage}/>
-         </p>
-      
-        {onlineImageOption&& <OnlineImage  canvas={canvas}/>}
-           
-        </>
+        <div id='image-menu'>
+            <p><ImageIcon htmlFor={"add-local-image-file"} children={"from file"} />
+                <input type="file" id="add-local-image-file" name="chooseFile" accept="image/*" onClick={addLocalImage} style={{ display: 'none' }} />
+                <ImageFromInternetIcon htmlFor={"put htmlFor"} children={"from internet"} onClick={addOnlineImage} />
+            </p>
+            {onlineImageOption && <OnlineImage canvas={canvas} />}
+        </div>
     )
 }

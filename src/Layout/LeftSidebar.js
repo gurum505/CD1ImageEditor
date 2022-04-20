@@ -1,87 +1,101 @@
 import styles from "./LeftSidebar.module.css";
-import LeftSidebarClosed from "../component/submenu/LeftSidebarClosed";
-import LeftSidebarOpened from "../component/submenu/LeftSidebarOpened";
-import { useEffect, useRef, useState} from "react";
+
+
+import FigureSubmenu from "../component/submenu/FigureSubmenu";
+import TextBoxSubmenu from "../component/submenu/TextBoxSubmenu";
+import FilterSubmenu from "../component/submenu/FilterSubmenu";
+import LineSubmenu from "../component/submenu/LineSubmenu";
+import CropSubmenu from "../component/submenu/CropSubmenu";
+
+import {
+  FontSizeOutlinedIcon, MenuOutlinedIcon, AppstoreOutlinedIcon
+  , AreaChartOutlinedIcon, LineOutlinedIcon, ScissorOutlinedIcon
+} from "../component/icons/icons";
+
+import { useEffect, useRef, useState } from "react";
 import * as common from "../component/submenu/common"
+const LeftSidebar = ({ canvas, imageRef, image }) => {
 
-import Submenu from "../component/Submenu";
-const LeftSidebar = (props) => {
-  const {children, canvas, imageRef,image,setCanvas}=props;
-  const [wid, setX] = useState(50)
-  const [isOpen, setOpen] = useState(false);
-  const [currentRoute,SetCurrentRoute] =useState("Menu");
-  
-  //사이드바 바깥을 클릭했을 때 닫히도록
-  //sidebar, canvas안에서는 안닫히고 나머지에서는 닫히도록
-  // const side=useRef();
-  // const handleClose = (e)=> {
-  //   let sideArea = side.current; //sidebar크기
-  //   let sideCildren = side.current.contains(e.target); //sidebar에 e.target이 들어가나
-  //   if(isOpen&&(!sideArea|| !sideCildren)){
-  //     toggleMenu();
-  //   }
-  // }
+  const recentSize = useRef('');
+  const [menu, setMenu] = useState('');
+  const menuRef = useRef('');
+  const [isOpened,setIsOpened] =useState(false);
 
-  // useEffect(()=> {
-  //   window.addEventListener('click', handleClose);
-  //   return () => {
-  //     window.removeEventListener('click', handleClose);
-  //   };
-  // })
-  
+  const figure = ['rect', 'triangle', 'circle', 'image'];
 
-  const beforeLeftbarOpenedSize = useRef(''); //leftbar 닫았을 때 닫기 전 캔버스 크기 유지를 위한 변수 
+
+  useEffect(() => {
+    window.onkeydown=(e)=>common.keyDownEvent(canvas,e)
+    canvas.componentSize = common.initialComponentSize(); // 최초 렌더링 이후 canvas에 componentSize 값 저장 
+    canvas.zoomInfo = '';
+  }, [])
+
   useEffect(()=>{
-    if( imageRef.current){
-      console.log(imageRef.current)
-      imageRef.current = !imageRef.current;
-    setX(50);
-    setOpen(false);
-      canvas.componentSize['leftbar']=50;
+    canvas.off('mouse:wheel')
+    canvas.on({
+      'mouse:wheel': (opt) => {
+        console.log('ㅋ')
+           var delta = opt.e.deltaY;
+          if(delta<0){
+              common.zoom(canvas,1.1);
+              let num=Number(canvas.zoomInfo.slice(0,-1));
+              canvas.zoomInfo=(num*1.1).toFixed(0).toString() + "%";
+          }else{
+              common.zoom(canvas,0.9);
+              let num=Number(canvas.zoomInfo.slice(0,-1));
+              canvas.zoomInfo=(num*0.9).toFixed(0).toString() + "%";
+          }
+    
+      }
+  });
+  
+  })
+  useEffect(() => {  //이후 메뉴를 여닫으며 렌더링 될 때마다 canvas component의 size값을 바꾸고 캔버스 중앙 위치 
+    var leftbar = document.querySelector('#leftbar').offsetWidth;
+    canvas.componentSize['leftbar'] = leftbar;
+    if (common.getCanvasStyleWidth() > common.getInnerSize(canvas)['innerWidth']) {
+      recentSize.current = { 'width': common.getCanvasStyleWidth(), 'height': common.getCanvasStyleHeight() }; //사이즈 조절 전 캔버스 크기 저장 
+      common.fitToProportion(canvas); //leftbar 열었을 때 캔버스 style width 가 가려진다면 
     }
-  },[imageRef,canvas.componentSize,image])//FIXME: image=>imageRef로 바꾸고 dependency추가했는데 의도에 맞나요? 
 
-  function toggleMenu() {
-      if (wid > 50) {
-          setX(50);
-          setOpen(false);
-          canvas.componentSize['leftbar']=50;
-      }
-      else {
-        beforeLeftbarOpenedSize.current = {'width':common.getCanvasStyleWidth(), 'height' : common.getCanvasStyleHeight()}
-          setX(200);
-          setOpen(true);
-          canvas.componentSize['leftbar']=200;
-      }
+    if (recentSize.current !== '' && leftbar === 48) { //저장한 캔버스 크기로 돌아감
+      common.setCanvasStyleSize(recentSize.current['width'], recentSize.current['height']);
+      recentSize.current = ''
+    }
+
+  
+    common.setCanvasCenter(canvas);
+  },[isOpened])
+
+ 
+  function changeMenu(menutype){
+    if(menu === menutype) {
+      setMenu('');
+      setIsOpened(false)
+    }else{
+      setMenu(menutype);
+      setIsOpened(true);
+    }
   }
-
-
-  function page(isOpen){
-    if(isOpen){
-      common.setCanvasCenter(canvas);
-      if(common.getCanvasStyleWidth()>common.getInnerSize(canvas)['innerWidth']){ //leftbar 열렸을 때 캔버스 크기를 넘으면 
-         common.fitToProportion(canvas)
-      }
-      return( 
-        <LeftSidebarOpened toggleMenu={toggleMenu}  currentRoute={currentRoute} canvas={canvas} addLayerItem={props.addLayerItem}/>
-      )
-
-    }
-    else{
-      common.setCanvasStyleSize(beforeLeftbarOpenedSize.current['width'],beforeLeftbarOpenedSize.current['height'])
-      common.setCanvasCenter(canvas);
-      return(
-        <LeftSidebarClosed toggleMenu={toggleMenu} SetCurrentRoute={SetCurrentRoute} canvas={canvas}/>
-      )
-    }
-  }
-
   return (
-    <div className={styles.container} >
-      <div id='leftbar'style={{ width: `${wid}px`, height: '100%', transition:'0.3s ease' ,overflow:"hidden"}}>
-        <div id='leftbar-content' className={styles.content}>
-          {page(isOpen)}
-        </div>
+    <div id='leftbar' className={styles.container}>
+
+      <div style={{ display: "flex", flexDirection: "column", outline: "none" }} >
+        {/* <MenuOutlinedIcon onClick={() => {SetCurrentRoute("Menu");toggleMenu();}} style={{ userSelect: "none" }}/> */}
+        <AppstoreOutlinedIcon onClick={() => { changeMenu('object-menu') }} />
+        <FontSizeOutlinedIcon onClick={() => { changeMenu('text-menu') }} />
+        <LineOutlinedIcon onClick={() => { changeMenu('drawing-menu') }} />
+        <AreaChartOutlinedIcon onClick={() => {changeMenu('filter-menu')}} />
+        <ScissorOutlinedIcon onClick={() => { changeMenu('crop-menu')}} />
+      </div>
+
+      {/* submenu */}
+      <div id='submenu' className={menu === '' ? styles.SubmenuClosed : styles.Submenu} >    {/* 메뉴가 열려있지 않으면 style 적용 x */}
+        {menu === 'object-menu' && <FigureSubmenu canvas={canvas} menu={menu} setMenu={setMenu} />}
+        {menu === 'text-menu' && <TextBoxSubmenu canvas={canvas} menu={menu} setMenu={setMenu} />}
+        {menu === 'drawing-menu' && <LineSubmenu canvas={canvas} menu={menu} setMenu={setMenu} />}
+        {menu === 'filter-menu' && <FilterSubmenu canvas={canvas}  menu={menu} setMenu={setMenu} />}
+        {menu === 'crop-menu' && <CropSubmenu canvas={canvas}  menu={menu} setMenu={setMenu}/>}
       </div>
     </div>
   );

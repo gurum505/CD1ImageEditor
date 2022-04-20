@@ -4,11 +4,19 @@ import backgroundImage from '../../img/background.png'
 import {
     BorderOutlinedIcon,FormOutlinedIcon
 } from "../icons/icons";
+import styles from "./LeftSidebarSubmenu.module.css"
+
 import { useEffect } from "react";
 
-export default function CropSubmenu(props) {
+export default function CropSubmenu({canvas,menu,setMenu}) {
     console.log("크롭메뉴 ")
-    const canvas = props.canvas;
+
+    useEffect(()=>{
+        canvas.off();
+        canvas.on({
+            'object:added':()=>{console.log('ㅇㅇ')}
+        })
+    },[menu])
     var currentImage;
     var selectionRect;
     // console.log('crop')
@@ -100,6 +108,7 @@ export default function CropSubmenu(props) {
         });
         // selectionRect.set({ 'width': width, 'height': height });
         canvas.add(selectionRect);
+        console.log(selectionRect)
         canvas.centerObject(selectionRect);
     }
 
@@ -113,9 +122,10 @@ export default function CropSubmenu(props) {
 
     function apply() {
         var mainImage = common.getMainImage(canvas);
-        canvas.undoStack[canvas.undoStack.length-1].recentStyleSize = {'width': common.getCanvasStyleWidth(), 'height':common.getCanvasStyleHeight(),'mainImage':mainImage}
-        canvas.remove(selectionRect);
+        console.log(selectionRect)
+        canvas.remove(selectionRect)
         
+        canvas.undoStack[canvas.undoStack.length-1].recentStyleSize = {'width': common.getCanvasStyleWidth(), 'height':common.getCanvasStyleHeight(),'mainImage':mainImage}
         canvas.setBackgroundImage(null);
 
         fabric.Image.fromURL(canvas.toDataURL(), img => {
@@ -130,8 +140,7 @@ export default function CropSubmenu(props) {
                 
             });
 
-            common.removeAllObjects(canvas,true)
-            console.log(canvas.getObjects())
+            common.removeAllObjects(canvas,true);
 
             canvas.setDimensions({ //캔버스 크기 조절
                 width: selectionRect.getScaledWidth(),
@@ -170,12 +179,13 @@ export default function CropSubmenu(props) {
 
         var isDown, origX, origY;
 
-        canvas.on('mouse:down', function (o) {
-            // canvas.selection = false;
+        canvas.on('mouse:down:before',()=>{
             objects.forEach((object) => {     //드래그 하면 기존의 객체까지 group select가 되어서 제대로 된 left, top 을 얻을 수 없음
                 object.set({'selectable':false})
-                
             })
+        })
+        canvas.on('mouse:down', function (o) {
+          
             isDown = true;
             var pointer = canvas.getPointer(o.e);
             origX = pointer.x; //클릭시 마우스 x좌표
@@ -204,6 +214,7 @@ export default function CropSubmenu(props) {
                 cropRect: true,
             });
             canvas.add(selectionRect);
+            console.log(selectionRect)
 
 
         });
@@ -243,6 +254,11 @@ export default function CropSubmenu(props) {
             canvas.off('mouse:up');
    
             canvas.defaultCursor = 'default';
+            canvas.on('mouse:down:before',()=>{
+                objects.forEach((object) => {     //드래그 하면 기존의 객체까지 group select가 되어서 제대로 된 left, top 을 얻을 수 없음
+                    object.set({'selectable':true})
+                })
+            })
         });
 
 
@@ -257,7 +273,8 @@ export default function CropSubmenu(props) {
 
 
     return (
-        <div>
+        <div id='crop-menu'>
+            <div className={styles.Title}>자르기</div>
         <p>
             <FormOutlinedIcon onClick={cropCustom} children={"custom cut"}/>
             <BorderOutlinedIcon onClick={() => crop('1:1')} children={"1:1"}/>

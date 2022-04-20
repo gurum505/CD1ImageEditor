@@ -1,7 +1,7 @@
 import { fabric } from "fabric";
 import { useEffect } from "react";
 import * as common from './common'
-import styles from "./LeftSidebarOpened.module.css"
+import styles from "./LeftSidebarSubmenu.module.css"
 
 export default function FilterSubmenu(props) {
     var filters = ['grayscale', 'invert', 'remove-color', 'sepia', 'brownie',
@@ -54,8 +54,6 @@ export default function FilterSubmenu(props) {
     }
     function applyFilter(index, filter) { //필터 적용
         const obj = common.getMainImage(canvas);
-        console.log(obj);
-        console.log(filter)
         obj.filters[index] = filter;
         obj.applyFilters();
         canvas.renderAll();
@@ -78,6 +76,7 @@ export default function FilterSubmenu(props) {
 
     function invert(e) {
         applyFilter(1, e.target.checked && new f.Invert());
+
     }
 
     function brightness() {
@@ -160,49 +159,33 @@ export default function FilterSubmenu(props) {
 
     return (
 
-        <div id='filter-list'>
+        <div id='filter-list' className={styles.FilterLabel}>
+            <div className={styles.Title}>필터</div>
+            <div className={styles.effectContainer}>
+                <input type="button" id="reset" value="reset" onClick={resetFilter} />
 
-            <p><label> width</label> <input type="text" /></p>
-            <p><label> height</label> <input type="text" /></p>
-            <p>
-                {/* reset버튼을 오른쪽으로 가게하기위한 빈  span*/}
-                <span></span>
-                <span></span>
-                <button type="button" id="reset" value="reset" onClick={resetFilter}>
-                    reset
-                </button>
-            </p>  
+                <label htmlFor="invert">Invert <input type="checkbox" id='invert' value='인버트' onClick={invert} /> </label>
 
-{/* TODO: input checkbox 형태로 두어야 함. label을 이용해서 label에 스타일을 주려하는데 잘 안됨. */}
-            <div id='filter-list-container' className={styles.effectContainer}>
-                <input type="checkbox" id="invert" onClick ={invert} />
-                <label htmlFor="invert">Invert</label>
-                <br></br>
 
-                <input type="checkbox" id="brightness" onClick={brightness}/>
-                <label htmlFor="brightness">Brightness</label>
+                <label>Brightness <input type="checkbox" id="brightness" onClick={brightness} /> </label>
                 <input type="range" id="brightness-value" defaultValue="0" min="-1" max="1" step="0.003921" onChange={brightnessValue} />
 
-                <input type="checkbox" id="gamma" onClick={gamma}/>
-                <label htmlFor="gamma">Gamma</label>
-                Red <input type="range" id="gamma-red" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaRed}/>
+
+                <label>Gamma <input type="checkbox" id="gamma" onClick={gamma} /></label>
+                Red <input type="range" id="gamma-red" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaRed} style={{ 'width': '100px' }} />
                 Green <input type="range" id="gamma-green" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaGreen} />
                 Blue <input type="range" id="gamma-blue" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaBlue} />
-                
-                <input type='checkbox' id="contrast" onClick={contrast}/> 
-                <label htmlFor="contrast">Contrast</label>
+
+                <label>Contrast <input type="checkbox" id="contrast" onClick={contrast} /></label>
                 <input type="range" id="contrast-value" defaultValue="0" min="-1" max="1" step="0.003921" onChange={contrastValue} />
 
-                <input type='checkbox' id="noise" onClick={noise}/>
-                <label htmlFor="noise">Noise</label>
+                <label>Noise <input type="checkbox" id="noise" onClick={noise} /></label>
                 <input type="range" id="noise-value" defaultValue="0" min="0" max="600" step="50" onChange={noiseValue} />
 
-                <input type='checkbox' id="pixelate" onClick={pixelate}/>
-                <label htmlFor="pixelate">Pixelate</label>
+                <label>Pixelate <input type="checkbox" id="pixelate" onClick={pixelate} /></label>
                 <input type="range" id="pixelate-value" defaultValue="1" min="1" max="20" step="3" onChange={pixelateValue} />
 
-                <input type='checkbox' id="blur" onClick={blur}/>
-                <label htmlFor="blur">Blur</label>
+                <label>Blur <input type="checkbox" id="blur" onClick={blur} /></label>
                 <input type="range" id="blur-value" defaultValue="0" min="0" max="1" step="0.1" onChange={blurValue} />
             </div>
         </div>

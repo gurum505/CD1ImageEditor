@@ -11,7 +11,7 @@ export function keyDownEvent(canvas,e){
     if(!canvas.getActiveObject()) return //선택된 객체가 없으면 종료 
                 
     if(canvas.getActiveObject().isEditing) {
-        modifyLayer(canvas.getActiveObject())
+        // modifyLayer(canvas.getActiveObject())
     }
 
     if (e.key === 'Delete' || e.key ==='Backspace') {   // 텍스트 입력 중 backspace눌러도 객체 삭제 되지 않도록 
@@ -20,6 +20,7 @@ export function keyDownEvent(canvas,e){
         var o = canvas.getActiveObjects();
         o.forEach((object) => {
             canvas.remove(object);
+            // document.getElementById(object.id).remove();
         });
 
        canvas.discardActiveObject(); // 그룹 삭제 시 빈 sizebox 남아있는 거 제거 
@@ -47,6 +48,7 @@ export function getInnerSize(canvas) { //캔버스가 포함되는 영역의 크
 
 export function setCanvasCenter(canvas) { //캔버스를 내 가운데에 위치 시키는 함수 
     if (canvas) {
+        
         var inner = getInnerSize(canvas);
         var innerWidth = inner['innerWidth'];
         var innerHeight = inner['innerHeight'];
@@ -136,8 +138,6 @@ export function fitToProportion(canvas) { // 사진이 다른 컴포넌트를 �
                 zoom(canvas, 1.1);
             else return;
         }
-
-
     }
 }
 
@@ -180,7 +180,7 @@ export function updateStates(canvas, isCropped = false) {
     if (objects.length > 0)
         for (var j = 0; j < objects.length; j++) {
             // let clonedOject = Object.assign(Object.create(Object.getPrototypeOf(objects[j])), objects[j])
-            objects[j].clone((cloned) => { newObjects.push(cloned) }, ['id', 'main','fill'])
+            objects[j].clone((cloned) => { newObjects.push(cloned) }, ['id', 'main'])
         }
 
     if (filters) {
@@ -198,6 +198,15 @@ export function updateStates(canvas, isCropped = false) {
 
 
 //객체 관련 
+
+export function getMenuType(object){ //해당 객체의 type을 바탕으로 어떤 메뉴 창을 띄울 것인지 메뉴 이름을 반환 
+    const figure= ['rect','triangle','image','circle'];
+    const drawing =['line','path'];
+
+    if(figure.includes(object.type)) return 'object-menu';
+    else if(drawing.includes(object.type)) return 'drawing-menu';
+    else if(object.type ==='textbox') return 'text-menu';
+}
 export function getMainImage(canvas) { //필터할 이미지 반환 
     var result = null;
     if(!canvas) return ;
@@ -260,8 +269,8 @@ export function colorActiveLayer(canvas) {
     }
     var objects = canvas.getActiveObjects();
     objects.forEach((object) => {
-        if (document.getElementById(object.id))
-            document.getElementById(object.id).style.border = 'solid 2px white'
+        if (document.getElementById('layer'+object.id))
+            document.getElementById('layer'+object.id).style.border = 'solid 2px white'
     })
      
 }
@@ -298,6 +307,7 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
         src = object.toDataURL();
     } catch (e) {
         src = object.getSrc();
+        console.log(src)
     }
     //img속성2
     imgTag.src = src;
@@ -346,7 +356,6 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     // div.appendChild(imgTag)
     // div.appendChild(objectBtn);
     // div.appendChild(deleteBtn);
-    // div.draggable=true;
     // el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
     return src;
 }

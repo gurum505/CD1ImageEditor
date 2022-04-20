@@ -1,19 +1,55 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { fabric } from "fabric";
 import ColorPicker from "./ColorPicker";
 import * as common from "./common"
-import styles from "./LeftSidebarOpened.module.css"
+import styles from "./LeftSidebarSubmenu.module.css"
 
 import {
      LineOutlinedIcon
     ,HighlightOutlinedIcon
 } from "../icons/icons";
-export default function LineSubmenu(props) {
-    console.log("라인메뉴")
-    const canvas = props.canvas;
-    const color = useRef('#000000');  // : 값이 바뀌어도 렌더링되지 않음.
+export default function LineSubmenu({canvas,menu,setMenu}) {
+    const color = useRef('#FFFFFF');  // : 값이 바뀌어도 렌더링되지 않음.
+    var unselectableObject = null;
 
+    useEffect(()=>{
+        canvas.off();
+        if(canvas.getActiveObject()) inputDrawingInfo(canvas.getActiveObject())
 
+        canvas.on({
+            'object:added': (e) => {
+                canvas.setActiveObject(e.target);
+            },
+            'selection:updated': (e) => {
+                if (e.selected.length === 1) {
+                    var object = e.selected[0];
+                    var menuType = common.getMenuType(object)
+                    if (menuType !== 'drawing-menu') setMenu(menuType);
+                    else inputDrawingInfo(object);
+                }
+            },
+            'selection:created':(e)=>{
+                var object = e.selected[0];
+                var menuType = common.getMenuType(object)
+                if(menuType !=='drawing-menu') setMenu(menuType);
+                else inputDrawingInfo(object);
+            },
+           
+        })
+    },[menu])
+    
+    
+    function mouseEventOff() {
+        canvas.off('mouse:down');
+        canvas.off('mouse:up');
+        canvas.off('mouse:move');
+        canvas.off('mouse:down:before')
+        canvas.off('mouse:up:before')
+    }
+
+    function inputDrawingInfo(object){
+        console.log("그리기 정보 ")
+    }
     function drawCurve() {
         canvas.off('mouse:down');
         canvas.off('mouse:up');
@@ -49,12 +85,24 @@ export default function LineSubmenu(props) {
     function drawStraight() {
         // document.getElementById('curve').disabled =false;
         // document.getElementById('straight').disabled =true;
+        mouseEventOff();
 
         canvas.defaultCursor = 'crosshair';
         canvas.isDrawingMode = false;
         canvas.off('mouse:down');
         canvas.off('mouse:up');
         var line, isDown;
+        var flag=false;
+
+        canvas.on('mouse:down:before', (e) => { //마우스 클릭 할 때 객체가 있으면 객체가 선택되기 전에 활성화 해제하고, 선택이 안되도록 함
+            flag  = true;
+            if (e.target ) {
+                canvas.discardActiveObject();
+                e.target.selectable = false;
+                unselectableObject = e.target
+            }
+        });
+
         canvas.on('mouse:down', function (o) {
             var pointer = canvas.getPointer(o.e);
             var points = [pointer.x, pointer.y, pointer.x, pointer.y];
@@ -62,7 +110,7 @@ export default function LineSubmenu(props) {
             line = new fabric.Line(points, {
                 strokeWidth: 5,
                 fill: 'red',
-                stroke: color.current,
+                stroke: `${color.current}`,
                 originX: 'center',
                 originY: 'center',
                 id: ++canvas.objectNum,
@@ -83,14 +131,21 @@ export default function LineSubmenu(props) {
             // document.getElementById('straight').disabled =false;
 
             isDown = false;
-            canvas.off('mouse:down');
-            canvas.off('mouse:up');
             canvas.defaultCursor = 'default';
+            // common.modifyLayer(line)
+            flag = false;
+            if(unselectableObject) unselectableObject.selectable=true;
+            var objects = canvas.getObjects();
+            objects.forEach(object=>{object.selectable=true;})
             common.updateStates(canvas);
-            common.modifyLayer(line)
-          
+            
+            mouseEventOff();
 
         });
+        canvas.on('mouse:up:before',()=>{
+            var objects = canvas.getObjects();
+            objects.forEach(object=>{object.selectable=false;})
+        })
     }
 
 
@@ -231,8 +286,9 @@ export default function LineSubmenu(props) {
     }
 
 
-    return (<>
-        <div>
+    return (
+        <div id='line-menu'>
+            <div className={styles.Title}>그리기</div>
             <p>
                 <LineOutlinedIcon children={"straight line"} onClick={drawStraight}/>
                 <HighlightOutlinedIcon htmlFor={"freedrawing"} children={"free drawing mode"} onClick={drawCurve}/>
@@ -258,5 +314,5 @@ export default function LineSubmenu(props) {
                 <label>Shadow offset: </label> <input type="range" id="shadow-offset" defaultValue="0" min="0" max="50" step="1" onChange={setShadowOffset} />
             </div>
         </div>
-    </>);
+    );
 }

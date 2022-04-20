@@ -125,15 +125,9 @@ export default function App(props) {
         // canvas.renderAll(); 
     }
 
-
-
     useEffect(()=>{
         if (canvas) {
             
-            canvas.preserveObjectStacking = true;
-            canvas.componentSize = common.initialComponentSize();
-            common.setCanvasCenter(canvas);
-
             fabric.Image.fromURL(backgroundImage,(img)=>{
                 img.default = true;
                 canvas.setBackgroundImage(img,canvas.renderAll.bind(canvas),{
@@ -143,81 +137,7 @@ export default function App(props) {
 
             })
             
-            canvas.on({
-                'mouse:wheel': (opt) => {
-                     var delta = opt.e.deltaY;
-                    if(delta<0){
-                        common.zoom(canvas,1.1);
-                        let num=Number(zoomInfo.current.value.slice(0,-1));
-                        zoomInfo.current.value=(num*1.1).toFixed(0).toString() + "%";
-                    }else{
-                        common.zoom(canvas,0.9);
-                        let num=Number(zoomInfo.current.value.slice(0,-1));
-                        zoomInfo.current.value=(num*0.9).toFixed(0).toString() + "%";
-                    }
-                    common.setCanvasCenter(canvas);
-                },
-                'selection:updated':(e)=>{
-                    console.log('selection:updated')
-                    setMenu(e.selected);
-                    common.colorActiveLayer(canvas);
-                },
-                'object:removed': () => {
-                    console.log('object:removed');
-                },
-                'selection:cleared': () => {
-                    // console.log('selection:cleared');
-                    // canvas.renderAll();
-                    common.colorActiveLayer(canvas);
-                    // document.getElementById('remove-object').disabled = true;
-                    
-                },
-                'selection:created': (e) => {
-                    console.log('selection:created');
-                    common.colorActiveLayer(canvas);
-                    setMenu(e.selected)
-                    // var object = canvas.getActiveObject();
-                    // document.getElementById('object-bar').open=true;
-
-                    // if(object.main) canvas.discardActiveObject(object)
-                    // document.getElementById('remove-object').disabled = false;
-                },
-                'object:added': () => {
-
-                    console.log('object:added');
-                    var objects = canvas.getObjects();
-                    var object = objects[objects.length-1];
-                    if(object.type!=='path'&& object.type!=='selection' && object.type!=='group' && object.cropRect!==true)
-                    {
-                        canvas.setActiveObject(object);
-                        // console.log(object.toDataURL());
-                        // console.log(common.addLayer(canvas,object));
-                        // addLayerItem(canvas,object.toDataURL());
-                        common.colorActiveLayer(canvas);
-                    }
-
-                    // if(object.main) canvas.discardActiveObject(object);
-                    // document.getElementById('remove-object').disabled = false;
-
-                },
-                'object:modified': () => {
-                    console.log('object:modified');
-                    var objects  = canvas.getActiveObjects();
-                   if (!canvas.getActiveObject().cropRect) {//crop을 위해 생성된 사각형은 modified되어도 undo stack에 쌓이면 안됨
-                    common.updateStates(canvas);
-                    // objects.forEach((object)=>{
-                    //     common.modifyLayer(object);
-                    // })
-                   }
-                    // document.getElementById('remove-object').disabled = false
-                },
-                'object:updated': () => {
-                    console.log('object:updated');
-                    // document.getElementById('remove-object').disabled = false
-                },
-                
-            });
-            
+          
             var flag;
               window.addEventListener("resize", function(opt) { //브라우저 크기 resize에 따른 이벤트 
                 common.setCanvasCenter(canvas)
@@ -244,32 +164,11 @@ export default function App(props) {
                         common.setCanvasStyleSize(innerWidth,innerWidth*(1/ratio))
                 }
 
-
-        
             });
-            
+
         }
     },[canvas])
-
-    const figureType=['rect','circle','triangle','image']
-    function setMenu(selectedObjects){
-        if(selectedObjects.lenght>1) return;
-        var object = selectedObjects[0];
-        if(object.cropRect|| object.main) return ;
-        var details = document.querySelector('#opened-leftbar').children;
-        for(var i=0; i<details.length; i++) {
-            details[i].open = false;
-        }
-
-        if(figureType.includes(object.type)){
-            document.querySelector('#object-menu').open=true;
-        }
-
-        if(object.type==='textbox')  document.querySelector('#textbox-menu').open=true;
-
-        if(object.type ==='line' || object.type==='path') document.querySelector('#drawing-menu').open=true;
-    }
-
+   
     const initCanvas = () => {
         
         return (
@@ -288,43 +187,27 @@ export default function App(props) {
     )
     }
 
-
-
-    //TODO: 객체도 되는지 <canvas를 집어넣네?>
-    //TODO: 객체를 추가했을 때 레이어도 추가되도록, 선택시 레이어도선택되도록
-    //TODO: 누르면 element생성하도록: popup창?
-    //TODO: 효과집어넣기 원래layer빈칸 옮길때 layer색바꾸기 등
-    //TODO: modal 애니메이션 효과추가
-
-    function addLayerItem(canvas,select){
-        //add items
-        let newItems=[
-        {name:"items"+(canvas.objectNum),//nextId.current
-        id:(canvas.objectNum)},//nextId.current
-        ...Items
-        ];
-        setItems(newItems);
-        ++canvas.objectNum;//nextId.current+=1;
-    }
-
-
     return (
         <div className={styles.layout}>
             <Title />
-            {canvas&& <LeftSidebar 
-                        canvas={canvas} image={image} 
-                        imageRef={imageRef} addLayerItem={addLayerItem}/>}
+            {canvas && <LeftSidebar canvas={canvas}
+                image={image} 
+                imageRef={imageRef}
+                addLayerItem={addLayerItem}
+            />}
             <div  className={styles.center}>
-                {canvas && <Header canvas={canvas} image={image} 
-                        setImage={setImage} imageRef={imageRef}/>}
-
+                {canvas && <Header canvas={canvas} 
+                    image={image} 
+                    setImage={setImage} 
+                    imageRef={imageRef}/>}
                 {/* center로 통합 필요 */}
                 <div className={styles.mainContainer}>
                     <canvas id="canvas" />
                     <Layer canvas={canvas}></Layer>
                     <div id="layer"></div>
                 </div>
-                <Footbar canvas={canvas} zoomInfo={zoomInfo}/>{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
+                <Footbar canvas={canvas} 
+                    zoomInfo={zoomInfo}/>{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
             </div>
             <RightSidebar addLayerItem={addLayerItem} 
                     delItem={delItem} 
