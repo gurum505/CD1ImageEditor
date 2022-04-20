@@ -10,11 +10,8 @@ html, body{
     left:0;
     height:100%;
     width :100%;
-
-
    /* right: 120px; /*  rightsidebar 크기만큼  */
-   /* width:calc(100% - 120px);   /*rightsidebar 크기만큼 */
-    
+    /* width:calc(100% - 120px);   rightsidebar 크기만큼 */
     display: flex;
 }
 .center{

@@ -23,6 +23,7 @@ import RightSidebar from './Layout/RightSidebar';
 //FIXME: colorpicker를 누르면 keydown이 안먹힘
 //FIXME: colorpicker 다시 같은 색으로 누르거나 다른 객체를 선택하고 누를시 적용안됌=>onchange라그런거 같음
 //TODO: colorpicker 사용하고 나서 다시 default로 돌아가도록
+//FIXME: header와 footbar는 오른쪽 rightsidebar만큼 뺀걸로 계산한다....
 
 //canvas
 import Header from "./component/Header";

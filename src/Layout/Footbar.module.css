@@ -4,8 +4,7 @@
     background-color: #202020;
     position: absolute;/*zoom기능할거면 absolute가 맞겠지?*/
     bottom: 80px;/*height만큼*/
-    width:100%;
-
+    width: 100%;
     flex-grow: 0;
 }
 .contents{
