@@ -278,7 +278,7 @@ export default function App(props) {
                         canvas={canvas} image={image} 
                         imageRef={imageRef} addLayerItem={addLayerItem}/>}
             <div  className={styles.center}>
-                {canvas && <Header canvas={canvas} image={image} Items={Items}
+                {canvas && <Header canvas={canvas} image={image} delItem={delItem}
                         setImage={setImage} imageRef={imageRef}/>}
 
                 {/* center로 통합 필요 */}

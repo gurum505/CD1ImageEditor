@@ -341,12 +341,8 @@ export default function Header(props) {
         try{
             var o = canvas.getActiveObjects();
             o.forEach((object) => {
-                canvas.remove(object);
-                document.getElementById(object.id).remove();
+                props.delItem(canvas,object.id);
             });
-    
-           canvas.discardActiveObject(); // 그룹 삭제 시 빈 sizebox 남아있는 거 제거 
-            common.updateStates(canvas);
         }
         catch{}
         
