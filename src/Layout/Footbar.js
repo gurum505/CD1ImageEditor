@@ -58,7 +58,7 @@ const Footbar = (props) => {
             recentStyleSize = { 'width': common.getCanvasStyleWidth(), 'height': common.getCanvasStyleHeight() }
             common.setCanvasStyleSize(canvas.width, canvas.height)
 
-            canvas.componentSize['footbar'] += 120;
+            // canvas.componentSize['footbar'] += 120;
 
             if(canvas.width>common.getInnerSize(canvas)['innerWidth'] || canvas.height>common.getInnerSize(canvas)['innerHeight'])
                 common.fitToProportion(canvas);
