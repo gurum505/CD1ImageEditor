@@ -50,7 +50,6 @@ export default function App(props) {
     const nextId=useRef(1);
     // var nextId =useRef(canvas.objectNum);
 
-    //TODO: 실제로 객체도 지워지도록
     function delItem(canvas,id){
         setItems(
             Items=>(Items.filter(Item=>Item.id !== id))
@@ -66,21 +65,18 @@ export default function App(props) {
         // canvas.renderAll();
     }
         
-    //TODO: modal 애니메이션 효과추가
     function addLayerItem(canvas,imgSrc){
+        //check if deleted item exist and occur error
+
+
         //add items
-        // console.log("addlayer");
-        // let objectcomponent=ReactDOMServer.renderToStaticMarkup(object);
-        // console.log("origianlItems: ",Items);
+        console.log("addlayerItem");
         let newItems=[
             {name:"items"+(canvas.objectNum),//nextId.current
             id:(canvas.objectNum),//nextId.current
             img:imgSrc},
         ...Items];
-        // console.log("obectNum(id): ",canvas.objectNum);
-        // console.log("newItems: ",newItems);
         setItems(newItems);
-        // ++canvas.objectNum;//nextId.current+=1;
     }
 
     //index=>nexPos로 아이템이 보내진다.
@@ -103,8 +99,8 @@ export default function App(props) {
         //도형앞으로, 뒤로 미루는 부분
         let objects = canvas.getObjects();
         let obj;
-        console.log(typeof(fromId));
-        console.log(typeof(objects[0].id));
+        // console.log(typeof(fromId));
+        // console.log(typeof(objects[0].id));
         for (var i = 0; i < objects.length; i++) {
             if (Number(objects[i].id) == fromId) {
                 obj=objects[i];
@@ -133,7 +129,8 @@ export default function App(props) {
             
             canvas.preserveObjectStacking = true;
             canvas.componentSize = common.initialComponentSize();
-            common.setCanvasCenter(canvas);
+            
+            common.setCanvasCenter(canvas);//TODO: 객체 생성시에도 화면이 실행됨
 
             fabric.Image.fromURL(backgroundImage,(img)=>{
                 img.default = true;
@@ -256,7 +253,6 @@ export default function App(props) {
     },[canvas])
    
     const initCanvas = () => {
-        
         return (
         new fabric.Canvas('canvas', {
             width: 600,
@@ -270,7 +266,7 @@ export default function App(props) {
             // backgroundColor: 'white',
             componentSize:'',
         })
-    )
+        )   
     }
 
     
@@ -282,7 +278,7 @@ export default function App(props) {
                         canvas={canvas} image={image} 
                         imageRef={imageRef} addLayerItem={addLayerItem}/>}
             <div  className={styles.center}>
-                {canvas && <Header canvas={canvas} image={image} 
+                {canvas && <Header canvas={canvas} image={image} Items={Items}
                         setImage={setImage} imageRef={imageRef}/>}
 
                 {/* center로 통합 필요 */}

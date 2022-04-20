@@ -285,13 +285,13 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     
     if (object.main) return;
     if (document.getElementById(object.id)) return;
-    const layerCanvas = new fabric.Canvas();
-    layerCanvas.setWidth(canvas.width);
-    layerCanvas.setHeight(canvas.height);
-    layerCanvas.backgroundColor = 'red'; //이거 되나?
+    // const layerCanvas = new fabric.Canvas();
+    // layerCanvas.setWidth(canvas.width);
+    // layerCanvas.setHeight(canvas.height);
+    // layerCanvas.backgroundColor = 'red'; //이거 되나?
 
-    var imgTag = document.createElement('img');
-    imgTag.crossOrigin = 'anonymous' //img속성1
+    // var imgTag = document.createElement('img');
+    // imgTag.crossOrigin = 'anonymous' //img속성1
     var src;                         
     // src = object.toDataURL()
     // console.log(object)
@@ -302,47 +302,47 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
         console.log(src)
     }
     //img속성2
-    imgTag.src = src;
-    imgTag.margin = 0;
-    imgTag.padding = 0;
-    imgTag.style.objectFit = 'contain';
-    imgTag.style.width = '80px';
-    imgTag.style.height = '50px'
+    // imgTag.src = src;
+    // imgTag.margin = 0;
+    // imgTag.padding = 0;
+    // imgTag.style.objectFit = 'contain';
+    // imgTag.style.width = '80px';
+    // imgTag.style.height = '50px'
 
-    imgTag.onclick = () => {
-        if(canvas.getActiveObject()===object) canvas.discardActiveObject(object);
-        else canvas.setActiveObject(object);
-        console.log(canvas.getActiveObjects())
-        canvas.renderAll();
-    }
+    // imgTag.onclick = () => {
+    //     if(canvas.getActiveObject()===object) canvas.discardActiveObject(object);
+    //     else canvas.setActiveObject(object);
+    //     console.log(canvas.getActiveObjects())
+    //     canvas.renderAll();
+    // }
 
-    const div = document.createElement('div');
-    div.id = object.id;
-    div.className = 'layer-list'
-    div.style.textAlign = 'center'
-    div.style.height = '80px'
-    div.style.width = '110px';
-    div.style.backgroundColor = 'gray'
-    const el = document.getElementById('rightsidebar-item-scroll')
+    // const div = document.createElement('div');
+    // div.id = object.id;
+    // div.className = 'layer-list'
+    // div.style.textAlign = 'center'
+    // div.style.height = '80px'
+    // div.style.width = '110px';
+    // div.style.backgroundColor = 'gray'
+    // const el = document.getElementById('rightsidebar-item-scroll')
 
-    const objectBtn = document.createElement('button');
-    objectBtn.innerHTML = 'select'
-    objectBtn.className = "layer-object";
-    objectBtn.onclick = () => {
-        if(canvas.getActiveObject()===object) canvas.discardActiveObject(object);
-        else
-        canvas.setActiveObject(object);
-        canvas.renderAll();
-    }
-    const deleteBtn = document.createElement('button');
-    deleteBtn.innerHTML = 'delete';
-    deleteBtn.className = 'delete-btn';
+    // const objectBtn = document.createElement('button');
+    // objectBtn.innerHTML = 'select'
+    // objectBtn.className = "layer-object";
+    // objectBtn.onclick = () => {
+    //     if(canvas.getActiveObject()===object) canvas.discardActiveObject(object);
+    //     else
+    //     canvas.setActiveObject(object);
+    //     canvas.renderAll();
+    // }
+    // const deleteBtn = document.createElement('button');
+    // deleteBtn.innerHTML = 'delete';
+    // deleteBtn.className = 'delete-btn';
 
-    deleteBtn.onclick = () => {
-        canvas.remove(object);
-        document.getElementById(object.id).remove();
-        updateStates(canvas);
-    }
+    // deleteBtn.onclick = () => {
+    //     canvas.remove(object);
+    //     document.getElementById(object.id).remove();
+    //     updateStates(canvas);
+    // }
 
 
     // div.appendChild(imgTag)

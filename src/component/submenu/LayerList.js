@@ -7,10 +7,8 @@ export default function LayerList(props){
     function renderImg(props){//Item.img
         
         return(
-            // <button disabled style={{backgroundColor:"#202020", border:"none",outline:"none", cursor:"default"}}>
             <div >
             <img src={props.img} className={styles.Img} crossOrigin="annoymous"/>
-            {/* </button> */}
             </div>
         )
     }
