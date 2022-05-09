@@ -1,4 +1,5 @@
 .editorHeader{
+    display:flex;
     justify-content: center;
     align-items: center;
     visibility: visible;
@@ -12,12 +13,16 @@
     width: 100%;
     background-color: #202020;
 
-    display:flex;
     box-sizing: border-box; /*테두리포함 크기로 계산*/
-
-    flex-grow: 0;
+    margin:0;
+    padding: 0;
 }
 .editorHeader input[type="file"]{
     display: none;
 }
-
+.sideLine{
+    height: 45px;
+    width: 1px;
+    border-left: 1px solid gray;
+    margin: 0 5px 0 5px;
+}
