@@ -128,47 +128,69 @@ export default function Header(props) {
             link.click();
         }
     }
-    // 직렬화 
-    function serialization() {
+    const serializationJson = () => { 
         var json = canvas.toDatalessJSON(['initialWidth', 'initialHeight', 'objectNum', 'id','filterValues','main']);
         // states는 순환 참조가 발생하므로 보낼 수 없음 
         json = JSON.stringify(json);
-
-
+        window.localStorage.setItem("userJson", json);
+        return json;
+     }
+    // 직렬화 
+    function serialization() {
+        var json=serializationJson();
         var blob = new Blob([json], { type: "text/plain;charset=utf-8" });
         var link = document.createElement('a'); //<a> 생성
 
         link.href = URL.createObjectURL(blob);
         link.download = "image.json";
         link.click();
-
+        
     }
 
+
+    const DeserializationJson = (Json) => { 
+        canvas.loadFromJSON(Json, () => {
+            common.initalCanvas(canvas,true);
+            canvas.setWidth(canvas.initialWidth);
+            canvas.setHeight(canvas.initialHeight);
+            common.setCanvasCenter(canvas);
+            common.updateStates(canvas);
+            var Objects = canvas.getObjects();
+            Objects.forEach((object)=>{
+                if(!object.main)
+                common.addLayer(canvas,object);
+            })
+            canvas.discardActiveObject(common.getMainImage())
+            common.colorActiveLayer(canvas);
+            canvas.renderAll();
+        });
+    }
     // 역직렬화
     function Deserialization(e) {
         e.target.value = '' //같은 이름의 이미지 파일 업로드가 안되는 것 방지 
         document.getElementById("Deserialization-json-file").onchange = function (e) {
             var reader = new FileReader();
             reader.onload = function (e) { //onload(): 읽기 성공 시 실행되는 핸들러
-                canvas.loadFromJSON(reader.result, () => {
-                    common.initalCanvas(canvas,true);
-                    canvas.setWidth(canvas.initialWidth);
-                    canvas.setHeight(canvas.initialHeight);
-                    common.setCanvasCenter(canvas);
-                    common.updateStates(canvas);
-                    var Objects = canvas.getObjects();
-                    Objects.forEach((object)=>{
-                        if(!object.main)
-                        common.addLayer(canvas,object);
-                    })
-                    canvas.discardActiveObject(common.getMainImage())
-                    common.colorActiveLayer(canvas);
-                    canvas.renderAll();
-                });
+                DeserializationJson(reader.result);
             }
             reader.readAsText(e.target.files[0]); // dataURL 형식으로 파일 읽음
         }
     }
+    const loadData = () => {
+        const userJson=window.localStorage.getItem("userJson");
+        DeserializationJson(userJson);
+    }
+
+    useEffect(()=>{
+        window.addEventListener("load",loadData);
+        window.addEventListener("beforeunload",serializationJson);
+        // window.addEventListener("unload",saveData);
+        return()=>{
+            window.removeEventListener("load",loadData);
+            window.removeEventListener("beforeunload",serializationJson);
+            // window.removeEventListener("unload",saveData);
+        }
+    },[])
 
     function undo(){
         if(canvas.undoStack.length>1){
