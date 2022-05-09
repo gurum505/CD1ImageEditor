@@ -180,7 +180,8 @@ white-space: nowrap; /*글이 재정렬되면서 밑으로 내려가지 않도�
   border-radius: 5px;
   background-color: #666565;
   user-select: none;
-  color: white;
+  color: #161616;
+  font-weight: bold;
 }
 
 .Submenu button:hover {
