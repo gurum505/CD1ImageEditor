@@ -19,13 +19,11 @@
 }
 
 .Submenu p {
-
     display: flex;
     align-content: space-between;
     justify-content: space-between;
     margin: 10px 15px 10px 15px;
     /*상자 끝에서 좀 띄워줌*/
-
 }
 
 .Submenu label {

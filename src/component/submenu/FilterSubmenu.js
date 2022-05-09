@@ -161,7 +161,7 @@ export default function FilterSubmenu(props) {
     return (
 
         <div id='filter-menu'className={styles.Submenu}>
-            <div className={styles.Title}>필터</div>
+            <div className={styles.Title}>Filter</div>
             <div className={styles.effectContainer}>
                 <input type="button" id="reset" value="reset" onClick={resetFilter} />
 

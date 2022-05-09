@@ -125,7 +125,7 @@ export default function TextBoxSubmenu({canvas,addLayerItem}) {
 
     return (
         <div id='text-menu' className={styles.Submenu}>
-            <div className={styles.Title}>텍스트 추가</div>
+            <div className={styles.Title}>Add Text</div>
             <p><FontSizeOutlinedIcon id='add-textbox' onClick={addTextBox} /></p>
             <p><label>font color</label> <ColorPicker canvas={canvas} color={color} /></p>
             <label style={{ marginLeft: "15px" }} >align</label>

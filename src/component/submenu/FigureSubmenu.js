@@ -193,7 +193,7 @@ export default function FigureSubmenu({ canvas, addLayerItem  }) {
     }
     return (
         <div id='figure-menu' className={styles.Submenu}>
-            <div className={styles.Title}>객체 추가</div>
+            <div className={styles.Title}>Add Object</div>
             <p>
                 <RectangleIcon id='add-rect' onClick={() => addElement("rect")} />
                 <CircleIcon id='add-circle' onClick={() => addElement("circle")} />

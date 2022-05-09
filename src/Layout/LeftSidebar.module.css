@@ -37,7 +37,6 @@ white-space: nowrap; /*글이 재정렬되면서 밑으로 내려가지 않도�
 
 .Submenu {
   display:none;
-
   box-sizing: border-box;
   /* border: 2px solid #202020; */
   width: 200px;
@@ -55,6 +54,7 @@ white-space: nowrap; /*글이 재정렬되면서 밑으로 내려가지 않도�
   padding: 5px;
   text-align: center;
   background-color: gray;
+  border-radius: 5px;
 }
 
 .Submenu p {

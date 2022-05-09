@@ -129,12 +129,14 @@ export default function Header(props) {
             link.click();
         }
     }
+
     const serializationJson = () => { 
         var json = canvas.toDatalessJSON(['initialWidth', 'initialHeight', 'objectNum', 'id','filterValues','main']);
         json = JSON.stringify(json);
         window.localStorage.setItem("userJson", json);
         return json;
      }
+
     // 직렬화 
     function serialization() {
         var json=serializationJson();
@@ -144,9 +146,7 @@ export default function Header(props) {
         link.href = URL.createObjectURL(blob);
         link.download = "image.json";
         link.click();
-        
     }
-
 
     const DeserializationJson = (Json) => { 
         canvas.loadFromJSON(Json, () => {

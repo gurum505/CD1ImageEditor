@@ -250,7 +250,7 @@ export default function LineSubmenu({ canvas,addLayerItem }) {
 
     return (
         <div id='line-menu' className={styles.Submenu}>
-            <div className={styles.Title}>그리기</div>
+            <div className={styles.Title}>Draw Line</div>
             <p>
                 <LineOutlinedIcon children={"straight line"} onClick={drawStraight} />
                 <HighlightOutlinedIcon htmlFor={"freedrawing"} children={"free drawing mode"} onClick={drawCurve} />

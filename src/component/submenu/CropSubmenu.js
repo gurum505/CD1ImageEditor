@@ -274,7 +274,7 @@ export default function CropSubmenu({canvas,menu,setMenu}) {
 
     return (
         <div id='crop-menu' className={styles.Submenu}>
-            <div className={styles.Title}>자르기</div>
+            <div className={styles.Title}>Cut</div>
         <p>
             <FormOutlinedIcon onClick={cropCustom} children={"custom cut"}/>
             <BorderOutlinedIcon onClick={() => crop('1:1')} children={"1:1"}/>
