@@ -2,8 +2,7 @@ import { fabric } from "fabric";
 import {
     FolderOpenOutlinedIcon, CloudDownloadOutlinedIcon, UploadOutlinedIcon,
     FileImageOutlinedIcon, RedoOutlinedIcon, UndoOutlinedIcon, DownloadOutlinedIcon,
-    DiffOutlinedIcon, CopyOutlinedIcon
-
+    DiffOutlinedIcon, CopyOutlinedIcon, DeleteOutlinedIcon
 } from "./icons/icons"
 import { useEffect } from "react";
 import styles from "./Header.module.css"
@@ -398,33 +397,49 @@ export default function Header(props) {
 
     return (
         <div id="header" className={styles.editorHeader}>
-            {/* 새프로젝트 */}
-            <FolderOpenOutlinedIcon onClick={clearCanvas} className="new-project" children={"새 프로젝트"} />
+            
+            {/* 프로젝트관련 */}
+            <div>
+                {/* 새프로젝트 */}
+                <FolderOpenOutlinedIcon onClick={clearCanvas} className="new-project" children={"new project"} />
 
-            {/* 이미지 저장 */}
-            <FileImageOutlinedIcon className="new-project" onClick={downloadImage} children={"이미지 저장"} />
 
-            {/* 프로젝트 다운로드 */}
-            <DownloadOutlinedIcon className="serialization" onClick={serialization} children={"프로젝트 다운로드"} />
+                {/* 프로젝트 다운로드 */}
+                <DownloadOutlinedIcon className="serialization" onClick={serialization} children={"download project"} />
 
-            {/* 프로젝트 업로드 */}
+                {/* 프로젝트 업로드 */}
+                <UploadOutlinedIcon htmlFor="Deserialization-json-file" onClick={Deserialization} children={"upload project"}/>
+                <input type="file" id="Deserialization-json-file" name="chooseFile" accept="application/JSON"
+                        onClick={Deserialization} />
+                
+            </div>
+                
+            <div className={styles.sideLine}/>
 
-            <UploadOutlinedIcon htmlFor="Deserialization-json-file" onClick={Deserialization} children={"프로젝트 업로드"} />
-            <input type="file" id="Deserialization-json-file" name="chooseFile" accept="application/JSON"
-                onClick={Deserialization} />
+            {/* 이미지편집관련 */}
+            <div >
+                {/* 이미지 저장 */}
+                <FileImageOutlinedIcon className="new-project" onClick={downloadImage} children={"download image"} />
 
-            {/* 이미지 가져오기 */}
-            <CloudDownloadOutlinedIcon htmlFor="import-image-file" children={"이미지 가져오기"} />
-            <input type="file" id="import-image-file" name="chooseFile" accept="image/*"
-                onClick={importImage} />
+                {/* 이미지 가져오기 */}
+                <CloudDownloadOutlinedIcon htmlFor="import-image-file" children={"import background"} />
+                <input type="file" id="import-image-file" name="chooseFile" accept="image/*"
+                        onClick={importImage} />
+                        
+                {/* 복붙 */}
+                <CopyOutlinedIcon id='copy' onClick={copy} children={"copy"}/>
+                <DiffOutlinedIcon id='paste' onClick={paste} children={"paste"}/>
+            </div>
 
-            <CopyOutlinedIcon id='copy' onClick={copy} children={"복사"} />
-            <DiffOutlinedIcon id='paste' onClick={paste} children={"붙여넣기"} />
+            <div className={styles.sideLine}/>
 
-            {/* 이전 */}
-            <UndoOutlinedIcon id='undo' onClick={undo} children={"이전"} />
-            {/* 되돌리기 */}
-            <RedoOutlinedIcon id='redo' onClick={redo} children={"되돌리기"} />
+            {/* redo undo */}
+            <div>
+                {/* 이전 */}
+                <UndoOutlinedIcon id='undo' onClick={undo} children={"undo"} />
+                {/* 되돌리기 */}
+                <RedoOutlinedIcon id='redo' onClick={redo} children={"redo"} />
+            </div>
         </div>
     )
 }
