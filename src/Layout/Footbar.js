@@ -4,7 +4,6 @@ import {
     ZoomInOutlinedIcon, ZoomOutOutlinedIcon,
     ExpandOutlinedIcon, EyeOutlinedIcon
 } from "../component/icons/icons"
-import { useRef } from 'react'
 
 const Footbar = (props) => {
 
