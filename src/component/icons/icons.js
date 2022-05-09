@@ -96,19 +96,6 @@ export const SearchOutlinedIcon =({onClick, children, htmlFor})=>{
         </span>
     )
 }
-export const UnderlineOutlinedIcon =({onClick, children, htmlFor})=>{
-    return(
-        <span className={styles.container}>
-            <label htmlFor={htmlFor}>
-            <UnderlineOutlined className={styles.icon} onClick={onClick}/>
-            <span className={styles.tooltiptext}>{children}</span>
-            </label>
-        </span>
-    )
-}
-
-
-
 export const PlusOutlinedIcon=({onClick, children, htmlFor})=>{
     return(
         <span className={styles.container}>
@@ -423,10 +410,11 @@ export const SettingOutlinedIcon=({onClick, children, htmlFor})=>{
     )
 }
 
-export const AlignLeftOutlinedIcon=({onClick, children, htmlFor})=>{
+export const AlignLeftOutlinedIcon=({onClick, children, htmlFor,checked})=>{
     return(
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
+            <input id={htmlFor} type="checkbox" style={{display:'none'}} checked={checked} readOnly/>
             <AlignLeftOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
             </label>
@@ -434,10 +422,11 @@ export const AlignLeftOutlinedIcon=({onClick, children, htmlFor})=>{
     )
 }
 
-export const AlignCenterOutlinedIcon=({onClick, children, htmlFor})=>{
+export const AlignCenterOutlinedIcon=({onClick, children, htmlFor,checked})=>{
     return(
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
+            <input id={htmlFor} type="checkbox" style={{display:'none'}} checked={checked} readOnly/>
             <AlignCenterOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
             </label>
@@ -445,10 +434,11 @@ export const AlignCenterOutlinedIcon=({onClick, children, htmlFor})=>{
     )
 }
 
-export const AlignRightOutlinedIcon=({onClick, children, htmlFor})=>{
+export const AlignRightOutlinedIcon=({onClick, children, htmlFor, checked})=>{
     return(
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
+            <input id={htmlFor} type="checkbox" style={{display:'none'}} checked={checked} readOnly/>
             <AlignRightOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
             </label>
@@ -461,17 +451,18 @@ export const HighlightOutlinedIcon=({onClick, children, htmlFor})=>{
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
             <input id={htmlFor} type="checkbox" style={{display:'none'}}/>
-            <HighlightOutlined className={styles.icon} onClick={onClick}/>
+            <HighlightOutlined className={styles.icon} onClick={onClick} />
             <span className={styles.tooltiptextleft}>{children}</span>
             </label>
         </span>
     )
 }
 
-export const BoldOutlinedIcon=({onClick, children, htmlFor})=>{
+export const BoldOutlinedIcon=({onClick, children, htmlFor,checked})=>{
     return(
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
+            <input id={htmlFor} type="checkbox" style={{display:'none'}} checked={checked} readOnly/>
             <BoldOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
             </label>
@@ -479,11 +470,24 @@ export const BoldOutlinedIcon=({onClick, children, htmlFor})=>{
     )
 }
 
-export const ItalicOutlinedIcon=({onClick, children, htmlFor})=>{
+export const ItalicOutlinedIcon=({onClick, children, htmlFor,checked})=>{
     return(
         <span className={styles.container}>
             <label htmlFor={htmlFor}>
+            <input id={htmlFor} type="checkbox" style={{display:'none'}} checked={checked} readOnly/>
             <ItalicOutlined className={styles.icon} onClick={onClick}/>
+            <span className={styles.tooltiptext}>{children}</span>
+            </label>
+        </span>
+    )
+}
+
+export const UnderlineOutlinedIcon =({onClick, children, htmlFor,checked})=>{
+    return(
+        <span className={styles.container}>
+            <label htmlFor={htmlFor}>
+            <input id={htmlFor} type="checkbox" style={{display:'none'}} checked={checked} readOnly/>
+            <UnderlineOutlined className={styles.icon} onClick={onClick}/>
             <span className={styles.tooltiptext}>{children}</span>
             </label>
         </span>

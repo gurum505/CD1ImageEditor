@@ -20,4 +20,9 @@
 .editorHeader input[type="file"]{
     display: none;
 }
-
+.sideLine{
+    height: 45px;
+    width: 1px;
+    border-left: 1px solid gray;
+    margin: 0 5px 0 5px;
+}

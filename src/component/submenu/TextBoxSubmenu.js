@@ -1,6 +1,6 @@
 import { CommentOutlined, UnderlineOutlined } from "@ant-design/icons";
 import { fabric } from "fabric";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ColorPicker from "./ColorPicker";
 import styles from "../../Layout/LeftSidebar.module.css"
 
@@ -15,6 +15,9 @@ export default function TextBoxSubmenu({canvas,addLayerItem}) {
 
     // console.log('textbox메뉴')
     const color = useRef('white');
+    const [alignChecked,makeAlignChecked] =useState("");
+    // var fontWeight={"bold":false,"italic":false,"underline":false}; //FIXME: default값을 text객체에서 불러와야함 all false가 아니라
+    // const [fontChecked,makeFontChecked] =useState(fontWeight);
 
     function inputTextInfo(textbox) {
         console.log("텍스트정보를 텍스트박스 메뉴에 입력하는 함수 실행")
@@ -67,6 +70,9 @@ export default function TextBoxSubmenu({canvas,addLayerItem}) {
                 canvas.renderAll();
             }
         })
+
+        // fontWeight["bold"]=!fontWeight["bold"];
+        // makeFontChecked(fontWeight);
     }
 
     //TODO:커서 범위에 따라 스타일 지정
@@ -110,17 +116,23 @@ export default function TextBoxSubmenu({canvas,addLayerItem}) {
             // text.setSelectionStyles({ underline: underline }, text.selectionStart,99 );
         }
     }
-
+    
     // 정렬 
-    function alignText(to) {
+    const alignText=(to) =>{
         var objects = canvas.getActiveObjects();
         objects.forEach((object) => {
             if (object.type === 'textbox') {
                 object.set({ textAlign: `${to}` });
                 canvas.renderAll();
             }
-        })
+        })  
+        // console.log("to",to);
+        makeAlignChecked(to);
+        // console.log(to==="left");
     }
+
+
+    
 
 
     return (
@@ -132,13 +144,13 @@ export default function TextBoxSubmenu({canvas,addLayerItem}) {
 
             <ul>
                 <li>
-                    <AlignLeftOutlinedIcon onClick={() => alignText('left')} />
+                    <AlignLeftOutlinedIcon onClick={() => alignText('left') } checked={alignChecked==="left"}/>
                 </li>
                 <li>
-                    <AlignCenterOutlinedIcon onClick={() => alignText('center')} />
+                    <AlignCenterOutlinedIcon onClick={() => alignText('center')} checked={alignChecked==="center"}/>
                 </li>
                 <li>
-                    <AlignRightOutlinedIcon onClick={() => alignText('right')} />
+                    <AlignRightOutlinedIcon onClick={() => alignText('right')} checked={alignChecked==="right"}/>
                 </li>
             </ul>
             <label style={{ marginLeft: "15px" }}>font</label>
