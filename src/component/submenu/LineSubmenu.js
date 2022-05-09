@@ -1,97 +1,114 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { fabric } from "fabric";
 import ColorPicker from "./ColorPicker";
 import * as common from "./common"
-import styles from "./LeftSidebarOpened.module.css"
+// import styles from "./LeftSidebarSubmenu.module.css"
+import styles from "../../Layout/LeftSidebar.module.css"
 
 import {
-     LineOutlinedIcon
-    ,HighlightOutlinedIcon
+    LineOutlinedIcon
+    , HighlightOutlinedIcon
 } from "../icons/icons";
-export default function LineSubmenu(props) {
-    const canvas = props.canvas;
-    const color = useRef('white');  // : 값이 바뀌어도 렌더링되지 않음.
+export default function LineSubmenu({ canvas,addLayerItem }) {
+    const color = useRef('#FFFFFF');  // : 값이 바뀌어도 렌더링되지 않음.
+    var unselectableObject = null;
 
+    function inputDrawingInfo(object) {
+        console.log("그리기 정보 ")
+    }
 
     function drawCurve() {
-        canvas.off('mouse:down');
-        canvas.off('mouse:up');
+        
         canvas.freeDrawingBrush.color = color.current;
+
         if (canvas.isDrawingMode) { //곡선 그리기가 꺼져있는 상태에서 곡선버튼을 눌렀을 때  
             canvas.isDrawingMode = false;
+            canvas.off('mouse:up')
             canvas.defaultCursor = 'default';
-            // document.getElementById('curve').disabled =false;
-            // document.getElementById('straight').disabled =false;
-
             return;
         }
         else {
             canvas.isDrawingMode = true;
-            // document.getElementById('curve').disabled =true;
-
             canvas.defaultCursor = 'crosshair';
-
         }
         canvas.on('mouse:up', () => {
-            canvas.discardActiveObject().renderAll(); // 곡선 그리고 나면 활성화되는 것 끄기 ( canvas.off('object:added') 로 하면 redo 할 때 활성화가 안됨)
-            canvas.item(canvas.getObjects().length - 1).set({ id:++canvas.objectNum,
-            selectable:false })
-
+            canvas.item(canvas.getObjects().length - 1).set({
+                id: ++canvas.objectNum,
+                selectable: false
+            })
             common.updateStates(canvas);
-
-
         })
-
     }
 
 
     function drawStraight() {
-        // document.getElementById('curve').disabled =false;
-        // document.getElementById('straight').disabled =true;
+        
+        common.mouseEventOff(canvas);
 
         canvas.defaultCursor = 'crosshair';
         canvas.isDrawingMode = false;
-        canvas.off('mouse:down');
-        canvas.off('mouse:up');
+
         var line, isDown;
-        canvas.on('mouse:down', function (o) {
-            var pointer = canvas.getPointer(o.e);
-            var points = [pointer.x, pointer.y, pointer.x, pointer.y];
-            isDown = true;
-            line = new fabric.Line(points, {
-                strokeWidth: 5,
-                fill: 'red',
-                stroke: `${color.current}`,
-                originX: 'center',
-                originY: 'center',
-                id: ++canvas.objectNum,
-            });
-            canvas.add(line);
-        });
+        var flag = false;
 
-        canvas.on('mouse:move', function (o) {
+        canvas.on({
+            'mouse:down:before': (e) => {
+                flag = true;
+                if (e.target && flag) {
+                    canvas.discardActiveObject();
+                    e.target.selectable = false;
+                    unselectableObject = e.target
+                }
 
-            if (!isDown) return;
-            var pointer = canvas.getPointer(o.e);
+                canvas.on({
+                    'mouse:down':(o)=>{
+                        var pointer = canvas.getPointer(o.e);
+                        var points = [pointer.x, pointer.y, pointer.x, pointer.y];
+                        isDown = true;
+                        line = new fabric.Line(points, {
+                            strokeWidth: 5,
+                            fill: 'red',
+                            stroke: `${color.current}`,
+                            originX: 'center',
+                            originY: 'center',
+                            id: ++canvas.objectNum,
+                        });
+                        canvas.add(line);
+                        canvas.setActiveObject(line)
+                    },
+                    'mouse:move':(o)=>{
+                        if (!isDown) return;
+                        var pointer = canvas.getPointer(o.e);
+        
+                        line.set({ x2: pointer.x, y2: pointer.y });
+                        canvas.renderAll();
+                    },
+                    'mouse:up':(o)=>{
+                        isDown = false;
+                        flag = false;
+                        
+                        canvas.defaultCursor = 'default';
+                        
+                        if (unselectableObject && unselectableObject.main!==true) unselectableObject.selectable = true;
+                        
+                        var objects = canvas.getObjects();
+                        objects.forEach(object => { 
+                            if(object.main!==true) object.selectable = true; })
+                        addLayerItem(canvas,line.toDataURL())
 
-            line.set({ x2: pointer.x, y2: pointer.y });
-            canvas.renderAll();
-
-        });
-        canvas.on('mouse:up', function (o) {
-            // document.getElementById('straight').disabled =false;
-
-            isDown = false;
-            canvas.off('mouse:down');
-            canvas.off('mouse:up');
-            canvas.defaultCursor = 'default';
-            common.updateStates(canvas);
-            common.modifyLayer(line)
-          
-
-        });
-    }
-
+                        common.updateStates(canvas);
+                        common.mouseEventOff(canvas);
+                    },
+                    'mouse:up:before': () => {
+                        var objects = canvas.getObjects();
+                        objects.forEach(object => { object.selectable = false; })
+                    }
+                 })
+                }
+            })
+        }
+            
+           
 
     var circleBrush = new fabric.CircleBrush(canvas);
     var sprayBrush = new fabric.SprayBrush(canvas);
@@ -100,6 +117,7 @@ export default function LineSubmenu(props) {
     var vLinePatternBrush = new fabric.PatternBrush(canvas);
     var squarePatternBrush = new fabric.PatternBrush(canvas);
     var diamondPatternBrush = new fabric.PatternBrush(canvas);
+
     canvas.freeDrawingBrush.shadow = new fabric.Shadow({
         blur: 0,
         offsetX: 0,
@@ -230,32 +248,33 @@ export default function LineSubmenu(props) {
     }
 
 
-    return (<>
-        <div>
+    return (
+        <div id='line-menu' className={styles.Submenu}>
+            <div className={styles.Title}>그리기</div>
             <p>
-                <LineOutlinedIcon children={"straight line"} onClick={drawStraight}/>
-                <HighlightOutlinedIcon htmlFor={"freedrawing"} children={"free drawing mode"} onClick={drawCurve}/>
+                <LineOutlinedIcon children={"straight line"} onClick={drawStraight} />
+                <HighlightOutlinedIcon htmlFor={"freedrawing"} children={"free drawing mode"} onClick={drawCurve} />
             </p>
             <p>
-            <select id='drawing-mode' onChange={setDrawingMode} style={{}}>
-            <option value="">--choose drawing option--</option>
-                <option>Pencil</option>
-                <option>Circle</option>
-                <option>Spray</option>
-                <option>hLine</option>
-                <option>vline</option>
-                <option>Square</option>
-                <option>Diamond</option>
-            </select>
+                <select id='drawing-mode' onChange={setDrawingMode} style={{}}>
+                    <option value="">--choose drawing option--</option>
+                    <option>Pencil</option>
+                    <option>Circle</option>
+                    <option>Spray</option>
+                    <option>hLine</option>
+                    <option>vline</option>
+                    <option>Square</option>
+                    <option>Diamond</option>
+                </select>
             </p>
-          
-          
-            <p><label> color</label> <ColorPicker canvas={canvas} color={color}/></p> 
+
+
+            <p><label> color</label> <ColorPicker canvas={canvas} color={color} /></p>
             <div className={styles.effectContainer}>
                 <label>Line width:</label><input type="range" id="line-width" defaultValue="30" min="0" max="150" step="1" onChange={setLineWidth} />
                 <label>Shadow width:</label><input type="range" id="shadow-width" defaultValue="0" min="0" max="50" step="1" onChange={setShadowWidth} />
                 <label>Shadow offset: </label> <input type="range" id="shadow-offset" defaultValue="0" min="0" max="50" step="1" onChange={setShadowOffset} />
             </div>
         </div>
-    </>);
+    );
 }

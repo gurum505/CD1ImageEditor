@@ -1,89 +1,110 @@
 import styles from "./LeftSidebar.module.css";
-import LeftSidebarClosed from "../component/submenu/LeftSidebarClosed";
-import LeftSidebarOpened from "../component/submenu/LeftSidebarOpened";
-import { useEffect, useRef, useState} from "react";
+
+
+import FigureSubmenu from "../component/submenu/FigureSubmenu";
+import TextBoxSubmenu from "../component/submenu/TextBoxSubmenu";
+import FilterSubmenu from "../component/submenu/FilterSubmenu";
+import LineSubmenu from "../component/submenu/LineSubmenu";
+import CropSubmenu from "../component/submenu/CropSubmenu";
+
+import {
+  FontSizeOutlinedIcon, MenuOutlinedIcon, AppstoreOutlinedIcon
+  , AreaChartOutlinedIcon, LineOutlinedIcon, ScissorOutlinedIcon
+} from "../component/icons/icons";
+
+import { useEffect, useRef, useState } from "react";
 import * as common from "../component/submenu/common"
-const LeftSidebar = (props) => {
-  const {children, canvas, imageRef,image,setCanvas}=props;
-  const [wid, setX] = useState(50)
-  const [isOpen, setOpen] = useState(false);
-  const [currentRoute,SetCurrentRoute] =useState("Menu");
-  
-  //사이드바 바깥을 클릭했을 때 닫히도록
-  //sidebar, canvas안에서는 안닫히고 나머지에서는 닫히도록
-  // const side=useRef();
-  // const handleClose = (e)=> {
-  //   let sideArea = side.current; //sidebar크기
-  //   let sideCildren = side.current.contains(e.target); //sidebar에 e.target이 들어가나
-  //   if(isOpen&&(!sideArea|| !sideCildren)){
-  //     toggleMenu();
-  //   }
-  // }
+import { ConsoleSqlOutlined } from "@ant-design/icons";
+const LeftSidebar = ({ canvas, imageRef, image,addLayerItem}) => {
 
-  // useEffect(()=> {
-  //   window.addEventListener('click', handleClose);
-  //   return () => {
-  //     window.removeEventListener('click', handleClose);
-  //   };
-  // })
   
+  const addObjectRef = useRef(false);  
+  const figure = ['rect', 'triangle', 'circle', 'image'];
 
-  const beforeLeftbarOpenedSize = useRef(''); //leftbar 닫았을 때 닫기 전 캔버스 크기 유지를 위한 변수 
+
+  useEffect(() => {
+
+    canvas.on({
+      'object:added': (e) => {
+        // canvas.setActiveObject(e.target)
+        // if(e.target.type==='path') canvas.discardActiveObject();
+      },
+      'object:modified':(e)=>{
+        console.log(e)
+        if(e.target._objects){
+          var group= e.target;
+          console.log(group.left)
+          console.log(group.width)
+          group.forEachObject((object)=>{
+            object.canvasRelativePosition = {'left':group.left+object.left+group.width/2, 'top': group.top+object.top+group.height/2}
+            console.log(object)
+            common.modifyLayer(object)
+          })
+          console.log(canvas)
+        }
+          if(!e.target.cropRect) common.updateStates(canvas);
+      },
+      'selection:updated': (e) => {
+        setMenu(common.getMenuType(e.selected[0]), true)
+        common.inputObjectInfo(e.selected[0])
+      },
+      'selection:created': (e) => {
+        if(e.selected[0].cropRect || e.selected[0].main ) return ;
+        setMenu(common.getMenuType(e.selected[0]), true)
+        common.inputObjectInfo(e.selected[0])
+      },
+      'object:scaling': (e) => {
+        console.log("object : scaling")
+      },
+    })
+  }, [])
+
   
-  useEffect(()=>{
-    if( imageRef.current){
-      console.log(imageRef.current)
-      imageRef.current = !imageRef.current;
-    setX(50);
-    setOpen(false);
-      canvas.componentSize['leftbar']=50;
+  function setMenu(type,canvasEvent=false) {
+    if(type ==='') return;
+    if(!canvasEvent){
+      common.mouseEventOff(canvas);
+      canvas.isDrawingMode = false; 
     }
-  },[imageRef,canvas.componentSize,image])//FIXME: image=>imageRef로 바꾸고 dependency추가했는데 의도에 맞나요?
+    canvas.defaultCursor = 'default';
+  
+    var display = document.getElementById(type).style.display;
 
-  function toggleMenu() {
-      if (wid > 50) {
-          setX(50);
-          setOpen(false);
-          canvas.componentSize['leftbar']=50;
-      }
-      else {
-        beforeLeftbarOpenedSize.current = {'width':common.getCanvasStyleWidth(), 'height' : common.getCanvasStyleHeight()}
-          setX(200);
-          setOpen(true);
-          canvas.componentSize['leftbar']=200;
-      }
+    if (display === 'block' && !canvasEvent) {
+      document.getElementById(type).style.display = '';
+      canvas.componentSize['leftbar'] = 48;
+    }
+    else {
+      var nodes = document.getElementById('submenu').childNodes;
+      nodes.forEach(node => node.style.display = '');
+      document.getElementById(type).style.display = 'block'
+      canvas.componentSize['leftbar'] = 248;
+
+      if(common.getCanvasStyleWidth()> common.getInnerSize(canvas)['innerWidth']) common.fitToProportion(canvas);
+    }
+    common.setCanvasCenter(canvas);
   }
-
-
-  function page(isOpen){
-    if(isOpen){
-      common.setCanvasCenter(canvas);
-      if(common.getCanvasStyleWidth()>common.getInnerSize(canvas)['innerWidth']){ //leftbar 열렸을 때 캔버스 크기를 넘으면 
-         common.fitToProportion(canvas)
-      }
-      return( 
-        <LeftSidebarOpened toggleMenu={toggleMenu} currentRoute={currentRoute} canvas={canvas} addLayerItem={props.addLayerItem}/>
-      )
-
-    }
-    else{
-      common.setCanvasStyleSize(beforeLeftbarOpenedSize.current['width'],beforeLeftbarOpenedSize.current['height'])
-      common.setCanvasCenter(canvas);
-      return(
-        <LeftSidebarClosed toggleMenu={toggleMenu} SetCurrentRoute={SetCurrentRoute} canvas={canvas}/>
-      )
-    }
-  }
-
   return (
-    <div className={styles.container} >
-      <div id='leftbar'style={{ width: `${wid}px`, height: '100%', transition:'0.5s ease' ,overflow:"hidden"}}>
-        
-        <div id='leftbar-content' className={styles.content}>
-          {page(isOpen)}
+  
+      <div id='leftbar' className={styles.container}>
+
+        <div style={{ display: "flex", flexDirection: "column", outline: "none" }} >
+          <AppstoreOutlinedIcon onClick={()=>setMenu('figure-menu')} />
+          <FontSizeOutlinedIcon onClick={()=>setMenu('text-menu')} />
+          <LineOutlinedIcon onClick={()=>setMenu('line-menu')} />
+          <AreaChartOutlinedIcon onClick={()=>setMenu('filter-menu')} />
+          <ScissorOutlinedIcon onClick={()=>setMenu('crop-menu')} />
         </div>
+
+      <div id='submenu' className ={styles.SubmenuWrap}>   
+        <FigureSubmenu canvas={canvas} addLayerItem={addLayerItem} />
+        <TextBoxSubmenu canvas={canvas}  addLayerItem={addLayerItem}/>
+        <LineSubmenu canvas={canvas}  addLayerItem={addLayerItem}/>
+        <FilterSubmenu canvas={canvas} />
+        <CropSubmenu canvas={canvas} />
       </div>
-    </div>
+
+      </div>
   );
 };
 

@@ -6,12 +6,12 @@ export default function ColorPicker(props){
 
     function selectColor(e) {
         const selectedColor = e.target.value;
-        console.log("selectedColor:",selectedColor);
         color.current = selectedColor;
-        console.log("color.current:",color.current);
 
         var objects = canvas.getActiveObjects();
         objects.forEach((object)=>{
+            common.modifyLayer(object)
+
             if (object.type === 'textbox' || figure.includes(object.type)) {
                 object.set({ fill: `${selectedColor}` });
         }
@@ -20,13 +20,14 @@ export default function ColorPicker(props){
                 object.set({stroke: `${selectedColor}`});
             }
         }
-        common.modifyLayer(object)
+        // common.modifyLayer(object)
         })
 
         if(canvas.isDrawingMode){
             canvas.freeDrawingBrush.color = color.current;
         }
         canvas.renderAll();
+
     }
 
 

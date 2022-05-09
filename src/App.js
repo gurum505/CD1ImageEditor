@@ -43,7 +43,6 @@ export default function App(props) {
         setCanvas(initCanvas());
     }, []);
     
-    const zoomInfo=useRef();
     //Rightsidebar
     const [Items,setItems]=useState([]);
     const nextId=useRef(1);
@@ -67,6 +66,7 @@ export default function App(props) {
         
     //TODO: modal 애니메이션 효과추가
     function addLayerItem(canvas,imgSrc){
+        console.log(imgSrc)
         //add items
         // console.log("addlayer");
         // let objectcomponent=ReactDOMServer.renderToStaticMarkup(object);
@@ -81,7 +81,6 @@ export default function App(props) {
         setItems(newItems);
         // ++canvas.objectNum;//nextId.current+=1;
     }
-
     //index=>nexPos로 아이템이 보내진다.
     const moveItem =(contents,fromId, toId)=>{
         let oriPos= contents.findIndex(obj=>obj.id === Number(fromId));
@@ -130,127 +129,65 @@ export default function App(props) {
     useEffect(()=>{
         if (canvas) {
             
-            canvas.preserveObjectStacking = true;
-            canvas.componentSize = common.initialComponentSize();
-            common.setCanvasCenter(canvas);
-
             fabric.Image.fromURL(backgroundImage,(img)=>{
                 img.default = true;
                 canvas.setBackgroundImage(img,canvas.renderAll.bind(canvas),{
                 });
                 canvas.renderAll();
                 common.updateStates(canvas);
-
             })
-            
-            canvas.on({
-                'mouse:down':()=>{
-                    console.log("mouse:down")
-                    document.getElementById('figure-width').readOnly = true;
-                },
-                'mouse:wheel': (opt) => {
-                     var delta = opt.e.deltaY;
-                    if(delta<0){
-                        common.zoom(canvas,1.1);
-                        let num=Number(zoomInfo.current.value.slice(0,-1));
-                        zoomInfo.current.value=(num*1.1).toFixed(0).toString() + "%";
-                    }else{
-                        common.zoom(canvas,0.9);
-                        let num=Number(zoomInfo.current.value.slice(0,-1));
-                        zoomInfo.current.value=(num*0.9).toFixed(0).toString() + "%";
-                    }
-                    common.setCanvasCenter(canvas);
-                },
-                'selection:updated':()=>{
-                    console.log('selection:updated')
-                    common.colorActiveLayer(canvas);
-                },
-                'object:removed': () => {
-                    console.log('object:removed');
-                },
-                'selection:cleared': () => {
-                    console.log('selection:cleared');
-                    canvas.renderAll();
-                    common.colorActiveLayer(canvas);
-                    // document.getElementById('remove-object').disabled = true;
-                    
-                },
-                'selection:created': () => {
-                    console.log('selection:created');
-                    common.colorActiveLayer(canvas);
-                    // var object = canvas.getActiveObject();
-                },
-                'object:added': () => {
-                    // console.log(window.localStorage.getItems().length)
-                    console.log('object:added');
-                    var objects = canvas.getObjects();
-                    var object = objects[objects.length-1];
-                    if(object.type!=='path'&& object.type!=='selection' && object.type!=='group' && object.cropRect!==true)
-                    {
-                        canvas.setActiveObject(object);
-                        // console.log(object.toDataURL());
-                        // console.log(common.addLayer(canvas,object));
-                        // addLayerItem(canvas,object.toDataURL());
-                        common.colorActiveLayer(canvas);
-                    }
 
-                    // if(object.main) canvas.discardActiveObject(object);
-                    // document.getElementById('remove-object').disabled = false;
-
-                },
-                'object:modified': () => {
-                    console.log('object:modified');
-                    var objects  = canvas.getActiveObjects();
-                   if (!canvas.getActiveObject().cropRect) {//crop을 위해 생성된 사각형은 modified되어도 undo stack에 쌓이면 안됨
-                    common.updateStates(canvas);
-                    objects.forEach((object)=>{
-                        common.modifyLayer(object);
-                    })
-                   }
-                    // document.getElementById('remove-object').disabled = false
-                },
-                'object:updated': () => {
-                    console.log('object:updated');
-                    // document.getElementById('remove-object').disabled = false
-                },
-                
-            });
+            canvas.componentSize = common.initialComponentSize(); // 최초 렌더링 이후 canvas에 componentSize 값 저장 
+            common.setCanvasCenter(canvas);
+            canvas.zoomInfo ='1'; //초기 캔버스 줌 x1
             
+            window.onkeydown=(e)=>common.keyDownEvent(canvas,e) 
+
             var flag;
-              window.addEventListener("resize", function(opt) { //브라우저 크기 resize에 따른 이벤트 
+            window.addEventListener("resize", function (opt) { //브라우저 크기 resize에 따른 이벤트 
                 common.setCanvasCenter(canvas)
-                var innerWidth =common.getInnerSize(canvas)['innerWidth'];
-                var innerHeight =common.getInnerSize(canvas)['innerHeight'];
-                
+                var innerWidth = common.getInnerSize(canvas)['innerWidth'];
+                var innerHeight = common.getInnerSize(canvas)['innerHeight'];
+
                 var currentWidth = common.getCanvasStyleWidth();
                 var currentHeight = common.getCanvasStyleHeight();
 
-                var ratio = canvas.width/canvas.height;
+                var ratio = canvas.width / canvas.height;
 
-                if(innerWidth<currentWidth){
+                if (innerWidth < currentWidth) {
                     flag = 'width';
-                    common.setCanvasStyleSize(innerWidth,innerWidth*(1/ratio))
+                    common.setCanvasStyleSize(innerWidth, innerWidth * (1 / ratio))
                 }
-                else if(innerHeight<currentHeight){
-                    flag  ='height'
-                    common.setCanvasStyleSize(innerHeight*ratio,innerHeight)
-                }else{
-                    if(currentHeight<canvas.height &&flag ==='height' )
-                    common.setCanvasStyleSize(innerHeight*ratio,innerHeight)
-                    
-                    if(currentWidth<canvas.width &&flag ==='width' )
-                        common.setCanvasStyleSize(innerWidth,innerWidth*(1/ratio))
+                else if (innerHeight < currentHeight) {
+                    flag = 'height'
+                    common.setCanvasStyleSize(innerHeight * ratio, innerHeight)
+                } else {
+                    if (currentHeight < canvas.height && flag === 'height')
+                        common.setCanvasStyleSize(innerHeight * ratio, innerHeight)
+
+                    if (currentWidth < canvas.width && flag === 'width')
+                        common.setCanvasStyleSize(innerWidth, innerWidth * (1 / ratio))
                 }
 
-
-        
             });
-            
-          
-            window.onkeydown = function (e) { // delete, backspace 키로 삭제
-                console.log("window.onkeydown")
-            //    common.keyDownEvent(canvas,e);
-            }
+
+
+            canvas.on({
+                'mouse:wheel': (opt) => {
+                    var delta = opt.e.deltaY;
+                    if (delta < 0) {
+                        common.zoom(canvas, 1.1);
+                        let num = Number(canvas.zoomInfo.slice(0, -1));
+                        canvas.zoomInfo = (num * 1.1).toFixed(0).toString() + "%";
+                    } else {
+                        common.zoom(canvas, 0.9);
+                        let num = Number(canvas.zoomInfo.slice(0, -1));
+                        canvas.zoomInfo = (num * 0.9).toFixed(0).toString() + "%";
+                    }
+
+                }
+            })
+
         }
     },[canvas])
    
@@ -265,8 +202,6 @@ export default function App(props) {
             objectNum : 0,
             undoStack :[],
             redoStack :[],
-            // filterValues : '',
-            // backgroundColor: 'white',
             componentSize:'',
         })
     )
@@ -276,20 +211,27 @@ export default function App(props) {
     return (
         <div className={styles.layout}>
             <Title />
-            {canvas&& <LeftSidebar 
-                        canvas={canvas} image={image} 
-                        imageRef={imageRef} addLayerItem={addLayerItem}/>}
+            {canvas && <LeftSidebar canvas={canvas}
+                image={image} 
+                imageRef={imageRef}
+                addLayerItem={addLayerItem}
+            />}
             <div  className={styles.center}>
-                {canvas && <Header canvas={canvas} image={image} 
-                        setImage={setImage} imageRef={imageRef}/>}
-
+                {canvas && <Header canvas={canvas} 
+                    image={image} 
+                    setImage={setImage} 
+                    imageRef={imageRef}
+                    addLayerItem={addLayerItem}
+                    />
+                    
+                    }
                 {/* center로 통합 필요 */}
                 <div className={styles.mainContainer}>
                     <canvas id="canvas"/>
                     <Layer canvas={canvas}></Layer>
                     <div id="layer"></div>
                 </div>
-                <Footbar canvas={canvas} zoomInfo={zoomInfo}/>{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
+                <Footbar canvas={canvas} />{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
             </div>
             <RightSidebar addLayerItem={addLayerItem} 
                     delItem={delItem} 
