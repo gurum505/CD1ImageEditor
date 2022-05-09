@@ -85,13 +85,13 @@ const Footbar = (props) => {
             <div className={styles.contents}>
                 <h2 className={styles.title}>
                 </h2>
-                <ExpandOutlinedIcon onClick={fitToProportion} children={"비율에 맞추기"} />
+                <ExpandOutlinedIcon onClick={fitToProportion} children={"fullscreen"} />
                 <span></span>
-                <ZoomOutOutlinedIcon onClick={zoomOut} children={"줌아웃"} />
+                <ZoomOutOutlinedIcon onClick={zoomOut} children={"zoom out"} />
                 <input type="text" ref={props.zoomInfo} defaultValue={'100%'} className={styles.inputdesign} disabled />
-                <ZoomInOutlinedIcon onClick={zoomIn} children={"줌인"} />
+                <ZoomInOutlinedIcon onClick={zoomIn} children={"zoom in"} />
                 <span></span>
-                <EyeOutlinedIcon onClick={preview} children={"미리보기"} />
+                <EyeOutlinedIcon onClick={preview} children={"preview"} />
             </div>
         </div>
     )
