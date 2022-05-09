@@ -177,10 +177,11 @@ export function updateStates(canvas, isCropped = false) {
     var newObjects = [];
     var filters = getMainImage(canvas) ? getMainImage(canvas).filters : [];
     var objects = canvas.getObjects();
+    console.log(objects)
     if (objects.length > 0)
         for (var j = 0; j < objects.length; j++) {
             // let clonedOject = Object.assign(Object.create(Object.getPrototypeOf(objects[j])), objects[j])
-            objects[j].clone((cloned) => { newObjects.push(cloned) }, ['id', 'main'])
+            objects[j].clone((cloned) => { newObjects.push(cloned) }, ['id', 'main','cropRect','canvasRelativePosition'])
         }
 
     if (filters) {
@@ -200,12 +201,13 @@ export function updateStates(canvas, isCropped = false) {
 //객체 관련 
 
 export function getMenuType(object){ //해당 객체의 type을 바탕으로 어떤 메뉴 창을 띄울 것인지 메뉴 이름을 반환 
-    const figure= ['rect','triangle','image','circle'];
-    const drawing =['line','path'];
+    const figureList= ['rect','triangle','image','circle'];
+    const lineList =['line'];
 
-    if(figure.includes(object.type)) return 'object-menu';
-    else if(drawing.includes(object.type)) return 'drawing-menu';
+    if(figureList.includes(object.type)) return 'figure-menu';
+    else if(lineList.includes(object.type)) return 'line-menu';
     else if(object.type ==='textbox') return 'text-menu';
+    else return ('');
 }
 export function getMainImage(canvas) { //필터할 이미지 반환 
     var result = null;
@@ -237,8 +239,8 @@ export function removeAllObjects(canvas, clear = false) {  //clear = true일 때
 
         try {
             if (!object.main)
-
-                document.getElementById(object.id).remove(); // 레이어 제거
+                // document.getElementById(object.id).remove(); // 레이어 제거
+                console.log('layer'+object.id)
         } catch (e) {
         }
     })
@@ -277,6 +279,7 @@ export function colorActiveLayer(canvas) {
 
 export function modifyLayer(object) {
     var layer = document.getElementById(object.id);
+    console.log(layer)
     // console.log(layer);
     // var layer = document.getElementById('rightsidebar-item-scroll');
     var img = layer.querySelector('img');
@@ -331,6 +334,7 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     div.style.height = '80px'
     div.style.width = '110px';
     div.style.backgroundColor = 'gray'
+    
     const el = document.getElementById('rightsidebar-item-scroll')
 
     const objectBtn = document.createElement('button');
@@ -341,6 +345,9 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
         else
         canvas.setActiveObject(object);
         canvas.renderAll();
+    }
+    objectBtn.onmousedown=()=>{
+        console.log("mousedonw")
     }
     const deleteBtn = document.createElement('button');
     deleteBtn.innerHTML = 'delete';
@@ -353,11 +360,58 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     }
 
 
-    // div.appendChild(imgTag)
-    // div.appendChild(objectBtn);
-    // div.appendChild(deleteBtn);
-    // el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
+    div.appendChild(imgTag)
+    div.appendChild(objectBtn);
+    div.appendChild(deleteBtn);
+    el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
     return src;
 }
 
 
+// figure 관련 
+
+
+const figureList = ['triangle', 'rect', 'circle', 'image'];
+const lineList = ['path','line'];
+
+
+export function mouseEventOff(canvas) {
+    canvas.off('mouse:down');
+    canvas.off('mouse:up');
+    canvas.off('mouse:move');
+    canvas.off('mouse:down:before')
+    canvas.off('mouse:up:before')
+}
+
+
+export function inputFigureInfo(object) { // figure-width, figure-height id를 갖는 input 영역에 도형의 크기 정보 입력  
+    if (!object) {
+        document.getElementById('figure-width').value = '';
+        document.getElementById('figure-height').value = '';
+        // document.getElementById('color').?;
+        // deactivateInput();
+    }
+    else {
+        document.getElementById('figure-width').value = Math.round(object.getScaledWidth());
+        document.getElementById('figure-height').value = Math.round(object.getScaledHeight());
+        document.getElementById('color').value = object.fill;
+    }
+}
+
+
+export function inputTextInfo(textbox) {
+    var info = {
+        'fill':textbox.fill, 
+        'fontStyle':textbox.fontStyle,
+        'fontWeight':textbox.fontWeight,
+        'textAlign':textbox.textAlign,
+        'underline':textbox.underline
+    }
+    console.log(info)
+}
+
+export function inputObjectInfo(object){
+    if (figureList.includes(object.type)) inputFigureInfo(object);
+    else if(lineList.includes(object.type)) {}
+    else if (object.type==='textbox') inputTextInfo(object);
+}

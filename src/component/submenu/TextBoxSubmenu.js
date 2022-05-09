@@ -2,7 +2,7 @@ import { CommentOutlined, UnderlineOutlined } from "@ant-design/icons";
 import { fabric } from "fabric";
 import { useEffect, useRef } from "react";
 import ColorPicker from "./ColorPicker";
-import styles from "./LeftSidebarSubmenu.module.css"
+import styles from "../../Layout/LeftSidebar.module.css"
 
 import * as common from "./common"
 import {
@@ -11,66 +11,50 @@ import {
     , BoldOutlinedIcon, ItalicOutlinedIcon, FontSizeOutlinedIcon, LineHeightOutlinedIcon
 } from "../icons/icons";
 
-export default function TextBoxSubmenu({ canvas, menu, setMenu }) {
+export default function TextBoxSubmenu({canvas,addLayerItem}) {
 
-    useEffect(() => {
-        canvas.off();
-        canvas.on({
-            'object:added': (e) => {
-                console.log(e)
-                canvas.setActiveObject(e.target);
-            },
-            'selection:updated': (e) => {
-                var object = e.selected[0];
-                var menuType = common.getMenuType(object)
-                if (menuType !== 'text-menu') setMenu(menuType);
-                else inputTextInfo(object);
-
-            },
-            'selection:created': (e) => {
-                var object = e.selected[0];
-                var menuType = common.getMenuType(object)
-                if (menuType !== 'text-menu') setMenu(menuType);
-                else inputTextInfo(object);
-
-            }
-        })
-    }, [menu])
     // console.log('textbox메뉴')
     const color = useRef('white');
-    canvas.isDrawingMode = false;
-    useEffect(() => {
-        canvas.off('mouse:down');
-        canvas.defaultCursor = 'default';
-    })
 
-
-    function inputTextInfo() {
-        console.log("텍스트정보 입력")
+    function inputTextInfo(textbox) {
+        console.log("텍스트정보를 텍스트박스 메뉴에 입력하는 함수 실행")
+        var info = {
+            'fill':textbox.fill, 
+            'fontStyle':textbox.fontStyle,
+            'fontWeight':textbox.fontWeight,
+            'textAlign':textbox.textAlign,
+            'underline':textbox.underline
+        }
+        console.log(info)
     }
 
-    function addTextBox() {
-        // document.getElementById('add-textbox').disabled =true;
-        canvas.defaultCursor = 'text';
-        canvas.on('mouse:down', (o) => {
-            const pointer = canvas.getPointer(o.e);
-            addTextBox();
-            var textbox = new fabric.Textbox('내용 입력', {
-                width: 250,
-                fill: `${color.current}`,
-                left: pointer.x - 125,
-                top: pointer.y - 20,
-                id: ++canvas.objectNum,
-                type: 'textbox'
-            });
-            canvas.add(textbox);
-            // document.getElementById('add-textbox').disabled =false;
-            common.updateStates(canvas);
-            common.addLayer(canvas, textbox);
-            canvas.off('mouse:down');
-            canvas.defaultCursor = 'default';
-
+    function mouseDownHandler(o){
+        const pointer = canvas.getPointer(o.e);
+        var textbox = new fabric.Textbox('내용 입력', {
+            width: 250,
+            fill: `${color.current}`,
+            left: pointer.x - 125,
+            top: pointer.y - 20,
+            id: ++canvas.objectNum,
+            type: 'textbox'
         });
+        canvas.add(textbox);
+        addLayerItem(canvas,textbox.toDataURL())
+        canvas.setActiveObject(textbox)
+        common.updateStates(canvas);
+        canvas.defaultCursor = 'default';
+    }
+
+    function mouseUpHandler(){
+        canvas.off('mouse:down',mouseDown);
+    }
+
+    var mouseDown;
+
+    function addTextBox() {
+        canvas.defaultCursor = 'text';
+        canvas.on('mouse:down', mouseDown = (o)=>mouseDownHandler(o));  
+        canvas.on('mouse:up',mouseUpHandler);
     }
 
     //추후 보완할 점 : 드래그 범위 bold 지정, 커서 위치 문자의 bold 여부에 따라 button 변경
@@ -140,7 +124,7 @@ export default function TextBoxSubmenu({ canvas, menu, setMenu }) {
 
 
     return (
-        <div className="textbox-submenu">
+        <div id='text-menu' className={styles.Submenu}>
             <div className={styles.Title}>텍스트 추가</div>
             <p><FontSizeOutlinedIcon id='add-textbox' onClick={addTextBox} /></p>
             <p><label>font color</label> <ColorPicker canvas={canvas} color={color} /></p>

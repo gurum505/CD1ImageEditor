@@ -14,90 +14,97 @@ import {
 
 import { useEffect, useRef, useState } from "react";
 import * as common from "../component/submenu/common"
-const LeftSidebar = ({ canvas, imageRef, image }) => {
+import { ConsoleSqlOutlined } from "@ant-design/icons";
+const LeftSidebar = ({ canvas, imageRef, image,addLayerItem}) => {
 
-  const recentSize = useRef('');
-  const [menu, setMenu] = useState('');
-  const menuRef = useRef('');
-  const [isOpened,setIsOpened] =useState(false);
-
+  
+  const addObjectRef = useRef(false);  
   const figure = ['rect', 'triangle', 'circle', 'image'];
 
 
   useEffect(() => {
-    window.onkeydown=(e)=>common.keyDownEvent(canvas,e)
-    canvas.componentSize = common.initialComponentSize(); // 최초 렌더링 이후 canvas에 componentSize 값 저장 
-    canvas.zoomInfo = '';
+
+    canvas.on({
+      'object:added': (e) => {
+        // canvas.setActiveObject(e.target)
+        // if(e.target.type==='path') canvas.discardActiveObject();
+      },
+      'object:modified':(e)=>{
+        console.log(e)
+        if(e.target._objects){
+          var group= e.target;
+          console.log(group.left)
+          console.log(group.width)
+          group.forEachObject((object)=>{
+            object.canvasRelativePosition = {'left':group.left+object.left+group.width/2, 'top': group.top+object.top+group.height/2}
+            console.log(object)
+            common.modifyLayer(object)
+          })
+          console.log(canvas)
+        }
+          if(!e.target.cropRect) common.updateStates(canvas);
+      },
+      'selection:updated': (e) => {
+        setMenu(common.getMenuType(e.selected[0]), true)
+        common.inputObjectInfo(e.selected[0])
+      },
+      'selection:created': (e) => {
+        if(e.selected[0].cropRect || e.selected[0].main ) return ;
+        setMenu(common.getMenuType(e.selected[0]), true)
+        common.inputObjectInfo(e.selected[0])
+      },
+      'object:scaling': (e) => {
+        console.log("object : scaling")
+      },
+    })
   }, [])
 
-  useEffect(()=>{
-    canvas.off('mouse:wheel')
-    canvas.on({
-      'mouse:wheel': (opt) => {
-        console.log('ㅋ')
-           var delta = opt.e.deltaY;
-          if(delta<0){
-              common.zoom(canvas,1.1);
-              let num=Number(canvas.zoomInfo.slice(0,-1));
-              canvas.zoomInfo=(num*1.1).toFixed(0).toString() + "%";
-          }else{
-              common.zoom(canvas,0.9);
-              let num=Number(canvas.zoomInfo.slice(0,-1));
-              canvas.zoomInfo=(num*0.9).toFixed(0).toString() + "%";
-          }
-    
-      }
-  });
   
-  })
-  useEffect(() => {  //이후 메뉴를 여닫으며 렌더링 될 때마다 canvas component의 size값을 바꾸고 캔버스 중앙 위치 
-    var leftbar = document.querySelector('#leftbar').offsetWidth;
-    canvas.componentSize['leftbar'] = leftbar;
-    if (common.getCanvasStyleWidth() > common.getInnerSize(canvas)['innerWidth']) {
-      recentSize.current = { 'width': common.getCanvasStyleWidth(), 'height': common.getCanvasStyleHeight() }; //사이즈 조절 전 캔버스 크기 저장 
-      common.fitToProportion(canvas); //leftbar 열었을 때 캔버스 style width 가 가려진다면 
+  function setMenu(type,canvasEvent=false) {
+    if(type ==='') return;
+    if(!canvasEvent){
+      common.mouseEventOff(canvas);
+      canvas.isDrawingMode = false; 
     }
-
-    if (recentSize.current !== '' && leftbar === 48) { //저장한 캔버스 크기로 돌아감
-      common.setCanvasStyleSize(recentSize.current['width'], recentSize.current['height']);
-      recentSize.current = ''
-    }
-
+    canvas.defaultCursor = 'default';
   
+    var display = document.getElementById(type).style.display;
+
+    if (display === 'block' && !canvasEvent) {
+      document.getElementById(type).style.display = '';
+      canvas.componentSize['leftbar'] = 48;
+    }
+    else {
+      var nodes = document.getElementById('submenu').childNodes;
+      nodes.forEach(node => node.style.display = '');
+      document.getElementById(type).style.display = 'block'
+      canvas.componentSize['leftbar'] = 248;
+
+      if(common.getCanvasStyleWidth()> common.getInnerSize(canvas)['innerWidth']) common.fitToProportion(canvas);
+    }
     common.setCanvasCenter(canvas);
-  },[isOpened])
-
- 
-  function changeMenu(menutype){
-    if(menu === menutype) {
-      setMenu('');
-      setIsOpened(false)
-    }else{
-      setMenu(menutype);
-      setIsOpened(true);
-    }
   }
   return (
-    <div id='leftbar' className={styles.container}>
+  
+      <div id='leftbar' className={styles.container}>
 
-      <div style={{ display: "flex", flexDirection: "column", outline: "none" }} >
-        {/* <MenuOutlinedIcon onClick={() => {SetCurrentRoute("Menu");toggleMenu();}} style={{ userSelect: "none" }}/> */}
-        <AppstoreOutlinedIcon onClick={() => { changeMenu('object-menu') }} />
-        <FontSizeOutlinedIcon onClick={() => { changeMenu('text-menu') }} />
-        <LineOutlinedIcon onClick={() => { changeMenu('drawing-menu') }} />
-        <AreaChartOutlinedIcon onClick={() => {changeMenu('filter-menu')}} />
-        <ScissorOutlinedIcon onClick={() => { changeMenu('crop-menu')}} />
+        <div style={{ display: "flex", flexDirection: "column", outline: "none" }} >
+          <AppstoreOutlinedIcon onClick={()=>setMenu('figure-menu')} />
+          <FontSizeOutlinedIcon onClick={()=>setMenu('text-menu')} />
+          <LineOutlinedIcon onClick={()=>setMenu('line-menu')} />
+          <AreaChartOutlinedIcon onClick={()=>setMenu('filter-menu')} />
+          <ScissorOutlinedIcon onClick={()=>setMenu('crop-menu')} />
+        </div>
+
+      <div id='submenu' className ={styles.SubmenuWrap}>   
+        <FigureSubmenu canvas={canvas} addLayerItem={addLayerItem} />
+        <TextBoxSubmenu canvas={canvas}  addLayerItem={addLayerItem}/>
+        <LineSubmenu canvas={canvas}  addLayerItem={addLayerItem}/>
+        <FilterSubmenu canvas={canvas} />
+        <CropSubmenu canvas={canvas} />
       </div>
 
-      {/* submenu */}
-      <div id='submenu' className={menu === '' ? styles.SubmenuClosed : styles.Submenu} >    {/* 메뉴가 열려있지 않으면 style 적용 x */}
-        {menu === 'object-menu' && <FigureSubmenu canvas={canvas} menu={menu} setMenu={setMenu} />}
-        {menu === 'text-menu' && <TextBoxSubmenu canvas={canvas} menu={menu} setMenu={setMenu} />}
-        {menu === 'drawing-menu' && <LineSubmenu canvas={canvas} menu={menu} setMenu={setMenu} />}
-        {menu === 'filter-menu' && <FilterSubmenu canvas={canvas}  menu={menu} setMenu={setMenu} />}
-        {menu === 'crop-menu' && <CropSubmenu canvas={canvas}  menu={menu} setMenu={setMenu}/>}
       </div>
-    </div>
   );
 };
 

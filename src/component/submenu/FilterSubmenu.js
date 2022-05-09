@@ -1,7 +1,8 @@
 import { fabric } from "fabric";
 import { useEffect } from "react";
 import * as common from './common'
-import styles from "./LeftSidebarSubmenu.module.css"
+// import styles from "./LeftSidebarSubmenu.module.css"
+import styles from "../../Layout/LeftSidebar.module.css"
 
 export default function FilterSubmenu(props) {
     var filters = ['grayscale', 'invert', 'remove-color', 'sepia', 'brownie',
@@ -10,20 +11,20 @@ export default function FilterSubmenu(props) {
         'polaroid', 'blend-color', 'gamma', 'kodachrome',
         'blackwhite', 'blend-image', 'hue', 'resize'];
 
-    useEffect(() => {
-        //이미지가 없을 때는 필터 기능 disabled
-        if (common.getMainImage(canvas) === null) {
-            const divElem = document.getElementById('filter-list');
+    // useEffect(() => {
+    //     //이미지가 없을 때는 필터 기능 disabled
+    //     if (common.getMainImage(canvas) === null) {
+    //         const divElem = document.getElementById('filter-menu');
 
-            const inputElements = divElem.querySelectorAll("input[type=range], input[type=checkbox], input[type=button]")
-            for (var i = 0; i < inputElements.length; i++) {
-                inputElements[i].disabled = true;
-            }
-        }
-    })
+    //         const inputElements = divElem.querySelectorAll("input[type=range], input[type=checkbox], input[type=button]")
+    //         for (var i = 0; i < inputElements.length; i++) {
+    //             inputElements[i].disabled = true;
+    //         }
+    //     }
+    // })
 
     useEffect(() => {
-        const divElem = document.getElementById('filter-list');
+        const divElem = document.getElementById('filter-menu');
         const inputElements = divElem.querySelectorAll("input,range, checkbox")
         inputElements.forEach((input) => {
             input.addEventListener('change', (e) => {
@@ -159,7 +160,7 @@ export default function FilterSubmenu(props) {
 
     return (
 
-        <div id='filter-list' className={styles.FilterLabel}>
+        <div id='filter-menu'className={styles.Submenu}>
             <div className={styles.Title}>필터</div>
             <div className={styles.effectContainer}>
                 <input type="button" id="reset" value="reset" onClick={resetFilter} />

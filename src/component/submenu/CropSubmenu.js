@@ -4,7 +4,8 @@ import backgroundImage from '../../img/background.png'
 import {
     BorderOutlinedIcon,FormOutlinedIcon
 } from "../icons/icons";
-import styles from "./LeftSidebarSubmenu.module.css"
+// import styles from "./LeftSidebarSubmenu.module.css"
+import styles from "../../Layout/LeftSidebar.module.css"
 
 import { useEffect } from "react";
 
@@ -12,10 +13,8 @@ export default function CropSubmenu({canvas,menu,setMenu}) {
     console.log("크롭메뉴 ")
 
     useEffect(()=>{
+        canvas.isDrawingMode = false;
         canvas.off();
-        canvas.on({
-            'object:added':()=>{console.log('ㅇㅇ')}
-        })
     },[menu])
     var currentImage;
     var selectionRect;
@@ -256,6 +255,7 @@ export default function CropSubmenu({canvas,menu,setMenu}) {
             canvas.defaultCursor = 'default';
             canvas.on('mouse:down:before',()=>{
                 objects.forEach((object) => {     //드래그 하면 기존의 객체까지 group select가 되어서 제대로 된 left, top 을 얻을 수 없음
+                    if(!object.main)
                     object.set({'selectable':true})
                 })
             })
@@ -273,7 +273,7 @@ export default function CropSubmenu({canvas,menu,setMenu}) {
 
 
     return (
-        <div id='crop-menu'>
+        <div id='crop-menu' className={styles.Submenu}>
             <div className={styles.Title}>자르기</div>
         <p>
             <FormOutlinedIcon onClick={cropCustom} children={"custom cut"}/>

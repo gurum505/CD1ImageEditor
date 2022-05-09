@@ -6,7 +6,6 @@ import Modal from "../component/Modal.js"
 
 
 export default function RightSidebar (props) { 
-
   const [isDragging,setIsDragging]=useState(false);
   const [isDragOver,setIsDragOver]=useState(false);
 

@@ -52,6 +52,7 @@ export default function OnelineImage(props) {
                         image.scaleToHeight(200, false);
                         image.transparentCorners = false;
                         canvas.add(image);
+                        canvas.setActiveObject(image);
                         canvas.renderAll();
                         common.updateStates(canvas)
                         // common.addLayer(canvas,image);

@@ -43,7 +43,6 @@ export default function App(props) {
         setCanvas(initCanvas());
     }, []);
     
-    const zoomInfo=useRef();
     //Rightsidebar
     const [Items,setItems]=useState([]);
     const nextId=useRef(1);
@@ -67,6 +66,7 @@ export default function App(props) {
         
     //TODO: modal 애니메이션 효과추가
     function addLayerItem(canvas,imgSrc){
+        console.log(imgSrc)
         //add items
         // console.log("addlayer");
         // let objectcomponent=ReactDOMServer.renderToStaticMarkup(object);
@@ -81,7 +81,6 @@ export default function App(props) {
         setItems(newItems);
         // ++canvas.objectNum;//nextId.current+=1;
     }
-
     //index=>nexPos로 아이템이 보내진다.
     const moveItem =(contents,fromId, toId)=>{
         let oriPos= contents.findIndex(obj=>obj.id === Number(fromId));
@@ -134,37 +133,58 @@ export default function App(props) {
                 });
                 canvas.renderAll();
                 common.updateStates(canvas);
-
             })
+
+            canvas.componentSize = common.initialComponentSize(); // 최초 렌더링 이후 canvas에 componentSize 값 저장 
+            common.setCanvasCenter(canvas);
+            canvas.zoomInfo ='1'; //초기 캔버스 줌 x1
             
-          
+            window.onkeydown=(e)=>common.keyDownEvent(canvas,e) 
+
             var flag;
-              window.addEventListener("resize", function(opt) { //브라우저 크기 resize에 따른 이벤트 
+            window.addEventListener("resize", function (opt) { //브라우저 크기 resize에 따른 이벤트 
                 common.setCanvasCenter(canvas)
-                var innerWidth =common.getInnerSize(canvas)['innerWidth'];
-                var innerHeight =common.getInnerSize(canvas)['innerHeight'];
-                
+                var innerWidth = common.getInnerSize(canvas)['innerWidth'];
+                var innerHeight = common.getInnerSize(canvas)['innerHeight'];
+
                 var currentWidth = common.getCanvasStyleWidth();
                 var currentHeight = common.getCanvasStyleHeight();
 
-                var ratio = canvas.width/canvas.height;
+                var ratio = canvas.width / canvas.height;
 
-                if(innerWidth<currentWidth){
+                if (innerWidth < currentWidth) {
                     flag = 'width';
-                    common.setCanvasStyleSize(innerWidth,innerWidth*(1/ratio))
+                    common.setCanvasStyleSize(innerWidth, innerWidth * (1 / ratio))
                 }
-                else if(innerHeight<currentHeight){
-                    flag  ='height'
-                    common.setCanvasStyleSize(innerHeight*ratio,innerHeight)
-                }else{
-                    if(currentHeight<canvas.height &&flag ==='height' )
-                    common.setCanvasStyleSize(innerHeight*ratio,innerHeight)
-                    
-                    if(currentWidth<canvas.width &&flag ==='width' )
-                        common.setCanvasStyleSize(innerWidth,innerWidth*(1/ratio))
+                else if (innerHeight < currentHeight) {
+                    flag = 'height'
+                    common.setCanvasStyleSize(innerHeight * ratio, innerHeight)
+                } else {
+                    if (currentHeight < canvas.height && flag === 'height')
+                        common.setCanvasStyleSize(innerHeight * ratio, innerHeight)
+
+                    if (currentWidth < canvas.width && flag === 'width')
+                        common.setCanvasStyleSize(innerWidth, innerWidth * (1 / ratio))
                 }
 
             });
+
+
+            canvas.on({
+                'mouse:wheel': (opt) => {
+                    var delta = opt.e.deltaY;
+                    if (delta < 0) {
+                        common.zoom(canvas, 1.1);
+                        let num = Number(canvas.zoomInfo.slice(0, -1));
+                        canvas.zoomInfo = (num * 1.1).toFixed(0).toString() + "%";
+                    } else {
+                        common.zoom(canvas, 0.9);
+                        let num = Number(canvas.zoomInfo.slice(0, -1));
+                        canvas.zoomInfo = (num * 0.9).toFixed(0).toString() + "%";
+                    }
+
+                }
+            })
 
         }
     },[canvas])
@@ -180,8 +200,6 @@ export default function App(props) {
             objectNum : 0,
             undoStack :[],
             redoStack :[],
-            // filterValues : '',
-            // backgroundColor: 'white',
             componentSize:'',
         })
     )
@@ -199,15 +217,18 @@ export default function App(props) {
                 {canvas && <Header canvas={canvas} 
                     image={image} 
                     setImage={setImage} 
-                    imageRef={imageRef}/>}
+                    imageRef={imageRef}
+                    addLayerItem={addLayerItem}
+                    />
+                    
+                    }
                 {/* center로 통합 필요 */}
                 <div className={styles.mainContainer}>
                     <canvas id="canvas" />
                     <Layer canvas={canvas}></Layer>
                     <div id="layer"></div>
                 </div>
-                <Footbar canvas={canvas} 
-                    zoomInfo={zoomInfo}/>{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
+                <Footbar canvas={canvas} />{/*투명하게(or 우선순위를 canvas보다 낮게), zoom component, 전체화면키 전환키 */}
             </div>
             <RightSidebar addLayerItem={addLayerItem} 
                     delItem={delItem} 

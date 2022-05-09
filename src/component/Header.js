@@ -173,16 +173,25 @@ export default function Header(props) {
 
     function undo() {
         if (canvas.undoStack.length > 1) {
+            canvas.discardActiveObject();
             common.removeAllObjects(canvas);
             var current = canvas.undoStack.pop();
             canvas.redoStack.push(current);
-
             var json = canvas.undoStack[canvas.undoStack.length - 1];
             var objects = json['objects'];
 
             objects.forEach((object) => {
-                console.log(object)
-                if (object.main !== true) canvas.add(object)
+                if(object.main){
+                    console.log("메인")
+                    object.set({selectable:false})
+                    console.log(object)
+                }
+                if (object.main !== true && !object.cropRect)canvas.add(object)
+                if(object.canvasRelativePosition){
+                    object.left = object.canvasRelativePosition['left']
+                    object.top = object.canvasRelativePosition['top']
+                }
+                 
             })
 
             var filters = json['filters'];
@@ -265,13 +274,17 @@ export default function Header(props) {
             var objects = json['objects'];
             var filters = json['filters']
             objects.forEach((object) => {
-                if (!object.main)
+                if (!object.main && !object.cropRect){
+                    if(object.canvasRelativePosition){
+                        object.left = object.canvasRelativePosition['left']
+                        object.top = object.canvasRelativePosition['top']
+                    }
                     canvas.add(object)
-
+                }
             })
 
             if (common.getMainImage(canvas)) common.getMainImage(canvas).applyFilters(filters);
-            canvas.renderAll();
+            canvas.renderAll(); 
             if (json['isCropped']) {
                 common.removeAllObjects(canvas, true);
                 canvas.setWidth(json['initialWidth']);
@@ -334,7 +347,8 @@ export default function Header(props) {
 
                         canvas.add(obj);
                         canvas.setActiveObject(obj);
-                        common.addLayer(canvas, obj);
+                        // common.addLayer(canvas, obj);
+                        props.addLayerItem(canvas,obj.toDataURL())
                         common.colorActiveLayer(canvas);
                         common.updateStates(canvas);
                     });
@@ -347,7 +361,8 @@ export default function Header(props) {
                     })
                     canvas.add(clonedObj);
                     canvas.setActiveObject(clonedObj);
-                    common.addLayer(canvas, clonedObj);
+                    // common.addLayer(canvas, clonedObj);
+                    props.addLayerItem(canvas,clonedObj.toDataURL())
                     common.colorActiveLayer(canvas);
                     common.updateStates(canvas);
                     canvas.requestRenderAll();

@@ -3,7 +3,6 @@ import OnlineImage from "./OnlineImage";
 import * as common from './common'
 import { ImageIcon, ImageFromInternetIcon } from "../icons/icons";
 import { useState } from "react";
-import styles from "./LeftSidebarSubmenu.module.css"
 
 export default function ImageSubmenu(props) {
     const canvas = props.canvas;

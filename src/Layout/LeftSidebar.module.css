@@ -31,11 +31,13 @@ white-space: nowrap; /*글이 재정렬되면서 밑으로 내려가지 않도�
 
 /* 서브메뉴 */
 
-.SubmenuClosed{
-  width:0px;
+.SubmenuWrap{
+  /* display:none; */
 }
 
 .Submenu {
+  display:none;
+
   box-sizing: border-box;
   /* border: 2px solid #202020; */
   width: 200px;
