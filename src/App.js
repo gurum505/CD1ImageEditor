@@ -271,109 +271,6 @@ export default function App(props) {
         })
     )
     }
-
-    const saveData = () => {
-        try{
-            var json = canvas.toDatalessJSON(['initialWidth', 'initialHeight', 'objectNum', 'id','filterValues','main']);
-            // states는 순환 참조가 발생하므로 보낼 수 없음 
-            json = JSON.stringify(json);
-
-
-            var blob = new Blob([json], { type: "text/plain;charset=utf-8" });
-            var link = document.createElement('a'); //<a> 생성
-
-            link.href = URL.createObjectURL(blob);
-            link.download = "image.json";
-            link.click();
-
-            window.localStorage.setItem("userJson", blob);
-            // window.alert("userJson:",userJson);
-        }catch{
-            console.log("error in saveData function")
-        }
-    }
-
-    const loadData=()=>{
-        
-        // var userJson=window.localStorage.getItem("userJson");
-        const blob=window.localStorage.getItem("userJson");
-        // const canvas=canvasRef.current;
-        // var newcanvas=new fabric.Canvas('c');
-        // var newCanvas=fabric.Canvas('canvas', {
-        //     width: 600,
-        //     height: 400,
-        //     initialWidth: 600,
-        //     initialHeight:400, 
-        //     objectNum : 0,
-        //     undoStack :[],
-        //     redoStack :[],
-        //     // filterValues : '',
-        //     // backgroundColor: 'white',
-        //     componentSize:'',
-        // })
-        // console.log("canvas:",canvas);
-        console.log("blob:",blob);
-        // console.log("canvas typea:",typeof(canvas));
-        // console.log("userJson type:",typeof(userJson));
-
-        var reader = new FileReader(blob);
-        reader.onload = function (e) { //onload(): 읽기 성공 시 실행되는 핸들러
-            console.log("filereader:",blob);
-            canvas.loadFromJSON(reader.result, () => {
-                common.initalCanvas(canvas,true);
-                canvas.setWidth(canvas.initialWidth);
-                canvas.setHeight(canvas.initialHeight);
-                common.setCanvasCenter(canvas);
-                common.updateStates(canvas);
-                var Objects = canvas.getObjects();
-                Objects.forEach((object)=>{
-                    if(!object.main)
-                    common.addLayer(canvas,object);
-                })
-                canvas.discardActiveObject(common.getMainImage())
-                common.colorActiveLayer(canvas);
-                canvas.renderAll();
-            });
-        }
-        
-        // if(userJson !=="[object Object]"){ //빈배열을 stringfy시 userJson은 obejct Object가 된다.
-        //     // console.log("userJson:",typeof(userJson));
-        //     userJson=JSON.parse(userJson);
-        //     console.log("userJson in load:",userJson);
-            
-        //     newcanvas.loadFromJSON(userJson, () => {
-        //         // common.initalCanvas(canvas,true);
-        //         newcanvas.setWidth(canvas.initialWidth);
-        //         newcanvas.setHeight(canvas.initialHeight);
-        //         //     common.setCanvasCenter(canvas);
-        //         // common.updateStates(canvas);
-        //         var Objects = userJson["objects"];
-        //         Objects.forEach((object)=>{
-        //             if(!object.main)
-        //             common.addLayer(newcanvas,object);
-        //         })
-        //         newcanvas.discardActiveObject(common.getMainImage())
-        //         common.colorActiveLayer(newcanvas);
-        //         newcanvas.renderAll();
-        //     });
-        // }
-        // canvasRef.current=newcanvas;
-    }
-
-
-
-    const canvasRef=useRef();
-    // useEffect(()=>{
-    //     window.addEventListener("load",loadData);
-    //     window.addEventListener("beforeunload",saveData);
-    //     // window.addEventListener("unload",saveData);
-    //     return()=>{
-    //         window.removeEventListener("load",loadData);
-    //         window.removeEventListener("beforeunload",saveData);
-    //         // window.removeEventListener("unload",saveData);
-    //     }
-    // },[])
-
     
 
     return (
@@ -388,7 +285,7 @@ export default function App(props) {
 
                 {/* center로 통합 필요 */}
                 <div className={styles.mainContainer}>
-                    <canvas id="canvas" ref={canvasRef}/>
+                    <canvas id="canvas"/>
                     <Layer canvas={canvas}></Layer>
                     <div id="layer"></div>
                 </div>
