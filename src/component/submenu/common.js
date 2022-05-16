@@ -73,9 +73,11 @@ export function setCanvasCenter(canvas) { //캔버스를 내 가운데에 위치
 export function zoom(canvas, ratio) {
     var canvasElem = document.getElementsByTagName('canvas');
     for (var i = 0; i < canvasElem.length; i++) {
-        canvasElem[i].style.width = getCanvasStyleWidth() * ratio + 'px';
-        canvasElem[i].style.height = getCanvasStyleHeight() * ratio + 'px';
+        canvasElem[i].style.width = Math.floor(getCanvasStyleWidth() * ratio) + 'px';
+        canvasElem[i].style.height = Math.floor(getCanvasStyleHeight() * ratio) + 'px';
     }
+
+    document.getElementById('zoom-info').value =Math.floor(canvas.zoomInfo*100) + '%'
     setCanvasCenter(canvas);
 
 }
@@ -98,6 +100,8 @@ export function initalCanvas(canvas, loadPrevCanvas = false) {
     canvas.setWidth(600);
     canvas.setHeight(400);
     setCanvasStyleSize(600, 400);
+    canvas.zoomInfo = 1;
+    document.getElementById('zoom-info').value='100%'
     setCanvasCenter(canvas);
 }
 
@@ -122,20 +126,25 @@ export function setCanvasStyleSize(width, height) {
 export function fitToProportion(canvas) { // 사진이 다른 컴포넌트를 넘지 않는 선에서 최대한 꽉 차게 비율을 맞춤
     var innerWidth = getInnerSize(canvas)['innerWidth'];
     var innerHeight = getInnerSize(canvas)['innerHeight'];
+    canvas.zoomInfo = 1
 
     if (getCanvasStyleWidth() > innerWidth || getCanvasStyleHeight() > innerHeight) {
         while (1) {
             if (getCanvasStyleWidth() < getInnerSize(canvas)['innerWidth'] && getCanvasStyleHeight() < getInnerSize(canvas)['innerHeight']) break;
+            canvas.zoomInfo-=0.1;
             zoom(canvas, 0.9);
         }
+        canvas.zoomInfo-=0.1;
         zoom(canvas, 0.9);
-
+ 
     }
 
     if (getCanvasStyleWidth() < innerWidth || getCanvasStyleHeight() < innerHeight) {
         while (1) {
-            if (getCanvasStyleWidth() * 1.1 < innerWidth && getCanvasStyleHeight() * 1.1 < innerHeight)
+            if (getCanvasStyleWidth() * 1.1 < innerWidth && getCanvasStyleHeight() * 1.1 < innerHeight){
                 zoom(canvas, 1.1);
+                canvas.zoomInfo+=0.1;
+            }
             else return;
         }
     }
@@ -177,7 +186,6 @@ export function updateStates(canvas, isCropped = false) {
     var newObjects = [];
     var filters = getMainImage(canvas) ? getMainImage(canvas).filters : [];
     var objects = canvas.getObjects();
-    console.log(objects)
     if (objects.length > 0)
         for (var j = 0; j < objects.length; j++) {
             // let clonedOject = Object.assign(Object.create(Object.getPrototypeOf(objects[j])), objects[j])
@@ -278,12 +286,10 @@ export function colorActiveLayer(canvas) {
 }
 
 export function modifyLayer(object) {
+    if(object.cropRect) return;
     var layer = document.getElementById(object.id);
-    console.log(layer)
-    // console.log(layer);
     // var layer = document.getElementById('rightsidebar-item-scroll');
     var img = layer.querySelector('img');
-    // console.log(img)
     var src;
     try {
         src = object.toDataURL();

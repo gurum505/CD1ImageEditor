@@ -89,7 +89,15 @@ export default function Header(props) {
                     common.setCanvasCenter(canvas);
                     common.updateStates(canvas);
                     canvas.renderAll();
-                    console.log(canvas)
+
+                    //필터 기능 누를 수 있게 변경 
+                    const divElem = document.getElementById('filter-menu');
+                    const inputElements = divElem.querySelectorAll("input[type=range], input[type=checkbox], button")
+                    for (var i = 0; i < inputElements.length; i++) {
+                        console.log(inputElements[i])
+                        inputElements[i].disabled = false;
+                    }
+
                 });
             };
             reader.readAsDataURL(file);
@@ -129,16 +137,16 @@ export default function Header(props) {
         }
     }
 
-    const serializationJson = () => { 
-        var json = canvas.toDatalessJSON(['initialWidth', 'initialHeight', 'objectNum', 'id','filterValues','main']);
+    const serializationJson = () => {
+        var json = canvas.toDatalessJSON(['initialWidth', 'initialHeight', 'objectNum', 'id', 'filterValues', 'main']);
         json = JSON.stringify(json);
         window.localStorage.setItem("userJson", json);
         return json;
-     }
+    }
 
     // 직렬화 
     function serialization() {
-        var json=serializationJson();
+        var json = serializationJson();
         var blob = new Blob([json], { type: "text/plain;charset=utf-8" });
         var link = document.createElement('a'); //<a> 생성
 
@@ -147,17 +155,17 @@ export default function Header(props) {
         link.click();
     }
 
-    const DeserializationJson = (Json) => { 
+    const DeserializationJson = (Json) => {
         canvas.loadFromJSON(Json, () => {
-            common.initalCanvas(canvas,true);
+            common.initalCanvas(canvas, true);
             canvas.setWidth(canvas.initialWidth);
             canvas.setHeight(canvas.initialHeight);
             common.setCanvasCenter(canvas);
             common.updateStates(canvas);
             var Objects = canvas.getObjects();
-            Objects.forEach((object)=>{
-                if(!object.main)
-                common.addLayer(canvas,object);
+            Objects.forEach((object) => {
+                if (!object.main)
+                    common.addLayer(canvas, object);
             })
             canvas.discardActiveObject(common.getMainImage())
             common.colorActiveLayer(canvas);
@@ -176,20 +184,20 @@ export default function Header(props) {
         }
     }
     const loadData = () => {
-        const userJson=window.localStorage.getItem("userJson");
+        const userJson = window.localStorage.getItem("userJson");
         DeserializationJson(userJson);
     }
 
-    useEffect(()=>{
-        window.addEventListener("load",loadData);
-        window.addEventListener("beforeunload",serializationJson);
+    useEffect(() => {
+        window.addEventListener("load", loadData);
+        window.addEventListener("beforeunload", serializationJson);
         // window.addEventListener("unload",saveData);
-        return()=>{
-            window.removeEventListener("load",loadData);
-            window.removeEventListener("beforeunload",serializationJson);
+        return () => {
+            window.removeEventListener("load", loadData);
+            window.removeEventListener("beforeunload", serializationJson);
             // window.removeEventListener("unload",saveData);
         }
-    },[])
+    }, [])
 
     function undo() {
         if (canvas.undoStack.length > 1) {
@@ -199,29 +207,9 @@ export default function Header(props) {
             canvas.redoStack.push(current);
             var json = canvas.undoStack[canvas.undoStack.length - 1];
             var objects = json['objects'];
-
-            objects.forEach((object) => {
-                if(object.main){
-                    console.log("메인")
-                    object.set({selectable:false})
-                    console.log(object)
-                }
-                if (object.main !== true && !object.cropRect)canvas.add(object)
-                if(object.canvasRelativePosition){
-                    object.left = object.canvasRelativePosition['left']
-                    object.top = object.canvasRelativePosition['top']
-                }
-                 
-            })
-
-            var filters = json['filters'];
-            var mainImage = json['image'];
-            if (mainImage) mainImage.applyFilters(filters);
-
-            canvas.renderAll();
-
-            common.setCanvasCenter(canvas);
-            if (json['recentStyleSize']) { 
+            
+            //crop 한 뒤 undo 했을 때 
+            if (json['recentStyleSize']) {
                 canvas.remove(common.getMainImage(canvas))
                 canvas.setWidth(json['initialWidth']);
                 canvas.setHeight(json['initialHeight']);
@@ -231,8 +219,32 @@ export default function Header(props) {
                 }
                 // common.setCanvasStyleSize(json['recentStyleSize']['width'], json['recentStyleSize']['height']);
                 common.setCanvasCenter(canvas);
-                console.log(canvas)
             }
+
+
+            objects.forEach((object) => {
+                if (object.main) {
+                    object.set({ selectable: false })
+                }
+                if (object.main !== true && !object.cropRect) {
+                    console.log(object)
+                    canvas.add(object)
+                }
+                if (object.canvasRelativePosition) {
+                    object.left = object.canvasRelativePosition['left']
+                    object.top = object.canvasRelativePosition['top']
+                }
+
+            })
+
+            var filters = json['filters'];
+            var mainImage = json['image'];
+            if (mainImage) mainImage.applyFilters(filters);
+
+            canvas.renderAll();
+
+            common.setCanvasCenter(canvas);
+         
             // canvas.loadFromJSON(json, () => {
             //     if(canvas.recentStyleSize){
             //     canvas.setWidth(canvas.initialWidth);
@@ -294,8 +306,8 @@ export default function Header(props) {
             var objects = json['objects'];
             var filters = json['filters']
             objects.forEach((object) => {
-                if (!object.main && !object.cropRect){
-                    if(object.canvasRelativePosition){
+                if (!object.main && !object.cropRect) {
+                    if (object.canvasRelativePosition) {
                         object.left = object.canvasRelativePosition['left']
                         object.top = object.canvasRelativePosition['top']
                     }
@@ -304,7 +316,7 @@ export default function Header(props) {
             })
 
             if (common.getMainImage(canvas)) common.getMainImage(canvas).applyFilters(filters);
-            canvas.renderAll(); 
+            canvas.renderAll();
             if (json['isCropped']) {
                 common.removeAllObjects(canvas, true);
                 canvas.setWidth(json['initialWidth']);
@@ -368,7 +380,7 @@ export default function Header(props) {
                         canvas.add(obj);
                         canvas.setActiveObject(obj);
                         // common.addLayer(canvas, obj);
-                        props.addLayerItem(canvas,obj.toDataURL())
+                        props.addLayerItem(canvas, obj.toDataURL())
                         common.colorActiveLayer(canvas);
                         common.updateStates(canvas);
                     });
@@ -382,7 +394,7 @@ export default function Header(props) {
                     canvas.add(clonedObj);
                     canvas.setActiveObject(clonedObj);
                     // common.addLayer(canvas, clonedObj);
-                    props.addLayerItem(canvas,clonedObj.toDataURL())
+                    props.addLayerItem(canvas, clonedObj.toDataURL())
                     common.colorActiveLayer(canvas);
                     common.updateStates(canvas);
                     canvas.requestRenderAll();
@@ -397,7 +409,7 @@ export default function Header(props) {
 
     return (
         <div id="header" className={styles.editorHeader}>
-            
+
             {/* 프로젝트관련 */}
             <div>
                 {/* 새프로젝트 */}
@@ -408,13 +420,13 @@ export default function Header(props) {
                 <DownloadOutlinedIcon className="serialization" onClick={serialization} children={"download project"} />
 
                 {/* 프로젝트 업로드 */}
-                <UploadOutlinedIcon htmlFor="Deserialization-json-file" onClick={Deserialization} children={"upload project"}/>
+                <UploadOutlinedIcon htmlFor="Deserialization-json-file" onClick={Deserialization} children={"upload project"} />
                 <input type="file" id="Deserialization-json-file" name="chooseFile" accept="application/JSON"
-                        onClick={Deserialization} />
-                
+                    onClick={Deserialization} />
+
             </div>
-                
-            <div className={styles.sideLine}/>
+
+            <div className={styles.sideLine} />
 
             {/* 이미지편집관련 */}
             <div >
@@ -424,14 +436,14 @@ export default function Header(props) {
                 {/* 이미지 가져오기 */}
                 <CloudDownloadOutlinedIcon htmlFor="import-image-file" children={"import background"} />
                 <input type="file" id="import-image-file" name="chooseFile" accept="image/*"
-                        onClick={importImage} />
-                        
+                    onClick={importImage} />
+
                 {/* 복붙 */}
-                <CopyOutlinedIcon id='copy' onClick={copy} children={"copy"}/>
-                <DiffOutlinedIcon id='paste' onClick={paste} children={"paste"}/>
+                <CopyOutlinedIcon id='copy' onClick={copy} children={"copy"} />
+                <DiffOutlinedIcon id='paste' onClick={paste} children={"paste"} />
             </div>
 
-            <div className={styles.sideLine}/>
+            <div className={styles.sideLine} />
 
             {/* redo undo */}
             <div>

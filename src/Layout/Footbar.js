@@ -10,14 +10,12 @@ const Footbar = (props) => {
     const canvas = props.canvas;
 
     function zoomIn() {
+        canvas.zoomInfo +=0.1
         common.zoom(canvas, 1.1);
-        let num = Number(props.zoomInfo.current.value.slice(0, -1));
-        props.zoomInfo.current.value = (num * 1.1).toFixed(0).toString() + "%";
     }
     function zoomOut() {
+        canvas.zoomInfo -=0.1
         common.zoom(canvas, 0.9);
-        let num = Number(props.zoomInfo.current.value.slice(0, -1));
-        props.zoomInfo.current.value = (num * 0.9).toFixed(0).toString() + "%";
     }
     function fitToProportion() {
         common.fitToProportion(canvas);
@@ -39,7 +37,7 @@ const Footbar = (props) => {
 
         if (!isPreviewOn) {
             if (canvas.componentSize['leftbar'] === 248) { // 248 :opened leftbar  size
-                isLeftbarOpenend = true;
+                isLeftbarOpenend = true;    
             } else {
                 isLeftbarOpenend = false;
             }
@@ -87,7 +85,7 @@ const Footbar = (props) => {
                 <ExpandOutlinedIcon onClick={fitToProportion} children={"fullscreen"} />
                 <span></span>
                 <ZoomOutOutlinedIcon onClick={zoomOut} children={"zoom out"} />
-                <input type="text" ref={props.zoomInfo} defaultValue={'100%'} className={styles.inputdesign} disabled />
+                <input type="text" id='zoom-info' ref={props.zoomInfo} defaultValue={'100%'} className={styles.inputdesign} disabled />
                 <ZoomInOutlinedIcon onClick={zoomIn} children={"zoom in"} />
                 <span></span>
                 <EyeOutlinedIcon onClick={preview} children={"preview"} />

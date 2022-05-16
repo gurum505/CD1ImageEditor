@@ -8,6 +8,28 @@ import { useState } from "react";
 //TODO: 드래그 후 드랍할 때 마우스 위치를 어떻게 ??
 export default function OnelineImage(props) {
     const canvas = props.canvas;
+    const axios = require("axios");
+    console.log(canvas.toDataURL())
+    console.log(typeof(canvas.toDataURL()))
+    const options = {
+      method: 'GET',
+      url: 'https://google-reverse-image-search.p.rapidapi.com/imgSearch',
+      params: {url: 'https://l450v.alamy.com/450v/2j0k6b8/vector-map-of-ukraine-in-the-colors-of-the-ukrainian-flag-isolated-white-background-2j0k6b8.jpg'},
+      headers: {
+        'X-RapidAPI-Host': 'google-reverse-image-search.p.rapidapi.com',
+        'X-RapidAPI-Key': '61693e0399mshcc29d5c513e9fcbp1f87aejsn9335eeb9efd6'
+      }
+    };
+    
+    axios.request(options).then(function (response) {
+        console.log(response.data);
+        console.log(response.data.googleSearchResult)
+    }).catch(function (error) {
+        console.error(error);
+    });
+
+
+
 
     const apikey = "26628044-6a51b2056c4c10fd1fccc159d";
     const lang = 'ko' //검색 지역 
@@ -19,7 +41,7 @@ export default function OnelineImage(props) {
     var query = "";
 
     const [isCompleted, setIsCompleted] = useState(false); //이미지 검색 결과가 들어오면 style을 적용하기 위한 state
-
+    
     function loadImage() {
         if (query = '') return
         query = document.getElementById('query').value;
@@ -28,7 +50,6 @@ export default function OnelineImage(props) {
             // document.querySelector(".gallery").innerHTML = "";
 
             const data = await fetch(`https://pixabay.com/api?q=${query}&key=${apikey}&lang=${lang}&colors=${colors}&per_page=50`);
-
             const result = await data.json();   //await : 처리 될 때까지 기다림 
 
             result.hits.forEach((photo) => {
@@ -54,8 +75,9 @@ export default function OnelineImage(props) {
                         canvas.add(image);
                         canvas.setActiveObject(image);
                         canvas.renderAll();
-                        common.updateStates(canvas)
-                        // common.addLayer(canvas,image);
+                        common.updateStates(canvas);
+                        props.addLayerItem(canvas,imgtag.src)
+
                     });
 
                 };

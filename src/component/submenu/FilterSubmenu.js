@@ -11,17 +11,17 @@ export default function FilterSubmenu(props) {
         'polaroid', 'blend-color', 'gamma', 'kodachrome',
         'blackwhite', 'blend-image', 'hue', 'resize'];
 
-    // useEffect(() => {
-    //     //이미지가 없을 때는 필터 기능 disabled
-    //     if (common.getMainImage(canvas) === null) {
-    //         const divElem = document.getElementById('filter-menu');
+    useEffect(() => {
+        //이미지가 없을 때는 필터 기능 disabled
+        if (common.getMainImage(canvas) === null) {
+            const divElem = document.getElementById('filter-menu');
 
-    //         const inputElements = divElem.querySelectorAll("input[type=range], input[type=checkbox], input[type=button]")
-    //         for (var i = 0; i < inputElements.length; i++) {
-    //             inputElements[i].disabled = true;
-    //         }
-    //     }
-    // })
+            const inputElements = divElem.querySelectorAll("input[type=range], input[type=checkbox], button")
+            for (var i = 0; i < inputElements.length; i++) {
+                inputElements[i].disabled = true;
+            }
+        }
+    })
 
     useEffect(() => {
         const divElem = document.getElementById('filter-menu');
@@ -41,7 +41,7 @@ export default function FilterSubmenu(props) {
     const canvas = props.canvas;
     const f = fabric.Image.filters;
 
-  
+
     function resetFilter() { //필터 초기화 
         const obj = common.getMainImage(canvas);
         var inputNodes = document.getElementById('filter-list').getElementsByTagName('input');
@@ -160,23 +160,24 @@ export default function FilterSubmenu(props) {
 
     return (
 
-        <div id='filter-menu'className={styles.Submenu}>
+        <div id='filter-menu' className={styles.Submenu}>
             <div className={styles.Title}>Filter</div>
             <p><label> width</label> <input type="text" /></p>
             <p><label> height</label> <input type="text" /></p>
             <p>
-            {/* reset버튼을 오른쪽으로 가게하기위한 빈 span*/}
+                {/* reset버튼을 오른쪽으로 가게하기위한 빈 span*/}
                 <span></span>
                 <span></span>
+
+            </p>
+            <div className={styles.effectContainer} id='filter-list'>
                 <button type="button" id="reset" value="reset" onClick={resetFilter}>
                     reset
                 </button>
-            </p>  
-            <div className={styles.effectContainer}>
                 {/* <input type="button" id="reset" value="reset" onClick={resetFilter} /> */}
 
-                {/* <label htmlFor="invert">Invert <input type="checkbox" id='invert' value='인버트' onClick={invert} /> </label> */}
-                <button id="invert" onClick={invert} > Invert</button>
+                <label htmlFor="invert">Invert <input type="checkbox" id='invert' value='인버트' onClick={invert} /> </label>
+                {/* <button id="invert" onClick={invert} > Invert</button> */}
 
                 <label>Brightness <input type="checkbox" id="brightness" onClick={brightness} /> </label>
                 <input type="range" id="brightness-value" defaultValue="0" min="-1" max="1" step="0.003921" onChange={brightnessValue} />
@@ -217,7 +218,7 @@ export default function FilterSubmenu(props) {
         //     Red <input type="range" id="gamma-red" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaRed}/>
         //     Green <input type="range" id="gamma-green" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaGreen} />
         //     Blue <input type="range" id="gamma-blue" defaultValue="1" min="0.2" max="2.2" step="0.003921" onChange={gammaBlue} />
-            
+
         //     {/* e.target.checked */}
         //     <button id="contrast" onClick={contrast}> Contrast</button>
         //     <input type="range" id="contrast-value" defaultValue="0" min="-1" max="1" step="0.003921" onChange={contrastValue} />
@@ -229,12 +230,12 @@ export default function FilterSubmenu(props) {
         //     {/* e.target.checked */}
         //     <button id="pixelate" onClick={pixelate}>Pixelate</button>
         //     <input type="range" id="pixelate-value" defaultValue="1" min="1" max="20" step="3" onChange={pixelateValue} />
-            
+
         //     {/* e.target.checked */}
         //     <button id="blur" onClick={blur}>Blur</button>
         //     <input type="range" id="blur-value" defaultValue="0" min="0" max="1" step="0.1" onChange={blurValue} />
         // </div>
-            // </div>
+        // </div>
 
     )
 }
