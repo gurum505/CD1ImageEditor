@@ -180,16 +180,16 @@ export default function Header(props) {
         DeserializationJson(userJson);
     }
 
-    useEffect(()=>{
-        window.addEventListener("load",loadData);
-        window.addEventListener("beforeunload",serializationJson);
-        // window.addEventListener("unload",saveData);
-        return()=>{
-            window.removeEventListener("load",loadData);
-            window.removeEventListener("beforeunload",serializationJson);
-            // window.removeEventListener("unload",saveData);
-        }
-    },[])
+    // useEffect(()=>{
+    //     window.addEventListener("load",loadData);
+    //     window.addEventListener("beforeunload",serializationJson);
+    //     // window.addEventListener("unload",saveData);
+    //     return()=>{
+    //         window.removeEventListener("load",loadData);
+    //         window.removeEventListener("beforeunload",serializationJson);
+    //         // window.removeEventListener("unload",saveData);
+    //     }
+    // },[])
 
     function undo() {
         if (canvas.undoStack.length > 1) {
