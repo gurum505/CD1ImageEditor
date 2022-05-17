@@ -21,7 +21,7 @@ export default function FigureSubmenu({ canvas, addLayerItem  }) {
     const figureList = ['triangle', 'rect', 'circle', 'image']
     const color = useRef('#FFFFFF');
     var figure, rect, circle, triangle, isDown, origX, origY;
-    console.log(canvas)
+    // console.log(canvas)
 
     function inputFigureInfo(object) { // figure-width, figure-height id를 갖는 input 영역에 도형의 크기 정보 입력  
         if (!object) {

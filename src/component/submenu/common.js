@@ -312,7 +312,7 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
         src = object.getSrc();
         console.log(src)
     }
-    //img속성2
+    // img속성2
     imgTag.src = src;
     imgTag.margin = 0;
     imgTag.padding = 0;
@@ -360,10 +360,10 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
     }
 
 
-    div.appendChild(imgTag)
-    div.appendChild(objectBtn);
-    div.appendChild(deleteBtn);
-    el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
+    // div.appendChild(imgTag)
+    // div.appendChild(objectBtn);
+    // div.appendChild(deleteBtn);
+    // el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
     return src;
 }
 
