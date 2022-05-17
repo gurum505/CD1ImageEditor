@@ -10,8 +10,6 @@ import styles from "../../Layout/LeftSidebar.module.css"
 import { useEffect } from "react";
 
 export default function CropSubmenu({canvas,menu,setMenu}) {
-    console.log("크롭메뉴 ")
-
     useEffect(()=>{
         canvas.isDrawingMode = false;
         canvas.off();
@@ -79,6 +77,8 @@ export default function CropSubmenu({canvas,menu,setMenu}) {
         return upperCanvas.style.height.substr(0,upperCanvas.style.height.length-2);
     }
     function addSelectionRect(ratio = '') {
+        cancle();
+
         canvas.discardActiveObject();
         if(selectionRect) canvas.remove(selectionRect);
         var ratio;
@@ -107,7 +107,6 @@ export default function CropSubmenu({canvas,menu,setMenu}) {
         });
         // selectionRect.set({ 'width': width, 'height': height });
         canvas.add(selectionRect);
-        console.log(selectionRect)
         canvas.centerObject(selectionRect);
     }
 
@@ -166,6 +165,7 @@ export default function CropSubmenu({canvas,menu,setMenu}) {
 
 
     function cropCustom() {
+        cancle();
         canvas.discardActiveObject();
         if(selectionRect) canvas.remove(selectionRect)
         // canvas.selection = false; 
@@ -266,7 +266,6 @@ export default function CropSubmenu({canvas,menu,setMenu}) {
 
     function cancle() {
         if (canvas.getActiveObject() === selectionRect) canvas.remove(selectionRect);
-        var cropBtn = document.querySelectorAll('.crop-button');
 
     }
 

@@ -257,7 +257,6 @@ export default function LineSubmenu({ canvas,addLayerItem }) {
             </p>
             <p>
                 <select id='drawing-mode' onChange={setDrawingMode} style={{}}>
-                    <option value="">--choose drawing option--</option>
                     <option>Pencil</option>
                     <option>Circle</option>
                     <option>Spray</option>

@@ -33,7 +33,7 @@ export default function ImageSubmenu(props) {
 
                     canvas.add(img).setActiveObject(img);
                     common.updateStates(canvas);
-                    common.addLayer(canvas, img);
+                    props.addLayerItem(canvas,img.toDataURL())
 
                     canvas.renderAll();
 
@@ -52,7 +52,7 @@ export default function ImageSubmenu(props) {
                 <input type="file" id="add-local-image-file" name="chooseFile" accept="image/*" onClick={addLocalImage} style={{ display: 'none' }} />
                 <ImageFromInternetIcon htmlFor={"put htmlFor"} children={"from internet"} onClick={addOnlineImage} />
             </p>
-            {onlineImageOption && <OnlineImage canvas={canvas} />}
+            {onlineImageOption && <OnlineImage canvas={canvas} addLayerItem={props.addLayerItem}/>}
         </div>
     )
 }

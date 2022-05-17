@@ -66,7 +66,6 @@ export default function App(props) {
         
     //TODO: modal 애니메이션 효과추가
     function addLayerItem(canvas,imgSrc){
-        console.log(imgSrc)
         //add items
         // console.log("addlayer");
         // let objectcomponent=ReactDOMServer.renderToStaticMarkup(object);
@@ -139,7 +138,7 @@ export default function App(props) {
 
             canvas.componentSize = common.initialComponentSize(); // 최초 렌더링 이후 canvas에 componentSize 값 저장 
             common.setCanvasCenter(canvas);
-            canvas.zoomInfo ='1'; //초기 캔버스 줌 x1
+            canvas.zoomInfo =1; //초기 캔버스 줌 x1
             
             window.onkeydown=(e)=>common.keyDownEvent(canvas,e) 
 
@@ -175,16 +174,10 @@ export default function App(props) {
             canvas.on({
                 'mouse:wheel': (opt) => {
                     var delta = opt.e.deltaY;
-                    if (delta < 0) {
-                        common.zoom(canvas, 1.1);
-                        let num = Number(canvas.zoomInfo.slice(0, -1));
-                        canvas.zoomInfo = (num * 1.1).toFixed(0).toString() + "%";
-                    } else {
-                        common.zoom(canvas, 0.9);
-                        let num = Number(canvas.zoomInfo.slice(0, -1));
-                        canvas.zoomInfo = (num * 0.9).toFixed(0).toString() + "%";
-                    }
-
+                    var value = delta<0? 0.1:-0.1;
+                    canvas.zoomInfo += value;
+                    common.zoom(canvas,1+value)
+                    // document.getElementById('zoom-info').value =Math.fl oor(canvas.zoomInfo*100) + '%'
                 }
             })
 
@@ -192,7 +185,6 @@ export default function App(props) {
     },[canvas])
    
     const initCanvas = () => {
-        console.log("initCanvas")
         return (
         new fabric.Canvas('canvas', {
             width: 600,
