@@ -53,7 +53,7 @@ export default function RightSidebar (props) {
     <div id ="rightsidebar" className={styles.container}>
       <div className={styles.itemList}>
       {/* props.addLayerItem */}
-        <Modal isModalOpen={isModalOpen} closeModal={closeModal} />
+        <Modal isModalOpen={isModalOpen} closeModal={closeModal} canvas={props.canvas} addLayerItem={props.addLayerItem} />
         <div className={styles.addItem} onClick={openModal}>
           <PlusOutlined style={{fontSize:"20pt", color:"gray"}} />
         </div>

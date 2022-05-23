@@ -164,8 +164,12 @@ export default function Header(props) {
             common.updateStates(canvas);
             var Objects = canvas.getObjects();
             Objects.forEach((object) => {
-                if (!object.main)
-                    common.addLayer(canvas, object);
+                console.log(object)
+                if (!object.main){
+                    // common.addLayer(canvas, object);
+                    console.log('추가')
+                    props.addLayerItem(canvas,object.toDataURL())
+                }
             })
             canvas.discardActiveObject(common.getMainImage())
             common.colorActiveLayer(canvas);
