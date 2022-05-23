@@ -1,5 +1,5 @@
 import styles from "./LayerList.module.css";
-import {DashOutlined} from "@ant-design/icons"
+import {CloseOutlined} from "@ant-design/icons"
 
 export default function LayerList(props){
     const {Items, delItem,handleDragStart,handleDragOver,handleDrop,idDragOver,canvas}=props
@@ -42,7 +42,7 @@ export default function LayerList(props){
                     <>
                     
                     <div onClick={()=>delItem(canvas,Item.id)}>
-                      <DashOutlined className={styles.ItemButton} />
+                      <CloseOutlined className={styles.ItemButton} />
                     </div>
                     <div id ={"layer"+Item.id} className={styles.select} onClick={()=>selectFromLayer(canvas,Item.id)}>
                         {/* 선택용 투명 레이어 */}

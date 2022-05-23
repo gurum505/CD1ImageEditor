@@ -147,11 +147,8 @@ const Modal = (props) => {
                 <TriangleIcon onClick={addTriangle} />
               </div>
               <div>
-                <ImageIcon htmlFor={"add-local-image-file"} children={"from file"} />
+                <ImageIcon htmlFor={"add-local-image-file"} />
                 <input type="file" id="add-local-image-file" name="chooseFile" accept="image/*" onClick={addLocalImage} style={{ display: 'none' }} />
-                <ImageFromInternetIcon htmlFor={"put htmlFor"} children={"from internet"}  />
-            
-                {/* FIXME: 따로 스타일을 지정해줘야함 */}
                 <span className={styles.textIcon}>
                   <FontSizeOutlinedIcon  onClick={addTextBox}/>
                 </span>

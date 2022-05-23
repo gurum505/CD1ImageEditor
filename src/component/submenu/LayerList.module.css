@@ -32,9 +32,8 @@
   position:absolute;
   top: 0px;
   right:0;
-  background-color: #666565;/*TODO: bgColor없애기*/
-  border-radius: 5px;
   z-index: 100;
+  color: #666565;
 }
 .ItemButton:hover{
   cursor: pointer;
