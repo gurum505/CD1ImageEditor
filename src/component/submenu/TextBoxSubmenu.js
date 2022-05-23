@@ -15,12 +15,15 @@ export default function TextBoxSubmenu({ canvas, addLayerItem }) {
 
     // console.log('textbox메뉴')
     const color = useRef('white');
-    const [alignChecked, makeAlignChecked] = useState("");
+    const [alignChecked, makeAlignChecked] = useState('left');
+    const [boldChecked,makeBoldChecked] =useState("");
+    const [italicChecked,makeItalicChecked] =useState("");
+    const [underlineChecked, makeUnderlineChecked]=useState("");
+
     // var fontWeight={"bold":false,"italic":false,"underline":false}; //FIXME: default값을 text객체에서 불러와야함 all false가 아니라
     // const [fontChecked,makeFontChecked] =useState(fontWeight);
 
     function inputTextInfo(textbox) {
-        console.log("텍스트정보를 텍스트박스 메뉴에 입력하는 함수 실행")
         var info = {
             'fill': textbox.fill,
             'fontStyle': textbox.fontStyle,
@@ -28,7 +31,6 @@ export default function TextBoxSubmenu({ canvas, addLayerItem }) {
             'textAlign': textbox.textAlign,
             'underline': textbox.underline
         }
-        console.log(info)
     }
 
     function mouseDownHandler(o) {
@@ -41,6 +43,23 @@ export default function TextBoxSubmenu({ canvas, addLayerItem }) {
             id: ++canvas.objectNum,
             type: 'textbox'
         });
+        textbox.on('selected',(e)=>{
+            common.setMenu(common.getMenuType('textbox'),canvas,true);
+            console.log(e.target)
+            if(e.target.fontWeight ==='bold') makeBoldChecked(true)
+            else makeBoldChecked(false)
+
+            if(e.target.fontStyle==='italic') makeItalicChecked(true);
+            else makeItalicChecked(false)
+
+            if(e.target.underline===true) makeUnderlineChecked(true);
+            else makeUnderlineChecked(false)
+
+            makeAlignChecked(e.target.textAlign)
+
+            // if(e.target.)
+            
+        })
         canvas.add(textbox);
         addLayerItem(canvas, textbox.toDataURL())
         canvas.setActiveObject(textbox)
@@ -68,7 +87,10 @@ export default function TextBoxSubmenu({ canvas, addLayerItem }) {
                 if (object.type === 'textbox') {
                     var fontWeight = object.fontWeight === 'bold' ? 'normal' : 'bold';
                     object.set("fontWeight", fontWeight);
+                    console.log(fontWeight)
                     canvas.renderAll();
+                    if(fontWeight==='normal') makeBoldChecked(false);
+                    else makeBoldChecked(true)
                 }
             })
             common.updateStates(canvas)
@@ -97,7 +119,9 @@ export default function TextBoxSubmenu({ canvas, addLayerItem }) {
                 if (object.type === 'textbox') {
                     var fontFamily = object.fontStyle === 'italic' ? 'normal' : 'italic';
                     object.set("fontStyle", fontFamily);
+                    if(fontFamily==='normal') makeItalicChecked(false) ; else makeItalicChecked(true)
                     canvas.renderAll();
+                    
                 }
             })
 
@@ -114,6 +138,7 @@ export default function TextBoxSubmenu({ canvas, addLayerItem }) {
                 if (object.type === 'textbox') {
                     var underline = !object.underline;
                     object.set('underline', underline);
+                    makeUnderlineChecked(underline)
                     canvas.renderAll();
                 }
             })
@@ -121,7 +146,7 @@ export default function TextBoxSubmenu({ canvas, addLayerItem }) {
             // document.getElementById("bold").style.fontWeight = `${fontWeight}`;
             // text.setSelectionStyles({ underline: underline }, text.selectionStart,99 );
             common.updateStates(canvas)
-
+            // makeUnderlineChecked(true)
         }
     }
 
@@ -136,7 +161,9 @@ export default function TextBoxSubmenu({ canvas, addLayerItem }) {
                 }
             })
             // console.log("to",to);
-            makeAlignChecked(to);
+            
+           makeAlignChecked(to);
+
             common.updateStates(canvas)
         }
         // console.log(to==="left");
@@ -167,13 +194,13 @@ export default function TextBoxSubmenu({ canvas, addLayerItem }) {
             <label style={{ marginLeft: "15px" }}>font</label>
             <ul>
                 <li>
-                    <BoldOutlinedIcon onClick={makeTextBold} />
+                    <BoldOutlinedIcon  onClick={makeTextBold} checked={boldChecked} />
                 </li>
                 <li>
-                    <ItalicOutlinedIcon onClick={italicizeText} />
+                    <ItalicOutlinedIcon onClick={italicizeText} checked={italicChecked}/>
                 </li>
                 <li>
-                    <UnderlineOutlinedIcon onClick={underlineText} />
+                    <UnderlineOutlinedIcon onClick={underlineText} checked={underlineChecked}/>
                 </li>
             </ul>
         </div>

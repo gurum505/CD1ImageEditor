@@ -49,11 +49,12 @@ const LeftSidebar = ({ canvas, imageRef, image,addLayerItem}) => {
         
           if(!e.target.cropRect) common.updateStates(canvas);
       },
-      'selection:updated': (e) => {
-        console.log('update')
-        setMenu(common.getMenuType(e.selected[0]), true)
-        common.inputObjectInfo(e.selected[0])
-      },
+      // 'selection:updated': (e) => {
+      //   console.log('update')
+      //   setMenu(common.getMenuType(e.selected[0]), true)
+      //   console.log("나다")
+      //   common.inputObjectInfo(e.selected[0])
+      // },
       'selection:created': (e) => {
         if(e.selected.length!==1) return ; // 여러 객체 선택 시 menu 전환 안되게  
 

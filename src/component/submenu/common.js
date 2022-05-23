@@ -406,6 +406,9 @@ export function inputFigureInfo(object) { // figure-width, figure-height idë¥¼ ê
 
 
 export function inputTextInfo(textbox) {
+    const btn = document.querySelector('[aria-label="bold"]')
+    btn.checked = true;
+    console.log(btn)
     var info = {
         'fill':textbox.fill, 
         'fontStyle':textbox.fontStyle,
@@ -413,6 +416,7 @@ export function inputTextInfo(textbox) {
         'textAlign':textbox.textAlign,
         'underline':textbox.underline
     }
+    
     console.log(info)
 }
 
@@ -421,3 +425,29 @@ export function inputObjectInfo(object){
     else if(lineList.includes(object.type)) {}
     else if (object.type==='textbox') inputTextInfo(object);
 }
+
+
+export function setMenu(type,canvas,canvasEvent=false) {
+    if(type ==='') return;
+    if(!canvasEvent){
+      mouseEventOff(canvas);
+      canvas.isDrawingMode = false; 
+    }
+    canvas.defaultCursor = 'default';
+  
+    var display = document.getElementById(type).style.display;
+
+    if (display === 'block' && !canvasEvent) {
+      document.getElementById(type).style.display = '';
+      canvas.componentSize['leftbar'] = 48;
+    }
+    else {
+      var nodes = document.getElementById('submenu').childNodes;
+      nodes.forEach(node => node.style.display = '');
+      document.getElementById(type).style.display = 'block'
+      canvas.componentSize['leftbar'] = 248;
+
+      if(getCanvasStyleWidth()> getInnerSize(canvas)['innerWidth']) fitToProportion(canvas);
+    }
+    setCanvasCenter(canvas);
+  }

@@ -154,16 +154,58 @@ export default function FilterSubmenu(props) {
         applyFilterValue(11, 'blur', parseFloat(e.target.value, 10));
     }
 
+    function setCanvasWidth(e){
+        var value;
+        if (!e.target.value) value = 100 //값이 없을 때 객체가 사라지는 것을 방지
+        else value = parseInt(e.target.value);
+        canvas.setWidth(value);
+        common.getMainImage(canvas).set({
+            scaleX: canvas.width/ common.getMainImage(canvas).width,
+        })
+        canvas.initalWidth = value;
+        common.setCanvasCenter(canvas);
+        canvas.renderAll();
+    }
 
+    function setCanvasHeight(e){
+        var value;
+        if (!e.target.value) value = 100 //값이 없을 때 객체가 사라지는 것을 방지
+        else value = parseInt(e.target.value);
+        canvas.setHeight(value);
+        common.getMainImage(canvas).set({
+            scaleY: canvas.height/ common.getMainImage(canvas).height,
+        })
+        canvas.initialHeight = value;
+        common.setCanvasCenter(canvas);
+        canvas.renderAll();
 
+    }   
+
+    function setCanvasSize(){
+        var width = document.getElementById('canvas-width').value;
+        var height = document.getElementById('canvas-height').value;
+        canvas.setWidth(width)
+        canvas.setHeight(height)
+        console.log(common.getMainImage(canvas))
+        common.getMainImage(canvas).set({
+            scaleX: canvas.width/ common.getMainImage(canvas).width,
+            scaleY: canvas.height/ common.getMainImage(canvas).height,
+        })
+        // common.getMainImage(canvas).scaleToWidth(width);
+        // common.getMainImage(canvas).scaleToHeight(height);
+
+        common.setCanvasCenter(canvas);
+      
+    }
 
 
     return (
 
         <div id='filter-menu' className={styles.Submenu}>
             <div className={styles.Title}>Filter</div>
-            <p><label> width</label> <input type="text" /></p>
-            <p><label> height</label> <input type="text" /></p>
+            <p><label> width</label> <input type="text" id='canvas-width' onChange={setCanvasWidth}/></p>
+            <p><label> height</label> <input type="text" id='canvas-height' onChange={setCanvasHeight} /></p>
+            {/* <p><button onClick={setCanvasSize}>apply</button></p> */}
             <p>
                 {/* reset버튼을 오른쪽으로 가게하기위한 빈 span*/}
                 <span></span>
