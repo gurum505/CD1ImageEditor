@@ -94,7 +94,6 @@ export default function Header(props) {
                     const divElem = document.getElementById('filter-menu');
                     const inputElements = divElem.querySelectorAll("input[type=range], input[type=checkbox], button")
                     for (var i = 0; i < inputElements.length; i++) {
-                        console.log(inputElements[i])
                         inputElements[i].disabled = false;
                     }
 
@@ -164,11 +163,9 @@ export default function Header(props) {
             common.updateStates(canvas);
             var Objects = canvas.getObjects();
             Objects.forEach((object) => {
-                console.log(object)
                 if (!object.main){
                     // common.addLayer(canvas, object);
-                    console.log('추가')
-                    props.addLayerItem(canvas,object.toDataURL())
+                    // props.addLayerItem(canvas,object.toDataURL())
                 }
             })
             canvas.discardActiveObject(common.getMainImage())
@@ -231,7 +228,6 @@ export default function Header(props) {
                     object.set({ selectable: false })
                 }
                 if (object.main !== true && !object.cropRect) {
-                    console.log(object)
                     canvas.add(object)
                 }
                 if (object.canvasRelativePosition) {

@@ -27,8 +27,8 @@ const LeftSidebar = ({ canvas, imageRef, image,addLayerItem}) => {
     canvas.on({
       'selection:cleared':(e)=>{
         console.log(e)
-        if (e.deselected)
-        e.deselected.forEach((object)=>{if (!object.cropRect)common.modifyLayer(object)});
+        // if (e.deselected)
+        // e.deselected.forEach((object)=>{if (!object.cropRect)common.modifyLayer(object)});
       },
       'object:added': (e) => {
         // canvas.setActiveObject(e.target)
@@ -40,21 +40,19 @@ const LeftSidebar = ({ canvas, imageRef, image,addLayerItem}) => {
           var group= e.target;
           group.forEachObject((object)=>{
             object.canvasRelativePosition = {'left':group.left+object.left+group.width/2, 'top': group.top+object.top+group.height/2};
-            common.modifyLayer(object)
+            // common.modifyLayer(object)
           })
         }else{
-          common.modifyLayer(e.target)
+          // common.modifyLayer(e.target)
           
         }
         
           if(!e.target.cropRect) common.updateStates(canvas);
       },
-      // 'selection:updated': (e) => {
-      //   console.log('update')
-      //   setMenu(common.getMenuType(e.selected[0]), true)
-      //   console.log("나다")
-      //   common.inputObjectInfo(e.selected[0])
-      // },
+      'selection:updated': (e) => {
+        setMenu(common.getMenuType(e.selected[0]), true)
+        common.inputObjectInfo(e.selected[0])
+      },
       'selection:created': (e) => {
         if(e.selected.length!==1) return ; // 여러 객체 선택 시 menu 전환 안되게  
 

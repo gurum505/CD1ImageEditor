@@ -43,24 +43,24 @@ export default function TextBoxSubmenu({ canvas, addLayerItem }) {
             id: ++canvas.objectNum,
             type: 'textbox'
         });
-        textbox.on('selected',(e)=>{
-            common.setMenu(common.getMenuType('textbox'),canvas,true);
-            console.log(e.target)
-            if(e.target.fontWeight ==='bold') makeBoldChecked(true)
-            else makeBoldChecked(false)
-
-            if(e.target.fontStyle==='italic') makeItalicChecked(true);
-            else makeItalicChecked(false)
-
-            if(e.target.underline===true) makeUnderlineChecked(true);
-            else makeUnderlineChecked(false)
-
-            makeAlignChecked(e.target.textAlign)
-
-            // if(e.target.)
+        // textbox.on('selected',(e)=>{
+        //     console.log("텍스트박스에요")
             
-        })
+        //     common.setMenu('text-menu',canvas,true);
+        //     if(e.target.fontWeight ==='bold') makeBoldChecked(true)
+        //     else makeBoldChecked(false)
+
+        //     if(e.target.fontStyle==='italic') makeItalicChecked(true);
+        //     else makeItalicChecked(false)
+
+        //     if(e.target.underline===true) makeUnderlineChecked(true);
+        //     else makeUnderlineChecked(false)
+
+        //     makeAlignChecked(e.target.textAlign)
+            
+        // })
         canvas.add(textbox);
+        console.log(textbox)
         addLayerItem(canvas, textbox.toDataURL())
         canvas.setActiveObject(textbox)
         common.updateStates(canvas);
@@ -89,8 +89,8 @@ export default function TextBoxSubmenu({ canvas, addLayerItem }) {
                     object.set("fontWeight", fontWeight);
                     console.log(fontWeight)
                     canvas.renderAll();
-                    if(fontWeight==='normal') makeBoldChecked(false);
-                    else makeBoldChecked(true)
+                    if(fontWeight==='normal') document.querySelector('[aria-label="bold"]').style.background  = '#161616'
+                    else document.querySelector('[aria-label="bold"]').style.background  = 'white'
                 }
             })
             common.updateStates(canvas)
@@ -119,7 +119,8 @@ export default function TextBoxSubmenu({ canvas, addLayerItem }) {
                 if (object.type === 'textbox') {
                     var fontFamily = object.fontStyle === 'italic' ? 'normal' : 'italic';
                     object.set("fontStyle", fontFamily);
-                    if(fontFamily==='normal') makeItalicChecked(false) ; else makeItalicChecked(true)
+                    if(fontFamily==='normal') document.querySelector('[aria-label="italic"]').style.background  = '#161616'
+                    else document.querySelector('[aria-label="italic"]').style.background  = 'white';            
                     canvas.renderAll();
                     
                 }
@@ -138,7 +139,8 @@ export default function TextBoxSubmenu({ canvas, addLayerItem }) {
                 if (object.type === 'textbox') {
                     var underline = !object.underline;
                     object.set('underline', underline);
-                    makeUnderlineChecked(underline)
+                    if(underline===false) document.querySelector('[aria-label="underline"]').style.background  = '#161616'
+                    else document.querySelector('[aria-label="underline"]').style.background  = 'white';    
                     canvas.renderAll();
                 }
             })
@@ -157,13 +159,18 @@ export default function TextBoxSubmenu({ canvas, addLayerItem }) {
             objects.forEach((object) => {
                 if (object.type === 'textbox') {
                     object.set({ textAlign: `${to}` });
+                    document.querySelector('[aria-label="align-center"]').style.background='#161616';                    
+                    document.querySelector('[aria-label="align-left"]').style.background='#161616';                    
+                    document.querySelector('[aria-label="align-right"]').style.background='#161616';      
+                    
+                    var align = 'align-'+to;
+                    document.querySelector(`[aria-label="align-${to}"]`).style.background='white';      
                     canvas.renderAll();
+               
                 }
             })
             // console.log("to",to);
             
-           makeAlignChecked(to);
-
             common.updateStates(canvas)
         }
         // console.log(to==="left");

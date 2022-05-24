@@ -136,9 +136,8 @@ export default function FigureSubmenu({ canvas, addLayerItem }) {
                         });
                         figure = triangle;
                     }
-                    figure.on('modified', () => common.inputFigureInfo(figure));
                     canvas.add(figure);
-
+                    
                     canvas.setActiveObject(figure)
                 },
 

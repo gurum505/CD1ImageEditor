@@ -32,6 +32,6 @@ export default function ColorPicker(props){
 
 
     return (
-        <input id="color" type="color" defaultValue="#ffffff" onChange={e=>selectColor(e)}  />
+        <input id="color" type="color" defaultValue="#ffffff" onChange={e=>selectColor(e)} />
     );
 }

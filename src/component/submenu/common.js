@@ -201,6 +201,7 @@ export function updateStates(canvas, isCropped = false) {
             }
         }
     }
+    console.log(newObjects)
     canvas.undoStack.push({ 'objects': newObjects, 'filters': newFilters, 'filterRangeState': getRangeState(), 'isCropped': isCropped, 'initialWidth': canvas.initialWidth, 'initialHeight': canvas.initialHeight, 'image': getMainImage(canvas) });
 }
 
@@ -211,7 +212,7 @@ export function updateStates(canvas, isCropped = false) {
 export function getMenuType(object){ //해당 객체의 type을 바탕으로 어떤 메뉴 창을 띄울 것인지 메뉴 이름을 반환 
     const figureList= ['rect','triangle','image','circle'];
     const lineList =['line'];
-
+    if(object==='figure') return 'figure-menu'
     if(figureList.includes(object.type)) return 'figure-menu';
     else if(lineList.includes(object.type)) return 'line-menu';
     else if(object.type ==='textbox') return 'text-menu';
@@ -406,18 +407,17 @@ export function inputFigureInfo(object) { // figure-width, figure-height id를 �
 
 
 export function inputTextInfo(textbox) {
-    const btn = document.querySelector('[aria-label="bold"]')
-    btn.checked = true;
-    console.log(btn)
-    var info = {
-        'fill':textbox.fill, 
-        'fontStyle':textbox.fontStyle,
-        'fontWeight':textbox.fontWeight,
-        'textAlign':textbox.textAlign,
-        'underline':textbox.underline
-    }
-    
-    console.log(info)
+   
+    document.getElementById('color').value = textbox.fill;
+    if(textbox.fontWeight ==='bold') document.querySelector('[aria-label="bold"]').style.background  = 'white'
+    else  document.querySelector('[aria-label="bold"]').style.background  = '#161616'
+
+    if(textbox.fontStyle==='italic') document.querySelector('[aria-label="italic"]').style.background  = 'white'
+    else document.querySelector('[aria-label="italic"]').style.background  = '#161616'
+
+    if(textbox.underline===true) document.querySelector('[aria-label="underline"]').style.background  = 'white'
+    else document.querySelector('[aria-label="underline"]').style.background  = '#161616'
+
 }
 
 export function inputObjectInfo(object){
