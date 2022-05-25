@@ -47,10 +47,10 @@ export default function LayerList(props){
                     <div id ={"layer"+Item.id} className={styles.select} onClick={()=>selectFromLayer(canvas,Item.id)}>
                         {/* 선택용 투명 레이어 */}
                     </div>
-                    <div className={styles.ItemContent}>
+                    {/* <div id='layer-list' className={styles.ItemContent}> */}
                         {renderImg(Item)}   
                         
-                    </div>
+                    {/* </div> */}
                     
                     </>
                 </div>

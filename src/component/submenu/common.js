@@ -4,6 +4,8 @@
 import { CommentOutlined } from "@ant-design/icons";
 import { fabric } from "fabric";
 import backgroundImage from '../../img/background.png'
+import styles from "./LayerList.module.css";
+import {CloseOutlined} from "@ant-design/icons"
 
 
 //delete , backspace 눌렀을 때 객체 제거 
@@ -20,6 +22,7 @@ export function keyDownEvent(canvas,e){
         var o = canvas.getActiveObjects();
         o.forEach((object) => {
             canvas.remove(object);
+            document.getElementById('layer'+object.id).remove();
             // document.getElementById(object.id).remove();
         });
 
@@ -86,9 +89,8 @@ export function initalCanvas(canvas, loadPrevCanvas = false) {
     canvas.set({
         undoStack: [],
         redoStack: [],
-        initialWidth: 600,
-        initialHeight: 400,
     });
+
     fabric.Image.fromURL(backgroundImage, (img) => {
         img.default = true;
         canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
@@ -96,7 +98,13 @@ export function initalCanvas(canvas, loadPrevCanvas = false) {
         canvas.renderAll();
     })
 
-    if (!loadPrevCanvas) canvas.objectNum = 0;
+    if (!loadPrevCanvas) {
+        canvas.objectNum = 0;
+        canvas.set({
+            width:600,
+            height:400,
+        })
+    }
     canvas.setWidth(600);
     canvas.setHeight(400);
     setCanvasStyleSize(600, 400);
@@ -201,7 +209,6 @@ export function updateStates(canvas, isCropped = false) {
             }
         }
     }
-    console.log(newObjects)
     canvas.undoStack.push({ 'objects': newObjects, 'filters': newFilters, 'filterRangeState': getRangeState(), 'isCropped': isCropped, 'initialWidth': canvas.initialWidth, 'initialHeight': canvas.initialHeight, 'image': getMainImage(canvas) });
 }
 
@@ -248,8 +255,7 @@ export function removeAllObjects(canvas, clear = false) {  //clear = true일 때
 
         try {
             if (!object.main)
-                // document.getElementById(object.id).remove(); // 레이어 제거
-                console.log('layer'+object.id)
+                document.getElementById('layer'+object.id).remove(); // 레이어 제거
         } catch (e) {
         }
     })
@@ -261,7 +267,7 @@ export function removeAllLayer(canvas) {
     var prevObjects = canvas.getObjects();
     prevObjects.forEach((object) => {
         try {
-            document.getElementById(object.id).remove();
+            document.getElementById('layer'+object.id).remove();
         } catch (e) {
         }
     })
@@ -270,13 +276,15 @@ export function removeAllLayer(canvas) {
 
 // 활성화(선택) 되어 있는 layer 빨간색으로 표시 
 export function colorActiveLayer(canvas) {
-
     //FIXME:모든 objectNum을 돌기 때문에 + 매 클릭마다 === 성능걱정이 좀 됌
     for (let i = 1; i <= canvas.objectNum; i++) {
-        let layerElement = document.getElementById(i);
+        let layerElement = document.getElementById('layer-list');
+        layerElement.childNodes.forEach(child => child.style.borderColor = '#666565')
+
+        
         // console.log("layerElement:",layerElements);
-        if (layerElement)
-            layerElement.style.border = 'solid 2px gray';
+        // if (layerElement)
+            // layerElement.style.border = 'solid 2px gray';
     }
     var objects = canvas.getActiveObjects();
     objects.forEach((object) => {
@@ -288,7 +296,7 @@ export function colorActiveLayer(canvas) {
 
 export function modifyLayer(object) {
     if(object.cropRect) return;
-    var layer = document.getElementById(object.id);
+    var layer = document.getElementById('layer'+object.id);
     // var layer = document.getElementById('rightsidebar-item-scroll');
     var img = layer.querySelector('img');
     var src;
@@ -299,16 +307,16 @@ export function modifyLayer(object) {
     }
     img.src = src;
 }
+   
+var flag = false;
+
 export function addLayer(canvas, object) {  //레이어에 객체 추가 
-    
-    if (object.main) return;
+    if (object.main || object.type === 'path') return;
     if (document.getElementById(object.id)) return;
-    const layerCanvas = new fabric.Canvas();
-    layerCanvas.setWidth(canvas.width);
-    layerCanvas.setHeight(canvas.height);
-    layerCanvas.backgroundColor = 'red'; //이거 되나?
+
 
     var imgTag = document.createElement('img');
+    imgTag.className = `${styles.Img}`
     imgTag.crossOrigin = 'anonymous' //img속성1
     var src;                         
     // src = object.toDataURL()
@@ -317,60 +325,74 @@ export function addLayer(canvas, object) {  //레이어에 객체 추가
         src = object.toDataURL();
     } catch (e) {
         src = object.getSrc();
-        console.log(src)
     }
     // img속성2
     imgTag.src = src;
-    imgTag.margin = 0;
-    imgTag.padding = 0;
-    imgTag.style.objectFit = 'contain';
-    imgTag.style.width = '80px';
-    imgTag.style.height = '50px'
+    // imgTag.margin = 0;
+    // imgTag.padding = 0;
+    // imgTag.style.objectFit = 'contain';
+    // imgTag.style.width = '80px';
+    // imgTag.style.height = '50px'
 
-    imgTag.onclick = () => {
-        if(canvas.getActiveObject()===object) canvas.discardActiveObject(object);
-        else canvas.setActiveObject(object);
-        console.log(canvas.getActiveObjects())
-        canvas.renderAll();
-    }
-
+    // imgTag.onclick = () => {
+    //     console.log("ㅋㅋ")
+    //     if(canvas.getActiveObject()===object) canvas.discardActiveObject(object);
+    //     else canvas.setActiveObject(object);
+    //     console.log(canvas.getActiveObjects())
+    //     canvas.renderAll();
+    // }
     const div = document.createElement('div');
-    div.id = object.id;
-    div.className = 'layer-list'
-    div.style.textAlign = 'center'
-    div.style.height = '80px'
-    div.style.width = '110px';
-    div.style.backgroundColor = 'gray'
+    div.id = 'layer'+object.id;
+    div.className = `${styles.Item} draggable`
+    // div.className = "draggable"
+    div.draggable=true;
+    // div.style.textAlign = 'center'
+    // div.style.height = '80px'
+    // div.style.width = '110px';
+    // div.style.backgroundColor = 'gray'
     
-    const el = document.getElementById('rightsidebar-item-scroll')
-
-    const objectBtn = document.createElement('button');
-    objectBtn.innerHTML = 'select'
-    objectBtn.className = "layer-object";
-    objectBtn.onclick = () => {
-        if(canvas.getActiveObject()===object) canvas.discardActiveObject(object);
-        else
+    // const el = document.getElementById('rightsidebar-item-scroll')
+    const el = document.getElementById('layer-list')
+    // el.className = `${styles.ItemContent}`
+    // const objectBtn = document.createElement('button');
+    // objectBtn.innerHTML = 'select'
+    // objectBtn.className = `${styles.Item}`
+    div.onclick = (e) => {
+        if(flag) {
+            flag = false; 
+            return ;
+        }
+        if(canvas.getActiveObject()===object) {
+            canvas.discardActiveObject(object);
+        }
+        else{
         canvas.setActiveObject(object);
+        }
         canvas.renderAll();
-    }
-    objectBtn.onmousedown=()=>{
-        console.log("mousedonw")
     }
     const deleteBtn = document.createElement('button');
     deleteBtn.innerHTML = 'delete';
     deleteBtn.className = 'delete-btn';
 
-    deleteBtn.onclick = () => {
+    const closeBtn = document.createElement('button');
+    closeBtn.type ='primary'
+    closeBtn.className = `${styles.ItemButton}`
+    closeBtn.innerHTML="X"
+
+    closeBtn.onclick = () => {
+        flag = true;
         canvas.remove(object);
-        document.getElementById(object.id).remove();
+        document.getElementById('layer'+object.id).remove();
         updateStates(canvas);
     }
 
 
-    // div.appendChild(imgTag)
+    div.appendChild(imgTag)
+    div.appendChild(closeBtn)
     // div.appendChild(objectBtn);
     // div.appendChild(deleteBtn);
-    // el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)   
+    el.insertBefore(div, el.firstChild);  //스택처럼 쌓이게 (최근 것이 위로)  
+
     return src;
 }
 
@@ -417,6 +439,13 @@ export function inputTextInfo(textbox) {
 
     if(textbox.underline===true) document.querySelector('[aria-label="underline"]').style.background  = 'white'
     else document.querySelector('[aria-label="underline"]').style.background  = '#161616'
+
+    document.querySelector('[aria-label="align-left"]').style.background  = '#161616'
+    document.querySelector('[aria-label="align-center"]').style.background  = '#161616'
+    document.querySelector('[aria-label="align-right"]').style.background  = '#161616'
+    if(textbox.textAlign==='left') document.querySelector('[aria-label="align-left"]').style.background  = 'white'
+    else if(textbox.textAlign==='center') document.querySelector('[aria-label="align-center"]').style.background  = 'white'
+    else if(textbox.textAlign==='right') document.querySelector('[aria-label="align-right"]').style.background  = 'white'
 
 }
 

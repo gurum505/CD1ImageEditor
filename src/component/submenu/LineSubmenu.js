@@ -94,8 +94,8 @@ export default function LineSubmenu({ canvas,addLayerItem }) {
                         var objects = canvas.getObjects();
                         objects.forEach(object => { 
                             if(object.main!==true) object.selectable = true; })
-                        addLayerItem(canvas,line.toDataURL())
-
+                        // addLayerItem(canvas,line.toDataURL())
+                        common.addLayer(canvas,line)
                         common.updateStates(canvas);
                         common.mouseEventOff(canvas);
                     },

@@ -181,8 +181,9 @@ export default function FigureSubmenu({ canvas, addLayerItem }) {
                     })
                     common.updateStates(canvas);
                     common.mouseEventOff(canvas);
-                    // common.addLayer(canvas,figure)
-                    addLayerItem(canvas, figure.toDataURL());
+                    common.addLayer(canvas,figure)
+                    common.colorActiveLayer(canvas)
+                    addLayerItem(canvas,figure.toDataURL())
 
                 }
             })

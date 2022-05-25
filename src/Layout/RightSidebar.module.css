@@ -1,3 +1,14 @@
+.Item{
+  border: 2px solid #666565;
+  box-sizing: border-box;
+  width: 100px;
+  height: 60px;
+  position: relative;
+  margin:5px 10px 5px 10px;
+  background-color: #202020;
+  border-radius: 5px;
+}
+
 .container {
   background-color: #161616;
   position:fixed;

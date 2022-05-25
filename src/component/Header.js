@@ -90,6 +90,8 @@ export default function Header(props) {
                     common.updateStates(canvas);
                     canvas.renderAll();
 
+                    common.setMenu('filter-menu',canvas,false)
+
                     //필터 기능 누를 수 있게 변경 
                     const divElem = document.getElementById('filter-menu');
                     const inputElements = divElem.querySelectorAll("input[type=range], input[type=checkbox], button")
@@ -156,6 +158,7 @@ export default function Header(props) {
 
     const DeserializationJson = (Json) => {
         canvas.loadFromJSON(Json, () => {
+            common.removeAllLayer(canvas)
             common.initalCanvas(canvas, true);
             canvas.setWidth(canvas.initialWidth);
             canvas.setHeight(canvas.initialHeight);
@@ -164,8 +167,7 @@ export default function Header(props) {
             var Objects = canvas.getObjects();
             Objects.forEach((object) => {
                 if (!object.main){
-                    // common.addLayer(canvas, object);
-                    // props.addLayerItem(canvas,object.toDataURL())
+                    common.addLayer(canvas, object);
                 }
             })
             canvas.discardActiveObject(common.getMainImage())
@@ -203,6 +205,7 @@ export default function Header(props) {
     function undo() {
         if (canvas.undoStack.length > 1) {
             canvas.discardActiveObject();
+            common.removeAllLayer(canvas);
             common.removeAllObjects(canvas);
             var current = canvas.undoStack.pop();
             canvas.redoStack.push(current);
@@ -229,6 +232,7 @@ export default function Header(props) {
                 }
                 if (object.main !== true && !object.cropRect) {
                     canvas.add(object)
+                    common.addLayer(canvas,object);
                 }
                 if (object.canvasRelativePosition) {
                     object.left = object.canvasRelativePosition['left']
@@ -299,6 +303,7 @@ export default function Header(props) {
 
     function redo() {
         if (canvas.redoStack.length > 0) {
+            common.removeAllLayer(canvas);
             common.removeAllObjects(canvas);
             var json = canvas.redoStack.pop();
             canvas.undoStack.push(json);
@@ -312,6 +317,7 @@ export default function Header(props) {
                         object.top = object.canvasRelativePosition['top']
                     }
                     canvas.add(object)
+                    common.addLayer(canvas,object)
                 }
             })
 
@@ -379,8 +385,8 @@ export default function Header(props) {
 
                         canvas.add(obj);
                         canvas.setActiveObject(obj);
-                        // common.addLayer(canvas, obj);
-                        props.addLayerItem(canvas, obj.toDataURL())
+                        common.addLayer(canvas, obj);
+                        // props.addLayerItem(canvas, obj.toDataURL())
                         common.colorActiveLayer(canvas);
                         common.updateStates(canvas);
                     });
@@ -393,8 +399,8 @@ export default function Header(props) {
                     })
                     canvas.add(clonedObj);
                     canvas.setActiveObject(clonedObj);
-                    // common.addLayer(canvas, clonedObj);
-                    props.addLayerItem(canvas, clonedObj.toDataURL())
+                    common.addLayer(canvas, clonedObj);
+                    // props.addLayerItem(canvas, clonedObj.toDataURL())
                     common.colorActiveLayer(canvas);
                     common.updateStates(canvas);
                     canvas.requestRenderAll();

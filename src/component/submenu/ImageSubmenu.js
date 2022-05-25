@@ -33,8 +33,8 @@ export default function ImageSubmenu(props) {
 
                     canvas.add(img).setActiveObject(img);
                     common.updateStates(canvas);
-                    props.addLayerItem(canvas,img.toDataURL())
-
+                    // props.addLayerItem(canvas,img.toDataURL())
+                    common.addLayer(canvas,img)
                     canvas.renderAll();
 
                 }

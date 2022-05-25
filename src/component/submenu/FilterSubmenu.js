@@ -162,7 +162,7 @@ export default function FilterSubmenu(props) {
         common.getMainImage(canvas).set({
             scaleX: canvas.width/ common.getMainImage(canvas).width,
         })
-        canvas.initalWidth = value;
+        canvas.initialWidth = value;
         common.setCanvasCenter(canvas);
         canvas.renderAll();
     }

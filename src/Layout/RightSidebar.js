@@ -58,14 +58,9 @@ export default function RightSidebar (props) {
           <PlusOutlined style={{fontSize:"20pt", color:"gray"}} />
         </div>
         <div id='rightsidebar-item-scroll'className={styles.itemScroll}>
-          <LayerList 
-              Items={props.Items} 
-              delItem={props.delItem} 
-              handleDragStart={handleDragStart}
-              handleDragOver={handleDragOver}
-              isDragOver={isDragOver}
-              handleDrop={handleDrop}
-              canvas={props.canvas}/>
+          <div id='layer-list' >
+
+          </div>
         </div>
       </div>
     </div>

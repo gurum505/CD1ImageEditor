@@ -7,29 +7,6 @@ import { useState } from "react";
 //TODO: 드래그 후 드랍할 때 마우스 위치를 어떻게 ??
 export default function OnelineImage(props) {
     const canvas = props.canvas;
-    const axios = require("axios");
-    console.log(canvas.toDataURL())
-    console.log(typeof(canvas.toDataURL()))
-    const options = {
-      method: 'GET',
-      url: 'https://google-reverse-image-search.p.rapidapi.com/imgSearch',
-      params: {url: 'https://l450v.alamy.com/450v/2j0k6b8/vector-map-of-ukraine-in-the-colors-of-the-ukrainian-flag-isolated-white-background-2j0k6b8.jpg'},
-      headers: {
-        'X-RapidAPI-Host': 'google-reverse-image-search.p.rapidapi.com',
-        'X-RapidAPI-Key': '61693e0399mshcc29d5c513e9fcbp1f87aejsn9335eeb9efd6'
-      }
-    };
-    
-    axios.request(options).then(function (response) {
-        console.log(response.data);
-        console.log(response.data.googleSearchResult)
-    }).catch(function (error) {
-        console.error(error);
-    });
-
-
-
-
     const apikey = "26628044-6a51b2056c4c10fd1fccc159d";
     const lang = 'ko' //검색 지역 
     const colors = 'transparent'
@@ -75,7 +52,7 @@ export default function OnelineImage(props) {
                         canvas.setActiveObject(image);
                         canvas.renderAll();
                         common.updateStates(canvas);
-                        props.addLayerItem(canvas,imgtag.src)
+                        common.addLayer(canvas,image)
 
                     });
 

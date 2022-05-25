@@ -27,23 +27,7 @@ const Modal = (props) => {
     canvas.centerObject(rect)
     props.addLayerItem(canvas, rect.toDataURL())
     canvas.setActiveObject(rect)
-    closeModal();
-  }
-
-  function addRect() {
-    const rect = new fabric.Rect({
-      width: 100,
-      height: 100,
-      noScaleCache: true,
-      angle: 0,
-      fill: 'white',
-      type: 'rect',
-      id: ++canvas.objectNum,
-    });
-    canvas.add(rect);
-    canvas.centerObject(rect)
-    props.addLayerItem(canvas, rect.toDataURL())
-    canvas.setActiveObject(rect)
+    common.addLayer(canvas,rect);
     closeModal();
   }
 
@@ -62,6 +46,7 @@ const Modal = (props) => {
     canvas.centerObject(circle)
     props.addLayerItem(canvas, circle.toDataURL())
     canvas.setActiveObject(circle)
+    common.addLayer(canvas,circle);
     closeModal();
   }
 
@@ -77,8 +62,9 @@ const Modal = (props) => {
     });
     canvas.add(triangle);
     canvas.centerObject(triangle)
-    props.addLayerItem(canvas, triangle.toDataURL())
     canvas.setActiveObject(triangle)
+    common.addLayer(canvas,triangle)
+    // props.addLayerItem(canvas, triangle)
     closeModal();
   }
 
@@ -93,13 +79,16 @@ const Modal = (props) => {
     canvas.centerObject(textbox)
     props.addLayerItem(canvas, textbox.toDataURL())
     canvas.setActiveObject(textbox)
+    // props.addLayerItem(canvas, textbox);
+    common.addLayer(canvas,textbox)
     closeModal();
   }
 
   function addLocalImage(e) {
     e.target.value = ''
     canvas.isDrawingMode = false;
-    document.getElementById("add-local-image-file").onchange = function (e) {
+    
+    document.getElementById("add-local-image").onchange = function (e) {
         var reader = new FileReader();
         reader.onload = function (e) { //onload(): 읽기 성공 시 실행되는 핸들러
             var image = new Image();
@@ -115,23 +104,22 @@ const Modal = (props) => {
                     var ratio = img.height/img.width;
                     img.scaleToWidth(canvas.width / 2);
                     img.scaleToHeight(canvas.width / 2 * ratio);
-                    console.log(img)
                 }
 
 
                 canvas.add(img).setActiveObject(img);
                 common.updateStates(canvas);
-                props.addLayerItem(canvas,img.toDataURL())
                 canvas.setActiveObject(img);
-                closeModal();
-
-
-
+                common.addLayer(canvas,img)
+                closeModal()
+              }
             }
-        }
-        reader.readAsDataURL(e.target.files[0]); // dataURL 형식으로 파일 읽음
-    }
+            reader.readAsDataURL(e.target.files[0]); // dataURL 형식으로 파일 읽음
+          }
 }
+
+
+
   return (
     <>
       {isModalOpen ? (
@@ -147,8 +135,8 @@ const Modal = (props) => {
                 <TriangleIcon onClick={addTriangle} />
               </div>
               <div>
-                <ImageIcon htmlFor={"add-local-image-file"} />
-                <input type="file" id="add-local-image-file" name="chooseFile" accept="image/*" onClick={addLocalImage} style={{ display: 'none' }} />
+                <ImageIcon htmlFor={"add-local-image"} />
+                <input type="file" id="add-local-image" name="chooseFile" accept="image/*" onClick={addLocalImage} style={{ display: 'none' }} />
                 <span className={styles.textIcon}>
                   <FontSizeOutlinedIcon  onClick={addTextBox}/>
                 </span>

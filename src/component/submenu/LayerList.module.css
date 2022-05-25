@@ -7,6 +7,9 @@
   margin:5px 10px 5px 10px;
   background-color: #202020;
   border-radius: 5px;
+  text-align: center;
+  vertical-align:middle;
+  cursor: move;
 }
 .ItemDragOver{
   border: 2px solid #666565;
@@ -33,7 +36,12 @@
   top: 0px;
   right:0;
   z-index: 100;
-  color: #666565;
+  color: white;
+  border-radius: 5px;
+  background-color: #666565;
+  /* width:10px; */
+  /* height:10px; */
+  font-size:0.1px;
 }
 .ItemButton:hover{
   cursor: pointer;
@@ -52,6 +60,7 @@
   cursor: default;
 }
 .Img{
+  padding-top:7px;
   user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;

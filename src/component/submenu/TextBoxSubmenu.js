@@ -13,25 +13,7 @@ import {
 
 export default function TextBoxSubmenu({ canvas, addLayerItem }) {
 
-    // console.log('textbox메뉴')
     const color = useRef('white');
-    const [alignChecked, makeAlignChecked] = useState('left');
-    const [boldChecked,makeBoldChecked] =useState("");
-    const [italicChecked,makeItalicChecked] =useState("");
-    const [underlineChecked, makeUnderlineChecked]=useState("");
-
-    // var fontWeight={"bold":false,"italic":false,"underline":false}; //FIXME: default값을 text객체에서 불러와야함 all false가 아니라
-    // const [fontChecked,makeFontChecked] =useState(fontWeight);
-
-    function inputTextInfo(textbox) {
-        var info = {
-            'fill': textbox.fill,
-            'fontStyle': textbox.fontStyle,
-            'fontWeight': textbox.fontWeight,
-            'textAlign': textbox.textAlign,
-            'underline': textbox.underline
-        }
-    }
 
     function mouseDownHandler(o) {
         const pointer = canvas.getPointer(o.e);
@@ -43,25 +25,9 @@ export default function TextBoxSubmenu({ canvas, addLayerItem }) {
             id: ++canvas.objectNum,
             type: 'textbox'
         });
-        // textbox.on('selected',(e)=>{
-        //     console.log("텍스트박스에요")
-            
-        //     common.setMenu('text-menu',canvas,true);
-        //     if(e.target.fontWeight ==='bold') makeBoldChecked(true)
-        //     else makeBoldChecked(false)
-
-        //     if(e.target.fontStyle==='italic') makeItalicChecked(true);
-        //     else makeItalicChecked(false)
-
-        //     if(e.target.underline===true) makeUnderlineChecked(true);
-        //     else makeUnderlineChecked(false)
-
-        //     makeAlignChecked(e.target.textAlign)
-            
-        // })
+     
         canvas.add(textbox);
-        console.log(textbox)
-        addLayerItem(canvas, textbox.toDataURL())
+        common.addLayer(canvas,textbox)
         canvas.setActiveObject(textbox)
         common.updateStates(canvas);
         canvas.defaultCursor = 'default';
@@ -189,25 +155,25 @@ export default function TextBoxSubmenu({ canvas, addLayerItem }) {
 
             <ul>
                 <li>
-                    <AlignLeftOutlinedIcon onClick={() => alignText('left')} checked={alignChecked === "left"} />
+                    <AlignLeftOutlinedIcon onClick={() => alignText('left')}  />
                 </li>
                 <li>
-                    <AlignCenterOutlinedIcon onClick={() => alignText('center')} checked={alignChecked === "center"} />
+                    <AlignCenterOutlinedIcon onClick={() => alignText('center')} />
                 </li>
                 <li>
-                    <AlignRightOutlinedIcon onClick={() => alignText('right')} checked={alignChecked === "right"} />
+                    <AlignRightOutlinedIcon onClick={() => alignText('right')}  />
                 </li>
             </ul>
             <label style={{ marginLeft: "15px" }}>font</label>
             <ul>
                 <li>
-                    <BoldOutlinedIcon  onClick={makeTextBold} checked={boldChecked} />
+                    <BoldOutlinedIcon  onClick={makeTextBold} />
                 </li>
                 <li>
-                    <ItalicOutlinedIcon onClick={italicizeText} checked={italicChecked}/>
+                    <ItalicOutlinedIcon onClick={italicizeText} />
                 </li>
                 <li>
-                    <UnderlineOutlinedIcon onClick={underlineText} checked={underlineChecked}/>
+                    <UnderlineOutlinedIcon onClick={underlineText} />
                 </li>
             </ul>
         </div>
