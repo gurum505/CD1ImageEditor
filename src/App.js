@@ -33,6 +33,9 @@ import * as common from "./component/submenu/common"
 //TODO: Canvas:객체들고 옮길때 canvas에 중앙선or경계 표시
 //TODO: freedrwaing은 레이어가 안생김
 
+fabric.Object.prototype.getZIndex = function() {
+    return this.canvas.getObjects().indexOf(this);
+}
 
 export default function App(props) {
     const [canvas, setCanvas] = useState(''); //useEffect()후 렌더링 하기 위한 state

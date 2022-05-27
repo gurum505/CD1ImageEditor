@@ -53,6 +53,9 @@ const LeftSidebar = ({ canvas, imageRef, image,addLayerItem}) => {
         setMenu(common.getMenuType(e.selected[0]), true)
         common.inputObjectInfo(e.selected[0])
         common.colorActiveLayer(canvas);
+        canvas.getObjects().forEach(object=>{
+          console.log(object.getZIndex())
+        })
       },
       'selection:created': (e) => {
         common.colorActiveLayer(canvas)
