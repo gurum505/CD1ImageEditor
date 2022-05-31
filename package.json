@@ -1,7 +1,7 @@
 {
   "name": "fabric-image-editor",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
   "homepage": "https://gurum505.github.io/CD1ImageEditor",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",

@@ -2,7 +2,7 @@ import { fabric } from "fabric";
 import React, { useState, useEffect, useRef } from "react";
 import backgroundImage from './img/background.png'
 //layout
-import styles from './App.module.css';
+import styles from './Editor.module.css';
 import Title from './Layout/Title';
 import Footbar from './Layout/Footbar';
 import LeftSidebar from './Layout/LeftSidebar';
@@ -37,7 +37,7 @@ fabric.Object.prototype.getZIndex = function() {
     return this.canvas.getObjects().indexOf(this);
 }
 
-export default function App(props) {
+export default function Editor(props) {
     const [canvas, setCanvas] = useState(''); //useEffect()후 렌더링 하기 위한 state
     const[image,setImage] = useState(false); //이미지 불러왔을 때 전체 렌더링을 위한 state 
     const imageRef = useRef(false); // 이미지를 불러오면 header에서 setImage()를 통해 렌더링을 시키고, Editor.js에서 imageRef값이 변경 되면 submenu들을 렌더링 함 
