@@ -16,6 +16,8 @@ Run ```npm install fabric-image-editor```
 4. Open your web browser to```http://localhost:3000```
 
 # Demo
+https://gurum505.github.io/CD1ImageEditor/
+
 
 # Motivation
 # Considerations
