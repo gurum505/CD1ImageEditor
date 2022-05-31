@@ -41,9 +41,9 @@ export default function LayerList(props){
                     onDrop={handleDrop}>
                     <>
                     
-                    <div onClick={()=>delItem(canvas,Item.id)}>
+                    {/* <div onClick={()=>delItem(canvas,Item.id)}>
                       <CloseOutlined className={styles.ItemButton} />
-                    </div>
+                    </div> */}
                     <div id ={"layer"+Item.id} className={styles.select} onClick={()=>selectFromLayer(canvas,Item.id)}>
                         {/* 선택용 투명 레이어 */}
                     </div>

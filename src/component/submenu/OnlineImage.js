@@ -7,7 +7,7 @@ import { useState } from "react";
 //TODO: 드래그 후 드랍할 때 마우스 위치를 어떻게 ??
 export default function OnelineImage(props) {
     const canvas = props.canvas;
-    const apikey = "26628044-6a51b2056c4c10fd1fccc159d";
+    const apikey = "27765286-a6ea0251ac9cdd446bd238bb4";
     const lang = 'ko' //검색 지역 
     const colors = 'transparent'
 
@@ -25,7 +25,7 @@ export default function OnelineImage(props) {
         async function CuratedPhotos(page_num) {
             // document.querySelector(".gallery").innerHTML = "";
 
-            const data = await fetch(`https://pixabay.com/api?q=${query}&key=${apikey}&lang=${lang}&colors=${colors}&per_page=50`);
+            const data = await fetch(`https://pixabay.com/api?q=${query}&key=${apikey}&lang=${lang}&colors=${colors}&per_page=50`,{mode: 'cors'});
             const result = await data.json();   //await : 처리 될 때까지 기다림 
 
             result.hits.forEach((photo) => {
