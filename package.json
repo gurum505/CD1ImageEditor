@@ -1,6 +1,6 @@
 {
   "name": "fabric-image-editor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "homepage": "https://gurum505.github.io/CD1ImageEditor",
   "dependencies": {
