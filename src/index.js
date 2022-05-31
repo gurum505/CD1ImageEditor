@@ -9,6 +9,6 @@ ReactDOM.render(
     document.getElementById('root')
   );
 
-export {Editor}
+export default Editor
 
 
