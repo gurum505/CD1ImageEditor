@@ -35,6 +35,7 @@ https://gurum505.github.io/CD1ImageEditor/
 3.1.1   객체의 layer 
 
 ![그림1](https://user-images.githubusercontent.com/33712528/172047275-019d6523-6f9a-456e-bc64-819f0606dccf.png)
+[그림1] 객체 layer
 <br>
 사용자는 객체를 생성하고 상호작용한다. 새 객체를 만들면 그 객체 고유의 layer와 ID가 생성되고 React의 state를 사용해 전역적으로 객체ID를 관리한다. 이 때 사용자의 객체에 대한 상호작용은  레이어에 즉각적으로 반영이 된다. 또한 레이어의 순서를 뒤바꿀시 그에 따라 각 객체의 z-index는 재정렬된다.
 3.1.2   undo/redo 
@@ -47,6 +48,7 @@ https://gurum505.github.io/CD1ImageEditor/
 ![그림3](https://user-images.githubusercontent.com/33712528/172047301-6b2f7ee5-1daa-4db4-a951-440d39250e2b.png)
 ![그림4](https://user-images.githubusercontent.com/33712528/172047302-03d9f0f8-5ad5-49f4-bb21-d0aa02e2abff.png)
 <br>
+[그림 3]
 
 zoom기능은 사용자의 세세한 작업을 지원함으로써 결과물 완성도에 직결된다. 마우스 휠과 버튼을 통해 canvas의 크기를 유동적으로 조절함 사용자는 직관적으로 zoom기능을 사용할 수 있다. 또한 미리보기 기능을 통해 작업물 외의 다른 UI를  제거하여 사용자의 결과물을 객관적으로 어떻게 저장될 것인지 볼 수 있다.  [그림3]에서 파란색으로 표시된 부분은 zoom의 확대도를 표시하고 버튼으로도 확대를 조절할 수 있게 구현하였다. 초록색은 미리보기 버튼으로, 클릭시 하단의 UI만 남기고 나머지 UI는 사라진다.
 
