@@ -83,3 +83,15 @@ zoom기능은 사용자의 세세한 작업을 지원함으로써 결과물 완�
 
 # References
 
+[[1] “사진에디터 Pixlr X- 온라인 무료 사진 에디터.” 사 진 편집기 및 템플릿 디자이너.accessed March 22, 2022, https://pixlr.com/kr/x/#editor.](https://pixlr.com/kr/x/#editor)   
+
+
+[[2] 정종윤(Jongyoon Jeong),and 박성배(Seong-Bae Park). "HTML5 Canvas 기반 오픈소스 이미지 에디터 라이브 러리 개발." 한국정보과학회 학술발표논문집 2021.12 (2021): 1318-1320.](https://www.riss.kr/search/detail/DetailView.do?p_mat_type=1a0202e37d52c72d&control_no=5963acb3a35e45697f7a54760bb41745&keyword=HTML5%20Canvas)  
+
+
+[[3] "LogRocket", 'When to use HTML5's canvas', last modified Arpil 8. 2019, accessed March 30,2022,https://blog.logrocket.com/when-to-use-html 5s-canvas-ce992b100ee8/](https://blog.logrocket.com/when-to-use-html) 
+
+
+[[4] "NAVER D2",'Chrome의 Flash 차단 정책과 Flash에 서 Canvas로 전환 사례', 2016년 10월 20일, 2022년 4월22일접속,https://d2.naver.com/helloworld/1899560.](https://d2.naver.com/helloworld/1899560)   
+
+
