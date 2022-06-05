@@ -33,7 +33,7 @@ https://gurum505.github.io/CD1ImageEditor/
 # Features
 
 3.1.1   객체의 layer 
-
+<br>
 ![그림1](https://user-images.githubusercontent.com/33712528/172047275-019d6523-6f9a-456e-bc64-819f0606dccf.png)
 <br>[그림1] 객체 layer
 <br>
@@ -43,6 +43,8 @@ https://gurum505.github.io/CD1ImageEditor/
 ![그림2](https://user-images.githubusercontent.com/33712528/172047300-1ffcd38a-d952-47e7-89ef-432b8830a7df.png)
 <br>[그림2] undo/redo
      fabric.js 라이브러리가 제공하는 메서드를 사용하면 특정 시점의 canvas 객체를 JSON 형태로 저장하거나 불러오는 것이 가능하다. 하지만 부분적으로 필요한 내용이 아닌 캔버스 상태 전체 내용을 불러오고 저장하므로 필요 이상의 무거운 작업을 하게된다. 이를 개선하기 위해 undoStack, redoStack 배열을 각각 할당하여 이벤트가 발생했을 때 undoStack 배열에 부분적으로 필요한 내용(객체, 필터 내용 등)만을 추가한다. 이 상태에서 이전(undo)을 했을 때는 undoStack에서 가장 최근에 추가된 요소를 redoStack에 추가하고 undoStack에서 가장 나중의 index에 해당하는 캔버스 상태 정보를 캔버스에 반영한다. 되돌리기(redo)를 했을 때는 가장 나중의 index에 해당하는 요소를 undoStack에 추가하고 캔버스에 반영하는 형태로 성능을 개선하였다.  [그림2]에서 초록색 undo를 누르면 1만 남고 2는 지워지며 파란색 redo를 누르면 사라졌던 2가 다시 나타난다.                                               <br>
+     
+     
 3.1.3   zoom,  미리보기 
 <br>
 ![그림3](https://user-images.githubusercontent.com/33712528/172047301-6b2f7ee5-1daa-4db4-a951-440d39250e2b.png)
