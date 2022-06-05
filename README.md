@@ -38,10 +38,12 @@ https://gurum505.github.io/CD1ImageEditor/
 <br>[그림1] 객체 layer
 <br>
 사용자는 객체를 생성하고 상호작용한다. 새 객체를 만들면 그 객체 고유의 layer와 ID가 생성되고 React의 state를 사용해 전역적으로 객체ID를 관리한다. 이 때 사용자의 객체에 대한 상호작용은  레이어에 즉각적으로 반영이 된다. 또한 레이어의 순서를 뒤바꿀시 그에 따라 각 객체의 z-index는 재정렬된다.
+
+
 3.1.2   undo/redo 
 <br>
 ![그림2](https://user-images.githubusercontent.com/33712528/172047300-1ffcd38a-d952-47e7-89ef-432b8830a7df.png)
-<br>[그림2] undo/redo
+<br>[그림2] undo/redo <br>
      fabric.js 라이브러리가 제공하는 메서드를 사용하면 특정 시점의 canvas 객체를 JSON 형태로 저장하거나 불러오는 것이 가능하다. 하지만 부분적으로 필요한 내용이 아닌 캔버스 상태 전체 내용을 불러오고 저장하므로 필요 이상의 무거운 작업을 하게된다. 이를 개선하기 위해 undoStack, redoStack 배열을 각각 할당하여 이벤트가 발생했을 때 undoStack 배열에 부분적으로 필요한 내용(객체, 필터 내용 등)만을 추가한다. 이 상태에서 이전(undo)을 했을 때는 undoStack에서 가장 최근에 추가된 요소를 redoStack에 추가하고 undoStack에서 가장 나중의 index에 해당하는 캔버스 상태 정보를 캔버스에 반영한다. 되돌리기(redo)를 했을 때는 가장 나중의 index에 해당하는 요소를 undoStack에 추가하고 캔버스에 반영하는 형태로 성능을 개선하였다.  [그림2]에서 초록색 undo를 누르면 1만 남고 2는 지워지며 파란색 redo를 누르면 사라졌던 2가 다시 나타난다.                                               <br>
      
      
